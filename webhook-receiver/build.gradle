@@ -1,0 +1,5 @@
+jib {
+    to {
+        image = "gcr.io/${gcpProject}/github-webhook-receiver"
+    }
+}

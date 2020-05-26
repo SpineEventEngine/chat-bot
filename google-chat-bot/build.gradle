@@ -1,0 +1,5 @@
+jib {
+    to {
+        image = "gcr.io/${gcpProject}/chat-bot"
+    }
+}
