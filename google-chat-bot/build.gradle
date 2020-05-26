@@ -1,3 +1,16 @@
+apply plugin: 'io.spine.tools.gradle.bootstrap'
+
+spine {
+    enableJava().server()
+    modelCompiler {
+        generateValidation = true
+    }
+}
+
+dependencies {
+    testImplementation "io.spine:spine-testutil-server:${spine.version()}"
+}
+
 jib {
     to {
         image = "gcr.io/${gcpProject}/chat-bot"

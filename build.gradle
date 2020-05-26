@@ -1,16 +1,10 @@
-buildscript {
-    repositories {
-        gradlePluginPortal()
-        jcenter()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath "net.ltgt.gradle:gradle-apt-plugin:0.21"
-        classpath "com.github.jengelman.gradle.plugins:shadow:5.2.0"
-        classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:2.3.0"
-        classpath "net.saliman:gradle-properties-plugin:1.5.1"
-    }
+plugins {
+    id "net.ltgt.apt" version "0.21" apply false
+    id "com.github.johnrengelman.shadow" version "5.2.0" apply false
+    id 'com.google.cloud.tools.jib' version '2.3.0' apply false
+    id "net.saliman.properties" version "1.5.1" apply false
+    id 'io.spine.tools.gradle.bootstrap' version '1.5.8' apply false
+    id "net.ltgt.errorprone" version "1.1.1" apply false
 }
 
 allprojects {
@@ -25,6 +19,7 @@ subprojects {
     apply plugin: "com.github.johnrengelman.shadow"
     apply plugin: "application"
     apply plugin: "com.google.cloud.tools.jib"
+    apply plugin: "net.ltgt.errorprone"
 
     repositories {
         jcenter()
@@ -37,6 +32,7 @@ subprojects {
     }
 
     dependencies {
+        errorprone "com.google.errorprone:error_prone_core:2.3.4"
         annotationProcessor(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
         annotationProcessor("io.micronaut:micronaut-inject-java")
         annotationProcessor("io.micronaut:micronaut-validation")
@@ -47,6 +43,7 @@ subprojects {
         implementation("io.micronaut:micronaut-inject")
         implementation("io.micronaut:micronaut-validation")
         implementation("io.micronaut:micronaut-runtime")
+        implementation("com.google.guava:guava:29.0-jre")
 
         implementation "io.micronaut:micronaut-http-server-netty"
         implementation("javax.annotation:javax.annotation-api")
