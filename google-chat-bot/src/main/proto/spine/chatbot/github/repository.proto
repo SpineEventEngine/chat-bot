@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package spine.chatbot.github;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.github";
+option java_outer_classname = "GithubOrganizationProto";
+option java_multiple_files = true;
+
+import "spine/net/url.proto";
+
+import "spine/chatbot/github/identifiers.proto";
+
+// A GitHub repository.
+message Repository {
+    option (entity).kind = AGGREGATE;
+
+    RepositoryId id = 1;
+
+    // Name of the repository.
+    string name = 2;
+
+    // GitHub URL of the repository.
+    spine.net.Url github_url = 3;
+
+    // Travis CI URL of the repository.
+    spine.net.Url travis_ci_url = 4;
+}

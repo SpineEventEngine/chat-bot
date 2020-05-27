@@ -221,3 +221,5 @@ gradle-app.setting
 
 # Local gradle properties that overrides default gradle.properties and are private
 gradle-local.properties
+
+**/generated/**

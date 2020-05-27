@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package spine.chatbot.github;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.github.organization";
+option java_outer_classname = "OrganizationProto";
+option java_multiple_files = true;
+
+import "spine/net/url.proto";
+
+import "spine/chatbot/github/identifiers.proto";
+
+// A GitHub organization.
+message Organization {
+    option (entity).kind = AGGREGATE;
+
+    OrganizationId id = 1;
+
+    // Name of the GitHub organization.
+    string name = 2;
+
+    // URL of the official organization-related website.
+    spine.net.Url website_url = 3;
+
+    // URL of the organization GitHub profile.
+    spine.net.Url github_url = 4;
+
+    // URL of the organization Travis CI profile.
+    spine.net.Url travis_ci_url = 5;
+}

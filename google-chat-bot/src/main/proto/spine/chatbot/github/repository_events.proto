@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package spine.chatbot.github;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.github.repository.event";
+option java_outer_classname = "RepositoryEventsProto";
+option java_multiple_files = true;
+
+import "spine/net/url.proto";
+
+import "spine/chatbot/github/identifiers.proto";
+
+// Denotes that a new repository is registered.
+message RepositoryRegistered {
+
+    RepositoryId id = 1 [(required) = true];
+
+    // Name of the repository.
+    string name = 2 [(required) = true];
+
+    // GitHub URL of the repository.
+    spine.net.Url github_url = 3 [(required) = true];
+
+    // Travis CI URL of the repository.
+    spine.net.Url travis_ci_url = 4 [(required) = true];
+}

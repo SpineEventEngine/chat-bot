@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package spine.chatbot.github;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.github";
+option java_outer_classname = "IdentifiersProto";
+option java_multiple_files = true;
+
+import "spine/time/time.proto";
+import "spine/core/user_id.proto";
+
+// Internal GitHub organization ID.
+message OrganizationId {
+
+    string uuid = 1[(required) = true];
+}
+
+// Internal GitHub repository ID.
+message RepositoryId {
+
+    string uuid = 1[(required) = true];
+}
