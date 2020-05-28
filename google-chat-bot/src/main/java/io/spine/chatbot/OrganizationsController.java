@@ -20,36 +20,29 @@
 
 package io.spine.chatbot;
 
-import com.google.common.annotations.VisibleForTesting;
-import io.micronaut.runtime.Micronaut;
-import io.spine.chatbot.server.github.GitHubContext;
-import io.spine.server.Server;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.spine.chatbot.github.organization.Organization;
+import io.spine.client.Client;
 
-import java.io.IOException;
+import java.util.stream.Collectors;
 
-public final class Application {
+import static io.spine.chatbot.Application.SERVER_NAME;
 
-    static final String SERVER_NAME = "ChatBotServer";
+@Controller("/organizations")
+public class OrganizationsController {
 
-    private Application() {
-    }
-
-    public static void main(String[] args) {
-        initializeSpine();
-        Micronaut.run(Application.class, args);
-    }
-
-    @VisibleForTesting
-    static void initializeSpine() {
-        ChatBotServerEnvironment.initializeEnvironment();
-        Server server = Server
+    @Get
+    public String index() {
+        Client client = Client
                 .inProcess(SERVER_NAME)
-                .add(GitHubContext.newBuilder())
                 .build();
-        try {
-            server.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        String result = client.asGuest()
+                              .select(Organization.class)
+                              .run()
+                              .stream()
+                              .map(String::valueOf)
+                              .collect(Collectors.joining());
+        return result;
     }
 }

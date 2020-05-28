@@ -20,36 +20,23 @@
 
 package io.spine.chatbot;
 
-import com.google.common.annotations.VisibleForTesting;
-import io.micronaut.runtime.Micronaut;
-import io.spine.chatbot.server.github.GitHubContext;
-import io.spine.server.Server;
+import io.spine.server.ServerEnvironment;
+import io.spine.server.delivery.Delivery;
+import io.spine.server.storage.memory.InMemoryStorageFactory;
+import io.spine.server.transport.memory.InMemoryTransportFactory;
 
-import java.io.IOException;
+final class ChatBotServerEnvironment {
 
-public final class Application {
-
-    static final String SERVER_NAME = "ChatBotServer";
-
-    private Application() {
+    /**
+     * Prevents instantiation of this utility class.
+     */
+    private ChatBotServerEnvironment() {
     }
 
-    public static void main(String[] args) {
-        initializeSpine();
-        Micronaut.run(Application.class, args);
-    }
-
-    @VisibleForTesting
-    static void initializeSpine() {
-        ChatBotServerEnvironment.initializeEnvironment();
-        Server server = Server
-                .inProcess(SERVER_NAME)
-                .add(GitHubContext.newBuilder())
-                .build();
-        try {
-            server.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    static void initializeEnvironment() {
+        ServerEnvironment se = ServerEnvironment.instance();
+        se.configureStorage(InMemoryStorageFactory.newInstance());
+        se.configureTransport(InMemoryTransportFactory.newInstance());
+        se.configureDelivery(Delivery.localAsync());
     }
 }

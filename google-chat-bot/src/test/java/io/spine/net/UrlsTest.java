@@ -18,16 +18,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot;
+package io.spine.net;
 
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Get;
+import io.spine.testing.UtilityClassTest;
+import org.junit.jupiter.api.DisplayName;
 
-@Controller("/hello")
-public class HelloController {
+@DisplayName("Urls should")
+final class UrlsTest extends UtilityClassTest<Urls> {
 
-    @Get(uri = "/", produces = "text/plain")
-    public String index() {
-        return "Example Response";
+    UrlsTest() {
+        super(Urls.class);
     }
 }

@@ -29,16 +29,18 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.chatbot.Application.initializeSpine;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @MicronautTest
-final class HelloFunctionTest {
+final class OrganizationsControllerTest {
 
     private static EmbeddedServer server;
     private static HttpClient client;
 
     @BeforeAll
-    public static void setupServer() {
+    static void setupServer() {
+        initializeSpine();
         server = ApplicationContext.run(EmbeddedServer.class);
         client = server
                 .getApplicationContext()
@@ -46,7 +48,7 @@ final class HelloFunctionTest {
     }
 
     @AfterAll
-    public static void stopServer() {
+    static void stopServer() {
         if (server != null) {
             server.stop();
         }
@@ -56,9 +58,9 @@ final class HelloFunctionTest {
     }
 
     @Test
-    public void testFunction() {
+    void testFunction() {
         String actual = client.toBlocking()
-                              .retrieve(HttpRequest.GET("/hello"));
+                              .retrieve(HttpRequest.GET("/organizations"));
         assertEquals("Example Response", actual);
     }
 }

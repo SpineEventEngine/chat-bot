@@ -18,38 +18,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot;
+package io.spine.chatbot.server.github;
 
-import com.google.common.annotations.VisibleForTesting;
-import io.micronaut.runtime.Micronaut;
-import io.spine.chatbot.server.github.GitHubContext;
-import io.spine.server.Server;
+import io.spine.testing.UtilityClassTest;
+import org.junit.jupiter.api.DisplayName;
 
-import java.io.IOException;
+@DisplayName("GitHubContext should")
+final class GitHubContextTest extends UtilityClassTest<GitHubContext> {
 
-public final class Application {
-
-    static final String SERVER_NAME = "ChatBotServer";
-
-    private Application() {
-    }
-
-    public static void main(String[] args) {
-        initializeSpine();
-        Micronaut.run(Application.class, args);
-    }
-
-    @VisibleForTesting
-    static void initializeSpine() {
-        ChatBotServerEnvironment.initializeEnvironment();
-        Server server = Server
-                .inProcess(SERVER_NAME)
-                .add(GitHubContext.newBuilder())
-                .build();
-        try {
-            server.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    GitHubContextTest() {
+        super(GitHubContext.class);
     }
 }

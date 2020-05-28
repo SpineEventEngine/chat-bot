@@ -18,38 +18,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot;
+package io.spine.net;
 
-import com.google.common.annotations.VisibleForTesting;
-import io.micronaut.runtime.Micronaut;
-import io.spine.chatbot.server.github.GitHubContext;
-import io.spine.server.Server;
+/**
+ * An utility for working with {@link Url}.
+ */
+public final class Urls {
 
-import java.io.IOException;
-
-public final class Application {
-
-    static final String SERVER_NAME = "ChatBotServer";
-
-    private Application() {
+    /**
+     * Prevents instantiation of this utility class.
+     */
+    private Urls() {
     }
 
-    public static void main(String[] args) {
-        initializeSpine();
-        Micronaut.run(Application.class, args);
-    }
-
-    @VisibleForTesting
-    static void initializeSpine() {
-        ChatBotServerEnvironment.initializeEnvironment();
-        Server server = Server
-                .inProcess(SERVER_NAME)
-                .add(GitHubContext.newBuilder())
-                .build();
-        try {
-            server.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    /** Creates a new {@link Url} out of supplied spec. **/
+    public static Url urlOfSpec(String spec) {
+        return Url.newBuilder()
+                  .setSpec(spec)
+                  .vBuild();
     }
 }
