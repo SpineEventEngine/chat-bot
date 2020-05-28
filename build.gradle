@@ -24,7 +24,7 @@ plugins {
     id 'com.google.cloud.tools.jib' version '2.3.0' apply false
     id "net.saliman.properties" version "1.5.1" apply false
     id 'io.spine.tools.gradle.bootstrap' version '1.5.8' apply false
-    id "net.ltgt.errorprone" version "1.1.1" apply false
+    id "net.ltgt.errorprone" version "1.2.0" apply false
 }
 
 allprojects {
@@ -96,7 +96,15 @@ subprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-        options.compilerArgs.add('-parameters')
+        options.compilerArgs.addAll("-Xlint:unchecked", "-Xlint:deprecation")
+
+        options.errorprone
+                .errorproneArgs
+                .addAll('-XepExcludedPaths:.*/generated/.*',
+                        '-Xep:ClassCanBeStatic:OFF',
+                        '-Xep:UnusedMethod:OFF',
+                        '-Xep:UnusedVariable:OFF',
+                        '-Xep:CheckReturnValue:OFF')
     }
 
     tasks.withType(JavaExec) {
