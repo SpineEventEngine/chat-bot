@@ -15,11 +15,11 @@ import "spine/core/user_id.proto";
 // Internal GitHub organization ID.
 message OrganizationId {
 
-    string uuid = 1[(required) = true];
+    string uuid = 1 [(required) = true];
 }
 
 // Internal GitHub repository ID.
 message RepositoryId {
 
-    string uuid = 1[(required) = true];
+    string uuid = 1 [(required) = true];
 }
