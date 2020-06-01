@@ -40,8 +40,10 @@ message Repository {
 
     RepositoryId id = 1;
 
-    // Name of the repository.
-    string name = 2;
+    // Slug of the repository.
+    //
+    // E.g. `SpineEventEngine/base`. The slug is used as a human-friendly unique identifier.
+    string slug = 2;
 
     // GitHub URL of the repository.
     spine.net.Url github_url = 3;
