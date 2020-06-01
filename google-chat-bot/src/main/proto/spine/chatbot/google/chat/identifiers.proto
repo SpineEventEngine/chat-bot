@@ -20,23 +20,29 @@
 
 syntax = "proto3";
 
-package spine.chatbot.github;
+package spine.chatbot.google.chat;
 
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io.chatbot";
-option java_package = "io.spine.chatbot.github";
+option java_package = "io.spine.chatbot.google.chat";
 option java_outer_classname = "IdentifiersProto";
 option java_multiple_files = true;
 
-// Internal GitHub organization ID.
-message OrganizationId {
+// Hangouts Chat Space identifier.
+message SpaceId {
 
     string uuid = 1 [(required) = true];
 }
 
-// Internal GitHub repository ID.
-message RepositoryId {
+// Hangouts Chat Room identifier.
+message RoomId {
+
+    string uuid = 1 [(required) = true];
+}
+
+// Hangout Chat Room Thread identifier.
+message ThreadId {
 
     string uuid = 1 [(required) = true];
 }
