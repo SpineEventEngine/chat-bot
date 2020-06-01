@@ -1,0 +1,129 @@
+/*
+ * Copyright 2020, TeamDev. All rights reserved.
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+syntax = "proto3";
+
+package spine.chatbot.travis;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.travis";
+option java_outer_classname = "TravisCiProto";
+option java_multiple_files = true;
+
+import "spine/time/time.proto";
+import "spine/core/user_id.proto";
+
+message Owner {
+
+    // Value uniquely identifying the owner.
+    uint64 id = 1;
+
+    // User or organization login set on GitHub.
+    string login = 2;
+}
+
+// An individual repository.
+message Repository {
+
+    // Value uniquely identifying the repository.
+    uint64 id = 1;
+
+    // The repository's name on GitHub.
+    string name = 2;
+
+    // The repository's slug.
+    //
+    // Same as {repository.owner.name}/{repository.name}.
+    string slug = 3;
+}
+
+// The branch of a GitHub repository.
+message Branch {
+
+    // Name of the git branch.
+    string name = 1;
+}
+
+// Commit information is obtained by requesting a build.
+message Commit {
+
+    // Value uniquely identifying the commit.
+    uint64 id = 1;
+
+    // Checksum the commit has in git and is identified by.
+    string sha = 2;
+
+    // Named reference the commit has in git.
+    string ref = 3;
+
+    // Commit message.
+    string message = 4;
+
+    // URL to the commit's diff on GitHub.
+    string compare_url = 5;
+
+    // Commit date from git.
+    string committed_at = 6;
+}
+
+// Minimal Travis CI build representation.
+message Build {
+
+    // Value uniquely identifying the build.
+    uint64 id = 1;
+
+    // Incremental number for a repository's builds.
+    string number = 2;
+
+    // Current state of the build.
+    string state = 3;
+
+    // Wall clock time in seconds.
+    uint64 duration = 4;
+
+    // Event that triggered the build.
+    string event_type = 5;
+
+    // State of the previous build.
+    string previous_state = 6;
+
+    // GitHub repository the build is associated with.
+    Repository repository = 7;
+
+    // The branch the build is associated with.
+    Branch branch = 8;
+
+    // The build's tag.
+    string tag = 9;
+
+    // The commit the build is associated with.
+    Commit commit = 10;
+
+    // The User or Organization that created the build.
+    Owner created_by = 11;
+}
+
+// A Travis `builds` API endpoint response.
+message BuildsResponse {
+
+    repeated Build builds = 1;
+}
