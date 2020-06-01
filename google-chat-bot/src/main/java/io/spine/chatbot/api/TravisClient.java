@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.travis.api;
+package io.spine.chatbot.api;
 
 import io.spine.chatbot.travis.BuildsResponse;
 
@@ -29,7 +29,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 
-import static io.spine.chatbot.travis.api.JsonProtoBodyHandler.jsonBodyHandler;
+import static io.spine.chatbot.api.JsonProtoBodyHandler.jsonBodyHandler;
 
 final class TravisClient {
 

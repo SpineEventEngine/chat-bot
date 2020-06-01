@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.travis.api;
+package io.spine.chatbot.api;
 
 import com.google.protobuf.Message;
 import io.spine.json.Json;
