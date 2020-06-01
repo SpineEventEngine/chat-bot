@@ -1,0 +1,6 @@
+###
+
+GET https://api.travis-ci.com/repo/SpineEventEngine%2Fbase/builds?limit=1&branch.name=master
+Accept: application/json
+Authorization: token <token>
+Travis-API-Version: 3
