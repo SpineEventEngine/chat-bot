@@ -32,13 +32,14 @@ option java_multiple_files = true;
 // Hangouts Chat Space identifier.
 message SpaceId {
 
-    string uuid = 1 [(required) = true];
+    // Resource name of the space, in the form "spaces/*".
+    string value = 1 [(required) = true];
 }
 
 // Hangouts Chat Room identifier.
 message RoomId {
 
-    string uuid = 1 [(required) = true];
+    string value = 1 [(required) = true];
 }
 
 // Hangout Chat Room Thread identifier.
