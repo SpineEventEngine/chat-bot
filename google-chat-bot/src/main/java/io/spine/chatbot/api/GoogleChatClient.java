@@ -58,11 +58,10 @@ public final class GoogleChatClient {
             .getSpaces()
             .forEach(System.out::println);
         var message = new Message()
-                .setName("test-message")
                 .setText("This is a test message from the Bot API.");
         System.out.println(chat.spaces()
                                .messages()
-                               .create("", message)
+                               .create("spaces/4H4sJgAAAAE", message)
                                .execute());
     }
 }

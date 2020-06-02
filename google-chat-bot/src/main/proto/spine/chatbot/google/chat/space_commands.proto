@@ -18,40 +18,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot;
+syntax = "proto3";
 
-import com.google.common.annotations.VisibleForTesting;
-import io.micronaut.runtime.Micronaut;
-import io.spine.chatbot.server.github.GitHubContext;
-import io.spine.chatbot.server.google.chat.GoogleChatContext;
-import io.spine.server.Server;
+package spine.chatbot.google.chat;
 
-import java.io.IOException;
+import "spine/options.proto";
 
-public final class Application {
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.google.chat.command";
+option java_outer_classname = "SpaceCommandsProto";
+option java_multiple_files = true;
 
-    static final String SERVER_NAME = "ChatBotServer";
+import "spine/chatbot/google/chat/identifiers.proto";
 
-    private Application() {
-    }
+message RegisterSpace {
 
-    public static void main(String[] args) {
-        initializeSpine();
-        Micronaut.run(Application.class, args);
-    }
+    SpaceId id = 1 [(required) = true];
 
-    @VisibleForTesting
-    static void initializeSpine() {
-        ChatBotServerEnvironment.initializeEnvironment();
-        Server server = Server
-                .inProcess(SERVER_NAME)
-                .add(GitHubContext.newBuilder())
-                .add(GoogleChatContext.newBuilder())
-                .build();
-        try {
-            server.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    // Resource name of the space, in the form "spaces/*".
+    string name = 2 [(required) = true];
+
+    // Whether the space is a DM between a bot and a single human.
+    bool single_user_bot_dm = 3;
+
+    // Whether the messages are threaded in this space.
+    bool threaded = 4;
+
+    // The display name (only if the space is a room).
+    string display_name = 5;
 }
