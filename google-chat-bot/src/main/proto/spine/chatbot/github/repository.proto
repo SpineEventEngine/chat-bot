@@ -25,8 +25,8 @@ package spine.chatbot.github;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io.chatbot";
-option java_package = "io.spine.chatbot.github";
-option java_outer_classname = "GithubOrganizationProto";
+option java_package = "io.spine.chatbot.github.repository";
+option java_outer_classname = "RepositoryProto";
 option java_multiple_files = true;
 
 import "spine/net/url.proto";
@@ -49,8 +49,11 @@ message Repository {
     // Travis CI URL of the repository.
     spine.net.Url travis_ci_url = 4;
 
+    // ID of the organization repository is related to if any.
+    OrganizationId organization_id = 5;
+
     // Current state of the build.
-    BuildState build_state = 5;
+    BuildState build_state = 6;
 }
 
 // State of the build for a repository branch.

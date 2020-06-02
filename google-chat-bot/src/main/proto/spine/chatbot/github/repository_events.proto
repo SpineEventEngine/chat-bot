@@ -47,6 +47,9 @@ message RepositoryRegistered {
 
     // Travis CI URL of the repository.
     spine.net.Url travis_ci_url = 4 [(required) = true];
+
+    // ID of the organization repository is related to if any.
+    OrganizationId organization_id = 5;
 }
 
 // Denotes that a build state was changed.
