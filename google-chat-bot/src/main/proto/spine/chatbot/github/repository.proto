@@ -40,14 +40,70 @@ message Repository {
 
     RepositoryId id = 1;
 
-    // Slug of the repository.
-    //
-    // E.g. `SpineEventEngine/base`. The slug is used as a human-friendly unique identifier.
-    string slug = 2;
+    // Name of the repository.
+    string name = 2;
 
     // GitHub URL of the repository.
     spine.net.Url github_url = 3;
 
     // Travis CI URL of the repository.
     spine.net.Url travis_ci_url = 4;
+
+    // Current state of the build.
+    BuildState build_state = 5;
+}
+
+// State of the build for a repository branch.
+message BuildState {
+
+    // Incremental number for a repository's builds.
+    string number = 1;
+
+    // Current state of the build.
+    Status status = 2;
+
+    // State of the previous build.
+    Status previous_status = 3;
+
+    // The branch the build is associated with.
+    string branch = 4;
+
+    enum Status {
+        BS_STATUS_UNKNOWN = 0;
+
+        PASSING = 1;
+
+        FAILING = 2;
+    }
+
+    // The commit the build is associated with.
+    Commit last_commit = 5;
+
+    // The User or Organization that created the build.
+    string created_by = 6;
+
+    message Commit {
+
+        // Checksum the commit has in git and is identified by.
+        string sha = 1;
+
+        // Commit message.
+        string message = 2;
+
+        // URL to the commit's diff on GitHub.
+        string compare_url = 3;
+
+        // Commit date from git.
+        string committed_at = 4;
+    }
+}
+
+// Definition of a change in a `build_state` field.
+message BuildStateChange {
+
+    // The value of the field that's changing.
+    BuildState previous_value = 1;
+
+    // The new value of the field.
+    BuildState new_value = 2 [(required) = true];
 }

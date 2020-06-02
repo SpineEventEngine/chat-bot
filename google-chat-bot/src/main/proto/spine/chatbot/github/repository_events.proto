@@ -32,6 +32,7 @@ option java_multiple_files = true;
 import "spine/net/url.proto";
 
 import "spine/chatbot/github/identifiers.proto";
+import "spine/chatbot/github/repository.proto";
 
 // Denotes that a new repository is registered.
 message RepositoryRegistered {
@@ -46,4 +47,12 @@ message RepositoryRegistered {
 
     // Travis CI URL of the repository.
     spine.net.Url travis_ci_url = 4 [(required) = true];
+}
+
+// Denotes that a build state was changed.
+message BuildStateChanged {
+
+    RepositoryId id = 1 [(required) = true];
+
+    BuildStateChange change = 2;
 }

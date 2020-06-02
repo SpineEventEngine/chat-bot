@@ -32,6 +32,7 @@ option java_multiple_files = true;
 import "spine/net/url.proto";
 
 import "spine/chatbot/github/identifiers.proto";
+import "spine/chatbot/github/repository.proto";
 
 // Registers a new repository in the system.
 message RegisterRepository {
@@ -46,4 +47,12 @@ message RegisterRepository {
 
     // Travis CI URL of the repository.
     spine.net.Url travis_ci_url = 4 [(required) = true];
+}
+
+// Sets the new build state of the repository.
+message SetBuildState {
+
+    RepositoryId id = 1 [(required) = true];
+
+    BuildState build_state = 2;
 }
