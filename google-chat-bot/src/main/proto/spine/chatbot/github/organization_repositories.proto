@@ -29,8 +29,6 @@ option java_package = "io.spine.chatbot.github.organization";
 option java_outer_classname = "OrganizationRepositoriesProto";
 option java_multiple_files = true;
 
-import "spine/net/url.proto";
-
 import "spine/chatbot/github/identifiers.proto";
 
 // A GitHub organization.

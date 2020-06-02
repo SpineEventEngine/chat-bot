@@ -29,9 +29,6 @@ option java_package = "io.spine.chatbot.travis";
 option java_outer_classname = "TravisCiProto";
 option java_multiple_files = true;
 
-import "spine/time/time.proto";
-import "spine/core/user_id.proto";
-
 message Owner {
 
     // Value uniquely identifying the owner.
