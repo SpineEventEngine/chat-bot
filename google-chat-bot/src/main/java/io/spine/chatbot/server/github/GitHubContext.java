@@ -83,6 +83,7 @@ public final class GitHubContext {
     public static BoundedContextBuilder newBuilder() {
         return BoundedContext
                 .singleTenant(NAME)
-                .add(OrganizationAggregate.class);
+                .add(OrganizationAggregate.class)
+                .add(RepositoryAggregate.class);
     }
 }
