@@ -20,9 +20,9 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.github.BuildStateChange;
-import io.spine.chatbot.github.Repository;
 import io.spine.chatbot.github.RepositoryId;
+import io.spine.chatbot.github.repository.BuildStateChange;
+import io.spine.chatbot.github.repository.Repository;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
 import io.spine.chatbot.github.repository.command.SetBuildState;
 import io.spine.chatbot.github.repository.event.BuildStateChanged;
