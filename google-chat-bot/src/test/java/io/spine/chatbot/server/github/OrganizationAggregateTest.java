@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.net.Urls.urlOfSpec;
 
-@DisplayName("Organization should")
+@DisplayName("OrganizationAggregate should")
 final class OrganizationAggregateTest extends ContextAwareTest {
 
     @Override
@@ -39,14 +39,15 @@ final class OrganizationAggregateTest extends ContextAwareTest {
     }
 
     @Test
-    void registerOrganization() {
-        var organizationId = OrganizationId
+    @DisplayName("register an organization")
+    void register() {
+        var id = OrganizationId
                 .newBuilder()
                 .setValue("TestOrganization")
                 .vBuild();
         var registerOrganization = RegisterOrganization
                 .newBuilder()
-                .setId(organizationId)
+                .setId(id)
                 .setGithubUrl(urlOfSpec("https://github.com/TestOrganization"))
                 .setTravisCiUrl(urlOfSpec("https://travis-ci.com/TestOrganization"))
                 .setWebsiteUrl(urlOfSpec("https://test-organization.com"))
@@ -56,13 +57,13 @@ final class OrganizationAggregateTest extends ContextAwareTest {
 
         var expectedState = Organization
                 .newBuilder()
-                .setId(organizationId)
+                .setId(id)
                 .setGithubUrl(urlOfSpec("https://github.com/TestOrganization"))
                 .setTravisCiUrl(urlOfSpec("https://travis-ci.com/TestOrganization"))
                 .setWebsiteUrl(urlOfSpec("https://test-organization.com"))
                 .setName("Test Organization")
                 .vBuild();
-        context().assertState(organizationId, Organization.class)
+        context().assertState(id, Organization.class)
                  .isEqualTo(expectedState);
     }
 }

@@ -30,8 +30,8 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.net.Urls.urlOfSpec;
 
-@DisplayName("Repository should")
-public class RepositoryAggregateTest extends ContextAwareTest {
+@DisplayName("RepositoryAggregate should")
+final class RepositoryAggregateTest extends ContextAwareTest {
 
     @Override
     protected BoundedContextBuilder contextBuilder() {
@@ -39,7 +39,8 @@ public class RepositoryAggregateTest extends ContextAwareTest {
     }
 
     @Test
-    void registerOrganization() {
+    @DisplayName("register a repository")
+    void register() {
         var id = RepositoryId
                 .newBuilder()
                 .setValue("SpineEventEngine/base")
