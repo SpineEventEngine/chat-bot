@@ -40,8 +40,11 @@ final class OrganizationAggregateTest extends ContextAwareTest {
 
     @Test
     void registerOrganization() {
-        OrganizationId organizationId = OrganizationId.generate();
-        RegisterOrganization registerOrganization = RegisterOrganization
+        var organizationId = OrganizationId
+                .newBuilder()
+                .setValue("TestOrganization")
+                .vBuild();
+        var registerOrganization = RegisterOrganization
                 .newBuilder()
                 .setId(organizationId)
                 .setGithubUrl(urlOfSpec("https://github.com/TestOrganization"))
@@ -51,7 +54,7 @@ final class OrganizationAggregateTest extends ContextAwareTest {
                 .vBuild();
         context().receivesCommand(registerOrganization);
 
-        Organization expectedState = Organization
+        var expectedState = Organization
                 .newBuilder()
                 .setId(organizationId)
                 .setGithubUrl(urlOfSpec("https://github.com/TestOrganization"))
