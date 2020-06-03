@@ -18,29 +18,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.chatbot.server.github;
 
-package spine.chatbot.github;
+import io.spine.chatbot.github.OrganizationId;
+import io.spine.chatbot.github.organization.OrganizationRepositories;
+import io.spine.chatbot.github.organization.event.OrganizationRegistered;
+import io.spine.chatbot.github.repository.event.RepositoryRegistered;
+import io.spine.core.Subscribe;
+import io.spine.server.projection.Projection;
 
-import "spine/options.proto";
+final class OrganizationRepositoriesProjection
+        extends Projection<OrganizationId, OrganizationRepositories, OrganizationRepositories.Builder> {
 
-option (type_url_prefix) = "type.spine.io.chatbot";
-option java_package = "io.spine.chatbot.github";
-option java_outer_classname = "IdentifiersProto";
-option java_multiple_files = true;
+    @Subscribe
+    void on(OrganizationRegistered e) {
+        builder().setId(e.getId());
+    }
 
-// GitHub organization ID.
-message OrganizationId {
-
-    // Name of the GitHub organization.
-    string value = 1 [(required) = true];
-}
-
-// GitHub repository ID.
-message RepositoryId {
-
-    // Slug of the repository.
-    //
-    // E.g. `SpineEventEngine/base`. The slug is used as a human-friendly unique identifier.
-    string value = 1 [(required) = true];
+    @Subscribe
+    void on(RepositoryRegistered e) {
+        builder().addRepositories(e.getId());
+    }
 }

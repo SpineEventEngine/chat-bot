@@ -36,7 +36,7 @@ message OrganizationRepositories {
     option (entity).kind = PROJECTION;
     option (entity).visibility = FULL;
 
-    OrganizationRepositoriesId id = 1;
+    OrganizationId id = 1;
 
     // Linked organization repositories.
     repeated RepositoryId repositories = 2;
