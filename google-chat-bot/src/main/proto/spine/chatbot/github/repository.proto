@@ -62,14 +62,17 @@ message BuildState {
     // Incremental number for a repository's builds.
     string number = 1;
 
+    // Travis CI URL of the build.
+    spine.net.Url travis_ci_url = 2;
+
     // Current state of the build.
-    Status status = 2;
+    Status status = 3;
 
     // State of the previous build.
-    Status previous_status = 3;
+    Status previous_status = 4;
 
     // The branch the build is associated with.
-    string branch = 4;
+    string branch = 5;
 
     enum Status {
         BS_STATUS_UNKNOWN = 0;
@@ -80,10 +83,10 @@ message BuildState {
     }
 
     // The commit the build is associated with.
-    Commit last_commit = 5;
+    Commit last_commit = 6;
 
     // The User or Organization that created the build.
-    string created_by = 6;
+    string created_by = 7;
 
     message Commit {
 
@@ -94,7 +97,7 @@ message BuildState {
         string message = 2;
 
         // URL to the commit's diff on GitHub.
-        string compare_url = 3;
+        spine.net.Url compare_url = 3;
 
         // Commit date from git.
         string committed_at = 4;
