@@ -33,6 +33,7 @@ import com.google.api.services.chat.v1.model.OpenLink;
 import com.google.api.services.chat.v1.model.Section;
 import com.google.api.services.chat.v1.model.Space;
 import com.google.api.services.chat.v1.model.TextButton;
+import com.google.api.services.chat.v1.model.TextParagraph;
 import com.google.api.services.chat.v1.model.Thread;
 import com.google.api.services.chat.v1.model.WidgetMarkup;
 import com.google.auth.http.HttpCredentialsAdapter;
@@ -113,16 +114,29 @@ public final class GoogleChatClient {
     }
 
     private static Section commitSection(BuildState.Commit commit) {
-        return sectionWithWidget(commitWidget(commit));
+        var commitInfo = String.format(
+                "Authored by <b>%s</b> at %s.", commit.getAuthoredBy(), commit.getCommittedAt()
+        );
+        var section = new Section()
+                .setHeader("Commit " + commit.getSha())
+                .setWidgets(ImmutableList.of(
+                        textParagraph(commit.getMessage()),
+                        textParagraph(commitInfo)
+                ));
+        return section;
     }
 
-    private static WidgetMarkup commitWidget(BuildState.Commit commit) {
-        var keyValue = new KeyValue()
-                .setTopLabel("Commit " + commit.getSha())
-                .setContent(commit.getMessage())
-                .setBottomLabel("At " + commit.getCommittedAt())
-                .setButton(linkButton("Changes", commit.getCompareUrl()));
-        return new WidgetMarkup().setKeyValue(keyValue);
+    private static Section actions(BuildState buildState) {
+        BuildState.Commit commit = buildState.getLastCommit();
+        WidgetMarkup actionButtons = new WidgetMarkup().setButtons(ImmutableList.of(
+                linkButton("Open build", buildState.getTravisCiUrl()),
+                linkButton("Open changeset", commit.getCompareUrl())
+        ));
+        return sectionWithWidget(actionButtons);
+    }
+
+    private static WidgetMarkup textParagraph(String formattedText) {
+        return new WidgetMarkup().setTextParagraph(new TextParagraph().setText(formattedText));
     }
 
     private static Section buildStateSection(BuildState buildState) {
@@ -146,8 +160,7 @@ public final class GoogleChatClient {
         var keyValue = new KeyValue()
                 .setTopLabel("Build No.")
                 .setContent(buildState.getNumber())
-                .setBottomLabel(status)
-                .setButton(linkButton("Build", Urls.urlOfSpec("https://google.com")));
+                .setBottomLabel(status);
         return new WidgetMarkup().setKeyValue(keyValue);
     }
 
@@ -168,7 +181,8 @@ public final class GoogleChatClient {
                 .setImageUrl("https://www.freeiconspng.com/uploads/failure-icon-2.png");
         var sections = ImmutableList.of(
                 buildStateSection(buildState),
-                commitSection(buildState.getLastCommit())
+                commitSection(buildState.getLastCommit()),
+                actions(buildState)
         );
         var message = new Message().setCards(cardWith(cardHeader, sections));
         if (!isNullOrEmpty(threadName)) {
@@ -188,6 +202,7 @@ public final class GoogleChatClient {
                 .setSha("d97c603d5e855d0d211382f78916ad085ba04743")
                 .setCompareUrl(Urls.urlOfSpec(
                         "https://github.com/SpineEventEngine/base/commit/d97c603d5e855d0d211382f78916ad085ba04743"))
+                .setAuthoredBy("yuri-sergiichuk")
                 .vBuild();
         BuildState buildState = BuildState
                 .newBuilder()
