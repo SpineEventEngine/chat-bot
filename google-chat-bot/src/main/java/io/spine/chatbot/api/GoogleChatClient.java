@@ -114,9 +114,9 @@ public final class GoogleChatClient {
 
     private static WidgetMarkup commitWidget(BuildState.Commit commit) {
         var keyValue = new KeyValue()
-                .setTopLabel("Commit")
+                .setTopLabel("Commit " + commit.getSha())
                 .setContent(commit.getMessage())
-                .setBottomLabel(commit.getSha())
+                .setBottomLabel("At " + commit.getCommittedAt())
                 .setButton(linkButton("Changes", commit.getCompareUrl()));
         return new WidgetMarkup().setKeyValue(keyValue);
     }
@@ -174,7 +174,9 @@ public final class GoogleChatClient {
         listSpaces(chat).forEach(System.out::println);
         var commit = BuildState.Commit
                 .newBuilder()
-                .setMessage("My test commit")
+                .setCommittedAt("2020-06-03T14:45:02Z")
+                .setMessage(
+                        "My test commit with a very long description and even\n\n Sub-description, cause it is very relevant and has additional reference to issue\n #749 and a lot of kind words!")
                 .setSha("d97c603d5e855d0d211382f78916ad085ba04743")
                 .setCompareUrl(Urls.urlOfSpec(
                         "https://github.com/SpineEventEngine/base/commit/d97c603d5e855d0d211382f78916ad085ba04743"))
