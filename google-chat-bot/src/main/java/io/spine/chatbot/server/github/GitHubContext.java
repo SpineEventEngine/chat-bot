@@ -85,6 +85,7 @@ public final class GitHubContext {
                 .singleTenant(NAME)
                 .add(OrganizationAggregate.class)
                 .add(RepositoryAggregate.class)
+                .add(RepositoryBuildProcess.class)
                 .add(new OrganizationRepositoriesRepository());
     }
 }
