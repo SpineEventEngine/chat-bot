@@ -33,8 +33,13 @@ dependencies {
     testImplementation "io.spine:spine-testutil-server:${spine.version()}"
 }
 
+mainClassName = "io.spine.chatbot.Application"
+
 jib {
     to {
-        image = "gcr.io/${gcpProject}/chat-bot"
+        image = "gcr.io/${gcpProject}/google-chat-bot-server"
+    }
+    container {
+        mainClass = mainClassName
     }
 }
