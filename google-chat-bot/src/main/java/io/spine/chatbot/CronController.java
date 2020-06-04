@@ -23,8 +23,10 @@ package io.spine.chatbot;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.spine.chatbot.github.organization.Organization;
+import io.spine.chatbot.github.organization.OrganizationRepositories;
 import io.spine.client.Client;
 
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static io.spine.chatbot.Application.SERVER_NAME;
@@ -37,12 +39,21 @@ public class CronController {
         Client client = Client
                 .inProcess(SERVER_NAME)
                 .build();
-        String result = client.asGuest()
-                              .select(Organization.class)
-                              .run()
-                              .stream()
-                              .map(String::valueOf)
-                              .collect(Collectors.joining());
+        var orgIds = client.asGuest()
+                           .select(Organization.class)
+                           .run()
+                           .stream()
+                           .map(Organization::getId)
+                           .collect(Collectors.toList());
+        var orgRepos = client.asGuest()
+                             .select(OrganizationRepositories.class)
+                             .byId(orgIds)
+                             .run();
+        var repositoryIds = orgRepos.stream()
+                                    .map(OrganizationRepositories::getRepositoriesList)
+                                    .flatMap(Collection::stream)
+                                    .collect(Collectors.toList());
+
         return "success";
     }
 }
