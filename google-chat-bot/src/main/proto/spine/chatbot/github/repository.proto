@@ -101,6 +101,9 @@ message BuildState {
 
         // Commit date from git.
         string committed_at = 4;
+
+        // Commit author from git.
+        string authored_by = 5;
     }
 
     // The repository slug the builds is associated with.

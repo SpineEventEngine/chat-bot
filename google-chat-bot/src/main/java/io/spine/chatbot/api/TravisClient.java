@@ -47,7 +47,8 @@ final class TravisClient {
 
     public BuildsResponse queryBuildsFor(String repoSlug) {
         var encodedSlug = URLEncoder.encode(repoSlug, StandardCharsets.UTF_8);
-        var repoBuilds = "/repo/" + encodedSlug + "/builds?limit=1&branch.name=master";
+        var repoBuilds =
+                "/repo/" + encodedSlug + "/builds?limit=1&branch.name=master?include=build.commit";
         var request = apiRequest(repoBuilds, apiToken);
         try {
             var result = CLIENT.send(request, jsonBodyHandler(BuildsResponse.class));

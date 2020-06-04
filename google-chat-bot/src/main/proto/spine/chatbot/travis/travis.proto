@@ -80,6 +80,16 @@ message Commit {
 
     // Commit date from git.
     string committed_at = 6;
+
+    // Commit author.
+    Author author = 7;
+
+    // Git commit author information
+    message Author {
+
+        // Git name of the commit author
+        string name = 1;
+    }
 }
 
 // Minimal Travis CI build representation.
