@@ -112,6 +112,10 @@ public final class GoogleChatClient {
         return new Section().setWidgets(List.of(widget));
     }
 
+    private static Section commitSection(BuildState.Commit commit) {
+        return sectionWithWidget(commitWidget(commit));
+    }
+
     private static WidgetMarkup commitWidget(BuildState.Commit commit) {
         var keyValue = new KeyValue()
                 .setTopLabel("Commit " + commit.getSha())
@@ -121,8 +125,12 @@ public final class GoogleChatClient {
         return new WidgetMarkup().setKeyValue(keyValue);
     }
 
+    private static Section buildStateSection(BuildState buildState) {
+        return sectionWithWidget(buildStateWidget(buildState));
+    }
+
     private static WidgetMarkup buildStateWidget(BuildState buildState) {
-        String status = null;
+        String status;
         switch (buildState.getStatus()) {
             case PASSING:
                 status = "Passing";
@@ -159,8 +167,8 @@ public final class GoogleChatClient {
                 .setTitle(buildState.getRepositorySlug())
                 .setImageUrl("https://www.freeiconspng.com/uploads/failure-icon-2.png");
         var sections = ImmutableList.of(
-                sectionWithWidget(buildStateWidget(buildState)),
-                sectionWithWidget(commitWidget(buildState.getLastCommit()))
+                buildStateSection(buildState),
+                commitSection(buildState.getLastCommit())
         );
         var message = new Message().setCards(cardWith(cardHeader, sections));
         if (!isNullOrEmpty(threadName)) {
