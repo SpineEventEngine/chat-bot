@@ -37,7 +37,6 @@ import com.google.api.services.chat.v1.model.Thread;
 import com.google.api.services.chat.v1.model.WidgetMarkup;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.chatbot.github.repository.BuildState;
@@ -51,6 +50,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.List;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public final class GoogleChatClient {
 
@@ -161,9 +162,8 @@ public final class GoogleChatClient {
                 sectionWithWidget(buildStateWidget(buildState)),
                 sectionWithWidget(commitWidget(buildState.getLastCommit()))
         );
-        var message = new Message()
-                .setCards(cardWith(cardHeader, sections));
-        if (Strings.isNullOrEmpty(threadName)) {
+        var message = new Message().setCards(cardWith(cardHeader, sections));
+        if (!isNullOrEmpty(threadName)) {
             message.setThread(new Thread().setName(threadName));
         }
         return message;
