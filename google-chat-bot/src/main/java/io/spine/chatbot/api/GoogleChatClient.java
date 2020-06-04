@@ -144,23 +144,10 @@ public final class GoogleChatClient {
     }
 
     private static WidgetMarkup buildStateWidget(BuildState buildState) {
-        String status;
-        switch (buildState.getStatus()) {
-            case PASSING:
-                status = "Passing";
-                break;
-            case FAILING:
-                status = "Failing";
-                break;
-            case BS_STATUS_UNKNOWN:
-            case UNRECOGNIZED:
-            default:
-                status = "Undefined status";
-        }
         var keyValue = new KeyValue()
                 .setTopLabel("Build No.")
                 .setContent(buildState.getNumber())
-                .setBottomLabel(status);
+                .setBottomLabel(buildState.getState());
         return new WidgetMarkup().setKeyValue(keyValue);
     }
 
@@ -208,7 +195,7 @@ public final class GoogleChatClient {
                 .newBuilder()
                 .setRepositorySlug("SpineEventEngine/base")
                 .setNumber("5292")
-                .setStatus(BuildState.Status.FAILING)
+                .setState("failed")
                 .setLastCommit(commit)
                 .setTravisCiUrl(Urls.urlOfSpec(
                         "https://travis-ci.com/github/SpineEventEngine/base/builds/166723382"))

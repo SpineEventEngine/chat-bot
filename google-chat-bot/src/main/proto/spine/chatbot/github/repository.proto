@@ -66,21 +66,13 @@ message BuildState {
     spine.net.Url travis_ci_url = 2;
 
     // Current state of the build.
-    Status status = 3;
+    string state = 3;
 
     // State of the previous build.
-    Status previous_status = 4;
+    string previous_state = 4;
 
     // The branch the build is associated with.
     string branch = 5;
-
-    enum Status {
-        BS_STATUS_UNKNOWN = 0;
-
-        PASSING = 1;
-
-        FAILING = 2;
-    }
 
     // The commit the build is associated with.
     Commit last_commit = 6;
