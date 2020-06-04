@@ -19,6 +19,5 @@
  */
 
 rootProject.name = "chat-bot"
-include 'webhook-receiver'
 include 'google-chat-bot'
 

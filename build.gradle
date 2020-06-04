@@ -83,8 +83,6 @@ subprojects {
 
     test.classpath += configurations.developmentOnly
 
-    mainClassName = "io.spine.chatbot.Application"
-
     test {
         useJUnitPlatform()
     }
