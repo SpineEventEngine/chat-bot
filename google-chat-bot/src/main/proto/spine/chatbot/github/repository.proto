@@ -102,6 +102,9 @@ message BuildState {
         // Commit date from git.
         string committed_at = 4;
     }
+
+    // The repository slug the builds is associated with.
+    string repository_slug = 8;
 }
 
 // Definition of a change in a `build_state` field.
