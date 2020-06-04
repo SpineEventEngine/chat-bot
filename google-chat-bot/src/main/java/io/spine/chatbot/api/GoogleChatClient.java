@@ -43,6 +43,7 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.chatbot.github.repository.BuildState;
 import io.spine.net.Url;
 import io.spine.net.Urls;
+import io.spine.validate.Validate;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -120,10 +121,23 @@ public final class GoogleChatClient {
     }
 
     private static WidgetMarkup buildStateWidget(BuildState buildState) {
+        String status = null;
+        switch (buildState.getStatus()) {
+            case PASSING:
+                status = "Passing";
+                break;
+            case FAILING:
+                status = "Failing";
+                break;
+            case BS_STATUS_UNKNOWN:
+            case UNRECOGNIZED:
+            default:
+                status = "Undefined status";
+        }
         var keyValue = new KeyValue()
                 .setTopLabel("Build No.")
                 .setContent(buildState.getNumber())
-                .setBottomLabel("Failed")
+                .setBottomLabel(status)
                 .setButton(linkButton("Build", Urls.urlOfSpec("https://google.com")));
         return new WidgetMarkup().setKeyValue(keyValue);
     }
@@ -139,6 +153,7 @@ public final class GoogleChatClient {
     }
 
     private static Message buildStateMessage(BuildState buildState, @Nullable String threadName) {
+        Validate.checkValid(buildState);
         var cardHeader = new CardHeader()
                 .setTitle(buildState.getRepositorySlug())
                 .setImageUrl("https://www.freeiconspng.com/uploads/failure-icon-2.png");
@@ -168,6 +183,7 @@ public final class GoogleChatClient {
                 .newBuilder()
                 .setRepositorySlug("SpineEventEngine/base")
                 .setNumber("5292")
+                .setStatus(BuildState.Status.FAILING)
                 .setLastCommit(commit)
                 .setTravisCiUrl(Urls.urlOfSpec(
                         "https://travis-ci.com/github/SpineEventEngine/base/builds/166723382"))
