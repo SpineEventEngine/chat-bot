@@ -140,7 +140,7 @@ public final class GoogleChatClient {
 
     private static Message buildStateMessage(BuildState buildState, @Nullable String threadName) {
         var cardHeader = new CardHeader()
-                .setTitle("SpineEventEngine/base")
+                .setTitle(buildState.getRepositorySlug())
                 .setImageUrl("https://www.freeiconspng.com/uploads/failure-icon-2.png");
         var sections = ImmutableList.of(
                 sectionWithWidget(buildStateWidget(buildState)),
@@ -166,6 +166,7 @@ public final class GoogleChatClient {
                 .vBuild();
         BuildState buildState = BuildState
                 .newBuilder()
+                .setRepositorySlug("SpineEventEngine/base")
                 .setNumber("5292")
                 .setLastCommit(commit)
                 .setTravisCiUrl(Urls.urlOfSpec(
