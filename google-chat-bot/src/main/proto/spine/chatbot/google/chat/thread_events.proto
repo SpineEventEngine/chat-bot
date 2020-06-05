@@ -25,30 +25,29 @@ package spine.chatbot.google.chat;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io.chatbot";
-option java_package = "io.spine.chatbot.google.chat";
-option java_outer_classname = "IdentifiersProto";
+option java_package = "io.spine.chatbot.google.chat.thread.event";
+option java_outer_classname = "ThreadEventsProto";
 option java_multiple_files = true;
 
-// Hangouts Chat Space identifier.
-message SpaceId {
+import "spine/chatbot/google/chat/identifiers.proto";
 
-    // Resource name of the space, in the form `spaces/<space_id>`.
-    string value = 1 [(required) = true];
+// Denotes that a message was created in the space.
+message ThreadInitialized {
+
+    ThreadId id = 1;
+
+    // Resource name of the thread, in the form `spaces/<space_id>/threads/<thread_id>`.
+    string name = 2;
+
+    // ID of the space within with the thread is available.
+    SpaceId space_id = 3;
 }
 
-// Hangouts Chat Room Thread identifier.
-message ThreadId {
+// Denotes that a message was created in the space.
+message MessageAdded {
 
-    // The thread identifier is linked to the topic discussed in the thread.
-    //
-    // E.g. if the thread is denoted to the build status of a GitHub repository,
-    // the GitHub repository slug could be used as the thread ID.
-    string value = 1 [(required) = true];
-}
+    MessageId id = 1 [(required) = true];
 
-// Hangouts Chat Message identifier.
-message MessageId {
-
-    // Resource name of the message, in the form `spaces/<space_id>/messages/<message_id>`.
-    string value = 1 [(required) = true];
+    // ID of the thread to which the message is added.
+    ThreadId thread_id = 2 [(required) = true];
 }
