@@ -51,4 +51,7 @@ message Organization {
 
     // URL of the organization Travis CI profile.
     spine.net.Url travis_ci_url = 5;
+
+    // Name of the Google Chat space associated with the organization in form `spaces/<space_id>`.
+    string google_chat_space = 6;
 }

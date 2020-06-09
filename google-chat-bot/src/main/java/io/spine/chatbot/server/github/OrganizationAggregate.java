@@ -40,6 +40,7 @@ final class OrganizationAggregate
                 .setName(c.getName())
                 .setTravisCiUrl(c.getTravisCiUrl())
                 .setWebsiteUrl(c.getWebsiteUrl())
+                .setGoogleChatSpace(c.getGoogleChatSpace())
                 .vBuild();
     }
 
@@ -48,6 +49,7 @@ final class OrganizationAggregate
         builder().setName(e.getName())
                  .setGithubUrl(e.getGithubUrl())
                  .setTravisCiUrl(e.getTravisCiUrl())
-                 .setWebsiteUrl(e.getWebsiteUrl());
+                 .setWebsiteUrl(e.getWebsiteUrl())
+                 .setGoogleChatSpace(e.getGoogleChatSpace());
     }
 }
