@@ -35,7 +35,6 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> {
         var result = SpaceRegistered
                 .newBuilder()
                 .setId(c.getId())
-                .setName(c.getName())
                 .setSingleUserBotDm(c.getSingleUserBotDm())
                 .setThreaded(c.getThreaded())
                 .setDisplayName(c.getDisplayName())

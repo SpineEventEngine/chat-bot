@@ -23,9 +23,12 @@ package io.spine.chatbot.server.google.chat;
 import io.spine.chatbot.google.chat.Space;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.command.RegisterSpace;
+import io.spine.chatbot.google.chat.event.SpaceRegistered;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.ContextAwareTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("SpaceAggregate should")
@@ -36,30 +39,49 @@ final class SpaceAggregateTest extends ContextAwareTest {
         return GoogleChatContext.newBuilder();
     }
 
-    @Test
+    @Nested
     @DisplayName("register a space")
-    void register() {
-        var id = SpaceId
-                .newBuilder()
-                .setValue("spaces/qwroi12h3")
-                .vBuild();
-        var registerOrganization = RegisterSpace
-                .newBuilder()
-                .setId(id)
-                .setName(id.getValue())
-                .setThreaded(true)
-                .setDisplayName("Spine Developers")
-                .vBuild();
-        context().receivesCommand(registerOrganization);
+    final class Register {
 
-        var expectedState = Space
-                .newBuilder()
-                .setId(id)
-                .setName(id.getValue())
-                .setThreaded(true)
-                .setDisplayName("Spine Developers")
-                .vBuild();
-        context().assertState(id, Space.class)
-                 .isEqualTo(expectedState);
+        private final SpaceId spaceId = SpaceId.newBuilder()
+                                               .setValue("spaces/poqwdpQ21")
+                                               .vBuild();
+        private final String displayName = "Spine Developers";
+
+        @BeforeEach
+        void setUp() {
+            var registerSpace = RegisterSpace
+                    .newBuilder()
+                    .setId(spaceId)
+                    .setThreaded(true)
+                    .setDisplayName(displayName)
+                    .vBuild();
+            context().receivesCommand(registerSpace);
+        }
+
+        @Test
+        @DisplayName("producing SpaceRegistered event")
+        void producingEvent() {
+            var spaceRegistered = SpaceRegistered
+                    .newBuilder()
+                    .setId(spaceId)
+                    .setDisplayName(displayName)
+                    .setThreaded(true)
+                    .vBuild();
+            context().assertEvent(spaceRegistered);
+        }
+
+        @Test
+        @DisplayName("setting Space state")
+        void settingState() {
+            var expectedState = Space
+                    .newBuilder()
+                    .setId(spaceId)
+                    .setThreaded(true)
+                    .setDisplayName(displayName)
+                    .vBuild();
+            context().assertState(spaceId, Space.class)
+                     .isEqualTo(expectedState);
+        }
     }
 }
