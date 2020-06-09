@@ -21,11 +21,8 @@
 package io.spine.chatbot.server.github;
 
 import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.BuildStateChange;
 import io.spine.chatbot.github.repository.Repository;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
-import io.spine.chatbot.github.repository.command.SetBuildState;
-import io.spine.chatbot.github.repository.event.BuildStateChanged;
 import io.spine.chatbot.github.repository.event.RepositoryRegistered;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
@@ -51,26 +48,5 @@ final class RepositoryAggregate
         builder().setName(e.getName())
                  .setGithubUrl(e.getGithubUrl())
                  .setTravisCiUrl(e.getTravisCiUrl());
-    }
-
-    @Assign
-    BuildStateChanged handle(SetBuildState c) {
-        var stateChange = BuildStateChange
-                .newBuilder()
-                .setPreviousValue(state().getBuildState())
-                .setNewValue(c.getBuildState())
-                .vBuild();
-        var result = BuildStateChanged
-                .newBuilder()
-                .setId(c.getId())
-                .setChange(stateChange)
-                .vBuild();
-        return result;
-    }
-
-    @Apply
-    private void on(BuildStateChanged e) {
-        builder().setBuildState(e.getChange()
-                                 .getNewValue());
     }
 }

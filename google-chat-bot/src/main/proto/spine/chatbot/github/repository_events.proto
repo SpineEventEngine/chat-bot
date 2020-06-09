@@ -32,7 +32,6 @@ option java_multiple_files = true;
 import "spine/net/url.proto";
 
 import "spine/chatbot/github/identifiers.proto";
-import "spine/chatbot/github/repository.proto";
 
 // Denotes that a new repository is registered.
 message RepositoryRegistered {
@@ -50,12 +49,4 @@ message RepositoryRegistered {
 
     // ID of the organization repository is related to if any.
     OrganizationId organization_id = 5;
-}
-
-// Denotes that a build state was changed.
-message BuildStateChanged {
-
-    RepositoryId id = 1 [(required) = true];
-
-    BuildStateChange change = 2;
 }

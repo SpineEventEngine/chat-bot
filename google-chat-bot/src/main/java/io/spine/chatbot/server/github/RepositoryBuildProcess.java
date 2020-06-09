@@ -20,23 +20,25 @@
 
 package io.spine.chatbot.server.github;
 
+import io.spine.base.Time;
 import io.spine.chatbot.api.TravisClient;
 import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.BuildState;
+import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.chatbot.github.repository.build.BuildStateChange;
 import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
-import io.spine.chatbot.github.repository.command.SetBuildState;
+import io.spine.chatbot.github.repository.build.event.BuildStateChanged;
 import io.spine.chatbot.travis.Build;
 import io.spine.chatbot.travis.Commit;
 import io.spine.net.Urls;
-import io.spine.server.command.Command;
+import io.spine.server.command.Assign;
 import io.spine.server.procman.ProcessManager;
 
 final class RepositoryBuildProcess
         extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder> {
 
-    @Command
-    SetBuildState handle(CheckRepositoryBuild c) {
+    @Assign
+    BuildStateChanged handle(CheckRepositoryBuild c) {
         var travis = new TravisClient("");
         var builds = travis.queryBuildsFor(id().getValue())
                            .getBuildsList();
@@ -45,10 +47,17 @@ final class RepositoryBuildProcess
         }
         var build = builds.get(0);
         var buildState = from(build);
-        return SetBuildState
+        builder().setLastStatusCheck(Time.currentTime())
+                 .setBuildState(buildState);
+        var stateChange = BuildStateChange
+                .newBuilder()
+                .setPreviousValue(state().getBuildState())
+                .setNewValue(buildState)
+                .vBuild();
+        return BuildStateChanged
                 .newBuilder()
                 .setId(c.getId())
-                .setBuildState(buildState)
+                .setChange(stateChange)
                 .vBuild();
     }
 

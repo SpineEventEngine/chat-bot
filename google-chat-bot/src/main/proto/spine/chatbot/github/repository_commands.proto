@@ -32,7 +32,6 @@ option java_multiple_files = true;
 import "spine/net/url.proto";
 
 import "spine/chatbot/github/identifiers.proto";
-import "spine/chatbot/github/repository.proto";
 
 // Registers a new repository in the system.
 message RegisterRepository {
@@ -50,12 +49,4 @@ message RegisterRepository {
 
     // ID of the organization repository is related to if any.
     OrganizationId organization_id = 5;
-}
-
-// Sets the new build state of the repository.
-message SetBuildState {
-
-    RepositoryId id = 1 [(required) = true];
-
-    BuildState build_state = 2;
 }

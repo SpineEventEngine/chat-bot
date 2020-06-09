@@ -32,6 +32,8 @@ option java_multiple_files = true;
 
 import "google/protobuf/timestamp.proto";
 
+import "spine/net/url.proto";
+
 import "spine/chatbot/github/identifiers.proto";
 
 // A GitHub repository build process.
@@ -43,4 +45,66 @@ message RepositoryBuild {
 
     // Time of the last status check.
     google.protobuf.Timestamp last_status_check = 2;
+
+    // Current state of the build.
+    BuildState build_state = 3;
+}
+
+// State of the build for a repository branch.
+message BuildState {
+
+    // Incremental number for a repository's builds.
+    string number = 1;
+
+    // Travis CI URL of the build.
+    spine.net.Url travis_ci_url = 2;
+
+    // Current state of the build.
+    string state = 3;
+
+    // State of the previous build.
+    string previous_state = 4;
+
+    // The branch the build is associated with.
+    string branch = 5;
+
+    // The commit the build is associated with.
+    Commit last_commit = 6;
+
+    // The User or Organization that created the build.
+    string created_by = 7;
+
+    message Commit {
+
+        // Checksum the commit has in git and is identified by.
+        string sha = 1;
+
+        // Commit message.
+        string message = 2;
+
+        // URL to the commit's diff on GitHub.
+        spine.net.Url compare_url = 3;
+
+        // Commit date from git.
+        string committed_at = 4;
+
+        // Commit author from git.
+        string authored_by = 5;
+    }
+
+    // The repository slug the builds is associated with.
+    string repository_slug = 8;
+
+    // Name of the Google Chat space associated with the organization in form `spaces/<space_id>`.
+    string google_chat_space = 9;
+}
+
+// Definition of a change in a `build_state` field.
+message BuildStateChange {
+
+    // The value of the field that's changing.
+    BuildState previous_value = 1;
+
+    // The new value of the field.
+    BuildState new_value = 2 [(required) = true];
 }
