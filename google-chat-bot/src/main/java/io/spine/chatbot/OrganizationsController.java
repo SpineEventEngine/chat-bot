@@ -20,12 +20,11 @@
 
 package io.spine.chatbot;
 
+import com.google.common.collect.ImmutableList;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.client.Client;
-
-import java.util.stream.Collectors;
 
 import static io.spine.chatbot.Application.SERVER_NAME;
 
@@ -33,16 +32,13 @@ import static io.spine.chatbot.Application.SERVER_NAME;
 public class OrganizationsController {
 
     @Get
-    public String index() {
+    public ImmutableList<Organization> index() {
         Client client = Client
                 .inProcess(SERVER_NAME)
                 .build();
-        String result = client.asGuest()
-                              .select(Organization.class)
-                              .run()
-                              .stream()
-                              .map(String::valueOf)
-                              .collect(Collectors.joining());
+        ImmutableList<Organization> result = client.asGuest()
+                                                   .select(Organization.class)
+                                                   .run();
         return result;
     }
 }
