@@ -40,9 +40,9 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import io.spine.base.Environment;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.net.Url;
-import io.spine.net.Urls;
 import io.spine.validate.Validate;
 
 import javax.annotation.Nullable;
@@ -54,20 +54,41 @@ import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
+/**
+ * Google Chat client.
+ */
 public final class GoogleChatClient {
 
     private static final String BOT_NAME = "Spine Chat Bot";
     private static final String CHAT_BOT_SCOPE = "https://www.googleapis.com/auth/chat.bot";
 
+    /** Prevents direct instantiation. **/
     private GoogleChatClient() {
+    }
+
+    /**
+     * Sends {@link BuildState} status message to a related space and thread.
+     *
+     * <p>If the thread name is not specified the message is sent to a new thread.
+     *
+     * @return a sent message
+     */
+    public static Message sendMessage(BuildState buildState, @Nullable String threadName) {
+        var message = buildStateMessage(buildState, threadName);
+        return sendMessage(hangoutsChat(), buildState.getGoogleChatSpace(), message);
     }
 
     private static HangoutsChat hangoutsChat() {
         try {
-            var keyStream = Files.newInputStream(Paths.get("spine-chat-bot-ea2e6c200084.json"));
-
-            var credentials = GoogleCredentials.fromStream(keyStream)
+            GoogleCredentials credentials;
+            if (Environment.instance()
+                           .isProduction()) {
+                credentials = GoogleCredentials.getApplicationDefault();
+            } else {
+                var keyStream = Files.newInputStream(Paths.get("spine-chat-bot-ea2e6c200084.json"));
+                credentials = GoogleCredentials.fromStream(keyStream)
                                                .createScoped(CHAT_BOT_SCOPE);
+            }
             var credentialsAdapter = new HttpCredentialsAdapter(credentials);
             var chat = new HangoutsChat.Builder(
                     GoogleNetHttpTransport.newTrustedTransport(),
@@ -83,27 +104,24 @@ public final class GoogleChatClient {
 
     private static List<Space> listSpaces(HangoutsChat chat) {
         try {
-            return chat.spaces()
-                       .list()
-                       .execute()
-                       .getSpaces();
+            return chat
+                    .spaces()
+                    .list()
+                    .execute()
+                    .getSpaces();
         } catch (IOException e) {
             throw new RuntimeException("Unable to retrieve available spaces.", e);
         }
     }
 
-    public static Message sendMessage(BuildState buildState, @Nullable String threadName) {
-        var message = buildStateMessage(buildState, threadName);
-        return sendMessage(hangoutsChat(), buildState.getGoogleChatSpace(), message);
-    }
-
     @CanIgnoreReturnValue
     private static Message sendMessage(HangoutsChat chat, String space, Message message) {
         try {
-            return chat.spaces()
-                       .messages()
-                       .create(space, message)
-                       .execute();
+            return chat
+                    .spaces()
+                    .messages()
+                    .create(space, message)
+                    .execute();
         } catch (IOException e) {
             throw new RuntimeException("Unable to send message to space " + space, e);
         }
@@ -181,33 +199,5 @@ public final class GoogleChatClient {
             message.setThread(new Thread().setName(threadName));
         }
         return message;
-    }
-
-    public static void main(String[] args) {
-        var chat = hangoutsChat();
-        listSpaces(chat).forEach(System.out::println);
-        var commit = BuildState.Commit
-                .newBuilder()
-                .setCommittedAt("2020-06-03T14:45:02Z")
-                .setMessage(
-                        "My test commit with a very long description and even\n\n Sub-description, cause it is very relevant and has additional reference to issue\n #749 and a lot of kind words!")
-                .setSha("d97c603d5e855d0d211382f78916ad085ba04743")
-                .setCompareUrl(Urls.urlOfSpec(
-                        "https://github.com/SpineEventEngine/base/commit/d97c603d5e855d0d211382f78916ad085ba04743"))
-                .setAuthoredBy("yuri-sergiichuk")
-                .vBuild();
-        BuildState buildState = BuildState
-                .newBuilder()
-                .setRepositorySlug("SpineEventEngine/base")
-                .setNumber("5292")
-                .setState("failed")
-                .setLastCommit(commit)
-                .setTravisCiUrl(Urls.urlOfSpec(
-                        "https://travis-ci.com/github/SpineEventEngine/base/builds/166723382"))
-                .setBranch("master")
-                .setCreatedBy("yuri-sergiichuk")
-                .setGoogleChatSpace("spaces/AAAAnLxnh_o")
-                .vBuild();
-        System.out.println(sendMessage(buildState, "spaces/AAAAnLxnh_o/threads/TPFMA4dK0_4"));
     }
 }

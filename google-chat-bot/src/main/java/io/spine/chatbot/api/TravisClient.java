@@ -31,7 +31,10 @@ import java.nio.charset.StandardCharsets;
 
 import static io.spine.chatbot.api.JsonProtoBodyHandler.jsonBodyHandler;
 
-final class TravisClient {
+/**
+ * A Travis CI API client.
+ */
+public final class TravisClient {
 
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
     private static final String BASE_URL = "https://api.travis-ci.com";
@@ -41,14 +44,18 @@ final class TravisClient {
 
     private final String apiToken;
 
-    private TravisClient(String token) {
+    public TravisClient(String token) {
         apiToken = token;
     }
 
+    /**
+     * Queries Travis CI build statuses for a repository determined by the supplied repository slug.
+     */
     public BuildsResponse queryBuildsFor(String repoSlug) {
         var encodedSlug = URLEncoder.encode(repoSlug, StandardCharsets.UTF_8);
-        var repoBuilds =
-                "/repo/" + encodedSlug + "/builds?limit=1&branch.name=master?include=build.commit";
+        var repoBuilds = "/repo/"
+                + encodedSlug
+                + "/builds?limit=1&branch.name=master?include=build.commit";
         var request = apiRequest(repoBuilds, apiToken);
         try {
             var result = CLIENT.send(request, jsonBodyHandler(BuildsResponse.class));
@@ -70,11 +77,5 @@ final class TravisClient {
                 .GET()
                 .header(API_HEADER, API_VERSION)
                 .header(AUTH_HEADER, "token " + token);
-    }
-
-    public static void main(String[] args) {
-        var client = new TravisClient("");
-        var response = client.queryBuildsFor("SpineEventEngine/base");
-        System.out.println(response);
     }
 }
