@@ -33,6 +33,8 @@ import static io.spine.chatbot.api.JsonProtoBodyHandler.jsonBodyHandler;
 
 /**
  * A Travis CI API client.
+ *
+ * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
  */
 public final class TravisClient {
 

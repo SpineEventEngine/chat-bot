@@ -56,6 +56,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Google Chat client.
+ *
+ * @see <a href="https://developers.google.com/hangouts/chat/concepts">Hangouts Chat API</a>
  */
 public final class GoogleChatClient {
 
