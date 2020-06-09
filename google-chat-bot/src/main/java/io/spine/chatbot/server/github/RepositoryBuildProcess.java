@@ -30,6 +30,7 @@ import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildStateChanged;
 import io.spine.chatbot.travis.Build;
 import io.spine.chatbot.travis.Commit;
+import io.spine.net.Url;
 import io.spine.net.Urls;
 import io.spine.server.command.Assign;
 import io.spine.server.procman.ProcessManager;
@@ -64,7 +65,6 @@ final class RepositoryBuildProcess
     private static BuildState from(Build build) {
         var slug = build.getRepository()
                         .getSlug();
-        var spec = String.format("https://travis-ci.com/github/%s/builds/%d", slug, build.getId());
         return BuildState
                 .newBuilder()
                 .setState(build.getState())
@@ -75,8 +75,13 @@ final class RepositoryBuildProcess
                 .setCreatedBy(build.getCreatedBy()
                                    .getLogin())
                 .setRepositorySlug(slug)
-                .setTravisCiUrl(Urls.urlOfSpec(spec))
+                .setTravisCiUrl(newTravisCiUrlFor(slug, build.getId()))
                 .vBuild();
+    }
+
+    private static Url newTravisCiUrlFor(String repoSlug, long buildId) {
+        var spec = String.format("https://travis-ci.com/github/%s/builds/%d", repoSlug, buildId);
+        return Urls.urlOfSpec(spec);
     }
 
     private static BuildState.Commit from(Commit commit) {
