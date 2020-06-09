@@ -40,7 +40,7 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import io.spine.chatbot.github.repository.BuildState;
+import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.net.Url;
 import io.spine.net.Urls;
 import io.spine.validate.Validate;
@@ -90,6 +90,11 @@ public final class GoogleChatClient {
         } catch (IOException e) {
             throw new RuntimeException("Unable to retrieve available spaces.", e);
         }
+    }
+
+    public static Message sendMessage(BuildState buildState, @Nullable String threadName) {
+        var message = buildStateMessage(buildState, threadName);
+        return sendMessage(hangoutsChat(), buildState.getGoogleChatSpace(), message);
     }
 
     @CanIgnoreReturnValue
@@ -201,8 +206,8 @@ public final class GoogleChatClient {
                         "https://travis-ci.com/github/SpineEventEngine/base/builds/166723382"))
                 .setBranch("master")
                 .setCreatedBy("yuri-sergiichuk")
+                .setGoogleChatSpace("spaces/AAAAnLxnh_o")
                 .vBuild();
-        Message message = buildStateMessage(buildState, "spaces/AAAAnLxnh_o/threads/TPFMA4dK0_4");
-        sendMessage(chat, "spaces/AAAAnLxnh_o", message);
+        System.out.println(sendMessage(buildState, "spaces/AAAAnLxnh_o/threads/TPFMA4dK0_4"));
     }
 }

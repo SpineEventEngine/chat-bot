@@ -42,3 +42,15 @@ message MessageCreated {
     // ID of the thread within which the message is created if created in a threaded space.
     ThreadId thread_id = 3;
 }
+
+// Denotes that a recently created message created a new thread.
+message ThreadCreated {
+
+    ThreadId id = 1;
+
+    // Resource name of the thread, in the form `spaces/<space_id>/threads/<thread_id>`.
+    string name = 2;
+
+    // ID of the space within with the thread is available.
+    SpaceId space_id = 3;
+}
