@@ -20,20 +20,29 @@
 
 package io.spine.chatbot;
 
+import com.google.common.collect.ImmutableSet;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.OrganizationRepositories;
+import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.client.Client;
+import io.spine.client.CommandRequest;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static io.spine.chatbot.Application.SERVER_NAME;
+import static io.spine.util.Exceptions.newIllegalStateException;
 
+/**
+ * A REST controller for handling CRON-based requests from GCP.
+ */
 @Controller("/cron")
 public class CronController {
 
+    /** Requests build status checks for registered repositories. **/
     @Post("/repositories/check")
     public String checkRepositoryStatuses() {
         Client client = Client
@@ -49,11 +58,28 @@ public class CronController {
                              .select(OrganizationRepositories.class)
                              .byId(orgIds)
                              .run();
-        var repositoryIds = orgRepos.stream()
-                                    .map(OrganizationRepositories::getRepositoriesList)
-                                    .flatMap(Collection::stream)
-                                    .collect(Collectors.toList());
-
+        orgRepos.stream()
+                .map(OrganizationRepositories::getRepositoriesList)
+                .flatMap(Collection::stream)
+                .map(CronController::newCheckRepoBuildCommand)
+                .map(client.asGuest()::command)
+                .map(request -> request.onStreamingError(CronController::throwProcessingError))
+                .map(CommandRequest::post)
+                .flatMap(ImmutableSet::stream)
+                .forEach(client.subscriptions()::cancel);
         return "success";
+    }
+
+    private static void throwProcessingError(Throwable throwable) {
+        throw newIllegalStateException(
+                throwable, "An error while processing the command result."
+        );
+    }
+
+    private static CheckRepositoryBuild newCheckRepoBuildCommand(RepositoryId id) {
+        return CheckRepositoryBuild
+                .newBuilder()
+                .setId(id)
+                .vBuild();
     }
 }
