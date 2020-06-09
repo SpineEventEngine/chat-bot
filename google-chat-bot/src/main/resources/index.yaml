@@ -7,12 +7,11 @@
 indexes:
 
   # Common index for all the applications.
-  -
   - kind: spine.core.Event
-      ancestor: no
-      properties:
-        - name: type
-        - name: created
+    ancestor: no
+    properties:
+      - name: type
+      - name: created
 
   # Index required for `DsInboxStorage.readAll` query.
 
