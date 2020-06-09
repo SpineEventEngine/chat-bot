@@ -81,7 +81,7 @@ public final class GoogleChatContext {
         return BoundedContext
                 .singleTenant(NAME)
                 .add(SpaceAggregate.class)
-                .add(ThreadAggregate.class)
+                .add(new ThreadAggregateRepository())
                 .add(new ThreadChatProcessRepository());
     }
 }
