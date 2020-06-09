@@ -23,9 +23,13 @@ package io.spine.chatbot.server.github;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.Repository;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
+import io.spine.chatbot.github.repository.event.RepositoryRegistered;
+import io.spine.net.Url;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.ContextAwareTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.net.Urls.urlOfSpec;
@@ -38,30 +42,57 @@ final class RepositoryAggregateTest extends ContextAwareTest {
         return GitHubContext.newBuilder();
     }
 
-    @Test
+    @Nested
     @DisplayName("register a repository")
-    void register() {
-        var id = RepositoryId
+    final class Register {
+
+        private final RepositoryId repositoryId = RepositoryId
                 .newBuilder()
                 .setValue("SpineEventEngine/base")
                 .vBuild();
-        var registerRepository = RegisterRepository
-                .newBuilder()
-                .setId(id)
-                .setGithubUrl(urlOfSpec("https://github.com/SpineEventEngine/base"))
-                .setTravisCiUrl(urlOfSpec("https://travis-ci.com/github/SpineEventEngine/base"))
-                .setName("Spine base")
-                .vBuild();
-        context().receivesCommand(registerRepository);
 
-        var expectedState = Repository
-                .newBuilder()
-                .setId(id)
-                .setGithubUrl(urlOfSpec("https://github.com/SpineEventEngine/base"))
-                .setTravisCiUrl(urlOfSpec("https://travis-ci.com/github/SpineEventEngine/base"))
-                .setName("Spine base")
-                .vBuild();
-        context().assertState(id, Repository.class)
-                 .isEqualTo(expectedState);
+        private final Url githubUrl = urlOfSpec("https://github.com/SpineEventEngine/base");
+        private final Url travisCiUrl =
+                urlOfSpec("https://travis-ci.com/github/SpineEventEngine/base");
+        private final String repositoryName = "Spine Base";
+
+        @BeforeEach
+        void setUp() {
+            var registerRepository = RegisterRepository
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .setGithubUrl(githubUrl)
+                    .setTravisCiUrl(travisCiUrl)
+                    .setName(repositoryName)
+                    .vBuild();
+            context().receivesCommand(registerRepository);
+        }
+
+        @Test
+        @DisplayName("producing RepositoryRegistered event")
+        void producingEvent() {
+            var repositoryRegistered = RepositoryRegistered
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .setGithubUrl(githubUrl)
+                    .setTravisCiUrl(travisCiUrl)
+                    .setName(repositoryName)
+                    .vBuild();
+            context().assertEvent(repositoryRegistered);
+        }
+
+        @Test
+        @DisplayName("setting repository state")
+        void settingState() {
+            var expectedState = Repository
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .setGithubUrl(githubUrl)
+                    .setTravisCiUrl(travisCiUrl)
+                    .setName(repositoryName)
+                    .vBuild();
+            context().assertState(repositoryId, Repository.class)
+                     .isEqualTo(expectedState);
+        }
     }
 }

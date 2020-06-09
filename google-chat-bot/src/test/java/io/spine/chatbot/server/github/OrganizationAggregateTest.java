@@ -23,9 +23,13 @@ package io.spine.chatbot.server.github;
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
+import io.spine.chatbot.github.organization.event.OrganizationRegistered;
+import io.spine.net.Url;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.ContextAwareTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.net.Urls.urlOfSpec;
@@ -38,32 +42,64 @@ final class OrganizationAggregateTest extends ContextAwareTest {
         return GitHubContext.newBuilder();
     }
 
-    @Test
+    @Nested
     @DisplayName("register an organization")
-    void register() {
-        var id = OrganizationId
+    final class Register {
+
+        private final OrganizationId organizationId = OrganizationId
                 .newBuilder()
                 .setValue("TestOrganization")
                 .vBuild();
-        var registerOrganization = RegisterOrganization
-                .newBuilder()
-                .setId(id)
-                .setGithubUrl(urlOfSpec("https://github.com/TestOrganization"))
-                .setTravisCiUrl(urlOfSpec("https://travis-ci.com/TestOrganization"))
-                .setWebsiteUrl(urlOfSpec("https://test-organization.com"))
-                .setName("Test Organization")
-                .vBuild();
-        context().receivesCommand(registerOrganization);
 
-        var expectedState = Organization
-                .newBuilder()
-                .setId(id)
-                .setGithubUrl(urlOfSpec("https://github.com/TestOrganization"))
-                .setTravisCiUrl(urlOfSpec("https://travis-ci.com/TestOrganization"))
-                .setWebsiteUrl(urlOfSpec("https://test-organization.com"))
-                .setName("Test Organization")
-                .vBuild();
-        context().assertState(id, Organization.class)
-                 .isEqualTo(expectedState);
+        private final Url githubUrl = urlOfSpec("https://github.com/TestOrganization");
+        private final Url travisCiUrl = urlOfSpec("https://travis-ci.com/TestOrganization");
+        private final Url websiteUrl = urlOfSpec("https://test-organization.com");
+        private final String orgName = "Test Organization";
+        private final String googleChatSpace = "spaces/qwdp123ttQ";
+
+        @BeforeEach
+        void setUp() {
+            var registerOrganization = RegisterOrganization
+                    .newBuilder()
+                    .setId(organizationId)
+                    .setGithubUrl(githubUrl)
+                    .setTravisCiUrl(travisCiUrl)
+                    .setWebsiteUrl(websiteUrl)
+                    .setName(orgName)
+                    .setGoogleChatSpace(googleChatSpace)
+                    .vBuild();
+            context().receivesCommand(registerOrganization);
+        }
+
+        @Test
+        @DisplayName("producing OrganizationRegistered event")
+        void producingEvent() {
+            var organizationRegistered = OrganizationRegistered
+                    .newBuilder()
+                    .setId(organizationId)
+                    .setGithubUrl(githubUrl)
+                    .setTravisCiUrl(travisCiUrl)
+                    .setWebsiteUrl(websiteUrl)
+                    .setName(orgName)
+                    .setGoogleChatSpace(googleChatSpace)
+                    .vBuild();
+            context().assertEvent(organizationRegistered);
+        }
+
+        @Test
+        @DisplayName("setting organization state")
+        void settingState() {
+            var expectedState = Organization
+                    .newBuilder()
+                    .setId(organizationId)
+                    .setGithubUrl(githubUrl)
+                    .setTravisCiUrl(travisCiUrl)
+                    .setWebsiteUrl(websiteUrl)
+                    .setName(orgName)
+                    .setGoogleChatSpace(googleChatSpace)
+                    .vBuild();
+            context().assertState(organizationId, Organization.class)
+                     .isEqualTo(expectedState);
+        }
     }
 }
