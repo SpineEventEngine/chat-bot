@@ -28,7 +28,7 @@ import io.spine.server.route.EventRouting;
 
 import static io.spine.server.route.EventRoute.withId;
 
-class ThreadAggregateRepository extends AggregateRepository<ThreadId, ThreadAggregate> {
+final class ThreadAggregateRepository extends AggregateRepository<ThreadId, ThreadAggregate> {
 
     @Override
     protected void setupEventRouting(EventRouting<ThreadId> routing) {
