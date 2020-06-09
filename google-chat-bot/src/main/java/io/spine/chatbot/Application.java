@@ -28,10 +28,12 @@ import io.spine.server.Server;
 
 import java.io.IOException;
 
+/** The entry point to the Google Chat Bot application. **/
 public final class Application {
 
     static final String SERVER_NAME = "ChatBotServer";
 
+    /** Prevents direct instantiation. **/
     private Application() {
     }
 
@@ -40,6 +42,7 @@ public final class Application {
         Micronaut.run(Application.class, args);
     }
 
+    /** Initializes Spine server environment and starts Spine {@link Server}. **/
     @VisibleForTesting
     static void initializeSpine() {
         ChatBotServerEnvironment.initializeEnvironment();

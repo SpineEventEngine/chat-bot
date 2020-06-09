@@ -25,6 +25,7 @@ import io.spine.server.delivery.Delivery;
 import io.spine.server.storage.memory.InMemoryStorageFactory;
 import io.spine.server.transport.memory.InMemoryTransportFactory;
 
+/** ChatBot server environment definition. **/
 final class ChatBotServerEnvironment {
 
     /**
@@ -33,6 +34,7 @@ final class ChatBotServerEnvironment {
     private ChatBotServerEnvironment() {
     }
 
+    /** Initializes {@link ServerEnvironment} for ChatBot. **/
     static void initializeEnvironment() {
         ServerEnvironment se = ServerEnvironment.instance();
         se.configureStorage(InMemoryStorageFactory.newInstance());
