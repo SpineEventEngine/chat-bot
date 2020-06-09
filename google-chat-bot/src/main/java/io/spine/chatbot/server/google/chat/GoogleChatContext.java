@@ -80,6 +80,8 @@ public final class GoogleChatContext {
     public static BoundedContextBuilder newBuilder() {
         return BoundedContext
                 .singleTenant(NAME)
-                .add(SpaceAggregate.class);
+                .add(SpaceAggregate.class)
+                .add(ThreadAggregate.class)
+                .add(new ThreadChatProcessRepository());
     }
 }
