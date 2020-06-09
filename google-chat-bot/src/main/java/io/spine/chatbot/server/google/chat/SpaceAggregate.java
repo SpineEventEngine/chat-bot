@@ -45,8 +45,7 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> {
 
     @Apply
     private void on(SpaceRegistered e) {
-        builder().setName(e.getName())
-                 .setDisplayName(e.getDisplayName())
+        builder().setDisplayName(e.getDisplayName())
                  .setSingleUserBotDm(e.getSingleUserBotDm())
                  .setThreaded(e.getThreaded());
     }
