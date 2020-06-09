@@ -30,14 +30,15 @@ option java_outer_classname = "ThreadEventsProto";
 option java_multiple_files = true;
 
 import "spine/chatbot/google/chat/identifiers.proto";
+import "spine/chatbot/google/chat/thread.proto";
 
 // Denotes that a message was created in the space.
 message ThreadInitialized {
 
     ThreadId id = 1;
 
-    // Resource name of the thread, in the form `spaces/<space_id>/threads/<thread_id>`.
-    string name = 2;
+    // Google Chat thread.
+    ThreadResource thread = 2;
 
     // ID of the space within with the thread is available.
     SpaceId space_id = 3;

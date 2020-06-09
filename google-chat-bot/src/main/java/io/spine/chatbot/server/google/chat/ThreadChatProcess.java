@@ -36,6 +36,7 @@ import java.util.Optional;
 import static io.spine.chatbot.server.google.chat.Identifiers.newMessageId;
 import static io.spine.chatbot.server.google.chat.Identifiers.newSpaceId;
 import static io.spine.chatbot.server.google.chat.Identifiers.newThreadId;
+import static io.spine.chatbot.server.google.chat.ThreadResources.newThreadResource;
 
 final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, ThreadChat.Builder> {
 
@@ -46,7 +47,8 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var repositoryId = e.getId();
         var threadId = newThreadId(repositoryId.getValue());
         var spaceId = newSpaceId(buildState.getGoogleChatSpace());
-        var sentMessage = GoogleChatClient.sendMessage(buildState, state().getName());
+        var currentThread = state().getThread();
+        var sentMessage = GoogleChatClient.sendMessage(buildState, currentThread.getName());
         var thread = sentMessage.getThread();
         var messageId = newMessageId(sentMessage.getName());
         var messageCreated = MessageCreated
@@ -55,13 +57,14 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
                 .setSpaceId(spaceId)
                 .setThreadId(threadId)
                 .vBuild();
-        if (Strings.isNullOrEmpty(state().getName())) {
-            builder().setName(thread.getName())
+        if (Strings.isNullOrEmpty(currentThread.getName())) {
+            var newThread = newThreadResource(thread.getName());
+            builder().setThread(newThread)
                      .setSpaceId(spaceId);
             var threadCreated = ThreadCreated
                     .newBuilder()
                     .setId(threadId)
-                    .setName(thread.getName())
+                    .setThread(newThread)
                     .setSpaceId(spaceId)
                     .vBuild();
             return Pair.withNullable(messageCreated, threadCreated);

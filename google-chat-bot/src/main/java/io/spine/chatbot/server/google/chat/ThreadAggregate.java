@@ -37,14 +37,14 @@ final class ThreadAggregate extends Aggregate<ThreadId, Thread, Thread.Builder> 
         return ThreadInitialized
                 .newBuilder()
                 .setId(e.getId())
-                .setName(e.getName())
+                .setThread(e.getThread())
                 .setSpaceId(e.getSpaceId())
                 .vBuild();
     }
 
     @Apply
     private void on(ThreadInitialized e) {
-        builder().setName(e.getName())
+        builder().setThread(e.getThread())
                  .setSpaceId(e.getSpaceId());
     }
 

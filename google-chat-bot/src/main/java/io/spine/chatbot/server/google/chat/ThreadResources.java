@@ -18,30 +18,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.chatbot.server.google.chat;
 
-package spine.chatbot.google.chat;
+import io.spine.chatbot.google.chat.thread.ThreadResource;
 
-import "spine/options.proto";
+/**
+ * An utility for working with {@link ThreadResource}s.
+ */
+public final class ThreadResources {
 
-option (type_url_prefix) = "type.spine.io.chatbot";
-option java_package = "io.spine.chatbot.google.chat.thread";
-option java_outer_classname = "ThreadChatProto";
-option java_multiple_files = true;
+    /**
+     * Prevents instantiation of this utility class.
+     */
+    private ThreadResources() {
+    }
 
-import "spine/chatbot/google/chat/identifiers.proto";
-import "spine/chatbot/google/chat/thread.proto";
-
-// A thread in Google Chat room.
-message ThreadChat {
-    option (entity).kind = PROCESS_MANAGER;
-    option (entity).visibility = FULL;
-
-    ThreadId id = 1;
-
-    // Google Chat thread.
-    ThreadResource thread = 2;
-
-    // ID of the space within with the thread is available.
-    SpaceId space_id = 3;
+    /** Creates a new {@link ThreadResource} with the specified {@code name}. **/
+    public static ThreadResource newThreadResource(String name) {
+        return ThreadResource
+                .newBuilder()
+                .setName(name)
+                .vBuild();
+    }
 }

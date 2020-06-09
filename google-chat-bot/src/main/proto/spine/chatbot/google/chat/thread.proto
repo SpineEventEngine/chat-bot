@@ -39,11 +39,18 @@ message Thread {
     ThreadId id = 1;
 
     // Resource name of the thread, in the form `spaces/<space_id>/threads/<thread_id>`.
-    string name = 2;
+    ThreadResource thread = 2;
 
     // ID of the space within with the thread is available.
     SpaceId space_id = 3;
 
     // IDs of the messages posted by the bot to the thread.
     repeated MessageId messages = 4;
+}
+
+// Google Chat Thread resource.
+message ThreadResource {
+
+    // Resource name of the thread, in the form `spaces/<space_id>/threads/<thread_id>`.
+    string name = 1 [(required) = true];
 }
