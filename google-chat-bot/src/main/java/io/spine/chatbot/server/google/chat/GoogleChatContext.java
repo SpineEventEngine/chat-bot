@@ -27,6 +27,9 @@ import io.spine.server.QueryService;
 import io.spine.server.commandbus.CommandBus;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
+/**
+ * Provides {@link BoundedContextBuilder} for the Google Chat context.
+ */
 public final class GoogleChatContext {
 
     @MonotonicNonNull
@@ -42,16 +45,16 @@ public final class GoogleChatContext {
      */
     static final String NAME = "GoogleChat";
 
-    /**
-     * Prevents instantiation of this utility class.
-     */
+    /** Prevents instantiation of this utility class. **/
     private GoogleChatContext() {
     }
 
+    /** Returns command bus associated with the bounded context. **/
     public static CommandBus commandBus() {
         return context().commandBus();
     }
 
+    /** Returns query service associated with the bounded context. **/
     public static synchronized QueryService queryService() {
         if (queryService == null) {
             queryService = QueryService
@@ -62,6 +65,7 @@ public final class GoogleChatContext {
         return queryService;
     }
 
+    /** Returns the bounded context. **/
     public static synchronized BoundedContext context() {
         if (context == null) {
             context = newBuilder().build();
@@ -69,14 +73,13 @@ public final class GoogleChatContext {
         return context;
     }
 
+    /** Initializes bounded context and associated services. **/
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void initialize() {
         queryService();
     }
 
-    /**
-     * Creates a new instance of the GitHub Context builder.
-     */
+    /** Creates a new instance of the Google Chat context builder. **/
     public static BoundedContextBuilder newBuilder() {
         return BoundedContext
                 .singleTenant(NAME)

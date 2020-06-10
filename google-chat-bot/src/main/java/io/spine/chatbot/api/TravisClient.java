@@ -46,6 +46,9 @@ public final class TravisClient {
 
     private final String apiToken;
 
+    /**
+     * Creates a new Travis client with the specified API token.
+     */
     public TravisClient(String token) {
         apiToken = token;
     }

@@ -28,7 +28,7 @@ import io.spine.server.commandbus.CommandBus;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
- * Provides BoundedContestBuilder for the GitHub Context.
+ * Provides {@link BoundedContextBuilder} for the GitHub context.
  */
 public final class GitHubContext {
 
@@ -45,16 +45,16 @@ public final class GitHubContext {
      */
     static final String NAME = "GitHub";
 
-    /**
-     * Prevents instantiation of this utility class.
-     */
+    /** Prevents instantiation of this utility class. **/
     private GitHubContext() {
     }
 
+    /** Returns command bus associated with the bounded context. **/
     public static CommandBus commandBus() {
         return context().commandBus();
     }
 
+    /** Returns query service associated with the bounded context. **/
     public static synchronized QueryService queryService() {
         if (queryService == null) {
             queryService = QueryService
@@ -65,6 +65,7 @@ public final class GitHubContext {
         return queryService;
     }
 
+    /** Returns the bounded context. **/
     public static synchronized BoundedContext context() {
         if (context == null) {
             context = newBuilder().build();
@@ -72,14 +73,13 @@ public final class GitHubContext {
         return context;
     }
 
+    /** Initializes bounded context and associated services. **/
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void initialize() {
         queryService();
     }
 
-    /**
-     * Creates a new instance of the GitHub Context builder.
-     */
+    /** Creates a new instance of the GitHub Context builder. **/
     public static BoundedContextBuilder newBuilder() {
         return BoundedContext
                 .singleTenant(NAME)

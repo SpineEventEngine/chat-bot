@@ -37,7 +37,8 @@ final class JsonProtoBodyHandler<T extends Message> implements HttpResponse.Body
         this.type = type;
     }
 
-    public static <T extends Message> JsonProtoBodyHandler<T> jsonBodyHandler(Class<T> type) {
+    /** Creates a body handler for a specified type. **/
+    static <T extends Message> JsonProtoBodyHandler<T> jsonBodyHandler(Class<T> type) {
         return new JsonProtoBodyHandler<>(type);
     }
 
