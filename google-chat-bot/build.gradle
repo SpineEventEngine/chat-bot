@@ -40,7 +40,7 @@ mainClassName = "io.spine.chatbot.Application"
 
 jib {
     to {
-        image = "gcr.io/${gcpProject}/google-chat-bot-server"
+        image = "gcr.io/${gcpProject}/chat-bot-server"
     }
     container {
         mainClass = mainClassName
