@@ -40,15 +40,12 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import io.spine.base.Environment;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.net.Url;
 import io.spine.validate.Validate;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
@@ -82,15 +79,8 @@ public final class GoogleChatClient {
 
     private static HangoutsChat hangoutsChat() {
         try {
-            GoogleCredentials credentials;
-            if (Environment.instance()
-                           .isProduction()) {
-                credentials = GoogleCredentials.getApplicationDefault();
-            } else {
-                var keyStream = Files.newInputStream(Paths.get("spine-chat-bot-ea2e6c200084.json"));
-                credentials = GoogleCredentials.fromStream(keyStream)
+            var credentials = GoogleCredentials.getApplicationDefault()
                                                .createScoped(CHAT_BOT_SCOPE);
-            }
             var credentialsAdapter = new HttpCredentialsAdapter(credentials);
             var chat = new HangoutsChat.Builder(
                     GoogleNetHttpTransport.newTrustedTransport(),
