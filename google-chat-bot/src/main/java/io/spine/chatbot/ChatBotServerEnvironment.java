@@ -41,20 +41,22 @@ final class ChatBotServerEnvironment {
     /** Initializes {@link ServerEnvironment} for ChatBot. **/
     static void initializeEnvironment() {
         ServerEnvironment se = ServerEnvironment.instance();
-        StorageFactory storageFactory;
+        StorageFactory storageFactory = storageFactory();
+        se.configureStorage(storageFactory);
+        se.configureTransport(InMemoryTransportFactory.newInstance());
+        se.configureDelivery(Delivery.localAsync());
+    }
+
+    private static StorageFactory storageFactory() {
         if (Environment.instance()
                        .isProduction()) {
             var datastore = DatastoreOptions.getDefaultInstance()
                                             .getService();
-            storageFactory = DatastoreStorageFactory
+            return DatastoreStorageFactory
                     .newBuilder()
                     .setDatastore(datastore)
                     .build();
-        } else {
-            storageFactory = InMemoryStorageFactory.newInstance();
         }
-        se.configureStorage(storageFactory);
-        se.configureTransport(InMemoryTransportFactory.newInstance());
-        se.configureDelivery(Delivery.localAsync());
+        return InMemoryStorageFactory.newInstance();
     }
 }
