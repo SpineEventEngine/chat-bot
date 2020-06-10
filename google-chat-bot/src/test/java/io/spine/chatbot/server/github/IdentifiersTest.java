@@ -18,12 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.google.chat;
+package io.spine.chatbot.server.github;
 
+import io.spine.chatbot.server.google.chat.Identifiers;
 import io.spine.testing.UtilityClassTest;
 import org.junit.jupiter.api.DisplayName;
 
-@DisplayName("GoogleChat Identifiers should")
+@DisplayName("GitHub Identifiers should")
 final class IdentifiersTest extends UtilityClassTest<Identifiers> {
 
     IdentifiersTest() {

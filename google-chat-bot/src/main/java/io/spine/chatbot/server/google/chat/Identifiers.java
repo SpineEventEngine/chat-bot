@@ -31,9 +31,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class Identifiers {
 
-    /**
-     * Prevents instantiation of this utility class.
-     */
+    /** Prevents instantiation of this utility class. **/
     private Identifiers() {
     }
 

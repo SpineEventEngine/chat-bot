@@ -18,15 +18,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.google.chat;
+package io.spine.chatbot.server.github;
 
-import io.spine.testing.UtilityClassTest;
-import org.junit.jupiter.api.DisplayName;
+import io.spine.chatbot.github.OrganizationId;
+import io.spine.chatbot.github.RepositoryId;
 
-@DisplayName("GoogleChat Identifiers should")
-final class IdentifiersTest extends UtilityClassTest<Identifiers> {
+/**
+ * An utility for working with {@link GitHubContext} identifiers.
+ */
+public final class Identifiers {
 
-    IdentifiersTest() {
-        super(Identifiers.class);
+    /** Prevents instantiation of this utility class. **/
+    private Identifiers() {
+    }
+
+    /** Creates a new {@link OrganizationId} out of the specified {@code name}. **/
+    public static OrganizationId newOrganizationId(String name) {
+        return OrganizationId
+                .newBuilder()
+                .setValue(name)
+                .vBuild();
+    }
+
+    /** Creates a new {@link OrganizationId} out of the specified {@code slug}. **/
+    public static RepositoryId newRepositoryId(String slug) {
+        return RepositoryId
+                .newBuilder()
+                .setValue(slug)
+                .vBuild();
     }
 }

@@ -32,6 +32,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.chatbot.server.github.Identifiers.newOrganizationId;
 import static io.spine.net.Urls.urlOfSpec;
 
 @DisplayName("OrganizationAggregate should")
@@ -46,10 +47,7 @@ final class OrganizationAggregateTest extends ContextAwareTest {
     @DisplayName("register an organization")
     final class Register {
 
-        private final OrganizationId organizationId = OrganizationId
-                .newBuilder()
-                .setValue("TestOrganization")
-                .vBuild();
+        private final OrganizationId organizationId = newOrganizationId("TestOrganization");
 
         private final Url githubUrl = urlOfSpec("https://github.com/TestOrganization");
         private final Url travisCiUrl = urlOfSpec("https://travis-ci.com/TestOrganization");
