@@ -23,15 +23,10 @@ package io.spine.chatbot;
 import com.google.common.collect.ImmutableSet;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.spine.chatbot.client.ChatBotClient;
 import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.organization.Organization;
-import io.spine.chatbot.github.organization.OrganizationRepositories;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
-import io.spine.client.Client;
 import io.spine.client.CommandRequest;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 import static io.spine.chatbot.Application.SERVER_NAME;
 import static io.spine.util.Exceptions.newIllegalStateException;
@@ -42,31 +37,18 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 @Controller("/cron")
 public class CronController {
 
-    /** Requests build status checks for registered repositories. **/
+    /** Requests build status checks for registered listRepositories. **/
     @Post("/repositories/check")
     public String checkRepositoryStatuses() {
-        Client client = Client
-                .inProcess(SERVER_NAME)
-                .build();
-        var orgIds = client.asGuest()
-                           .select(Organization.class)
-                           .run()
-                           .stream()
-                           .map(Organization::getId)
-                           .collect(Collectors.toList());
-        var orgRepos = client.asGuest()
-                             .select(OrganizationRepositories.class)
-                             .byId(orgIds)
-                             .run();
-        orgRepos.stream()
-                .map(OrganizationRepositories::getRepositoriesList)
-                .flatMap(Collection::stream)
-                .map(CronController::newCheckRepoBuildCommand)
-                .map(client.asGuest()::command)
-                .map(request -> request.onStreamingError(CronController::throwProcessingError))
-                .map(CommandRequest::post)
-                .flatMap(ImmutableSet::stream)
-                .forEach(client.subscriptions()::cancel);
+        var botClient = ChatBotClient.inProcessClient(SERVER_NAME);
+        botClient.listRepositories()
+                 .stream()
+                 .map(CronController::newCheckRepoBuildCommand)
+                 .map(botClient.asGuest()::command)
+                 .map(request -> request.onStreamingError(CronController::throwProcessingError))
+                 .map(CommandRequest::post)
+                 .flatMap(ImmutableSet::stream)
+                 .forEach(botClient::cancelSubscription);
         return "success";
     }
 
