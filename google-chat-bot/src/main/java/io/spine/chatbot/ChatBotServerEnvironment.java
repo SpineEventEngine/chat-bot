@@ -20,8 +20,12 @@
 
 package io.spine.chatbot;
 
+import com.google.cloud.datastore.DatastoreOptions;
+import io.spine.base.Environment;
 import io.spine.server.ServerEnvironment;
 import io.spine.server.delivery.Delivery;
+import io.spine.server.storage.StorageFactory;
+import io.spine.server.storage.datastore.DatastoreStorageFactory;
 import io.spine.server.storage.memory.InMemoryStorageFactory;
 import io.spine.server.transport.memory.InMemoryTransportFactory;
 
@@ -37,7 +41,19 @@ final class ChatBotServerEnvironment {
     /** Initializes {@link ServerEnvironment} for ChatBot. **/
     static void initializeEnvironment() {
         ServerEnvironment se = ServerEnvironment.instance();
-        se.configureStorage(InMemoryStorageFactory.newInstance());
+        StorageFactory storageFactory;
+        if (Environment.instance()
+                       .isProduction()) {
+            var datastore = DatastoreOptions.getDefaultInstance()
+                                            .getService();
+            storageFactory = DatastoreStorageFactory
+                    .newBuilder()
+                    .setDatastore(datastore)
+                    .build();
+        } else {
+            storageFactory = InMemoryStorageFactory.newInstance();
+        }
+        se.configureStorage(storageFactory);
         se.configureTransport(InMemoryTransportFactory.newInstance());
         se.configureDelivery(Delivery.localAsync());
     }
