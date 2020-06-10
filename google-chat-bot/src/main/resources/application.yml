@@ -20,4 +20,4 @@
 
 micronaut:
   application:
-    name: chatBot
+    name: ChatBot
