@@ -243,3 +243,6 @@ gradle-app.setting
 gradle-local.properties
 
 **/generated/**
+
+# Local credentials folder
+.credentials
