@@ -23,6 +23,13 @@ indexes:
       - name: received_at
       - name: version
 
+  - kind: spine.server.delivery.InboxMessage
+    properties:
+      - name: inbox_shard
+      - name: of_total_inbox_shards
+      - name: received_at
+      - name: version
+
   # Index required for `DsInboxStorage.newestMessageToDeliver` query.
 
   - kind: spine.server.delivery.InboxMessage
@@ -42,15 +49,6 @@ indexes:
       - name: snapshot
 
   - kind: spine.system.server.EntityHistory
-    properties:
-      - name: aggregate_id
-      - name: version
-        direction: desc
-      - name: created
-        direction: desc
-      - name: snapshot
-
-  - kind: purephotos.photos.order.Order
     properties:
       - name: aggregate_id
       - name: version
