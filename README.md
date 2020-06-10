@@ -46,14 +46,16 @@ export APP_PORT=8080
 export LOCAL_PORT=9090
 export CONTAINER_CREDENTIALS_PATH="/tmp/keys/gcp-adc.json"
 export LOCAL_CREDENTIALS_PATH="${PWD}./credentials/gcp-adc.json"
+export GCP_PROJECT_ID="<gcp-project-id>"
 docker run \
     --tty \
     --rm \
     -p "${LOCAL_PORT}:${APP_PORT}" \
     -e "PORT=${APP_PORT}" \
     -e "MICRONAUT_SERVER_PORT=${APP_PORT}" \
-    -e "GOOGLE_APPLICATION_CREDENTIALS=${CONTAINER_CREDENTIALS_PATH}"
-    -v "${LOCAL_CREDENTIALS_PATH}:${CONTAINER_CREDENTIALS_PATH}"
+    -e "GOOGLE_APPLICATION_CREDENTIALS=${CONTAINER_CREDENTIALS_PATH}" \
+    -e "GCP_PROJECT_ID=${GCP_PROJECT_ID}" \
+    -v "${LOCAL_CREDENTIALS_PATH}:${CONTAINER_CREDENTIALS_PATH}" \
     gcr.io/${gcpProject}/chat-bot-server
 ```
 

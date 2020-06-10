@@ -21,7 +21,6 @@
 package io.spine.chatbot.server.github;
 
 import io.spine.base.Time;
-import io.spine.chatbot.api.TravisClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
@@ -35,12 +34,14 @@ import io.spine.net.Urls;
 import io.spine.server.command.Assign;
 import io.spine.server.procman.ProcessManager;
 
+import static io.spine.chatbot.api.TravisClient.defaultTravisClient;
+
 final class RepositoryBuildProcess
         extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder> {
 
     @Assign
     BuildStateChanged handle(CheckRepositoryBuild c) {
-        var travis = new TravisClient("");
+        var travis = defaultTravisClient();
         var builds = travis.queryBuildsFor(id().getValue())
                            .getBuildsList();
         if (builds.isEmpty()) {

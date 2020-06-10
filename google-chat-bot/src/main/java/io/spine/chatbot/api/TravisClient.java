@@ -49,8 +49,15 @@ public final class TravisClient {
     /**
      * Creates a new Travis client with the specified API token.
      */
-    public TravisClient(String token) {
+    private TravisClient(String token) {
         apiToken = token;
+    }
+
+    /**
+     * Creates a new Travis client with the default secure Travis token.
+     */
+    public static TravisClient defaultTravisClient() {
+        return new TravisClient(Secrets.travisToken());
     }
 
     /**
@@ -60,7 +67,7 @@ public final class TravisClient {
         var encodedSlug = URLEncoder.encode(repoSlug, StandardCharsets.UTF_8);
         var repoBuilds = "/repo/"
                 + encodedSlug
-                + "/builds?limit=1&branch.name=master?include=build.commit";
+                + "/builds?limit=1&branch.name=master&include=build.commit";
         var request = apiRequest(repoBuilds, apiToken);
         try {
             var result = CLIENT.send(request, jsonBodyHandler(BuildsResponse.class));
