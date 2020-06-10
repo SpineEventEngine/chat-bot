@@ -50,5 +50,5 @@ message Repository {
     spine.net.Url travis_ci_url = 4;
 
     // ID of the organization repository is related to if any.
-    OrganizationId organization_id = 5;
+    OrganizationId organization = 5;
 }

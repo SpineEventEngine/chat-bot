@@ -39,6 +39,7 @@ final class RepositoryAggregate
                 .setName(c.getName())
                 .setGithubUrl(c.getGithubUrl())
                 .setTravisCiUrl(c.getTravisCiUrl())
+                .setOrganization(c.getOrganization())
                 .vBuild();
         return result;
     }
@@ -47,6 +48,7 @@ final class RepositoryAggregate
     private void on(RepositoryRegistered e) {
         builder().setName(e.getName())
                  .setGithubUrl(e.getGithubUrl())
-                 .setTravisCiUrl(e.getTravisCiUrl());
+                 .setTravisCiUrl(e.getTravisCiUrl())
+                 .setOrganization(e.getOrganization());
     }
 }

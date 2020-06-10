@@ -20,6 +20,7 @@
 
 package io.spine.chatbot.server.github;
 
+import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.Repository;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
@@ -50,6 +51,10 @@ final class RepositoryAggregateTest extends ContextAwareTest {
                 .newBuilder()
                 .setValue("SpineEventEngine/base")
                 .vBuild();
+        private final OrganizationId organizationId = OrganizationId
+                .newBuilder()
+                .setValue("SpineEventEngine")
+                .vBuild();
 
         private final Url githubUrl = urlOfSpec("https://github.com/SpineEventEngine/base");
         private final Url travisCiUrl =
@@ -64,6 +69,7 @@ final class RepositoryAggregateTest extends ContextAwareTest {
                     .setGithubUrl(githubUrl)
                     .setTravisCiUrl(travisCiUrl)
                     .setName(repositoryName)
+                    .setOrganization(organizationId)
                     .vBuild();
             context().receivesCommand(registerRepository);
         }
@@ -77,6 +83,7 @@ final class RepositoryAggregateTest extends ContextAwareTest {
                     .setGithubUrl(githubUrl)
                     .setTravisCiUrl(travisCiUrl)
                     .setName(repositoryName)
+                    .setOrganization(organizationId)
                     .vBuild();
             context().assertEvent(repositoryRegistered);
         }
@@ -90,6 +97,7 @@ final class RepositoryAggregateTest extends ContextAwareTest {
                     .setGithubUrl(githubUrl)
                     .setTravisCiUrl(travisCiUrl)
                     .setName(repositoryName)
+                    .setOrganization(organizationId)
                     .vBuild();
             context().assertState(repositoryId, Repository.class)
                      .isEqualTo(expectedState);

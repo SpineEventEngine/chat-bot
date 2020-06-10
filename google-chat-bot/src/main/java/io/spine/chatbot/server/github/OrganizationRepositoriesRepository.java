@@ -41,8 +41,8 @@ final class OrganizationRepositoriesRepository
     protected void setupEventRouting(EventRouting<OrganizationId> routing) {
         super.setupEventRouting(routing);
         routing.route(RepositoryRegistered.class, (event, context) ->
-                isNotDefault(event.getOrganizationId())
-                ? withId(event.getOrganizationId())
+                isNotDefault(event.getOrganization())
+                ? withId(event.getOrganization())
                 : noTargets());
     }
 }
