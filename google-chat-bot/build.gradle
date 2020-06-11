@@ -28,9 +28,9 @@ spine {
 }
 
 dependencies {
-
     implementation "io.spine.gcloud:spine-datastore:1.5.0"
     implementation 'com.google.cloud:google-cloud-secretmanager:1.0.1'
+    implementation 'com.google.api.grpc:proto-google-cloud-pubsub-v1:1.89.0'
 
     implementation 'com.google.apis:google-api-services-chat:v1-rev20200502-1.30.9'
     implementation 'com.google.auth:google-auth-library-oauth2-http:0.20.0'
