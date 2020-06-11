@@ -38,7 +38,9 @@ message ChatEvent {
 
     Space space = 3;
 
-    User user = 4;
+    Message message = 4;
+
+    User user = 5;
 }
 
 message Message {
@@ -93,7 +95,16 @@ enum SpaceType {
 
 enum EventType {
     ET_UNKNOWN = 0;
-    ADDED_TO_SPACE = 1;
-    REMOVED_FROM_SPACE = 2;
-    MESSAGE = 3;
+
+    // A message was sent in a room or direct message.
+    MESSAGE = 1;
+
+    // The bot was added to a room or DM.
+    ADDED_TO_SPACE = 2;
+
+    // The bot was removed from a room or DM.
+    REMOVED_FROM_SPACE = 3;
+
+    // The bot's interactive card was clicked.
+    CARD_CLICKED = 4;
 }
