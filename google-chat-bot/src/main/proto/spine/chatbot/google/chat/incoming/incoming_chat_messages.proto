@@ -1,0 +1,99 @@
+/*
+ * Copyright 2020, TeamDev. All rights reserved.
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+syntax = "proto3";
+
+package spine.chatbot.google.chat.incoming;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.google.chat.incoming";
+option java_outer_classname = "IncomingChatMessagesProto";
+option java_multiple_files = true;
+
+// Denotes that a message was created in the space.
+message ChatEvent {
+
+    EventType type = 1;
+
+    string event_time = 2;
+
+    Space space = 3;
+
+    User user = 4;
+}
+
+message Message {
+    string name = 1;
+
+    User sender = 2;
+    string create_time = 3;
+    string text = 4;
+    string argumentText = 5;
+    Thread thread = 6;
+
+    message Thread {
+        string name = 1;
+    }
+
+    repeated Annotation annotations = 7;
+
+    message Annotation {
+        uint32 length = 1;
+        uint32 start_index = 2;
+
+        UserMention user_mention = 3;
+
+        message UserMention {
+            string type = 1;
+            User user = 2;
+        }
+        string type = 4;
+    }
+}
+
+
+message Space {
+    string name = 1;
+    string display_name = 2;
+    SpaceType type = 3;
+}
+
+message User {
+    string name = 1;
+    string displayName = 2;
+    string avatarUrl = 3;
+    string email = 4;
+    string type = 5;
+}
+
+enum SpaceType {
+    ST_UNKNOWN = 0;
+    ROOM = 1;
+    DM = 2;
+}
+
+enum EventType {
+    ET_UNKNOWN = 0;
+    ADDED_TO_SPACE = 1;
+    REMOVED_FROM_SPACE = 2;
+    MESSAGE = 3;
+}
