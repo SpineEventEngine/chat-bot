@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package google.pubsub.v1;
+
+option java_multiple_files = true;
+option java_outer_classname = "PubsubPushProto";
+option java_package = "com.google.pubsub.v1";
+
+import "google/pubsub/v1/pubsub.proto";
+
+// Pubsub push message notification.
+message PubsubPushNotification {
+
+    // Pubsub message.
+    PubsubMessage message = 1;
+
+    // The name of the Pubsub subscription that pushed the current notification.
+    // Format is `projects/{project}/subscriptions/{subscription}`.
+    string subscription = 2;
+}
