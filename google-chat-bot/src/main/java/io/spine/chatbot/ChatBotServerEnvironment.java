@@ -24,13 +24,17 @@ import com.google.cloud.datastore.DatastoreOptions;
 import io.spine.base.Environment;
 import io.spine.server.ServerEnvironment;
 import io.spine.server.delivery.Delivery;
+import io.spine.server.delivery.UniformAcrossAllShards;
 import io.spine.server.storage.StorageFactory;
 import io.spine.server.storage.datastore.DatastoreStorageFactory;
+import io.spine.server.storage.datastore.DsShardedWorkRegistry;
 import io.spine.server.storage.memory.InMemoryStorageFactory;
 import io.spine.server.transport.memory.InMemoryTransportFactory;
 
 /** ChatBot server environment definition. **/
 final class ChatBotServerEnvironment {
+
+    private static final int NUMBER_OF_SHARDS = 50;
 
     /**
      * Prevents instantiation of this utility class.
@@ -40,16 +44,32 @@ final class ChatBotServerEnvironment {
 
     /** Initializes {@link ServerEnvironment} for ChatBot. **/
     static void initializeEnvironment() {
-        ServerEnvironment se = ServerEnvironment.instance();
-        StorageFactory storageFactory = storageFactory();
+        var se = ServerEnvironment.instance();
+        var environment = Environment.instance();
+        StorageFactory storageFactory = newStorageFactory(environment);
         se.configureStorage(storageFactory);
         se.configureTransport(InMemoryTransportFactory.newInstance());
-        se.configureDelivery(Delivery.localAsync());
+        se.configureDelivery(newDelivery(environment, storageFactory));
     }
 
-    private static StorageFactory storageFactory() {
-        if (Environment.instance()
-                       .isProduction()) {
+    private static Delivery newDelivery(Environment environment, StorageFactory storageFactory) {
+        if (environment.isProduction()) {
+            var dsStorageFactory = (DatastoreStorageFactory) storageFactory;
+            var workRegistry = new DsShardedWorkRegistry(dsStorageFactory);
+            var inboxStorage = dsStorageFactory.createInboxStorage(false);
+            var delivery = Delivery
+                    .newBuilder()
+                    .setStrategy(UniformAcrossAllShards.forNumber(NUMBER_OF_SHARDS))
+                    .setWorkRegistry(workRegistry)
+                    .setInboxStorage(inboxStorage)
+                    .build();
+            return delivery;
+        }
+        return Delivery.local();
+    }
+
+    private static StorageFactory newStorageFactory(Environment environment) {
+        if (environment.isProduction()) {
             var datastore = DatastoreOptions.getDefaultInstance()
                                             .getService();
             return DatastoreStorageFactory
