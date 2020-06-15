@@ -36,6 +36,7 @@ import io.spine.chatbot.server.google.chat.Identifiers;
 import io.spine.json.Json;
 import io.spine.logging.Logging;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
@@ -85,6 +86,6 @@ public class IncomingEventsController implements Logging {
     private static String decodeBase64Json(ByteString encoded) {
         var decodedBytes = Base64.getDecoder()
                                  .decode(encoded.toByteArray());
-        return new String(decodedBytes);
+        return new String(decodedBytes, StandardCharsets.UTF_8);
     }
 }
