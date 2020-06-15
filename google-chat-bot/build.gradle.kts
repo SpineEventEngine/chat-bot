@@ -25,6 +25,7 @@ plugins {
     id("io.spine.tools.gradle.bootstrap")
 }
 
+/** The GCP project ID used for deployment of the application. **/
 val gcpProject: String by project
 
 spine {
