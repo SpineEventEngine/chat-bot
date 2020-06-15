@@ -73,5 +73,4 @@ tasks.compileJava {
             "-Xep:UnusedVariable:OFF",
             "-Xep:CheckReturnValue:OFF"
     ))
-
 }
