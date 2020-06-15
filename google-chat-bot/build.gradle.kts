@@ -19,18 +19,16 @@
  */
 
 plugins {
-    id "application"
-    id "com.github.johnrengelman.shadow"
-    id "com.google.cloud.tools.jib"
-    id "io.spine.tools.gradle.bootstrap"
+    application
+    id("com.github.johnrengelman.shadow")
+    id("com.google.cloud.tools.jib")
+    id("io.spine.tools.gradle.bootstrap")
 }
 
+val gcpProject: String by project
 
 spine {
     enableJava().server()
-    modelCompiler {
-        generateValidation = true
-    }
 }
 
 dependencies {
@@ -51,22 +49,29 @@ dependencies {
     runtimeOnly("org.apache.logging.log4j:log4j-api:2.13.3")
     runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.13.3")
 
-    implementation "io.spine.gcloud:spine-datastore:1.5.0"
-    implementation 'com.google.cloud:google-cloud-secretmanager:1.0.1'
-    implementation 'com.google.api.grpc:proto-google-cloud-pubsub-v1:1.89.0'
+    implementation("io.spine.gcloud:spine-datastore:1.5.0")
+    implementation("com.google.cloud:google-cloud-secretmanager:1.0.1")
+    implementation("com.google.api.grpc:proto-google-cloud-pubsub-v1:1.89.0")
 
-    implementation 'com.google.apis:google-api-services-chat:v1-rev20200502-1.30.9'
-    implementation 'com.google.auth:google-auth-library-oauth2-http:0.20.0'
-    testImplementation "io.spine:spine-testutil-server:${spine.version()}"
+    implementation("com.google.apis:google-api-services-chat:v1-rev20200502-1.30.9")
+    implementation("com.google.auth:google-auth-library-oauth2-http:0.20.0")
+    testAnnotationProcessor(enforcedPlatform(Build.micronaut.bom))
+    testAnnotationProcessor(Build.micronaut.injectJava)
+    testImplementation("io.spine:spine-testutil-server:${spine.version()}")
+    testImplementation(enforcedPlatform(Build.micronaut.bom))
+    testImplementation(Build.micronaut.testJUnit5)
+    testImplementation(Build.micronaut.httpClient)
 }
 
-mainClassName = "io.spine.chatbot.Application"
+application {
+    mainClassName = "io.spine.chatbot.Application"
+}
 
 jib {
     to {
         image = "gcr.io/${gcpProject}/chat-bot-server"
     }
     container {
-        mainClass = mainClassName
+        mainClass = application.mainClassName
     }
 }
