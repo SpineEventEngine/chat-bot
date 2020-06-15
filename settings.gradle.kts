@@ -19,5 +19,4 @@
  */
 
 rootProject.name = "chat-bot"
-include 'google-chat-bot'
-
+include("google-chat-bot")
