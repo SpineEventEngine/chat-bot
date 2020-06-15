@@ -25,10 +25,8 @@ object Versions {
     const val checkstyle = "8.29"
     const val findBugs = "3.0.2"
     const val guava = "29.0-jre"
-    const val grpc = "1.28.1"
     const val flogger = "0.5.1"
     const val junit5 = "5.6.2"
-    const val junitPlatform = "1.6.2"
     const val truth = "1.0.1"
     const val micronaut = "2.0.0.M3"
     const val spineGcloud = "1.5.0"
@@ -36,24 +34,7 @@ object Versions {
     const val googlePubsubProto = "1.89.0"
     const val googleChat = "v1-rev20200502-1.30.9"
     const val googleAuth = "0.20.0"
-
-    const val licensePlugin = "1.14"
-    const val errorPronePlugin = "1.2.1"
-    const val aptPlugin = "0.21"
-    const val shadowPlugin = "5.2.0"
-    const val jibPlugin = "2.4.0"
-    const val spineBootstrapPlugin = "1.5.17"
-    const val propertiesPlugin = "1.5.1"
-}
-
-object GradlePlugins {
-    const val apt = "net.ltgt.gradle:gradle-apt-plugin:${Versions.aptPlugin}"
-    const val shadow = "com.github.jengelman.gradle.plugins:shadow:${Versions.shadowPlugin}"
-    const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:${Versions.jibPlugin}"
-    const val properties = "net.saliman:gradle-properties-plugin:${Versions.propertiesPlugin}"
-    const val spineBootstrap = "io.spine.tools:spine-bootstrap:${Versions.spineBootstrapPlugin}"
-    const val errorProne = "net.ltgt.gradle:gradle-errorprone-plugin:${Versions.errorPronePlugin}"
-    const val licenseReport = "com.github.jk1:gradle-license-report:${Versions.licensePlugin}"
+    const val log4j2 = "2.13.3"
 }
 
 object Build {
@@ -73,8 +54,22 @@ object Build {
     const val guava = "com.google.guava:guava:${Versions.guava}"
     const val flogger = "com.google.flogger:flogger:${Versions.flogger}"
     val ci = "true".equals(System.getenv("CI"))
-    val gradlePlugins = GradlePlugins
     val micronaut = Micronaut
+    val google = Google
+    val log4j2 = Log4j2
+}
+
+object Log4j2 {
+    const val core = "org.apache.logging.log4j:log4j-core:${Versions.log4j2}"
+    const val api = "org.apache.logging.log4j:log4j-api:${Versions.log4j2}"
+    const val slf4jBridge = "org.apache.logging.log4j:log4j-slf4j-impl:${Versions.log4j2}"
+}
+
+object Google {
+    const val secretManager = "com.google.cloud:google-cloud-secretmanager:${Versions.googleSecretManager}"
+    const val pubsubProto = "com.google.api.grpc:proto-google-cloud-pubsub-v1:${Versions.googlePubsubProto}"
+    const val chat = "com.google.apis:google-api-services-chat:${Versions.googleChat}"
+    const val auth = "com.google.auth:google-auth-library-oauth2-http:${Versions.googleAuth}"
 }
 
 object Micronaut {
@@ -86,17 +81,7 @@ object Micronaut {
     const val netty = "io.micronaut:micronaut-http-server-netty"
     const val testJUnit5 = "io.micronaut.test:micronaut-test-junit5"
     const val httpClient = "io.micronaut:micronaut-http-client"
-}
-
-object Runtime {
-
-    val flogger = Flogger
-
-    object Flogger {
-        const val systemBackend = "com.google.flogger:flogger-system-backend:${Versions.flogger}"
-        const val log4J = "com.google.flogger:flogger-log4j:${Versions.flogger}"
-        const val slf4J = "com.google.flogger:slf4j-backend-factory:${Versions.flogger}"
-    }
+    const val annotationApi = "javax.annotation:javax.annotation-api"
 }
 
 object Test {
@@ -115,7 +100,6 @@ object Test {
 
 object Deps {
     val build = Build
-    val runtime = Runtime
     val test = Test
     val versions = Versions
 }

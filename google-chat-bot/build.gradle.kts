@@ -32,35 +32,37 @@ spine {
 }
 
 dependencies {
-    annotationProcessor(enforcedPlatform(Build.micronaut.bom))
-    annotationProcessor(Build.micronaut.injectJava)
-    annotationProcessor(Build.micronaut.validation)
+    annotationProcessor(enforcedPlatform(Deps.build.micronaut.bom))
+    annotationProcessor(Deps.build.micronaut.injectJava)
+    annotationProcessor(Deps.build.micronaut.validation)
 
-    compileOnly(enforcedPlatform(Build.micronaut.bom))
+    compileOnly(enforcedPlatform(Deps.build.micronaut.bom))
 
-    implementation(enforcedPlatform(Build.micronaut.bom))
-    implementation(Build.micronaut.inject)
-    implementation(Build.micronaut.validation)
-    implementation(Build.micronaut.runtime)
-    implementation(Build.micronaut.netty)
-    implementation("javax.annotation:javax.annotation-api")
+    implementation(enforcedPlatform(Deps.build.micronaut.bom))
+    implementation(Deps.build.micronaut.inject)
+    implementation(Deps.build.micronaut.validation)
+    implementation(Deps.build.micronaut.runtime)
+    implementation(Deps.build.micronaut.netty)
+    implementation(Deps.build.micronaut.annotationApi)
 
-    implementation("org.apache.logging.log4j:log4j-core:2.13.3")
-    runtimeOnly("org.apache.logging.log4j:log4j-api:2.13.3")
-    runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.13.3")
+    implementation(Deps.build.log4j2.core)
+    runtimeOnly(Deps.build.log4j2.api)
+    runtimeOnly(Deps.build.log4j2.slf4jBridge)
 
-    implementation("io.spine.gcloud:spine-datastore:1.5.0")
-    implementation("com.google.cloud:google-cloud-secretmanager:1.0.1")
-    implementation("com.google.api.grpc:proto-google-cloud-pubsub-v1:1.89.0")
+    implementation("io.spine.gcloud:spine-datastore:${Deps.versions.spineGcloud}")
+    implementation(Deps.build.google.secretManager)
+    implementation(Deps.build.google.pubsubProto)
 
-    implementation("com.google.apis:google-api-services-chat:v1-rev20200502-1.30.9")
-    implementation("com.google.auth:google-auth-library-oauth2-http:0.20.0")
-    testAnnotationProcessor(enforcedPlatform(Build.micronaut.bom))
-    testAnnotationProcessor(Build.micronaut.injectJava)
+    implementation(Deps.build.google.chat)
+    implementation(Deps.build.google.auth)
+
+    testAnnotationProcessor(enforcedPlatform(Deps.build.micronaut.bom))
+    testAnnotationProcessor(Deps.build.micronaut.injectJava)
+
     testImplementation("io.spine:spine-testutil-server:${spine.version()}")
-    testImplementation(enforcedPlatform(Build.micronaut.bom))
-    testImplementation(Build.micronaut.testJUnit5)
-    testImplementation(Build.micronaut.httpClient)
+    testImplementation(enforcedPlatform(Deps.build.micronaut.bom))
+    testImplementation(Deps.build.micronaut.testJUnit5)
+    testImplementation(Deps.build.micronaut.httpClient)
 }
 
 application {
