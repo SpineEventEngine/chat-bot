@@ -18,8 +18,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import org.gradle.api.artifacts.ConfigurationContainer
-
 
 // Specific repositories.
 object Repos {
@@ -47,21 +45,21 @@ object Versions {
     const val googleChat = "v1-rev20200502-1.30.9"
     const val googleAuth = "0.20.0"
 
-    const val licensePlugin = "1.13"
+    const val licensePlugin = "1.14"
     const val errorPronePlugin = "1.2.1"
-    const val aptPluginVersion = "0.21"
-    const val shadowPluginVersion = "5.2.0"
-    const val jibPluginVersion = "2.4.0"
-    const val spineBootstrapPluginVersion = "1.5.17"
-    const val propertiesPluginVersion = "1.5.1"
+    const val aptPlugin = "0.21"
+    const val shadowPlugin = "5.2.0"
+    const val jibPlugin = "2.4.0"
+    const val spineBootstrapPlugin = "1.5.17"
+    const val propertiesPlugin = "1.5.1"
 }
 
 object GradlePlugins {
-    const val apt = "net.ltgt.gradle:gradle-apt-plugin::${Versions.aptPluginVersion}"
-    const val shadow = "com.github.jengelman.gradle.plugins:shadow:${Versions.shadowPluginVersion}"
-    const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:${Versions.jibPluginVersion}"
-    const val properties = "net.saliman:gradle-properties-plugin:${Versions.propertiesPluginVersion}"
-    const val spineBootstrap = "io.spine.tools:spine-bootstrap:${Versions.spineBootstrapPluginVersion}"
+    const val apt = "net.ltgt.gradle:gradle-apt-plugin:${Versions.aptPlugin}"
+    const val shadow = "com.github.jengelman.gradle.plugins:shadow:${Versions.shadowPlugin}"
+    const val jib = "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:${Versions.jibPlugin}"
+    const val properties = "net.saliman:gradle-properties-plugin:${Versions.propertiesPlugin}"
+    const val spineBootstrap = "io.spine.tools:spine-bootstrap:${Versions.spineBootstrapPlugin}"
     const val errorProne = "net.ltgt.gradle:gradle-errorprone-plugin:${Versions.errorPronePlugin}"
     const val licenseReport = "com.github.jk1:gradle-license-report:${Versions.licensePlugin}"
 }
@@ -84,6 +82,7 @@ object Build {
     const val flogger = "com.google.flogger:flogger:${Versions.flogger}"
     val ci = "true".equals(System.getenv("CI"))
     val gradlePlugins = GradlePlugins
+    val micronaut = Micronaut
 }
 
 object Micronaut {
@@ -137,23 +136,4 @@ object Deps {
     val runtime = Runtime
     val test = Test
     val versions = Versions
-}
-
-object DependencyResolution {
-
-    fun forceConfiguration(configurations: ConfigurationContainer) {
-        configurations.all { config ->
-            config.resolutionStrategy { strategy ->
-                strategy.force(
-                        Deps.build.errorProneAnnotations,
-                        Deps.build.jsr305Annotations,
-                        Deps.build.checkerAnnotations,
-                        Deps.build.guava,
-                        Deps.test.guavaTestlib,
-                        Deps.test.truth,
-                        Deps.test.junit5Api
-                )
-            }
-        }
-    }
 }
