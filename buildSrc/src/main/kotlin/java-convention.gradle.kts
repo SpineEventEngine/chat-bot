@@ -52,4 +52,26 @@ tasks.test {
 
 tasks.compileJava {
     options.errorprone.disableWarningsInGeneratedCode.set(true)
+    // Explicitly states the encoding of the source and test source files, ensuring
+    // correct execution of the `javac` task.
+    options.encoding = "UTF-8"
+    options.compilerArgs.addAll(listOf("-Xlint:unchecked", "-Xlint:deprecation"))
+
+    // Configure Error Prone:
+    // 1. Exclude generated sources from being analyzed by Error Prone.
+    // 2. Turn the check off until Error Prone can handle `@Nested` JUnit classes.
+    //    See issue: https://github.com/google/error-prone/issues/956
+    // 3. Turn off checks which report unused methods and unused method parameters.
+    //    See issue: https://github.com/SpineEventEngine/config/issues/61
+    //
+    // For more config details see:
+    //    https://github.com/tbroyer/gradle-errorprone-plugin/tree/master#usage
+    options.errorprone.errorproneArgs.addAll(listOf(
+            "-XepExcludedPaths:.*/generated/.*",
+            "-Xep:ClassCanBeStatic:OFF",
+            "-Xep:UnusedMethod:OFF",
+            "-Xep:UnusedVariable:OFF",
+            "-Xep:CheckReturnValue:OFF"
+    ))
+
 }
