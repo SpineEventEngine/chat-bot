@@ -18,14 +18,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-// Specific repositories.
-object Repos {
-
-    const val sonatypeSnapshots: String = "https://oss.sonatype.org/content/repositories/snapshots"
-    const val gradlePlugins = "https://plugins.gradle.org/m2/"
-}
-
 object Versions {
     const val checkerFramework = "3.3.0"
     const val errorProne = "2.4.0"
@@ -93,16 +85,7 @@ object Micronaut {
     const val runtime = "io.micronaut:micronaut-runtime"
     const val netty = "io.micronaut:micronaut-http-server-netty"
     const val testJUnit5 = "io.micronaut.test:micronaut-test-junit5"
-}
-
-object Grpc {
-    const val core = "io.grpc:grpc-core:${Versions.grpc}"
-    const val stub = "io.grpc:grpc-stub:${Versions.grpc}"
-    const val okHttp = "io.grpc:grpc-okhttp:${Versions.grpc}"
-    const val protobuf = "io.grpc:grpc-protobuf:${Versions.grpc}"
-    const val netty = "io.grpc:grpc-netty:${Versions.grpc}"
-    const val nettyShaded = "io.grpc:grpc-netty-shaded:${Versions.grpc}"
-    const val context = "io.grpc:grpc-context:${Versions.grpc}"
+    const val httpClient = "io.micronaut:micronaut-http-client"
 }
 
 object Runtime {
@@ -132,7 +115,6 @@ object Test {
 
 object Deps {
     val build = Build
-    val grpc = Grpc
     val runtime = Runtime
     val test = Test
     val versions = Versions
