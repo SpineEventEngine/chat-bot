@@ -119,7 +119,10 @@ public final class ChatBotClient {
         postSyncCommand(registerSpineBase, RepositoryRegistered.class);
     }
 
-    private <E extends EventMessage> void
+    /**
+     * Posts a command and waits synchronously till the expected outcome event is published.
+     */
+    public <E extends EventMessage> void
     postSyncCommand(CommandMessage command, Class<E> expectedOutcome) {
         postSyncCommand(command, expectedOutcome, 1);
     }
