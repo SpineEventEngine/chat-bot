@@ -18,7 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-apply plugin: 'io.spine.tools.gradle.bootstrap'
+plugins {
+    id "application"
+    id "com.github.johnrengelman.shadow"
+    id "com.google.cloud.tools.jib"
+    id "io.spine.tools.gradle.bootstrap"
+}
+
 
 spine {
     enableJava().server()
@@ -28,6 +34,23 @@ spine {
 }
 
 dependencies {
+    annotationProcessor(enforcedPlatform(Build.micronaut.bom))
+    annotationProcessor(Build.micronaut.injectJava)
+    annotationProcessor(Build.micronaut.validation)
+
+    compileOnly(enforcedPlatform(Build.micronaut.bom))
+
+    implementation(enforcedPlatform(Build.micronaut.bom))
+    implementation(Build.micronaut.inject)
+    implementation(Build.micronaut.validation)
+    implementation(Build.micronaut.runtime)
+    implementation(Build.micronaut.netty)
+    implementation("javax.annotation:javax.annotation-api")
+
+    implementation("org.apache.logging.log4j:log4j-core:2.13.3")
+    runtimeOnly("org.apache.logging.log4j:log4j-api:2.13.3")
+    runtimeOnly("org.apache.logging.log4j:log4j-slf4j-impl:2.13.3")
+
     implementation "io.spine.gcloud:spine-datastore:1.5.0"
     implementation 'com.google.cloud:google-cloud-secretmanager:1.0.1'
     implementation 'com.google.api.grpc:proto-google-cloud-pubsub-v1:1.89.0'
