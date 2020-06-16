@@ -18,32 +18,5 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-apply plugin: 'io.spine.tools.gradle.bootstrap'
-
-spine {
-    enableJava().server()
-    modelCompiler {
-        generateValidation = true
-    }
-}
-
-dependencies {
-    implementation "io.spine.gcloud:spine-datastore:1.5.0"
-    implementation 'com.google.cloud:google-cloud-secretmanager:1.0.1'
-    implementation 'com.google.api.grpc:proto-google-cloud-pubsub-v1:1.89.0'
-
-    implementation 'com.google.apis:google-api-services-chat:v1-rev20200502-1.30.9'
-    implementation 'com.google.auth:google-auth-library-oauth2-http:0.20.0'
-    testImplementation "io.spine:spine-testutil-server:${spine.version()}"
-}
-
-mainClassName = "io.spine.chatbot.Application"
-
-jib {
-    to {
-        image = "gcr.io/${gcpProject}/chat-bot-server"
-    }
-    container {
-        mainClass = mainClassName
-    }
-}
+rootProject.name = "chat-bot"
+include("google-chat-bot")

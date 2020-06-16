@@ -18,6 +18,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-rootProject.name = "chat-bot"
-include 'google-chat-bot'
+import net.saliman.gradle.plugin.properties.PropertiesPlugin
 
+plugins {
+    idea
+}
+
+apply(from = "version.gradle.kts")
+val botVersion: String by extra
+
+allprojects {
+    apply<IdeaPlugin>()
+    apply<PropertiesPlugin>()
+
+    group = "io.spine"
+    version = botVersion
+}
+
+subprojects {
+    apply<JavaConventionPlugin>()
+}
