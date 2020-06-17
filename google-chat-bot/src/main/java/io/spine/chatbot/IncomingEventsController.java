@@ -22,7 +22,6 @@ package io.spine.chatbot;
 
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubPushNotification;
-import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -39,15 +38,21 @@ import io.spine.logging.Logging;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+import static io.micronaut.http.MediaType.APPLICATION_JSON;
+
 /**
- * A REST controller for handling incoming PubSub events from Google Chat users.
+ * A REST controller for handling incoming events from Google Chat.
  */
 @Controller("/chat")
 public class IncomingEventsController implements Logging {
 
-    /** Requests build status checks for registered listRepositories. **/
-    @Post(value = "/incoming/event", consumes = MediaType.APPLICATION_JSON)
-    public String checkRepositoryStatuses(@Body PubsubPushNotification pushNotification) {
+    /**
+     * Processes an incoming Google Chat event.
+     *
+     * <p>When a bot is added to a new space, registers the space in the system.
+     */
+    @Post(value = "/incoming/event", consumes = APPLICATION_JSON)
+    public String on(@Body PubsubPushNotification pushNotification) {
         var message = pushNotification.getMessage();
         var chatEventJson = decodeBase64Json(message.getData());
         ChatEvent chatEvent = Json.fromJson(chatEventJson, ChatEvent.class);
