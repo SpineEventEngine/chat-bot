@@ -19,16 +19,16 @@
  */
 
 object Versions {
-    const val checkerFramework = "3.3.0"
+    const val checkerFramework = "3.4.1"
     const val errorProne = "2.4.0"
-    const val pmd = "6.20.0"
+    const val pmd = "6.24.0"
     const val checkstyle = "8.29"
     const val findBugs = "3.0.2"
     const val guava = "29.0-jre"
     const val flogger = "0.5.1"
     const val junit5 = "5.6.2"
     const val truth = "1.0.1"
-    const val micronaut = "2.0.0.M3"
+    const val micronaut = "2.0.0.RC1"
     const val spineGcloud = "1.5.0"
     const val googleSecretManager = "1.0.1"
     const val googlePubsubProto = "1.89.0"
