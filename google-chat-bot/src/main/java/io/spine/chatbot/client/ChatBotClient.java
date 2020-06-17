@@ -27,10 +27,6 @@ import io.spine.base.EventMessage;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.OrganizationRepositories;
-import io.spine.chatbot.github.organization.command.RegisterOrganization;
-import io.spine.chatbot.github.organization.event.OrganizationRegistered;
-import io.spine.chatbot.github.repository.command.RegisterRepository;
-import io.spine.chatbot.github.repository.event.RepositoryRegistered;
 import io.spine.client.Client;
 import io.spine.client.ClientRequest;
 import io.spine.client.Subscription;
@@ -39,9 +35,6 @@ import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
-import static io.spine.chatbot.server.github.Identifiers.newOrganizationId;
-import static io.spine.chatbot.server.github.Identifiers.newRepositoryId;
-import static io.spine.net.Urls.urlOfSpec;
 
 /**
  * A ChatBot application's Spine client.
@@ -95,33 +88,6 @@ public final class ChatBotClient {
                              .flatMap(Collection::stream)
                              .collect(toImmutableList());
         return result;
-    }
-
-    /**
-     * Performs initialization of the entities that are monitored by the ChatBot
-     * by default.
-     */
-    public void initializeDefaults() {
-        var spineOrgId = newOrganizationId("SpineEventEngine");
-        var registerSpineOrg = RegisterOrganization
-                .newBuilder()
-                .setName("Spine Event Engine")
-                .setWebsiteUrl(urlOfSpec("https://spine.io/"))
-                .setTravisCiUrl(urlOfSpec("https://travis-ci.com/github/SpineEventEngine"))
-                .setGithubUrl(urlOfSpec("https://github.com/SpineEventEngine"))
-                .setId(spineOrgId)
-                .setGoogleChatSpace("spaces/AAAAnLxnh_o")
-                .vBuild();
-        postSyncCommand(registerSpineOrg, OrganizationRegistered.class);
-        var registerSpineBase = RegisterRepository
-                .newBuilder()
-                .setOrganization(spineOrgId)
-                .setGithubUrl(urlOfSpec("https://github.com/SpineEventEngine/base"))
-                .setId(newRepositoryId("SpineEventEngine/base"))
-                .setName("Spine Event Engine Base")
-                .setTravisCiUrl(urlOfSpec("https://travis-ci.com/github/SpineEventEngine/base"))
-                .vBuild();
-        postSyncCommand(registerSpineBase, RepositoryRegistered.class);
     }
 
     /**
