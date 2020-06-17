@@ -1,6 +1,13 @@
-###
+### List Travis CI builds for a repository
 
-GET https://api.travis-ci.com/repo/SpineEventEngine%2Fbase/builds?limit=1&branch.name=master
+GET https://{{host}}/repo/SpineEventEngine%2Fbase/builds?limit=1&branch.name=master&include=build.commit
 Accept: application/json
-Authorization: token <token>
+Authorization: token {{token}}
+Travis-API-Version: 3
+
+### List Travis CI repositories for a user
+
+GET https://{{host}}/owner/SpineEventEngine/repos
+Accept: application/json
+Authorization: token {{token}}
 Travis-API-Version: 3

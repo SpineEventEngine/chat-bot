@@ -246,3 +246,6 @@ gradle-local.properties
 
 # Local credentials folder
 .credentials
+
+# IDEA HTTP client private env files
+http-client.private.env.json
