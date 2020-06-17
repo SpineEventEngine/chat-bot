@@ -43,6 +43,11 @@ import static io.spine.chatbot.server.github.Identifiers.newOrganizationId;
 import static io.spine.chatbot.server.github.Identifiers.newRepositoryId;
 import static io.spine.net.Urls.urlOfSpec;
 
+/**
+ * A ChatBot application's Spine client.
+ *
+ * <p>Abstracts working with Spine's {@link Client client}.
+ */
 public final class ChatBotClient {
 
     private final Client client;
@@ -72,7 +77,7 @@ public final class ChatBotClient {
     }
 
     /**
-     * Returns IDs for all registered listRepositories.
+     * Returns IDs for all registered repositories.
      */
     public ImmutableList<RepositoryId> listRepositories() {
         var orgIds = client.asGuest()

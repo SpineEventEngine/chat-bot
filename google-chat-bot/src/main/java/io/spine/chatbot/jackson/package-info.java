@@ -18,33 +18,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
-
-import io.spine.chatbot.github.OrganizationId;
-import io.spine.chatbot.github.RepositoryId;
-
 /**
- * A utility for working with {@link GitHubContext} identifiers.
+ * This package jackson utilities.
+ *
+ * @see <a href="https://github.com/FasterXML/jackson">jackson</a>
  */
-public final class Identifiers {
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.chatbot.jackson;
 
-    /** Prevents instantiation of this utility class. **/
-    private Identifiers() {
-    }
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    /** Creates a new {@link OrganizationId} out of the specified {@code name}. **/
-    public static OrganizationId newOrganizationId(String name) {
-        return OrganizationId
-                .newBuilder()
-                .setValue(name)
-                .vBuild();
-    }
-
-    /** Creates a new {@link OrganizationId} out of the specified {@code slug}. **/
-    public static RepositoryId newRepositoryId(String slug) {
-        return RepositoryId
-                .newBuilder()
-                .setValue(slug)
-                .vBuild();
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -27,7 +27,7 @@ import io.spine.chatbot.google.chat.ThreadId;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * An utility for working with {@link GoogleChatContext} identifiers.
+ * A utility for working with {@link GoogleChatContext} identifiers.
  */
 public final class Identifiers {
 

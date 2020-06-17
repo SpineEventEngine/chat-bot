@@ -37,6 +37,7 @@ public final class Application {
     private Application() {
     }
 
+    /** Starts the application. **/
     public static void main(String[] args) {
         initializeSpine();
         Micronaut.run(Application.class, args);
