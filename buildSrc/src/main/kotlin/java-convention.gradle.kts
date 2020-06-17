@@ -55,7 +55,7 @@ tasks.compileJava {
     // Explicitly states the encoding of the source and test source files, ensuring
     // correct execution of the `javac` task.
     options.encoding = "UTF-8"
-    options.compilerArgs.addAll(listOf("-Xlint:unchecked", "-Xlint:deprecation"))
+    options.compilerArgs.addAll(listOf("-Xlint:unchecked", "-Xlint:deprecation", "-Werror"))
 
     // Configure Error Prone:
     // 1. Exclude generated sources from being analyzed by Error Prone.
