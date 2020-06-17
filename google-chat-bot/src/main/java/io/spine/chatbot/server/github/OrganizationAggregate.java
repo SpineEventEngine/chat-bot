@@ -28,9 +28,6 @@ import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 
-/**
- *
- */
 final class OrganizationAggregate
         extends Aggregate<OrganizationId, Organization, Organization.Builder> {
 
