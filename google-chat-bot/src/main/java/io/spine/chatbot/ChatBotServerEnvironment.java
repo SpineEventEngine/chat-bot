@@ -31,7 +31,17 @@ import io.spine.server.storage.datastore.DsShardedWorkRegistry;
 import io.spine.server.storage.memory.InMemoryStorageFactory;
 import io.spine.server.transport.memory.InMemoryTransportFactory;
 
-/** ChatBot server environment definition. **/
+/**
+ * ChatBot server environment definition.
+ *
+ * <p>Initializes the {@link ServerEnvironment}.
+ *
+ * <p>Configures the {@link StorageFactory} based on
+ * the current {@link Environment} — Datastore-based for Production and in-memory-based for tests.
+ *
+ * <p>Configures the inbox delivery through the Datastore work registry while
+ * in Production environment, otherwise uses local synchronous delivery.
+ */
 final class ChatBotServerEnvironment {
 
     private static final int NUMBER_OF_SHARDS = 50;
@@ -46,13 +56,13 @@ final class ChatBotServerEnvironment {
     static void initializeEnvironment() {
         var se = ServerEnvironment.instance();
         var environment = Environment.instance();
-        StorageFactory storageFactory = newStorageFactory(environment);
+        StorageFactory storageFactory = storageFactoryFor(environment);
         se.configureStorage(storageFactory);
         se.configureTransport(InMemoryTransportFactory.newInstance());
-        se.configureDelivery(newDelivery(environment, storageFactory));
+        se.configureDelivery(deliveryFor(environment, storageFactory));
     }
 
-    private static Delivery newDelivery(Environment environment, StorageFactory storageFactory) {
+    private static Delivery deliveryFor(Environment environment, StorageFactory storageFactory) {
         if (environment.isProduction()) {
             var dsStorageFactory = (DatastoreStorageFactory) storageFactory;
             var workRegistry = new DsShardedWorkRegistry(dsStorageFactory);
@@ -68,7 +78,7 @@ final class ChatBotServerEnvironment {
         return Delivery.local();
     }
 
-    private static StorageFactory newStorageFactory(Environment environment) {
+    private static StorageFactory storageFactoryFor(Environment environment) {
         if (environment.isProduction()) {
             var datastore = DatastoreOptions.getDefaultInstance()
                                             .getService();
