@@ -42,6 +42,7 @@ final class UrlsTest extends UtilityClassTest<Urls> {
 
     @DisplayName("compose URL for")
     @Nested
+    @SuppressWarnings("ClassCanBeStatic") // jUnit Jupiter cannot work with static classes
     final class Compose {
 
         @DisplayName("Travis CI repository page")
