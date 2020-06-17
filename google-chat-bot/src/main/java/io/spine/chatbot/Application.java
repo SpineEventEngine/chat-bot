@@ -28,7 +28,22 @@ import io.spine.server.Server;
 
 import java.io.IOException;
 
-/** The entry point to the Google Chat Bot application. **/
+/**
+ * The entry point to the Google Chat Bot application.
+ *
+ * <p>The application itself exposes a number of REST endpoints accessible for the clients such as:
+ *
+ * <ul>
+ *     <li>{@code /init} — triggers the initialization of the default resources the bot is
+ *     monitoring.
+ *     <li>{@code /chat/incoming/event} — handles incoming events from the Google Chat space.
+ *     <li>{@code /repositories/check} — triggers checking of the repositories build statuses.
+ * </ul>
+ *
+ * @see InitController
+ * @see IncomingEventsController
+ * @see RepositoriesController
+ **/
 public final class Application {
 
     static final String SERVER_NAME = "ChatBotServer";
