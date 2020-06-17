@@ -18,13 +18,11 @@ via the [Google Chat][google-chat].
 
 ## Build
 
-In order to build a distributive of the application, run:
+In order to build the application, run:
 
 ```bash
 ./gradlew clean build
 ```
-
-The `.tar` and `.zip` dists should be available under `build/distributions`.
 
 Also, it is possible to build a Docker image using [`jib`][jib]:
 
