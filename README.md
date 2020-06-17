@@ -58,7 +58,7 @@ docker run \
 ```
 
 The application will be available at `127.0.0.1:${LOCAL_PORT}` (e.g. `127.0.0.1:9090`). 
-Locally-supplied GCP credentials are mount into the image directly.
+Locally-supplied GCP credentials are mounted into the image directly.
 
 For detailed ADC credentials guide for Docker see example Cloud Run [guide][cloud-run-local-guide].
 
