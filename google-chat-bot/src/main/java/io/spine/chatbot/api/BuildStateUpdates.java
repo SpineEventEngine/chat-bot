@@ -48,10 +48,11 @@ final class BuildStateUpdates {
     }
 
     /**
-     * Creates a new {@link BuildState} update message of of the supplied state and the thread name.
+     * Creates a new {@link BuildState} update message of of the supplied state and the thread
+     * name.
      *
-     * <p>If the thread name is empty, assumes that the update message should be sent
-     * to a new thread.
+     * <p>If the thread name is {@code null} or empty, assumes that the update message should be
+     * sent to a new thread.
      */
     static Message buildStateMessage(BuildState buildState, @Nullable String threadName) {
         Validate.checkValid(buildState);
