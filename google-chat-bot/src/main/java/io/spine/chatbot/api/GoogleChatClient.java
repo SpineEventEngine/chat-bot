@@ -72,7 +72,7 @@ public final class GoogleChatClient {
      *
      * @return a sent message
      */
-    public static Message sendMessage(BuildState buildState, @Nullable String threadName) {
+    public static Message sendBuildStateUpdate(BuildState buildState, @Nullable String threadName) {
         var message = buildStateMessage(buildState, threadName);
         return sendMessage(hangoutsChat(), buildState.getGoogleChatSpace(), message);
     }

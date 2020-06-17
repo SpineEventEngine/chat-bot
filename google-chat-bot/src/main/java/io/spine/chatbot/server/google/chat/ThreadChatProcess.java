@@ -48,7 +48,8 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var threadId = newThreadId(repositoryId.getValue());
         var spaceId = newSpaceId(buildState.getGoogleChatSpace());
         var currentThread = state().getThread();
-        var sentMessage = GoogleChatClient.sendMessage(buildState, currentThread.getName());
+        var sentMessage = GoogleChatClient.sendBuildStateUpdate(buildState,
+                                                                currentThread.getName());
         var thread = sentMessage.getThread();
         var messageId = newMessageId(sentMessage.getName());
         var messageCreated = MessageCreated
