@@ -27,6 +27,7 @@ import io.spine.chatbot.google.chat.ThreadId;
 import io.spine.chatbot.google.chat.event.MessageCreated;
 import io.spine.chatbot.google.chat.event.ThreadCreated;
 import io.spine.chatbot.google.chat.thread.ThreadChat;
+import io.spine.core.External;
 import io.spine.server.event.React;
 import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.Pair;
@@ -40,8 +41,8 @@ import static io.spine.chatbot.server.google.chat.ThreadResources.newThreadResou
 
 final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, ThreadChat.Builder> {
 
-    @React(external = true)
-    Pair<MessageCreated, Optional<ThreadCreated>> on(BuildStateChanged e) {
+    @React
+    Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildStateChanged e) {
         var change = e.getChange();
         var buildState = change.getNewValue();
         var repositoryId = e.getId();
