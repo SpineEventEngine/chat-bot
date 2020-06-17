@@ -134,3 +134,9 @@ message BuildsResponse {
 
     repeated Build builds = 1;
 }
+
+// A travis `repos` API endpoint response.
+message RepositoriesResponse {
+
+    repeated Repository repositories = 1;
+}
