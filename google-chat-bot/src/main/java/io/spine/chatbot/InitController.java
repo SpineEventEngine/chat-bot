@@ -56,7 +56,9 @@ public class InitController implements Logging {
      */
     @Get
     public String initWatchedResources(@QueryValue String spaceName) {
-        _info().log("Performing initial application state initialization.");
+        _info().log(
+                "Performing initial application state initialization in the Google Chat space `%s`",
+                spaceName);
         var client = ChatBotClient.inProcessClient(Application.SERVER_NAME);
         var spineOrgId = newOrganizationId("SpineEventEngine");
         registerOrganization(client, spineOrgId, spaceName);
@@ -65,19 +67,19 @@ public class InitController implements Logging {
     }
 
     private static void registerWatchedRepos(ChatBotClient client, OrganizationId spineOrgId) {
-        defaultTravisClient()
+        var watchedRepositories = defaultTravisClient()
                 .queryRepositoriesFor(spineOrgId.getValue())
                 .getRepositoriesList()
                 .stream()
-                .filter(repository -> WATCHED_REPOS.contains(repository.getName()))
-                .map(repository -> newRegisterRepoCommand(repository, spineOrgId))
-                .forEach(registerRepository -> {
-                    client.postSyncCommand(registerRepository, RepositoryRegistered.class);
-                });
+                .filter(repository -> WATCHED_REPOS.contains(repository.getName()));
+        watchedRepositories.forEach(repository -> {
+            var registerRepository = registerRepoCommand(repository, spineOrgId);
+            client.postSyncCommand(registerRepository, RepositoryRegistered.class);
+        });
     }
 
-    private static RegisterRepository newRegisterRepoCommand(Repository repository,
-                                                             OrganizationId orgId) {
+    private static RegisterRepository registerRepoCommand(Repository repository,
+                                                          OrganizationId orgId) {
         var slug = repository.getSlug();
         return RegisterRepository
                 .newBuilder()
