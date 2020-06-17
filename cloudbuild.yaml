@@ -1,3 +1,6 @@
+# TODO:2020-06-17:yuri-sergiichuk: the build fails in the cloud with
+#  java.lang.NoClassDefFoundError: javax/annotation/Generated inside Spine protoc plugin
+
 steps:
   - name: 'gradle:6.4.1-jdk11'
     entrypoint: 'gradle'
