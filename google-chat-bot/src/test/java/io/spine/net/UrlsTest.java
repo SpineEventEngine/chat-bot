@@ -22,11 +22,50 @@ package io.spine.net;
 
 import io.spine.testing.UtilityClassTest;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
+import static io.spine.net.Urls.githubRepoUrlFor;
+import static io.spine.net.Urls.travisBuildUrlFor;
+import static io.spine.net.Urls.travisRepoUrlFor;
+import static io.spine.net.Urls.urlOfSpec;
 
 @DisplayName("Urls should")
 final class UrlsTest extends UtilityClassTest<Urls> {
 
+    private static final String REPO_SLUG = "SpineEventEngine/chat-bot";
+
     UrlsTest() {
         super(Urls.class);
+    }
+
+    @DisplayName("compose URL for")
+    @Nested
+    final class Compose {
+
+        @DisplayName("Travis CI repository page")
+        @Test
+        void travisRepo() {
+            assertThat(travisRepoUrlFor(REPO_SLUG)).isEqualTo(urlOfSpec(
+                    "https://travis-ci.com/github/SpineEventEngine/chat-bot"
+            ));
+        }
+
+        @DisplayName("Travis CI repository build page")
+        @Test
+        void travisBuild() {
+            assertThat(travisBuildUrlFor(REPO_SLUG, 331)).isEqualTo(urlOfSpec(
+                    "https://travis-ci.com/github/SpineEventEngine/chat-bot/builds/331"
+            ));
+        }
+
+        @DisplayName("GitHub repository page")
+        @Test
+        void githubRepo() {
+            assertThat(githubRepoUrlFor(REPO_SLUG)).isEqualTo(urlOfSpec(
+                    "https://github.com/SpineEventEngine/chat-bot"
+            ));
+        }
     }
 }

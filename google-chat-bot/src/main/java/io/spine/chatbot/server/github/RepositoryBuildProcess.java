@@ -29,12 +29,12 @@ import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildStateChanged;
 import io.spine.chatbot.travis.Build;
 import io.spine.chatbot.travis.Commit;
-import io.spine.net.Url;
 import io.spine.net.Urls;
 import io.spine.server.command.Assign;
 import io.spine.server.procman.ProcessManager;
 
 import static io.spine.chatbot.api.TravisClient.defaultTravisClient;
+import static io.spine.net.Urls.travisBuildUrlFor;
 
 final class RepositoryBuildProcess
         extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder> {
@@ -76,13 +76,8 @@ final class RepositoryBuildProcess
                 .setCreatedBy(build.getCreatedBy()
                                    .getLogin())
                 .setRepositorySlug(slug)
-                .setTravisCiUrl(newTravisCiUrlFor(slug, build.getId()))
+                .setTravisCiUrl(travisBuildUrlFor(slug, build.getId()))
                 .vBuild();
-    }
-
-    private static Url newTravisCiUrlFor(String repoSlug, long buildId) {
-        var spec = String.format("https://travis-ci.com/github/%s/builds/%d", repoSlug, buildId);
-        return Urls.urlOfSpec(spec);
     }
 
     private static BuildState.Commit from(Commit commit) {

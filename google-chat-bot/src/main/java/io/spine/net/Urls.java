@@ -20,10 +20,16 @@
 
 package io.spine.net;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.lang.String.format;
+
 /**
  * An utility for working with {@link Url}.
  */
 public final class Urls {
+
+    private static final String TRAVIS_GITHUB_ENDPOINT = "https://travis-ci.com/github";
+    private static final String GITHUB = "https://github.com";
 
     /**
      * Prevents instantiation of this utility class.
@@ -36,5 +42,28 @@ public final class Urls {
         return Url.newBuilder()
                   .setSpec(spec)
                   .vBuild();
+    }
+
+    /** Creates a new Travis CI build URL. **/
+    public static Url travisBuildUrlFor(String repoSlug, long buildId) {
+        checkNotNull(repoSlug);
+        var spec = format("%s/%s/builds/%d",
+                          TRAVIS_GITHUB_ENDPOINT, repoSlug, buildId);
+        return urlOfSpec(spec);
+    }
+
+    /** Creates a new Travis CI repository URL. **/
+    public static Url travisRepoUrlFor(String repoSlug) {
+        checkNotNull(repoSlug);
+        var spec = format("%s/%s",
+                          TRAVIS_GITHUB_ENDPOINT, repoSlug);
+        return urlOfSpec(spec);
+    }
+
+    /** Creates a new GitHub repository URL. **/
+    public static Url githubRepoUrlFor(String repoSlug) {
+        checkNotNull(repoSlug);
+        var spec = format("%s/%s", GITHUB, repoSlug);
+        return urlOfSpec(spec);
     }
 }
