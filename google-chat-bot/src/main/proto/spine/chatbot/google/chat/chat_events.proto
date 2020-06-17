@@ -47,11 +47,11 @@ message MessageCreated {
 // Denotes that a recently created message created a new thread.
 message ThreadCreated {
 
-    ThreadId id = 1;
+    ThreadId id = 1 [(required) = true];
 
     // Google Chat thread.
-    ThreadResource thread = 2;
+    ThreadResource thread = 2 [(required) = true];
 
     // ID of the space within with the thread is available.
-    SpaceId space_id = 3;
+    SpaceId space_id = 3 [(required) = true];
 }

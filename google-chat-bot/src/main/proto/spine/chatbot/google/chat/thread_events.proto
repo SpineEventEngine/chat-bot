@@ -35,13 +35,13 @@ import "spine/chatbot/google/chat/thread.proto";
 // Denotes that a message was created in the space.
 message ThreadInitialized {
 
-    ThreadId id = 1;
+    ThreadId id = 1 [(required) = true];
 
     // Google Chat thread.
-    ThreadResource thread = 2;
+    ThreadResource thread = 2 [(required) = true];
 
-    // ID of the space within with the thread is available.
-    SpaceId space_id = 3;
+    // ID of the space within which the thread is available.
+    SpaceId space_id = 3 [(required) = true];
 }
 
 // Denotes that a message was created in the space.
