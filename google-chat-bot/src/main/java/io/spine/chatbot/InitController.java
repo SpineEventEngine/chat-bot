@@ -66,13 +66,14 @@ public class InitController implements Logging {
         return "Successfully initialized";
     }
 
-    private static void registerWatchedRepos(ChatBotClient client, OrganizationId spineOrgId) {
+    private void registerWatchedRepos(ChatBotClient client, OrganizationId spineOrgId) {
         var watchedRepositories = defaultTravisClient()
                 .queryRepositoriesFor(spineOrgId.getValue())
                 .getRepositoriesList()
                 .stream()
                 .filter(repository -> WATCHED_REPOS.contains(repository.getName()));
         watchedRepositories.forEach(repository -> {
+            _info().log("Registering repository `%s`.", repository.getName());
             var registerRepository = registerRepoCommand(repository, spineOrgId);
             client.postSyncCommand(registerRepository, RepositoryRegistered.class);
         });
@@ -91,9 +92,10 @@ public class InitController implements Logging {
                 .vBuild();
     }
 
-    private static void registerOrganization(ChatBotClient client,
-                                             OrganizationId spineOrgId,
-                                             String spaceName) {
+    private void registerOrganization(ChatBotClient client,
+                                      OrganizationId spineOrgId,
+                                      String spaceName) {
+        _info().log("Registering `Spine Event Engine` organization.");
         var registerSpineOrg = RegisterOrganization
                 .newBuilder()
                 .setName("Spine Event Engine")
