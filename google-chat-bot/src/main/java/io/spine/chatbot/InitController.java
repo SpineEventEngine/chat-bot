@@ -20,6 +20,7 @@
 
 package io.spine.chatbot;
 
+import com.google.common.collect.ImmutableList;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.QueryValue;
@@ -29,10 +30,14 @@ import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.event.OrganizationRegistered;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
 import io.spine.chatbot.github.repository.event.RepositoryRegistered;
+import io.spine.chatbot.travis.Repository;
 import io.spine.logging.Logging;
 
+import static io.spine.chatbot.api.TravisClient.defaultTravisClient;
 import static io.spine.chatbot.server.github.Identifiers.newOrganizationId;
 import static io.spine.chatbot.server.github.Identifiers.newRepositoryId;
+import static io.spine.net.Urls.githubRepoUrlFor;
+import static io.spine.net.Urls.travisRepoUrlFor;
 import static io.spine.net.Urls.urlOfSpec;
 
 /**
@@ -40,6 +45,10 @@ import static io.spine.net.Urls.urlOfSpec;
  */
 @Controller("/init")
 public class InitController implements Logging {
+
+    private static final ImmutableList<String> WATCHED_REPOS = ImmutableList.of(
+            "base", "time", "core-java", "web", "gcloud-java", "bootstrap", "money", "jdbc-storage"
+    );
 
     /**
      * Performs the initial registration of the default Spine resources the bot is going
@@ -51,20 +60,33 @@ public class InitController implements Logging {
         var client = ChatBotClient.inProcessClient(Application.SERVER_NAME);
         var spineOrgId = newOrganizationId("SpineEventEngine");
         registerOrganization(client, spineOrgId, spaceName);
-        registerBase(client, spineOrgId);
+        registerWatchedRepos(client, spineOrgId);
         return "Successfully initialized";
     }
 
-    private static void registerBase(ChatBotClient client, OrganizationId spineOrgId) {
-        var registerSpineBase = RegisterRepository
+    private static void registerWatchedRepos(ChatBotClient client, OrganizationId spineOrgId) {
+        defaultTravisClient()
+                .queryRepositoriesFor(spineOrgId.getValue())
+                .getRepositoriesList()
+                .stream()
+                .filter(repository -> WATCHED_REPOS.contains(repository.getName()))
+                .map(repository -> newRegisterRepoCommand(repository, spineOrgId))
+                .forEach(registerRepository -> {
+                    client.postSyncCommand(registerRepository, RepositoryRegistered.class);
+                });
+    }
+
+    private static RegisterRepository newRegisterRepoCommand(Repository repository,
+                                                             OrganizationId orgId) {
+        var slug = repository.getSlug();
+        return RegisterRepository
                 .newBuilder()
-                .setOrganization(spineOrgId)
-                .setGithubUrl(urlOfSpec("https://github.com/SpineEventEngine/base"))
-                .setId(newRepositoryId("SpineEventEngine/base"))
-                .setName("Spine Event Engine Base")
-                .setTravisCiUrl(urlOfSpec("https://travis-ci.com/github/SpineEventEngine/base"))
+                .setOrganization(orgId)
+                .setGithubUrl(githubRepoUrlFor(slug))
+                .setId(newRepositoryId(slug))
+                .setName(repository.getName())
+                .setTravisCiUrl(travisRepoUrlFor(slug))
                 .vBuild();
-        client.postSyncCommand(registerSpineBase, RepositoryRegistered.class);
     }
 
     private static void registerOrganization(ChatBotClient client,
