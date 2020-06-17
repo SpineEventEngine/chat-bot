@@ -38,7 +38,7 @@ public class RepositoriesController {
     /**
      * Sends {@link CheckRepositoryBuild} commands to all repositories registered in the system.
      */
-    @Post("/check")
+    @Post("/builds/check")
     public String checkBuildStatuses() {
         var botClient = ChatBotClient.inProcessClient(SERVER_NAME);
         botClient.listRepositories()
