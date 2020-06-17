@@ -20,45 +20,49 @@
 
 package io.spine.chatbot;
 
-import com.google.common.collect.ImmutableSet;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.spine.chatbot.client.ChatBotClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
-import io.spine.client.CommandRequest;
 
 import static io.spine.chatbot.Application.SERVER_NAME;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
- * A REST controller for handling CRON-based requests from GCP.
+ * A REST controller handling Repository commands.
  */
-@Controller("/cron")
-public class CronController {
+@Controller("/repositories")
+public class RepositoriesController {
 
-    /** Requests build status checks for registered listRepositories. **/
-    @Post("/repositories/check")
-    public String checkRepositoryStatuses() {
+    /**
+     * Sends {@link CheckRepositoryBuild} commands to all repositories registered in the system.
+     */
+    @Post("/check")
+    public String checkBuildStatuses() {
         var botClient = ChatBotClient.inProcessClient(SERVER_NAME);
         botClient.listRepositories()
-                 .stream()
-                 .map(CronController::newCheckRepoBuildCommand)
-                 .map(botClient.asGuest()::command)
-                 .map(request -> request.onStreamingError(CronController::throwProcessingError))
-                 .map(CommandRequest::post)
-                 .flatMap(ImmutableSet::stream)
-                 .forEach(botClient::cancelSubscription);
+                 .forEach(repository -> checkBuildStatus(botClient, repository));
         return "success";
+    }
+
+    private static void checkBuildStatus(ChatBotClient botClient, RepositoryId repository) {
+        var checkRepositoryBuild = checkRepoBuildCommand(repository);
+        var subscriptions = botClient
+                .asGuest()
+                .command(checkRepositoryBuild)
+                .onStreamingError(RepositoriesController::throwProcessingError)
+                .post();
+        subscriptions.forEach(botClient::cancelSubscription);
     }
 
     private static void throwProcessingError(Throwable throwable) {
         throw newIllegalStateException(
-                throwable, "An error while processing the command result."
+                throwable, "An error while processing the command."
         );
     }
 
-    private static CheckRepositoryBuild newCheckRepoBuildCommand(RepositoryId id) {
+    private static CheckRepositoryBuild checkRepoBuildCommand(RepositoryId id) {
         return CheckRepositoryBuild
                 .newBuilder()
                 .setId(id)
