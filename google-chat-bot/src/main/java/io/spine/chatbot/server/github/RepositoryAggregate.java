@@ -24,15 +24,18 @@ import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.Repository;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
 import io.spine.chatbot.github.repository.event.RepositoryRegistered;
+import io.spine.logging.Logging;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 
 final class RepositoryAggregate
-        extends Aggregate<RepositoryId, Repository, Repository.Builder> {
+        extends Aggregate<RepositoryId, Repository, Repository.Builder>
+        implements Logging {
 
     @Assign
     RepositoryRegistered handle(RegisterRepository c) {
+        _info().log("Registering repository `%s`.", idAsString());
         var result = RepositoryRegistered
                 .newBuilder()
                 .setId(c.getId())

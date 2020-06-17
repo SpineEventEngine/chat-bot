@@ -26,14 +26,16 @@ import io.spine.chatbot.google.chat.event.ThreadCreated;
 import io.spine.chatbot.google.chat.thread.Thread;
 import io.spine.chatbot.google.chat.thread.event.MessageAdded;
 import io.spine.chatbot.google.chat.thread.event.ThreadInitialized;
+import io.spine.logging.Logging;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.event.React;
 
-final class ThreadAggregate extends Aggregate<ThreadId, Thread, Thread.Builder> {
+final class ThreadAggregate extends Aggregate<ThreadId, Thread, Thread.Builder> implements Logging {
 
     @React
     ThreadInitialized on(ThreadCreated e) {
+        _info().log("A new thread `%s` created.", idAsString());
         return ThreadInitialized
                 .newBuilder()
                 .setId(e.getId())
@@ -50,9 +52,12 @@ final class ThreadAggregate extends Aggregate<ThreadId, Thread, Thread.Builder> 
 
     @React
     MessageAdded on(MessageCreated e) {
+        var messageId = e.getId();
+        _info().log("A new message `%s` added to the thread `%s`.",
+                    messageId.getValue(), idAsString());
         return MessageAdded
                 .newBuilder()
-                .setId(e.getId())
+                .setId(messageId)
                 .setThreadId(e.getThreadId())
                 .vBuild();
     }

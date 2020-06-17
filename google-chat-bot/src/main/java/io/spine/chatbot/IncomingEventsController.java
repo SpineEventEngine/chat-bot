@@ -55,22 +55,26 @@ public class IncomingEventsController implements Logging {
     public String on(@Body PubsubPushNotification pushNotification) {
         var message = pushNotification.getMessage();
         var chatEventJson = decodeBase64Json(message.getData());
+        _debug().log("Received a new chat event: %s", chatEventJson);
         ChatEvent chatEvent = Json.fromJson(chatEventJson, ChatEvent.class);
         var client = ChatBotClient.inProcessClient(Application.SERVER_NAME);
         switch (chatEvent.getType()) {
             case MESSAGE:
+                _info().log("Processing user message.");
                 break;
             case ADDED_TO_SPACE:
-                onBotAddedToSpace(chatEvent.getSpace(), client);
+                var space = chatEvent.getSpace();
+                _info().log("Bot added to space `%s` (%s).",
+                            space.getDisplayName(), space.getName());
+                onBotAddedToSpace(space, client);
                 break;
             case REMOVED_FROM_SPACE:
             case CARD_CLICKED:
             case UNRECOGNIZED:
             case ET_UNKNOWN:
-                _warn().log("Unsupported chat event type received: %s", chatEvent.getType());
+                _debug().log("Unsupported chat event type received: %s", chatEvent.getType());
                 break;
         }
-        _debug().log("Received a new Chat event: %s", chatEvent);
         return "OK";
     }
 

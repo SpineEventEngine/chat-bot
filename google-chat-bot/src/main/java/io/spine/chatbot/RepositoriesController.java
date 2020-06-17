@@ -25,6 +25,7 @@ import io.micronaut.http.annotation.Post;
 import io.spine.chatbot.client.ChatBotClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
+import io.spine.logging.Logging;
 
 import static io.spine.chatbot.Application.SERVER_NAME;
 import static io.spine.util.Exceptions.newIllegalStateException;
@@ -33,20 +34,23 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  * A REST controller handling Repository commands.
  */
 @Controller("/repositories")
-public class RepositoriesController {
+public class RepositoriesController implements Logging {
 
     /**
      * Sends {@link CheckRepositoryBuild} commands to all repositories registered in the system.
      */
     @Post("/builds/check")
     public String checkBuildStatuses() {
+        _debug().log("Checking repositories build statues.");
         var botClient = ChatBotClient.inProcessClient(SERVER_NAME);
         botClient.listRepositories()
                  .forEach(repository -> checkBuildStatus(botClient, repository));
         return "success";
     }
 
-    private static void checkBuildStatus(ChatBotClient botClient, RepositoryId repository) {
+    private void checkBuildStatus(ChatBotClient botClient, RepositoryId repository) {
+        _info().log("Sending `CheckRepositoryBuild` command for repository `%s`",
+                    repository.getValue());
         var checkRepositoryBuild = checkRepoBuildCommand(repository);
         var subscriptions = botClient
                 .asGuest()

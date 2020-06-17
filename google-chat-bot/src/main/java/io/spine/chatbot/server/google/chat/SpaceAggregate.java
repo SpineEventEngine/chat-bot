@@ -24,14 +24,16 @@ import io.spine.chatbot.google.chat.Space;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.command.RegisterSpace;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
+import io.spine.logging.Logging;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 
-final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> {
+final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> implements Logging {
 
     @Assign
     SpaceRegistered handle(RegisterSpace c) {
+        _info().log("Registering space `%s`.", idAsString());
         var result = SpaceRegistered
                 .newBuilder()
                 .setId(c.getId())

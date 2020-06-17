@@ -24,15 +24,18 @@ import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.event.OrganizationRegistered;
+import io.spine.logging.Logging;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 
 final class OrganizationAggregate
-        extends Aggregate<OrganizationId, Organization, Organization.Builder> {
+        extends Aggregate<OrganizationId, Organization, Organization.Builder>
+        implements Logging {
 
     @Assign
     OrganizationRegistered handle(RegisterOrganization c) {
+        _info().log("Registering organization `%s`.", idAsString());
         return OrganizationRegistered
                 .newBuilder()
                 .setId(c.getId())

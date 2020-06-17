@@ -28,6 +28,7 @@ import io.spine.chatbot.google.chat.event.MessageCreated;
 import io.spine.chatbot.google.chat.event.ThreadCreated;
 import io.spine.chatbot.google.chat.thread.ThreadChat;
 import io.spine.core.External;
+import io.spine.logging.Logging;
 import io.spine.server.event.React;
 import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.Pair;
@@ -39,7 +40,8 @@ import static io.spine.chatbot.server.google.chat.Identifiers.newSpaceId;
 import static io.spine.chatbot.server.google.chat.Identifiers.newThreadId;
 import static io.spine.chatbot.server.google.chat.ThreadResources.newThreadResource;
 
-final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, ThreadChat.Builder> {
+final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, ThreadChat.Builder>
+        implements Logging {
 
     @React
     Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildStateChanged e) {
@@ -49,6 +51,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var threadId = newThreadId(repositoryId.getValue());
         var spaceId = newSpaceId(buildState.getGoogleChatSpace());
         var currentThread = state().getThread();
+        _info().log("Build state changed for the repository `%s`.", repositoryId.getValue());
         var sentMessage = GoogleChatClient.sendBuildStateUpdate(buildState,
                                                                 currentThread.getName());
         var thread = sentMessage.getThread();

@@ -73,7 +73,8 @@ public class InitController implements Logging {
                 .stream()
                 .filter(repository -> WATCHED_REPOS.contains(repository.getName()));
         watchedRepositories.forEach(repository -> {
-            _info().log("Registering repository `%s`.", repository.getName());
+            _info().log("Sending `RegisterRepository` command for repository `%s`.",
+                        repository.getName());
             var registerRepository = registerRepoCommand(repository, spineOrgId);
             client.postSyncCommand(registerRepository, RepositoryRegistered.class);
         });

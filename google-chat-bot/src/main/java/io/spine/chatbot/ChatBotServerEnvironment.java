@@ -59,9 +59,10 @@ final class ChatBotServerEnvironment {
         StorageFactory storageFactory = storageFactoryFor(environment);
         se.configureStorage(storageFactory);
         se.configureTransport(InMemoryTransportFactory.newInstance());
-        se.configureDelivery(deliveryFor(environment, storageFactory));
+        se.configureDelivery(Delivery.local());
     }
 
+    @SuppressWarnings("unused") // we'll get back to DS-based delivery
     private static Delivery deliveryFor(Environment environment, StorageFactory storageFactory) {
         if (environment.isProduction()) {
             var dsStorageFactory = (DatastoreStorageFactory) storageFactory;
