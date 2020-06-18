@@ -38,10 +38,10 @@ import io.spine.server.transport.memory.InMemoryTransportFactory;
  *
  * <p>Configures the inbox delivery through the Datastore work registry while
  * in Production environment, otherwise uses local synchronous delivery.
+ *
+ * @see DeliveryFactory
  */
 final class ChatBotServerEnvironment {
-
-    private static final int NUMBER_OF_SHARDS = 50;
 
     /** Prevents instantiation of this utility class. **/
     private ChatBotServerEnvironment() {
