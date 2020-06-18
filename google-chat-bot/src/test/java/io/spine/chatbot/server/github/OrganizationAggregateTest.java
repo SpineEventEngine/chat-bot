@@ -25,8 +25,6 @@ import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.event.OrganizationRegistered;
 import io.spine.net.Url;
-import io.spine.server.BoundedContextBuilder;
-import io.spine.testing.server.blackbox.ContextAwareTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -36,12 +34,7 @@ import static io.spine.chatbot.server.github.Identifiers.organizationIdOf;
 import static io.spine.net.Urls.urlOfSpec;
 
 @DisplayName("OrganizationAggregate should")
-final class OrganizationAggregateTest extends ContextAwareTest {
-
-    @Override
-    protected BoundedContextBuilder contextBuilder() {
-        return GitHubContext.newBuilder();
-    }
+final class OrganizationAggregateTest extends GitHubTest {
 
     @Nested
     @DisplayName("register an organization")

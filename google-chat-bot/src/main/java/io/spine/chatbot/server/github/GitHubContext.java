@@ -20,25 +20,19 @@
 
 package io.spine.chatbot.server.github;
 
-import com.google.errorprone.annotations.concurrent.LazyInit;
+import io.spine.chatbot.api.Travis;
+import io.spine.chatbot.api.TravisClient;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
-import io.spine.server.QueryService;
-import io.spine.server.commandbus.CommandBus;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Provides {@link BoundedContextBuilder} for the GitHub context.
  */
 public final class GitHubContext {
 
-    @MonotonicNonNull
-    @LazyInit
-    private static BoundedContext context = null;
-
-    @MonotonicNonNull
-    @LazyInit
-    private static QueryService queryService = null;
+    private final BoundedContextBuilder contextBuilder;
 
     /**
      * The name of the Context.
@@ -46,47 +40,60 @@ public final class GitHubContext {
     static final String NAME = "GitHub";
 
     /** Prevents instantiation of this utility class. **/
-    private GitHubContext() {
+    private GitHubContext(TravisClient travisClient) {
+        this.contextBuilder = configureContextBuilder(travisClient);
     }
 
-    /** Returns command bus associated with the bounded context. **/
-    public static CommandBus commandBus() {
-        return context().commandBus();
+    /** Returns the context builder associated with the GitHub context. **/
+    public BoundedContextBuilder contextBuilder() {
+        return this.contextBuilder;
     }
 
-    /** Returns query service associated with the bounded context. **/
-    public static synchronized QueryService queryService() {
-        if (queryService == null) {
-            queryService = QueryService
-                    .newBuilder()
-                    .add(context())
-                    .build();
-        }
-        return queryService;
-    }
-
-    /** Returns the bounded context. **/
-    public static synchronized BoundedContext context() {
-        if (context == null) {
-            context = newBuilder().build();
-        }
-        return context;
-    }
-
-    /** Initializes bounded context and associated services. **/
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void initialize() {
-        queryService();
-    }
-
-    /** Creates a new instance of the GitHub Context builder. **/
-    public static BoundedContextBuilder newBuilder() {
+    private static BoundedContextBuilder configureContextBuilder(TravisClient travisClient) {
         return BoundedContext
                 .singleTenant(NAME)
                 .add(OrganizationAggregate.class)
                 .add(RepositoryAggregate.class)
-                .add(RepositoryBuildProcess.class)
                 .add(new OrganizationRepositoriesRepository())
-                .add(new OrganizationInitRepository());
+                .add(new OrganizationInitRepository(travisClient))
+                .add(new RepositoryBuildRepository(travisClient));
+    }
+
+    /**
+     * Creates a new builder of the GitHub context.
+     */
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
+    /** A Builder for configuring GitHub context. **/
+    public static final class Builder {
+
+        private TravisClient travisClient;
+
+        private Builder() {
+        }
+
+        /**
+         * Sets a Travis CI client to be used within the context.
+         */
+        public Builder setTravis(TravisClient travisClient) {
+            checkNotNull(travisClient);
+            this.travisClient = travisClient;
+            return this;
+        }
+
+        /**
+         * Finishes configuration of the GitHub context and builds a new instance.
+         *
+         * <p>If the {@link #travisClient} was not explicitly configured, uses the
+         * {@link Travis#defaultTravisClient() default} client.
+         */
+        public GitHubContext build() {
+            if (travisClient == null) {
+                travisClient = Travis.defaultTravisClient();
+            }
+            return new GitHubContext(travisClient);
+        }
     }
 }

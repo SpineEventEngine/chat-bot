@@ -20,7 +20,9 @@
 
 package io.spine.chatbot.server.github;
 
+import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.Time;
+import io.spine.chatbot.api.TravisClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
@@ -32,18 +34,20 @@ import io.spine.chatbot.travis.Commit;
 import io.spine.net.Urls;
 import io.spine.server.command.Assign;
 import io.spine.server.procman.ProcessManager;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
-import static io.spine.chatbot.api.TravisClient.defaultTravisClient;
 import static io.spine.net.Urls.travisBuildUrlFor;
 
 final class RepositoryBuildProcess
         extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder> {
 
+    @LazyInit
+    private @MonotonicNonNull TravisClient travisClient;
+
     @Assign
     BuildStateChanged handle(CheckRepositoryBuild c) {
-        var travis = defaultTravisClient();
-        var builds = travis.queryBuildsFor(id().getValue())
-                           .getBuildsList();
+        var builds = travisClient.queryBuildsFor(id().getValue())
+                                 .getBuildsList();
         if (builds.isEmpty()) {
             throw new RuntimeException("No builds available for repository " + idAsString());
         }
@@ -90,5 +94,9 @@ final class RepositoryBuildProcess
                                      .getName())
                 .setCompareUrl(Urls.urlOfSpec(commit.getCompareUrl()))
                 .vBuild();
+    }
+
+    void setTravisClient(TravisClient travisClient) {
+        this.travisClient = travisClient;
     }
 }

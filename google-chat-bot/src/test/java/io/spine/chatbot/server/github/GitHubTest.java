@@ -20,33 +20,33 @@
 
 package io.spine.chatbot.server.github;
 
+import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 import io.spine.chatbot.api.InMemoryTravisClient;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.spine.server.BoundedContextBuilder;
+import io.spine.testing.server.blackbox.ContextAwareTest;
+import org.junit.jupiter.api.AfterEach;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+/**
+ * An abstract test-base for GitHub context tests.
+ */
+class GitHubTest extends ContextAwareTest {
 
-@DisplayName("GitHubContext should")
-final class GitHubContextTest {
+    final InMemoryTravisClient travisClient = new InMemoryTravisClient();
 
-    @Test
-    @DisplayName("allow configuring Travis CI client")
-    void allowConfiguringTravisClient() {
-        assertDoesNotThrow(
-                () -> GitHubContext.newBuilder()
-                                   .setTravis(new InMemoryTravisClient())
-                                   .build()
-        );
+    @Override
+    protected BoundedContextBuilder contextBuilder() {
+        return GitHubContext
+                .newBuilder()
+                .setTravis(travisClient)
+                .build()
+                .contextBuilder();
     }
 
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "ConstantConditions"})
-    @Test
-    @DisplayName("not allow passing `null` value as Travis CI client")
-    void notAllowNullTravisClients() {
-        assertThrows(
-                NullPointerException.class, () -> GitHubContext.newBuilder()
-                                                               .setTravis(null)
-        );
+    @AfterEach
+    @OverridingMethodsMustInvokeSuper
+    @Override
+    protected void closeContext() {
+        super.closeContext();
+        travisClient.reset();
     }
 }

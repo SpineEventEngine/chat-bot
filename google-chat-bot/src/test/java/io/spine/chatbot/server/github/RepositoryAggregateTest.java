@@ -26,8 +26,6 @@ import io.spine.chatbot.github.repository.Repository;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
 import io.spine.chatbot.github.repository.event.RepositoryRegistered;
 import io.spine.net.Url;
-import io.spine.server.BoundedContextBuilder;
-import io.spine.testing.server.blackbox.ContextAwareTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -38,12 +36,7 @@ import static io.spine.chatbot.server.github.Identifiers.repositoryIdOf;
 import static io.spine.net.Urls.urlOfSpec;
 
 @DisplayName("RepositoryAggregate should")
-final class RepositoryAggregateTest extends ContextAwareTest {
-
-    @Override
-    protected BoundedContextBuilder contextBuilder() {
-        return GitHubContext.newBuilder();
-    }
+final class RepositoryAggregateTest extends GitHubTest {
 
     @Nested
     @DisplayName("register a repository")

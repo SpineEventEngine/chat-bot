@@ -21,6 +21,7 @@
 package io.spine.chatbot.server.github;
 
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
+import io.spine.chatbot.api.TravisClient;
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
@@ -33,10 +34,21 @@ import static io.spine.server.route.EventRoute.withId;
 final class OrganizationInitRepository
         extends ProcessManagerRepository<OrganizationId, OrganizationInitProcess, OrganizationInit> {
 
+    private final TravisClient travisClient;
+
+    OrganizationInitRepository(TravisClient travisClient) {
+        this.travisClient = travisClient;
+    }
+
     @OverridingMethodsMustInvokeSuper
     @Override
     protected void setupEventRouting(EventRouting<OrganizationId> routing) {
         super.setupEventRouting(routing);
         routing.route(SpaceRegistered.class, (event, context) -> withId(SPINE_ORGANIZATION));
+    }
+
+    @Override
+    protected void configure(OrganizationInitProcess processManager) {
+        processManager.setTravisClient(travisClient);
     }
 }

@@ -59,9 +59,12 @@ public final class Application {
     @VisibleForTesting
     static void initializeSpine() {
         ChatBotServerEnvironment.initializeEnvironment();
+        var gitHubContext = GitHubContext
+                .newBuilder()
+                .build();
         Server server = Server
                 .inProcess(SERVER_NAME)
-                .add(GitHubContext.newBuilder())
+                .add(gitHubContext.contextBuilder())
                 .add(GoogleChatContext.newBuilder())
                 .build();
         try {

@@ -20,33 +20,23 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.api.InMemoryTravisClient;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.spine.chatbot.api.TravisClient;
+import io.spine.chatbot.github.RepositoryId;
+import io.spine.chatbot.github.repository.build.RepositoryBuild;
+import io.spine.server.procman.ProcessManagerRepository;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+final class RepositoryBuildRepository
+        extends ProcessManagerRepository<RepositoryId, RepositoryBuildProcess, RepositoryBuild> {
 
-@DisplayName("GitHubContext should")
-final class GitHubContextTest {
+    private final TravisClient travisClient;
 
-    @Test
-    @DisplayName("allow configuring Travis CI client")
-    void allowConfiguringTravisClient() {
-        assertDoesNotThrow(
-                () -> GitHubContext.newBuilder()
-                                   .setTravis(new InMemoryTravisClient())
-                                   .build()
-        );
+    RepositoryBuildRepository(TravisClient client) {
+        travisClient = client;
     }
 
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "ConstantConditions"})
-    @Test
-    @DisplayName("not allow passing `null` value as Travis CI client")
-    void notAllowNullTravisClients() {
-        assertThrows(
-                NullPointerException.class, () -> GitHubContext.newBuilder()
-                                                               .setTravis(null)
-        );
+    @Override
+    protected void configure(RepositoryBuildProcess processManager) {
+        super.configure(processManager);
+        processManager.setTravisClient(travisClient);
     }
 }

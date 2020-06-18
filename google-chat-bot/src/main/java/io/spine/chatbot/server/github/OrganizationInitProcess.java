@@ -22,7 +22,9 @@ package io.spine.chatbot.server.github;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.CommandMessage;
+import io.spine.chatbot.api.TravisClient;
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
@@ -33,8 +35,8 @@ import io.spine.core.External;
 import io.spine.logging.Logging;
 import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
-import static io.spine.chatbot.api.TravisClient.defaultTravisClient;
 import static io.spine.chatbot.server.github.Identifiers.organizationIdOf;
 import static io.spine.chatbot.server.github.Identifiers.repositoryIdOf;
 import static io.spine.net.Urls.githubRepoUrlFor;
@@ -52,6 +54,9 @@ final class OrganizationInitProcess
     );
     static final OrganizationId SPINE_ORGANIZATION = organizationIdOf(SPINE_ORG);
 
+    @LazyInit
+    private @MonotonicNonNull TravisClient travisClient;
+
     @Command
     Iterable<CommandMessage> on(@External SpaceRegistered e) {
         if (state().getIsInitialized()) {
@@ -60,13 +65,12 @@ final class OrganizationInitProcess
         var spaceId = e.getId();
         var commands = ImmutableSet.<CommandMessage>builder();
         commands.add(registerOrganizationCommand(SPINE_ORGANIZATION, spaceId.getValue()));
-        defaultTravisClient()
-                .queryRepositoriesFor(SPINE_ORG)
-                .getRepositoriesList()
-                .stream()
-                .filter(repository -> WATCHED_REPOS.contains(repository.getName()))
-                .map(repository -> registerRepoCommand(repository, SPINE_ORGANIZATION))
-                .forEach(commands::add);
+        travisClient.queryRepositoriesFor(SPINE_ORG)
+                    .getRepositoriesList()
+                    .stream()
+                    .filter(repository -> WATCHED_REPOS.contains(repository.getName()))
+                    .map(repository -> registerRepoCommand(repository, SPINE_ORGANIZATION))
+                    .forEach(commands::add);
         var result = commands.build();
         return result;
     }
@@ -96,5 +100,9 @@ final class OrganizationInitProcess
                 .setId(spineOrgId)
                 .setGoogleChatSpace(spaceName)
                 .vBuild();
+    }
+
+    void setTravisClient(TravisClient travisClient) {
+        this.travisClient = travisClient;
     }
 }
