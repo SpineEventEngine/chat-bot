@@ -57,7 +57,7 @@ public final class ChatBotClient {
         return new ChatBotClient(client);
     }
 
-    /** Returns Spine client quest request. **/
+    /** Returns Spine client guest request. **/
     public ClientRequest asGuest() {
         return client.asGuest();
     }
