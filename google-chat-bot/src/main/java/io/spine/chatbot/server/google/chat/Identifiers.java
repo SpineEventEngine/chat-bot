@@ -54,7 +54,7 @@ public final class Identifiers {
     }
 
     /** Creates a new {@link MessageId} out of the specified {@code value}. **/
-    public static MessageId newMessageId(String value) {
+    public static MessageId messageIdOf(String value) {
         checkNotNull(value);
         return MessageId
                 .newBuilder()

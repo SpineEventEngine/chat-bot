@@ -35,7 +35,7 @@ import io.spine.server.tuple.Pair;
 
 import java.util.Optional;
 
-import static io.spine.chatbot.server.google.chat.Identifiers.newMessageId;
+import static io.spine.chatbot.server.google.chat.Identifiers.messageIdOf;
 import static io.spine.chatbot.server.google.chat.Identifiers.spaceIdOf;
 import static io.spine.chatbot.server.google.chat.Identifiers.threadIdOf;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
@@ -55,7 +55,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var sentMessage = GoogleChatClient.sendBuildStateUpdate(buildState,
                                                                 currentThread.getName());
         var thread = sentMessage.getThread();
-        var messageId = newMessageId(sentMessage.getName());
+        var messageId = messageIdOf(sentMessage.getName());
         var messageCreated = MessageCreated
                 .newBuilder()
                 .setId(messageId)
