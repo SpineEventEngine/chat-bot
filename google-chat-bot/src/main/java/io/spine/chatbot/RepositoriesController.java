@@ -34,13 +34,13 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  * A REST controller handling Repository commands.
  */
 @Controller("/repositories")
-public class RepositoriesController implements Logging {
+final class RepositoriesController implements Logging {
 
     /**
      * Sends {@link CheckRepositoryBuild} commands to all repositories registered in the system.
      */
     @Post("/builds/check")
-    public String checkBuildStatuses() {
+    String checkBuildStatuses() {
         _debug().log("Checking repositories build statues.");
         var botClient = ChatBotClient.inProcessClient(SERVER_NAME);
         botClient.listRepositories()

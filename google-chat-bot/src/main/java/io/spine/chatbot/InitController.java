@@ -44,7 +44,7 @@ import static io.spine.net.Urls.urlOfSpec;
  * A REST controller for handling initialization of the application state.
  */
 @Controller("/init")
-public class InitController implements Logging {
+class InitController implements Logging {
 
     private static final ImmutableList<String> WATCHED_REPOS = ImmutableList.of(
             "base", "time", "core-java", "web", "gcloud-java", "bootstrap", "money", "jdbc-storage"

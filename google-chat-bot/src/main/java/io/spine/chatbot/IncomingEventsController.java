@@ -44,7 +44,7 @@ import static io.micronaut.http.MediaType.APPLICATION_JSON;
  * A REST controller for handling incoming events from Google Chat.
  */
 @Controller("/chat")
-public class IncomingEventsController implements Logging {
+final class IncomingEventsController implements Logging {
 
     /**
      * Processes an incoming Google Chat event.
@@ -52,7 +52,7 @@ public class IncomingEventsController implements Logging {
      * <p>When a bot is added to a new space, registers the space in the system.
      */
     @Post(value = "/incoming/event", consumes = APPLICATION_JSON)
-    public String on(@Body PubsubPushNotification pushNotification) {
+    String on(@Body PubsubPushNotification pushNotification) {
         var message = pushNotification.getMessage();
         var chatEventJson = decodeBase64Json(message.getData());
         _debug().log("Received a new chat event: %s", chatEventJson);

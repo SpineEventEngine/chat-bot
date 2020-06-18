@@ -30,7 +30,7 @@ import javax.inject.Singleton;
  * Creates Micronaut context bean definitions.
  */
 @Factory
-public class BeanFactory {
+final class BeanFactory {
 
     /**
      * Registers {@link com.google.pubsub.v1.PubsubPushNotification push notification}
@@ -38,7 +38,7 @@ public class BeanFactory {
      */
     @Singleton
     @Bean
-    public PubsubPushNotificationDeserializer pubsubDeserializer() {
+    PubsubPushNotificationDeserializer pubsubDeserializer() {
         return new PubsubPushNotificationDeserializer();
     }
 }
