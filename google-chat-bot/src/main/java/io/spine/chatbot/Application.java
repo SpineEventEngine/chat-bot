@@ -34,13 +34,10 @@ import java.io.IOException;
  * <p>The application itself exposes a number of REST endpoints accessible for the clients such as:
  *
  * <ul>
- *     <li>{@code /init} — triggers the initialization of the default resources the bot is
- *     monitoring.
  *     <li>{@code /chat/incoming/event} — handles incoming events from the Google Chat space.
  *     <li>{@code /repositories/check} — triggers checking of the repositories build statuses.
  * </ul>
  *
- * @see InitController
  * @see IncomingEventsController
  * @see RepositoriesController
  **/
