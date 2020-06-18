@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * An in-memory test-only implementation of the Travis CI API client.
@@ -36,11 +37,35 @@ public final class InMemoryTravisClient implements TravisClient {
     private final Map<String, BuildsResponse> buildsResponses = new ConcurrentHashMap<>();
     private final Map<String, RepositoriesResponse> repositoriesResponses = new ConcurrentHashMap<>();
 
+    /** Determines whether the client should fail if a particular response was not preconfigured. **/
+    private final boolean failFast;
+
+    private InMemoryTravisClient(boolean failFast) {
+        this.failFast = failFast;
+    }
+
+    /** Creates a {@link #failFast} in-memory Travis CI client. **/
+    public static InMemoryTravisClient strictClient() {
+        return new InMemoryTravisClient(true);
+    }
+
+    /** Creates a lenient in-memory Travis CI client. **/
+    public static InMemoryTravisClient lenientClient() {
+        return new InMemoryTravisClient(false);
+    }
+
     @Override
     public BuildsResponse queryBuildsFor(String repoSlug) {
         checkNotNull(repoSlug);
         var result = buildsResponses.get(repoSlug);
-        checkNotNull(result, "Builds response is not configured for the repository " + repoSlug);
+        if (failFast && result == null) {
+            throw newIllegalStateException(
+                    "Builds response is not configured for the repository `%s`.", repoSlug
+            );
+        }
+        if (!failFast && result == null) {
+            result = BuildsResponse.getDefaultInstance();
+        }
         return result;
     }
 
@@ -48,7 +73,14 @@ public final class InMemoryTravisClient implements TravisClient {
     public RepositoriesResponse queryRepositoriesFor(String owner) {
         checkNotNull(owner);
         var result = repositoriesResponses.get(owner);
-        checkNotNull(result, "Repositories response is not configured for the owner " + owner);
+        if (failFast && result == null) {
+            throw newIllegalStateException(
+                    "Repositories response is not configured for the owner `%s`.", owner
+            );
+        }
+        if (!failFast && result == null) {
+            result = RepositoriesResponse.getDefaultInstance();
+        }
         return result;
     }
 

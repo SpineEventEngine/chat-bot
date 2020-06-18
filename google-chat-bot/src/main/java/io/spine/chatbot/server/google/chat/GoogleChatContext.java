@@ -20,71 +20,56 @@
 
 package io.spine.chatbot.server.google.chat;
 
-import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
-import io.spine.server.QueryService;
-import io.spine.server.commandbus.CommandBus;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
  * Provides {@link BoundedContextBuilder} for the Google Chat context.
  */
 public final class GoogleChatContext {
 
-    @MonotonicNonNull
-    @LazyInit
-    private static BoundedContext context = null;
-
-    @MonotonicNonNull
-    @LazyInit
-    private static QueryService queryService = null;
-
-    /**
-     * The name of the Context.
-     */
+    /** The name of the Context. **/
     static final String NAME = "GoogleChat";
+
+    private final BoundedContextBuilder contextBuilder;
 
     /** Prevents instantiation of this utility class. **/
     private GoogleChatContext() {
+        this.contextBuilder = configureContextBuilder();
     }
 
-    /** Returns command bus associated with the bounded context. **/
-    public static CommandBus commandBus() {
-        return context().commandBus();
-    }
-
-    /** Returns query service associated with the bounded context. **/
-    public static synchronized QueryService queryService() {
-        if (queryService == null) {
-            queryService = QueryService
-                    .newBuilder()
-                    .add(context())
-                    .build();
-        }
-        return queryService;
-    }
-
-    /** Returns the bounded context. **/
-    public static synchronized BoundedContext context() {
-        if (context == null) {
-            context = newBuilder().build();
-        }
-        return context;
-    }
-
-    /** Initializes bounded context and associated services. **/
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    public static void initialize() {
-        queryService();
+    /** Returns the context builder associated with the Google Chat context. **/
+    public BoundedContextBuilder contextBuilder() {
+        return this.contextBuilder;
     }
 
     /** Creates a new instance of the Google Chat context builder. **/
-    public static BoundedContextBuilder newBuilder() {
+    private static BoundedContextBuilder configureContextBuilder() {
         return BoundedContext
                 .singleTenant(NAME)
                 .add(SpaceAggregate.class)
                 .add(new ThreadAggregateRepository())
                 .add(new ThreadChatProcessRepository());
+    }
+
+    /** Creates a new builder of the Google Chat context. **/
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
+    /** A Builder for configuring Google Chat context. **/
+    public static final class Builder {
+
+        //TODO:2020-06-18:ysergiichuk: add ability to configure GoogleChatClient
+
+        private Builder() {
+        }
+
+        /**
+         * Finishes configuration of the context and builds a new instance.
+         */
+        public GoogleChatContext build() {
+            return new GoogleChatContext();
+        }
     }
 }

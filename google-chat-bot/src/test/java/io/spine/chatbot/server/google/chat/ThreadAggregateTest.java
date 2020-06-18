@@ -29,34 +29,25 @@ import io.spine.chatbot.google.chat.thread.Thread;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 import io.spine.chatbot.google.chat.thread.event.MessageAdded;
 import io.spine.chatbot.google.chat.thread.event.ThreadInitialized;
-import io.spine.server.BoundedContextBuilder;
-import io.spine.testing.server.blackbox.ContextAwareTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.server.google.chat.Identifiers.messageIdOf;
+import static io.spine.chatbot.server.google.chat.Identifiers.spaceIdOf;
+import static io.spine.chatbot.server.google.chat.Identifiers.threadIdOf;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
 
 @DisplayName("ThreadAggregate should")
-final class ThreadAggregateTest extends ContextAwareTest {
-
-    @Override
-    protected BoundedContextBuilder contextBuilder() {
-        return GoogleChatContext.newBuilder();
-    }
+final class ThreadAggregateTest extends GoogleChatTest {
 
     @Nested
     @DisplayName("initialize a thread")
     final class InitThread {
 
-        private final ThreadId threadId = ThreadId.newBuilder()
-                                                  .setValue("SpineEventEngine/base")
-                                                  .vBuild();
-        private final SpaceId spaceId = SpaceId.newBuilder()
-                                               .setValue("spaces/qpojdwpiq1241")
-                                               .vBuild();
+        private final ThreadId threadId = threadIdOf("SpineEventEngine/base");
+        private final SpaceId spaceId = spaceIdOf("spaces/qpojdwpiq1241");
         private final ThreadResource threadResource =
                 threadResourceOf("spaces/qpojdwpiq1241/threads/qwdojp12");
 
@@ -86,11 +77,12 @@ final class ThreadAggregateTest extends ContextAwareTest {
         @Test
         @DisplayName("setting aggregate state")
         void settingState() {
-            var state = Thread.newBuilder()
-                              .setId(threadId)
-                              .setSpaceId(spaceId)
-                              .setThread(threadResource)
-                              .vBuild();
+            var state = Thread
+                    .newBuilder()
+                    .setId(threadId)
+                    .setSpaceId(spaceId)
+                    .setThread(threadResource)
+                    .vBuild();
             context().assertState(threadId, Thread.class)
                      .isEqualTo(state);
         }
@@ -100,12 +92,8 @@ final class ThreadAggregateTest extends ContextAwareTest {
     @DisplayName("add created message")
     final class AddMessage {
 
-        private final ThreadId threadId = ThreadId.newBuilder()
-                                                  .setValue("SpineEventEngine/base")
-                                                  .vBuild();
-        private final SpaceId spaceId = SpaceId.newBuilder()
-                                               .setValue("spaces/qpojdwpiq1241")
-                                               .vBuild();
+        private final ThreadId threadId = threadIdOf("SpineEventEngine/base");
+        private final SpaceId spaceId = spaceIdOf("spaces/qpojdwpiq1241");
         private final MessageId messageId =
                 messageIdOf("spaces/qpojdwpiq1241/messages/dqpwjpop12");
         private final ThreadResource threadResource =

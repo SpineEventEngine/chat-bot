@@ -56,16 +56,25 @@ public final class Application {
     }
 
     /** Initializes Spine server environment and starts Spine {@link Server}. **/
-    @VisibleForTesting
-    static void initializeSpine() {
+    private static void initializeSpine() {
         ChatBotServerEnvironment.initializeEnvironment();
         var gitHubContext = GitHubContext
                 .newBuilder()
                 .build();
+        var googleChatContext = GoogleChatContext
+                .newBuilder()
+                .build();
+        startSpineServer(gitHubContext, googleChatContext);
+    }
+
+    /** Starts Spine in-process server. **/
+    @VisibleForTesting
+    static void startSpineServer(GitHubContext gitHubContext,
+                                 GoogleChatContext googleChatContext) {
         Server server = Server
                 .inProcess(SERVER_NAME)
                 .add(gitHubContext.contextBuilder())
-                .add(GoogleChatContext.newBuilder())
+                .add(googleChatContext.contextBuilder())
                 .build();
         try {
             server.start();

@@ -35,7 +35,7 @@ final class GitHubContextTest {
     void allowConfiguringTravisClient() {
         assertDoesNotThrow(
                 () -> GitHubContext.newBuilder()
-                                   .setTravis(new InMemoryTravisClient())
+                                   .setTravis(InMemoryTravisClient.lenientClient())
                                    .build()
         );
     }

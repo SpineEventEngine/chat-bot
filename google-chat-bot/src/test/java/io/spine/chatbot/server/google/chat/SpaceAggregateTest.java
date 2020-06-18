@@ -24,28 +24,19 @@ import io.spine.chatbot.google.chat.Space;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.command.RegisterSpace;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
-import io.spine.server.BoundedContextBuilder;
-import io.spine.testing.server.blackbox.ContextAwareTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("SpaceAggregate should")
-final class SpaceAggregateTest extends ContextAwareTest {
-
-    @Override
-    protected BoundedContextBuilder contextBuilder() {
-        return GoogleChatContext.newBuilder();
-    }
+final class SpaceAggregateTest extends GoogleChatTest {
 
     @Nested
     @DisplayName("register a space")
     final class Register {
 
-        private final SpaceId spaceId = SpaceId.newBuilder()
-                                               .setValue("spaces/poqwdpQ21")
-                                               .vBuild();
+        private final SpaceId spaceId = Identifiers.spaceIdOf("spaces/poqwdpQ21");
         private final String displayName = "Spine Developers";
 
         @BeforeEach

@@ -28,6 +28,9 @@ import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.annotation.MicronautTest;
+import io.spine.chatbot.api.InMemoryTravisClient;
+import io.spine.chatbot.server.github.GitHubContext;
+import io.spine.chatbot.server.google.chat.GoogleChatContext;
 import io.spine.json.Json;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +41,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import static io.micronaut.http.HttpRequest.POST;
-import static io.spine.chatbot.Application.initializeSpine;
+import static io.spine.chatbot.Application.startSpineServer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("IncomingEventsController should")
@@ -54,7 +57,14 @@ final class IncomingEventsControllerTest {
 
     @BeforeAll
     static void setupServer() {
-        initializeSpine();
+        var chatContext = GoogleChatContext
+                .newBuilder()
+                .build();
+        var gitHubContext = GitHubContext
+                .newBuilder()
+                .setTravis(InMemoryTravisClient.lenientClient())
+                .build();
+        startSpineServer(gitHubContext, chatContext);
     }
 
     @Test

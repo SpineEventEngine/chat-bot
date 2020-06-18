@@ -32,12 +32,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class GitHubContext {
 
-    private final BoundedContextBuilder contextBuilder;
-
     /**
      * The name of the Context.
      */
     static final String NAME = "GitHub";
+
+    private final BoundedContextBuilder contextBuilder;
 
     /** Prevents instantiation of this utility class. **/
     private GitHubContext(TravisClient travisClient) {
@@ -59,9 +59,7 @@ public final class GitHubContext {
                 .add(new RepositoryBuildRepository(travisClient));
     }
 
-    /**
-     * Creates a new builder of the GitHub context.
-     */
+    /** Creates a new builder of the GitHub context. **/
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -74,9 +72,7 @@ public final class GitHubContext {
         private Builder() {
         }
 
-        /**
-         * Sets a Travis CI client to be used within the context.
-         */
+        /** Sets Travis CI client to be used within the context. **/
         public Builder setTravis(TravisClient travisClient) {
             checkNotNull(travisClient);
             this.travisClient = travisClient;
@@ -84,7 +80,7 @@ public final class GitHubContext {
         }
 
         /**
-         * Finishes configuration of the GitHub context and builds a new instance.
+         * Finishes configuration of the context and builds a new instance.
          *
          * <p>If the {@link #travisClient} was not explicitly configured, uses the
          * {@link Travis#defaultTravisClient() default} client.
