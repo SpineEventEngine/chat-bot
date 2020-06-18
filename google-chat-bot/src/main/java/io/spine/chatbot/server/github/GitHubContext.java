@@ -86,6 +86,7 @@ public final class GitHubContext {
                 .add(OrganizationAggregate.class)
                 .add(RepositoryAggregate.class)
                 .add(RepositoryBuildProcess.class)
-                .add(new OrganizationRepositoriesRepository());
+                .add(new OrganizationRepositoriesRepository())
+                .add(new OrganizationInitRepository());
     }
 }
