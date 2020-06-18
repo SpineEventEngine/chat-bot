@@ -71,8 +71,9 @@ final class OrganizationInitProcess
                     .filter(repository -> WATCHED_REPOS.contains(repository.getName()))
                     .map(repository -> registerRepoCommand(repository, SPINE_ORGANIZATION))
                     .forEach(commands::add);
-        var result = commands.build();
-        return result;
+        builder().setGoogleChatSpace(spaceId.getValue())
+                 .setIsInitialized(true);
+        return commands.build();
     }
 
     private static RegisterRepository registerRepoCommand(Repository repository,
