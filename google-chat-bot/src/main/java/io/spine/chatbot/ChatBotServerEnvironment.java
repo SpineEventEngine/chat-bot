@@ -22,13 +22,10 @@ package io.spine.chatbot;
 
 import com.google.cloud.datastore.DatastoreOptions;
 import io.spine.base.Environment;
+import io.spine.chatbot.delivery.DeliveryFactory;
 import io.spine.server.ServerEnvironment;
-import io.spine.server.delivery.Delivery;
-import io.spine.server.delivery.UniformAcrossAllShards;
 import io.spine.server.storage.StorageFactory;
 import io.spine.server.storage.datastore.DatastoreStorageFactory;
-import io.spine.server.storage.datastore.DsShardedWorkRegistry;
-import io.spine.server.storage.memory.InMemoryStorageFactory;
 import io.spine.server.transport.memory.InMemoryTransportFactory;
 
 /**
@@ -46,9 +43,7 @@ final class ChatBotServerEnvironment {
 
     private static final int NUMBER_OF_SHARDS = 50;
 
-    /**
-     * Prevents instantiation of this utility class.
-     */
+    /** Prevents instantiation of this utility class. **/
     private ChatBotServerEnvironment() {
     }
 
@@ -56,38 +51,20 @@ final class ChatBotServerEnvironment {
     static void initializeEnvironment() {
         var se = ServerEnvironment.instance();
         var environment = Environment.instance();
-        StorageFactory storageFactory = storageFactoryFor(environment);
+        var storageFactory = dsStorageFactory();
+        var deliveryFactory = DeliveryFactory.instance(environment, storageFactory);
+        var delivery = deliveryFactory.delivery();
         se.configureStorage(storageFactory);
         se.configureTransport(InMemoryTransportFactory.newInstance());
-        se.configureDelivery(Delivery.local());
+        se.configureDelivery(delivery);
     }
 
-    @SuppressWarnings("unused") // we'll get back to DS-based delivery
-    private static Delivery deliveryFor(Environment environment, StorageFactory storageFactory) {
-        if (environment.isProduction()) {
-            var dsStorageFactory = (DatastoreStorageFactory) storageFactory;
-            var workRegistry = new DsShardedWorkRegistry(dsStorageFactory);
-            var inboxStorage = dsStorageFactory.createInboxStorage(false);
-            var delivery = Delivery
-                    .newBuilder()
-                    .setStrategy(UniformAcrossAllShards.forNumber(NUMBER_OF_SHARDS))
-                    .setWorkRegistry(workRegistry)
-                    .setInboxStorage(inboxStorage)
-                    .build();
-            return delivery;
-        }
-        return Delivery.local();
-    }
-
-    private static StorageFactory storageFactoryFor(Environment environment) {
-        if (environment.isProduction()) {
-            var datastore = DatastoreOptions.getDefaultInstance()
-                                            .getService();
-            return DatastoreStorageFactory
-                    .newBuilder()
-                    .setDatastore(datastore)
-                    .build();
-        }
-        return InMemoryStorageFactory.newInstance();
+    private static DatastoreStorageFactory dsStorageFactory() {
+        var datastore = DatastoreOptions.getDefaultInstance()
+                                        .getService();
+        return DatastoreStorageFactory
+                .newBuilder()
+                .setDatastore(datastore)
+                .build();
     }
 }

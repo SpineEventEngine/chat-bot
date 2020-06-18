@@ -19,11 +19,11 @@
  */
 
 /**
- * This contains package Spine's Google Chat Bot application and environment configurations.
+ * This package contains Spine's Google Chat Bot signals delivery configurations.
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault
-package io.spine.chatbot;
+package io.spine.chatbot.delivery;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

@@ -18,13 +18,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.chatbot.delivery;
+
+import io.spine.base.Environment;
+import io.spine.server.delivery.Delivery;
+import io.spine.server.storage.datastore.DatastoreStorageFactory;
+
 /**
- * This contains package Spine's Google Chat Bot application and environment configurations.
+ * A utility class for configuring {@link Delivery} for environments.
  */
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.chatbot;
+public interface DeliveryFactory {
 
-import com.google.errorprone.annotations.CheckReturnValue;
+    /**
+     * Creates a new fully-configured delivery.
+     */
+    Delivery delivery();
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    /**
+     * Creates a new instance of a delivery factory for the specified {@code environment}
+     * and using the {@code storageFactory} if required.
+     */
+    static DeliveryFactory instance(Environment environment,
+                                    DatastoreStorageFactory storageFactory) {
+        if (environment.isProduction()) {
+            return DsDeliveryFactory.instance(storageFactory);
+        } else {
+            return LocalDeliveryFactory.instance;
+        }
+    }
+}
