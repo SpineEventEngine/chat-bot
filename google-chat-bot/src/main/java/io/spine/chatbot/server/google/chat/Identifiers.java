@@ -36,7 +36,7 @@ public final class Identifiers {
     }
 
     /** Creates a new {@link ThreadId} out of the specified {@code value}. **/
-    public static ThreadId newThreadId(String value) {
+    public static ThreadId threadIdOf(String value) {
         checkNotNull(value);
         return ThreadId
                 .newBuilder()
@@ -45,7 +45,7 @@ public final class Identifiers {
     }
 
     /** Creates a new {@link SpaceId} out of the specified {@code value}. **/
-    public static SpaceId newSpaceId(String value) {
+    public static SpaceId spaceIdOf(String value) {
         checkNotNull(value);
         return SpaceId
                 .newBuilder()

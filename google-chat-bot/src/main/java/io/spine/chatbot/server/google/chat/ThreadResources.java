@@ -34,7 +34,7 @@ public final class ThreadResources {
     }
 
     /** Creates a new {@link ThreadResource} with the specified {@code name}. **/
-    public static ThreadResource newThreadResource(String name) {
+    public static ThreadResource threadResourceOf(String name) {
         return ThreadResource
                 .newBuilder()
                 .setName(name)

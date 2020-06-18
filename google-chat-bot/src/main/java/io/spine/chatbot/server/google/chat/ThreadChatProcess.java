@@ -36,9 +36,9 @@ import io.spine.server.tuple.Pair;
 import java.util.Optional;
 
 import static io.spine.chatbot.server.google.chat.Identifiers.newMessageId;
-import static io.spine.chatbot.server.google.chat.Identifiers.newSpaceId;
-import static io.spine.chatbot.server.google.chat.Identifiers.newThreadId;
-import static io.spine.chatbot.server.google.chat.ThreadResources.newThreadResource;
+import static io.spine.chatbot.server.google.chat.Identifiers.spaceIdOf;
+import static io.spine.chatbot.server.google.chat.Identifiers.threadIdOf;
+import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
 
 final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, ThreadChat.Builder>
         implements Logging {
@@ -48,8 +48,8 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var change = e.getChange();
         var buildState = change.getNewValue();
         var repositoryId = e.getId();
-        var threadId = newThreadId(repositoryId.getValue());
-        var spaceId = newSpaceId(buildState.getGoogleChatSpace());
+        var threadId = threadIdOf(repositoryId.getValue());
+        var spaceId = spaceIdOf(buildState.getGoogleChatSpace());
         var currentThread = state().getThread();
         _info().log("Build state changed for the repository `%s`.", repositoryId.getValue());
         var sentMessage = GoogleChatClient.sendBuildStateUpdate(buildState,
@@ -63,7 +63,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
                 .setThreadId(threadId)
                 .vBuild();
         if (Strings.isNullOrEmpty(currentThread.getName())) {
-            var newThread = newThreadResource(thread.getName());
+            var newThread = threadResourceOf(thread.getName());
             builder().setThread(newThread)
                      .setSpaceId(spaceId);
             var threadCreated = ThreadCreated

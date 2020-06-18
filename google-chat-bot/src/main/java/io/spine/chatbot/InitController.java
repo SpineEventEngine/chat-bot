@@ -34,8 +34,8 @@ import io.spine.chatbot.travis.Repository;
 import io.spine.logging.Logging;
 
 import static io.spine.chatbot.api.TravisClient.defaultTravisClient;
-import static io.spine.chatbot.server.github.Identifiers.newOrganizationId;
-import static io.spine.chatbot.server.github.Identifiers.newRepositoryId;
+import static io.spine.chatbot.server.github.Identifiers.organizationIdOf;
+import static io.spine.chatbot.server.github.Identifiers.repositoryIdOf;
 import static io.spine.net.Urls.githubRepoUrlFor;
 import static io.spine.net.Urls.travisRepoUrlFor;
 import static io.spine.net.Urls.urlOfSpec;
@@ -60,7 +60,7 @@ public class InitController implements Logging {
                 "Performing initial application state initialization in the Google Chat space `%s`",
                 spaceName);
         var client = ChatBotClient.inProcessClient(Application.SERVER_NAME);
-        var spineOrgId = newOrganizationId("SpineEventEngine");
+        var spineOrgId = organizationIdOf("SpineEventEngine");
         registerOrganization(client, spineOrgId, spaceName);
         registerWatchedRepos(client, spineOrgId);
         return "Successfully initialized";
@@ -87,7 +87,7 @@ public class InitController implements Logging {
                 .newBuilder()
                 .setOrganization(orgId)
                 .setGithubUrl(githubRepoUrlFor(slug))
-                .setId(newRepositoryId(slug))
+                .setId(repositoryIdOf(slug))
                 .setName(repository.getName())
                 .setTravisCiUrl(travisRepoUrlFor(slug))
                 .vBuild();

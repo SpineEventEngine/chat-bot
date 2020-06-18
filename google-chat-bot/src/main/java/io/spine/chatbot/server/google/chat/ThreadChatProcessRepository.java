@@ -27,7 +27,7 @@ import io.spine.chatbot.google.chat.thread.ThreadChat;
 import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.server.route.EventRouting;
 
-import static io.spine.chatbot.server.google.chat.Identifiers.newThreadId;
+import static io.spine.chatbot.server.google.chat.Identifiers.threadIdOf;
 import static io.spine.server.route.EventRoute.withId;
 
 final class ThreadChatProcessRepository
@@ -39,7 +39,7 @@ final class ThreadChatProcessRepository
         super.setupEventRouting(routing);
         routing.route(BuildStateChanged.class, (event, context) -> {
             var repositoryId = event.getId();
-            var id = newThreadId(repositoryId.getValue());
+            var id = threadIdOf(repositoryId.getValue());
             return withId(id);
         });
     }

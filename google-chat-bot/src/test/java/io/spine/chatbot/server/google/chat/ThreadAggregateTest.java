@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.server.google.chat.Identifiers.newMessageId;
-import static io.spine.chatbot.server.google.chat.ThreadResources.newThreadResource;
+import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
 
 @DisplayName("ThreadAggregate should")
 final class ThreadAggregateTest extends ContextAwareTest {
@@ -58,7 +58,7 @@ final class ThreadAggregateTest extends ContextAwareTest {
                                                .setValue("spaces/qpojdwpiq1241")
                                                .vBuild();
         private final ThreadResource threadResource =
-                newThreadResource("spaces/qpojdwpiq1241/threads/qwdojp12");
+                threadResourceOf("spaces/qpojdwpiq1241/threads/qwdojp12");
 
         @BeforeEach
         void setUp() {
@@ -109,7 +109,7 @@ final class ThreadAggregateTest extends ContextAwareTest {
         private final MessageId messageId =
                 newMessageId("spaces/qpojdwpiq1241/messages/dqpwjpop12");
         private final ThreadResource threadResource =
-                newThreadResource("spaces/qpojdwpiq1241/threads/qwdojp12");
+                threadResourceOf("spaces/qpojdwpiq1241/threads/qwdojp12");
 
         @BeforeEach
         void setUp() {

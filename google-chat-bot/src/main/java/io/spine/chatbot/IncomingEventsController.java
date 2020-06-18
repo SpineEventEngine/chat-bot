@@ -83,7 +83,7 @@ public class IncomingEventsController implements Logging {
                 .newBuilder()
                 .setDisplayName(space.getDisplayName())
                 .setThreaded(isThreaded(space))
-                .setId(Identifiers.newSpaceId(space.getName()))
+                .setId(Identifiers.spaceIdOf(space.getName()))
                 .vBuild();
         client.postSyncCommand(registerSpace, SpaceRegistered.class);
     }
