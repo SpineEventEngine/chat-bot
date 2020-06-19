@@ -27,6 +27,7 @@ import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
+import io.spine.chatbot.github.repository.build.event.BuildStable;
 import io.spine.chatbot.travis.Build;
 import io.spine.chatbot.travis.BuildsResponse;
 import io.spine.chatbot.travis.Commit;
@@ -146,6 +147,62 @@ final class RepositoryBuildProcessTest extends GitHubEntityTest {
         }
     }
 
+    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
+    @Nested
+    @DisplayName("handle stable builds")
+    final class StableBuild {
+
+        private final Build previousBuild = passingBuild();
+        private final BuildState previousBuildState = buildStateFrom(previousBuild);
+
+        private final Build newBuild = nextPassingBuild();
+        private final BuildState newBuildState = buildStateFrom(newBuild);
+
+        @BeforeEach
+        void setUp() {
+            travisClient.setBuildsFor(repositoryId.getValue(), singleBuild(previousBuild));
+            var checkRepoFailure = CheckRepositoryBuild
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .vBuild();
+            context().receivesCommand(checkRepoFailure);
+            travisClient.setBuildsFor(repositoryId.getValue(), singleBuild(newBuild));
+            var checkRepoRecovery = CheckRepositoryBuild
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .vBuild();
+            context().receivesCommand(checkRepoRecovery);
+        }
+
+        @Test
+        @DisplayName("producing BuildStable event")
+        void producingEvent() {
+            var stateChange = BuildStateChange
+                    .newBuilder()
+                    .setPreviousValue(previousBuildState)
+                    .setNewValue(newBuildState)
+                    .vBuild();
+            var buildFailed = BuildStable
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .setChange(stateChange)
+                    .vBuild();
+            context().assertEvent(buildFailed);
+        }
+
+        @Test
+        @DisplayName("setting process state")
+        void settingState() {
+            var expectedState = RepositoryBuild
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .setBuildState(newBuildState)
+                    .vBuild();
+            context().assertState(repositoryId, RepositoryBuild.class)
+                     .isEqualTo(expectedState);
+        }
+    }
+
     private static BuildsResponse singleBuild(Build build) {
         return BuildsResponse
                 .newBuilder()
@@ -165,6 +222,18 @@ final class RepositoryBuildProcessTest extends GitHubEntityTest {
                 .buildPartial();
     }
 
+    private static Build nextPassingBuild() {
+        return Build
+                .newBuilder()
+                .setId(123154L)
+                .setNumber("43")
+                .setState("passed")
+                .setPreviousState("passed")
+                .setRepository(webRepository())
+                .setCommit(stableCommit())
+                .buildPartial();
+    }
+
     private static Build failedBuild() {
         return Build
                 .newBuilder()
@@ -173,7 +242,24 @@ final class RepositoryBuildProcessTest extends GitHubEntityTest {
                 .setState("failed")
                 .setPreviousState("failed")
                 .setRepository(webRepository())
-                .setCommit(luckyCommit())
+                .setCommit(fatefulCommit())
+                .buildPartial();
+    }
+
+    private static Commit stableCommit() {
+        var compareUrl = "https://github.com/SpineEventEngine/web/compare/04694f26f24a...afc1b76bf93c";
+        var author = Commit.Author
+                .newBuilder()
+                .setName("God")
+                .buildPartial();
+        return Commit
+                .newBuilder()
+                .setId(668)
+                .setCompareUrl(compareUrl)
+                .setSha("afc1b76bf93c4dadf86075280da623f947e1434b")
+                .setAuthor(author)
+                .setCommittedAt("2020-06-06T18:30:00Z")
+                .setMessage("May the heaven be on earth.")
                 .buildPartial();
     }
 
@@ -192,7 +278,6 @@ final class RepositoryBuildProcessTest extends GitHubEntityTest {
                 .setCommittedAt("2020-06-06T18:00:00Z")
                 .setMessage("No you're not. Fixing the world.")
                 .buildPartial();
-
     }
 
     private static Commit fatefulCommit() {
