@@ -20,32 +20,47 @@
 
 package io.spine.chatbot.server.github;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.Time;
 import io.spine.chatbot.api.TravisClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
+import io.spine.chatbot.github.repository.build.BuildStateStatusChange;
 import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
-import io.spine.chatbot.github.repository.build.event.BuildStateChanged;
+import io.spine.chatbot.github.repository.build.event.BuildFailed;
+import io.spine.chatbot.github.repository.build.event.BuildRecovered;
+import io.spine.chatbot.github.repository.build.event.BuildStable;
 import io.spine.chatbot.travis.Build;
 import io.spine.chatbot.travis.Commit;
 import io.spine.net.Urls;
 import io.spine.server.command.Assign;
 import io.spine.server.procman.ProcessManager;
+import io.spine.server.tuple.EitherOf3;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
+import static io.spine.chatbot.github.repository.build.BuildState.State.PASSED;
+import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.FAILED;
+import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.RECOVERED;
+import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.STABLE;
+import static io.spine.chatbot.server.github.BuildStates.buildStateFrom;
 import static io.spine.net.Urls.travisBuildUrlFor;
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 final class RepositoryBuildProcess
         extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder> {
+
+    private static final ImmutableSet<BuildState.State> FAILED_STATUSES = ImmutableSet.of(
+            BuildState.State.CANCELLED, BuildState.State.FAILED, BuildState.State.ERRORED
+    );
 
     @LazyInit
     private @MonotonicNonNull TravisClient travisClient;
 
     @Assign
-    BuildStateChanged handle(CheckRepositoryBuild c) {
+    EitherOf3<BuildFailed, BuildRecovered, BuildStable> handle(CheckRepositoryBuild c) {
         var builds = travisClient.queryBuildsFor(id().getValue())
                                  .getBuildsList();
         if (builds.isEmpty()) {
@@ -60,11 +75,60 @@ final class RepositoryBuildProcess
                 .setPreviousValue(state().getBuildState())
                 .setNewValue(buildState)
                 .vBuild();
-        return BuildStateChanged
-                .newBuilder()
-                .setId(c.getId())
-                .setChange(stateChange)
-                .vBuild();
+        var result = determineOutcome(c.getId(), stateChange);
+        return result;
+    }
+
+    private static EitherOf3<BuildFailed, BuildRecovered, BuildStable>
+    determineOutcome(RepositoryId id, BuildStateChange stateChange) {
+        var stateStatusChange = stateStatusChangeOf(stateChange.getNewValue());
+        switch (stateStatusChange) {
+            case FAILED:
+                var buildFailed = BuildFailed
+                        .newBuilder()
+                        .setId(id)
+                        .setChange(stateChange)
+                        .vBuild();
+                return EitherOf3.withA(buildFailed);
+            case RECOVERED:
+                var buildRecovered = BuildRecovered
+                        .newBuilder()
+                        .setId(id)
+                        .setChange(stateChange)
+                        .vBuild();
+                return EitherOf3.withB(buildRecovered);
+            case STABLE:
+                var buildStable = BuildStable
+                        .newBuilder()
+                        .setId(id)
+                        .setChange(stateChange)
+                        .vBuild();
+                return EitherOf3.withC(buildStable);
+            case BSC_UNKNOWN:
+            case UNRECOGNIZED:
+            default:
+                throw newIllegalStateException(
+                        "Unexpected state status change `%s`.", stateStatusChange
+                );
+        }
+    }
+
+    private static BuildStateStatusChange stateStatusChangeOf(BuildState buildState) {
+        var currentState = buildState.getState();
+        var previousState = buildState.getPreviousState();
+        if (FAILED_STATUSES.contains(currentState)) {
+            return FAILED;
+        }
+        if (currentState == PASSED && FAILED_STATUSES.contains(previousState)) {
+            return RECOVERED;
+        }
+        if (currentState == PASSED && previousState == PASSED) {
+            return STABLE;
+        }
+        throw newIllegalStateException(
+                "Build is in an unpredictable state. Current state `%s`. Previous state `%s`.",
+                currentState.name(), previousState.name()
+        );
     }
 
     private static BuildState from(Build build) {
@@ -72,8 +136,8 @@ final class RepositoryBuildProcess
                         .getSlug();
         return BuildState
                 .newBuilder()
-                .setState(build.getState())
-                .setPreviousState(build.getPreviousState())
+                .setState(buildStateFrom(build.getState()))
+                .setPreviousState(buildStateFrom(build.getPreviousState()))
                 .setBranch(build.getBranch()
                                 .getName())
                 .setLastCommit(from(build.getCommit()))

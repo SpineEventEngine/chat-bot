@@ -101,7 +101,12 @@ final class BuildStateUpdates {
         var keyValue = new KeyValue()
                 .setTopLabel("Build No.")
                 .setContent(buildState.getNumber())
-                .setBottomLabel(buildState.getState());
+                .setBottomLabel(capitalizeState(buildState.getState()));
         return new WidgetMarkup().setKeyValue(keyValue);
+    }
+
+    private static String capitalizeState(BuildState.State state) {
+        var name = state.name();
+        return name.charAt(0) + name.toLowerCase();
     }
 }

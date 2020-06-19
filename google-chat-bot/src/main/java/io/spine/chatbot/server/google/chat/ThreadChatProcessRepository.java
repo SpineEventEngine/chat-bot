@@ -22,11 +22,17 @@ package io.spine.chatbot.server.google.chat;
 
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 import io.spine.chatbot.api.GoogleChatClient;
-import io.spine.chatbot.github.repository.build.event.BuildStateChanged;
+import io.spine.chatbot.github.repository.build.event.BuildFailed;
+import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.google.chat.ThreadId;
 import io.spine.chatbot.google.chat.thread.ThreadChat;
+import io.spine.chatbot.server.github.RepositoryAwareEvent;
+import io.spine.core.EventContext;
 import io.spine.server.procman.ProcessManagerRepository;
+import io.spine.server.route.EventRoute;
 import io.spine.server.route.EventRouting;
+
+import java.util.Set;
 
 import static io.spine.chatbot.server.google.chat.Identifiers.threadIdOf;
 import static io.spine.server.route.EventRoute.withId;
@@ -44,15 +50,23 @@ final class ThreadChatProcessRepository
     @Override
     protected void setupEventRouting(EventRouting<ThreadId> routing) {
         super.setupEventRouting(routing);
-        routing.route(BuildStateChanged.class, (event, context) -> {
-            var repositoryId = event.getId();
-            var id = threadIdOf(repositoryId.getValue());
-            return withId(id);
-        });
+        routing.route(BuildFailed.class, new RepositoryEventRoute<>());
+        routing.route(BuildRecovered.class, new RepositoryEventRoute<>());
     }
 
     @Override
     protected void configure(ThreadChatProcess processManager) {
         processManager.setGoogleChatClient(googleChatClient);
+    }
+
+    private static class RepositoryEventRoute<M extends RepositoryAwareEvent> implements EventRoute<ThreadId, M> {
+
+        private static final long serialVersionUID = 5147803958347083018L;
+
+        @Override
+        public Set<ThreadId> apply(M event, EventContext context) {
+            var repositoryId = event.getId();
+            return withId(threadIdOf(repositoryId.getValue()));
+        }
     }
 }

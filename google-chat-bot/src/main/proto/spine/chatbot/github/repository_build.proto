@@ -50,6 +50,23 @@ message RepositoryBuild {
     BuildState build_state = 3;
 }
 
+// The state change status of the build.
+enum BuildStateStatusChange {
+
+    BSC_UNKNOWN = 0;
+
+    // The build has failed.
+    //
+    // It could be either a build configuration failure or the actual code build issue.
+    FAILED = 1;
+
+    // The build has recovered from the failed state.
+    RECOVERED = 2;
+
+    // The build is stable.
+    STABLE = 3;
+}
+
 // State of the build for a repository branch.
 message BuildState {
 
@@ -60,10 +77,40 @@ message BuildState {
     spine.net.Url travis_ci_url = 2;
 
     // Current state of the build.
-    string state = 3;
+    State state = 3;
 
     // State of the previous build.
-    string previous_state = 4;
+    State previous_state = 4;
+
+    // The build state.
+    enum State {
+        S_UNKNOWN = 0;
+
+        // The build is created.
+        CREATED = 1;
+
+        // The build is received by the CI.
+        RECEIVED = 2;
+
+        // The build is in progress.
+        STARTED = 3;
+
+        // The build has passed successfully.
+        PASSED = 4;
+
+        // The build has failed.
+        //
+        // Denotes that the developer code could not be successfully built.
+        FAILED = 5;
+
+        // The build configuration has failed.
+        //
+        // Denotes that the build configuration or pre-build steps failed.
+        ERRORED = 6;
+
+        // The build is cancelled.
+        CANCELLED = 7;
+    }
 
     // The branch the build is associated with.
     string branch = 5;

@@ -23,7 +23,10 @@ package io.spine.chatbot.server.google.chat;
 import com.google.common.base.Strings;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.chatbot.api.GoogleChatClient;
-import io.spine.chatbot.github.repository.build.event.BuildStateChanged;
+import io.spine.chatbot.github.RepositoryId;
+import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.chatbot.github.repository.build.event.BuildFailed;
+import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.google.chat.ThreadId;
 import io.spine.chatbot.google.chat.event.MessageCreated;
 import io.spine.chatbot.google.chat.event.ThreadCreated;
@@ -49,26 +52,42 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
     private @MonotonicNonNull GoogleChatClient googleChatClient;
 
     @React
-    Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildStateChanged e) {
+    Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildFailed e) {
         var change = e.getChange();
         var buildState = change.getNewValue();
         var repositoryId = e.getId();
+        _info().log("Build for repository `%s` failed.", repositoryId.getValue());
+
+        return processBuildStateUpdate(buildState, repositoryId);
+    }
+
+    @React
+    Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildRecovered e) {
+        var change = e.getChange();
+        var buildState = change.getNewValue();
+        var repositoryId = e.getId();
+        _info().log("Build for repository `%s` recovered.", repositoryId.getValue());
+
+        return processBuildStateUpdate(buildState, repositoryId);
+    }
+
+    private Pair<MessageCreated, Optional<ThreadCreated>> processBuildStateUpdate(
+            BuildState buildState, RepositoryId repositoryId) {
+        var sentMessage = googleChatClient.sendBuildStateUpdate(buildState, currentThreadName());
+        var messageId = messageIdOf(sentMessage.getName());
         var threadId = threadIdOf(repositoryId.getValue());
         var spaceId = spaceIdOf(buildState.getGoogleChatSpace());
-        var currentThread = state().getThread();
-        _info().log("Build state changed for the repository `%s`.", repositoryId.getValue());
-        var sentMessage = googleChatClient.sendBuildStateUpdate(buildState,
-                                                                currentThread.getName());
-        var thread = sentMessage.getThread();
-        var messageId = messageIdOf(sentMessage.getName());
         var messageCreated = MessageCreated
                 .newBuilder()
                 .setId(messageId)
                 .setSpaceId(spaceId)
                 .setThreadId(threadId)
                 .vBuild();
-        if (Strings.isNullOrEmpty(currentThread.getName())) {
-            var newThread = threadResourceOf(thread.getName());
+        if (shouldCreateThread()) {
+            var newThread = threadResourceOf(sentMessage.getThread()
+                                                        .getName());
+            _debug().log("New thread `%s` created for repository `%s`.",
+                         newThread.getName(), repositoryId.getValue());
             builder().setThread(newThread)
                      .setSpaceId(spaceId);
             var threadCreated = ThreadCreated
@@ -80,6 +99,15 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
             return Pair.withNullable(messageCreated, threadCreated);
         }
         return Pair.withNullable(messageCreated, null);
+    }
+
+    private boolean shouldCreateThread() {
+        return Strings.isNullOrEmpty(currentThreadName());
+    }
+
+    private String currentThreadName() {
+        return state().getThread()
+                      .getName();
     }
 
     void setGoogleChatClient(GoogleChatClient googleChatClient) {

@@ -29,14 +29,41 @@ option java_package = "io.spine.chatbot.github.repository.build.event";
 option java_outer_classname = "RepositoryBuildEventsProto";
 option java_multiple_files = true;
 
+option (every_is).java_type = "io.spine.chatbot.server.github.RepositoryAwareEvent";
+
 
 import "spine/chatbot/github/identifiers.proto";
 import "spine/chatbot/github/repository_build.proto";
 
-// Denotes that a build state was changed.
-message BuildStateChanged {
+// The build has failed for a repository.
+message BuildFailed {
 
     RepositoryId id = 1 [(required) = true];
 
+    // The change of the build state.
     BuildStateChange change = 2;
+}
+
+// The build has recovered from the failed state.
+message BuildRecovered {
+
+    RepositoryId id = 1 [(required) = true];
+
+    // The change of the build state.
+    BuildStateChange change = 2;
+}
+
+// The build is stable and passing.
+message BuildStable {
+
+    RepositoryId id = 1 [(required) = true];
+
+    // The change of the build state.
+    BuildStateChange change = 2;
+}
+
+// The build is stable and passing.
+message BuildInProgress {
+
+    RepositoryId id = 1 [(required) = true];
 }
