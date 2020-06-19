@@ -20,13 +20,76 @@
 
 package io.spine.chatbot.server.google.chat;
 
+import io.spine.chatbot.google.chat.MessageId;
+import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.testing.UtilityClassTest;
+import io.spine.validate.ValidationException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
+
+import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
+import static io.spine.chatbot.server.google.chat.Identifiers.messageIdOf;
+import static io.spine.chatbot.server.google.chat.Identifiers.spaceIdOf;
+import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @DisplayName("GoogleChat Identifiers should")
 final class IdentifiersTest extends UtilityClassTest<Identifiers> {
 
     IdentifiersTest() {
         super(Identifiers.class);
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @TestInstance(PER_CLASS)
+    @Nested
+    @DisplayName("not accept invalid")
+    final class NotAcceptInvalid {
+
+        @ParameterizedTest
+        @MethodSource("spaceIdsSource")
+        @DisplayName("space IDs")
+        void spaceIds(String value) {
+            Assertions.assertThrows(ValidationException.class, () -> spaceIdOf(value));
+        }
+
+        @ParameterizedTest
+        @MethodSource("messageIdsSource")
+        @DisplayName("space IDs")
+        void messageIds(String value) {
+            Assertions.assertThrows(ValidationException.class, () -> messageIdOf(value));
+        }
+
+        private Stream<String> spaceIdsSource() {
+            return Stream.of("spaces/", "spacs/12415", "", "   ");
+        }
+
+        private Stream<String> messageIdsSource() {
+            return Stream.of("spaces/", "spaces/qwe124", "spaces/eqwt23/messages/", "", "   ");
+        }
+    }
+
+    @Test
+    @DisplayName("create space ID")
+    void createSpaceId() {
+        var spaceId = "spaces/qew21466";
+        assertThat(spaceIdOf(spaceId)).isEqualTo(SpaceId.newBuilder()
+                                                        .setValue(spaceId)
+                                                        .buildPartial());
+    }
+
+    @Test
+    @DisplayName("create message ID")
+    void createMessageId() {
+        var messageId = "spaces/qew21466/messages/123112111";
+        assertThat(messageIdOf(messageId)).isEqualTo(MessageId.newBuilder()
+                                                              .setValue(messageId)
+                                                              .buildPartial());
     }
 }
