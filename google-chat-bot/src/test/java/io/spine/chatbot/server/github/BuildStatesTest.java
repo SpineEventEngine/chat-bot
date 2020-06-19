@@ -20,31 +20,13 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.testing.UtilityClassTest;
+import org.junit.jupiter.api.DisplayName;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.util.Exceptions.newIllegalArgumentException;
+@DisplayName("BuildStates should")
+final class BuildStatesTest extends UtilityClassTest<BuildStates> {
 
-/**
- * A utility class for working with {@link io.spine.chatbot.github.repository.build.BuildState.State
- * BuildState.State}s.
- */
-final class BuildStates {
-
-    /** Prevents instantiation of this utility class. **/
-    private BuildStates() {
-    }
-
-    /** Creates an instance of the build state of out its string representation. */
-    static BuildState.State buildStateFrom(String state) {
-        checkNotNull(state);
-        for (BuildState.State buildState : BuildState.State.values()) {
-            if (state.equalsIgnoreCase(buildState.name())) {
-                return buildState;
-            }
-        }
-        throw newIllegalArgumentException(
-                "Unable to create build state out of the supplied string value `%s`.", state
-        );
+    BuildStatesTest() {
+        super(BuildStates.class);
     }
 }
