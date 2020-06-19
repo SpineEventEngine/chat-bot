@@ -22,11 +22,22 @@ package io.spine.chatbot.server.github;
 
 import io.spine.testing.UtilityClassTest;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static io.spine.chatbot.server.github.BuildStates.buildStateFrom;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("BuildStates should")
 final class BuildStatesTest extends UtilityClassTest<BuildStates> {
 
     BuildStatesTest() {
         super(BuildStates.class);
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @Test
+    @DisplayName("not accept unknown build states")
+    void notAcceptUnknownStates() {
+        assertThrows(IllegalArgumentException.class, () -> buildStateFrom("unknown"));
     }
 }
