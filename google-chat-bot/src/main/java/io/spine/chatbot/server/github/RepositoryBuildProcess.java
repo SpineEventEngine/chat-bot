@@ -64,6 +64,8 @@ final class RepositoryBuildProcess
         var builds = travisClient.queryBuildsFor(id().getValue())
                                  .getBuildsList();
         if (builds.isEmpty()) {
+            //TODO:2020-06-19:yuri-sergiichuk: replace with `NoBuildsFound` rejection after migration
+            // to the new java11-compatible Bootstrap version
             throw newIllegalStateException(
                     "No build found for the repository `%s`.", id().getValue()
             );
