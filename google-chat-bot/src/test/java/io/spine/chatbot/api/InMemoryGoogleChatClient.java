@@ -61,7 +61,7 @@ public final class InMemoryGoogleChatClient extends FailFastClient implements Go
      * Sets up a stub {@code message} for a build state update with the specified
      * {@code buildNumber}.
      */
-    public void setMessageForBuildStatsUpdate(String buildNumber, Message message) {
+    public void setMessageForBuildStatusUpdate(String buildNumber, Message message) {
         checkNotNull(buildNumber);
         checkNotNull(message);
         sentMessages.put(buildNumber, message);

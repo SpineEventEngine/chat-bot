@@ -71,8 +71,8 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         return processBuildStateUpdate(buildState, repositoryId);
     }
 
-    private Pair<MessageCreated, Optional<ThreadCreated>> processBuildStateUpdate(
-            BuildState buildState, RepositoryId repositoryId) {
+    private Pair<MessageCreated, Optional<ThreadCreated>>
+    processBuildStateUpdate(BuildState buildState, RepositoryId repositoryId) {
         var sentMessage = googleChatClient.sendBuildStateUpdate(buildState, currentThreadName());
         var messageId = messageIdOf(sentMessage.getName());
         var threadId = threadIdOf(repositoryId.getValue());
