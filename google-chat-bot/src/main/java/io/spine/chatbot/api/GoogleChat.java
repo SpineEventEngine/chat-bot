@@ -28,6 +28,7 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.logging.Logging;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -40,7 +41,7 @@ import static io.spine.chatbot.api.BuildStateUpdates.buildStateMessage;
  *
  * @see <a href="https://developers.google.com/hangouts/chat/concepts">Hangouts Chat API</a>
  */
-public final class GoogleChat implements GoogleChatClient {
+public final class GoogleChat implements GoogleChatClient, Logging {
 
     private static final String BOT_NAME = "Spine Chat Bot";
     private static final String CHAT_BOT_SCOPE = "https://www.googleapis.com/auth/chat.bot";
@@ -60,8 +61,16 @@ public final class GoogleChat implements GoogleChatClient {
 
     @Override
     public Message sendBuildStateUpdate(BuildState buildState, @Nullable String threadName) {
+        var repoSlug = buildState.getRepositorySlug();
+        _debug().log("Sending build state update message for repository `%s`.", repoSlug);
         var message = buildStateMessage(buildState, threadName);
-        return sendMessage(buildState.getGoogleChatSpace(), message);
+        var result = sendMessage(buildState.getGoogleChatSpace(), message);
+        _debug().log(
+                "Build state update message with ID `%s` for repository `%s` sent to thread `%s`.",
+                result.getName(), repoSlug, result.getThread()
+                                                  .getName()
+        );
+        return result;
     }
 
     @CanIgnoreReturnValue
