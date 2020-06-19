@@ -20,6 +20,7 @@
 
 package io.spine.chatbot.server.github;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.Time;
@@ -45,7 +46,6 @@ import static io.spine.chatbot.github.repository.build.BuildState.State.PASSED;
 import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.FAILED;
 import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.RECOVERED;
 import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.STABLE;
-import static io.spine.chatbot.server.github.BuildStates.buildStateFrom;
 import static io.spine.net.Urls.travisBuildUrlFor;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
@@ -71,7 +71,7 @@ final class RepositoryBuildProcess
             );
         }
         var build = builds.get(0);
-        var buildState = from(build);
+        var buildState = buildStateFrom(build);
         builder().setLastStatusCheck(Time.currentTime())
                  .setBuildState(buildState);
         var stateChange = BuildStateChange
@@ -135,13 +135,14 @@ final class RepositoryBuildProcess
         );
     }
 
-    private static BuildState from(Build build) {
+    @VisibleForTesting
+    static BuildState buildStateFrom(Build build) {
         var slug = build.getRepository()
                         .getSlug();
         return BuildState
                 .newBuilder()
-                .setState(buildStateFrom(build.getState()))
-                .setPreviousState(buildStateFrom(build.getPreviousState()))
+                .setState(BuildStates.buildStateFrom(build.getState()))
+                .setPreviousState(BuildStates.buildStateFrom(build.getPreviousState()))
                 .setBranch(build.getBranch()
                                 .getName())
                 .setLastCommit(from(build.getCommit()))

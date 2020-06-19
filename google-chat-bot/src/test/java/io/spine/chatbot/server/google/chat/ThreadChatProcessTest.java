@@ -112,7 +112,7 @@ final class ThreadChatProcessTest {
 
         @Test
         @DisplayName("producing MessageCreated and ThreadCreated events")
-        void producingEvent() {
+        void producingEvents() {
             var messageCreated = MessageCreated
                     .newBuilder()
                     .setId(messageIdOf(sentMessage.getName()))
