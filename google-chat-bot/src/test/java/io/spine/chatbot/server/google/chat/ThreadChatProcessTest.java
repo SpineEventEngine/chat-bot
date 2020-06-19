@@ -47,6 +47,7 @@ import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource
 @DisplayName("ThreadChatProcess should")
 final class ThreadChatProcessTest {
 
+    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
     @Nested
     @DisplayName("sent a message to the Google Chat room when build failed")
     final class BuildIsFailed extends BuildStateChanged {
@@ -62,6 +63,7 @@ final class ThreadChatProcessTest {
         }
     }
 
+    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
     @Nested
     @DisplayName("sent a message to the Google Chat room when build recovered from failure")
     final class BuildIsRecovered extends BuildStateChanged {

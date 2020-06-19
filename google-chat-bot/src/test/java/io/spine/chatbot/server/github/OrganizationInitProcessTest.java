@@ -36,9 +36,9 @@ import static io.spine.chatbot.server.github.OrganizationInitProcess.SPINE_ORGAN
 @DisplayName("OrganizationInitProcess should")
 final class OrganizationInitProcessTest extends GitHubEntityTest {
 
-    @DisplayName("perform initialization of watched spine resources")
     @Nested
-    class Init {
+    @DisplayName("perform initialization of watched spine resources")
+    final class Init {
 
         private final SpaceId spaceId = Identifiers.spaceIdOf("spaces/qjwrp1441");
         private final Repository repository = Repository

@@ -20,6 +20,7 @@
 
 package io.spine.chatbot.server.google.chat;
 
+import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 import io.spine.chatbot.api.InMemoryGoogleChatClient;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.ContextAwareTest;
@@ -42,7 +43,10 @@ class GoogleChatEntityTest extends ContextAwareTest {
     }
 
     @AfterEach
-    void tearDown() {
+    @OverridingMethodsMustInvokeSuper
+    @Override
+    protected void closeContext() {
+        super.closeContext();
         googleChatClient.reset();
     }
 }

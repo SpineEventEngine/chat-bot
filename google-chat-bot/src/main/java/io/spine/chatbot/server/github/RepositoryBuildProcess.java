@@ -64,7 +64,9 @@ final class RepositoryBuildProcess
         var builds = travisClient.queryBuildsFor(id().getValue())
                                  .getBuildsList();
         if (builds.isEmpty()) {
-            throw new RuntimeException("No builds available for repository " + idAsString());
+            throw newIllegalStateException(
+                    "No build found for the repository `%s`.", id().getValue()
+            );
         }
         var build = builds.get(0);
         var buildState = from(build);
