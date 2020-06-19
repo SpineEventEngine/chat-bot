@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.chatbot.server.github.OrganizationInitProcess.SPINE_ORGANIZATION;
 
 @DisplayName("OrganizationInitProcess should")
-final class OrganizationInitProcessTest extends GitHubTest {
+final class OrganizationInitProcessTest extends GitHubEntityTest {
 
     @DisplayName("perform initialization of watched spine resources")
     @Nested

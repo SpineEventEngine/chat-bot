@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("SpaceAggregate should")
-final class SpaceAggregateTest extends GoogleChatTest {
+final class SpaceAggregateTest extends GoogleChatEntityTest {
 
     @Nested
     @DisplayName("register a space")

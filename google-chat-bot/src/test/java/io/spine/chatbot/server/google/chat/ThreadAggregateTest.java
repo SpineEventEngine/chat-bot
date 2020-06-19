@@ -40,7 +40,7 @@ import static io.spine.chatbot.server.google.chat.Identifiers.threadIdOf;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
 
 @DisplayName("ThreadAggregate should")
-final class ThreadAggregateTest extends GoogleChatTest {
+final class ThreadAggregateTest extends GoogleChatEntityTest {
 
     @Nested
     @DisplayName("initialize a thread")

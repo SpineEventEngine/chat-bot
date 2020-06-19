@@ -36,7 +36,7 @@ import static io.spine.chatbot.server.github.Identifiers.repositoryIdOf;
 import static io.spine.net.Urls.urlOfSpec;
 
 @DisplayName("RepositoryAggregate should")
-final class RepositoryAggregateTest extends GitHubTest {
+final class RepositoryAggregateTest extends GitHubEntityTest {
 
     @Nested
     @DisplayName("register a repository")
