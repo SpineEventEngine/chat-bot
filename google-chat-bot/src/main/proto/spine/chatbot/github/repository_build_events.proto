@@ -28,6 +28,7 @@ option (type_url_prefix) = "type.spine.io.chatbot";
 option java_package = "io.spine.chatbot.github.repository.build.event";
 option java_outer_classname = "RepositoryBuildEventsProto";
 option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
 
 option (every_is).java_type = "io.spine.chatbot.server.github.RepositoryAwareEvent";
 

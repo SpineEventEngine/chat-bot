@@ -28,6 +28,7 @@ option (type_url_prefix) = "type.spine.io.chatbot";
 option java_package = "io.spine.chatbot.google.chat.incoming";
 option java_outer_classname = "IncomingChatMessagesProto";
 option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
 
 // Denotes that a message was created in the space.
 message ChatEvent {

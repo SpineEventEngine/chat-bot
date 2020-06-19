@@ -28,6 +28,7 @@ option (type_url_prefix) = "type.spine.io.chatbot";
 option java_package = "io.spine.chatbot.google.chat";
 option java_outer_classname = "IdentifiersProto";
 option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
 
 // Hangouts Chat Space identifier.
 message SpaceId {
