@@ -26,6 +26,7 @@ import io.spine.chatbot.github.repository.build.BuildStateChange;
 import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
+import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.travis.Build;
 import io.spine.chatbot.travis.BuildsResponse;
 import io.spine.chatbot.travis.Commit;
@@ -45,7 +46,7 @@ final class RepositoryBuildProcessTest extends GitHubEntityTest {
 
     @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
     @Nested
-    @DisplayName("handle ")
+    @DisplayName("handle build failure")
     final class FailedBuild {
 
         private final Build build = failedBuild();
@@ -62,8 +63,8 @@ final class RepositoryBuildProcessTest extends GitHubEntityTest {
         }
 
         @Test
-        @DisplayName("producing MessageCreated and ThreadCreated events")
-        void producingEvents() {
+        @DisplayName("producing BuildFailed event")
+        void producingEvent() {
             var stateChange = BuildStateChange
                     .newBuilder()
                     .setNewValue(buildState)
@@ -89,6 +90,62 @@ final class RepositoryBuildProcessTest extends GitHubEntityTest {
         }
     }
 
+    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
+    @Nested
+    @DisplayName("handle build recovery")
+    final class RecoveredBuild {
+
+        private final Build previousBuild = failedBuild();
+        private final BuildState previousBuildState = buildStateFrom(previousBuild);
+
+        private final Build newBuild = passingBuild();
+        private final BuildState newBuildState = buildStateFrom(newBuild);
+
+        @BeforeEach
+        void setUp() {
+            travisClient.setBuildsFor(repositoryId.getValue(), singleBuild(previousBuild));
+            var checkRepoFailure = CheckRepositoryBuild
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .vBuild();
+            context().receivesCommand(checkRepoFailure);
+            travisClient.setBuildsFor(repositoryId.getValue(), singleBuild(newBuild));
+            var checkRepoRecovery = CheckRepositoryBuild
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .vBuild();
+            context().receivesCommand(checkRepoRecovery);
+        }
+
+        @Test
+        @DisplayName("producing BuildRecovered event")
+        void producingEvent() {
+            var stateChange = BuildStateChange
+                    .newBuilder()
+                    .setPreviousValue(previousBuildState)
+                    .setNewValue(newBuildState)
+                    .vBuild();
+            var buildFailed = BuildRecovered
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .setChange(stateChange)
+                    .vBuild();
+            context().assertEvent(buildFailed);
+        }
+
+        @Test
+        @DisplayName("setting process state")
+        void settingState() {
+            var expectedState = RepositoryBuild
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .setBuildState(newBuildState)
+                    .vBuild();
+            context().assertState(repositoryId, RepositoryBuild.class)
+                     .isEqualTo(expectedState);
+        }
+    }
+
     private static BuildsResponse singleBuild(Build build) {
         return BuildsResponse
                 .newBuilder()
@@ -96,20 +153,46 @@ final class RepositoryBuildProcessTest extends GitHubEntityTest {
                 .buildPartial();
     }
 
-    private static Build failedBuild() {
-        return buildWithState("failed", "failed");
+    private static Build passingBuild() {
+        return Build
+                .newBuilder()
+                .setId(123153L)
+                .setNumber("42")
+                .setState("passed")
+                .setPreviousState("failed")
+                .setRepository(webRepository())
+                .setCommit(luckyCommit())
+                .buildPartial();
     }
 
-    private static Build buildWithState(String state, String previousState) {
+    private static Build failedBuild() {
         return Build
                 .newBuilder()
                 .setId(123152L)
-                .setNumber("42")
-                .setState(state)
-                .setPreviousState(previousState)
+                .setNumber("41")
+                .setState("failed")
+                .setPreviousState("failed")
                 .setRepository(webRepository())
-                .setCommit(fatefulCommit())
+                .setCommit(luckyCommit())
                 .buildPartial();
+    }
+
+    private static Commit luckyCommit() {
+        var compareUrl = "https://github.com/SpineEventEngine/web/compare/6b4d32cadd9c...6b0a31d033a2";
+        var author = Commit.Author
+                .newBuilder()
+                .setName("God")
+                .buildPartial();
+        return Commit
+                .newBuilder()
+                .setId(667)
+                .setCompareUrl(compareUrl)
+                .setSha("6b0a31d033a2fc8d29d49baad600bc31789d9615")
+                .setAuthor(author)
+                .setCommittedAt("2020-06-06T18:00:00Z")
+                .setMessage("No you're not. Fixing the world.")
+                .buildPartial();
+
     }
 
     private static Commit fatefulCommit() {
