@@ -27,21 +27,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * An in-memory test-only implementation of the Travis CI API client.
  */
-public final class InMemoryTravisClient implements TravisClient {
+public final class InMemoryTravisClient extends FailFastClient implements TravisClient {
 
     private final Map<String, BuildsResponse> buildsResponses = new ConcurrentHashMap<>();
     private final Map<String, RepositoriesResponse> repositoriesResponses = new ConcurrentHashMap<>();
 
-    /** Determines whether the client should fail if a particular response was not preconfigured. **/
-    private final boolean failFast;
-
     private InMemoryTravisClient(boolean failFast) {
-        this.failFast = failFast;
+        super(failFast);
     }
 
     /** Creates a {@link #failFast} in-memory Travis CI client. **/
@@ -57,41 +53,27 @@ public final class InMemoryTravisClient implements TravisClient {
     @Override
     public BuildsResponse queryBuildsFor(String repoSlug) {
         checkNotNull(repoSlug);
-        var result = buildsResponses.get(repoSlug);
-        if (failFast && result == null) {
-            throw newIllegalStateException(
-                    "Builds response is not configured for the repository `%s`.", repoSlug
-            );
-        }
-        if (!failFast && result == null) {
-            result = BuildsResponse.getDefaultInstance();
-        }
+        var stubbedValue = buildsResponses.get(repoSlug);
+        var result = failOrDefault(stubbedValue, repoSlug, BuildsResponse.getDefaultInstance());
         return result;
     }
 
     @Override
     public RepositoriesResponse queryRepositoriesFor(String owner) {
         checkNotNull(owner);
-        var result = repositoriesResponses.get(owner);
-        if (failFast && result == null) {
-            throw newIllegalStateException(
-                    "Repositories response is not configured for the owner `%s`.", owner
-            );
-        }
-        if (!failFast && result == null) {
-            result = RepositoriesResponse.getDefaultInstance();
-        }
+        var stubbedValue = repositoriesResponses.get(owner);
+        var result = failOrDefault(stubbedValue, owner, RepositoriesResponse.getDefaultInstance());
         return result;
     }
 
-    /** Sets up a mocked {@code builds} response for a specified {@code repoSlug}. **/
+    /** Sets up a stub {@code builds} response for a specified {@code repoSlug}. **/
     public void setBuildsFor(String repoSlug, BuildsResponse builds) {
         checkNotNull(repoSlug);
         checkNotNull(builds);
         buildsResponses.put(repoSlug, builds);
     }
 
-    /** Sets up a mocked {@code repositories} response for a specified {@code owner}. **/
+    /** Sets up a stub {@code repositories} response for a specified {@code owner}. **/
     public void setRepositoriesFor(String owner, RepositoriesResponse repositories) {
         checkNotNull(owner);
         checkNotNull(repositories);

@@ -21,6 +21,7 @@
 package io.spine.chatbot.server.google.chat;
 
 import com.google.common.base.Strings;
+import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.chatbot.api.GoogleChatClient;
 import io.spine.chatbot.github.repository.build.event.BuildStateChanged;
 import io.spine.chatbot.google.chat.ThreadId;
@@ -32,6 +33,7 @@ import io.spine.logging.Logging;
 import io.spine.server.event.React;
 import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.Pair;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.util.Optional;
 
@@ -43,6 +45,9 @@ import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource
 final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, ThreadChat.Builder>
         implements Logging {
 
+    @LazyInit
+    private @MonotonicNonNull GoogleChatClient googleChatClient;
+
     @React
     Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildStateChanged e) {
         var change = e.getChange();
@@ -52,7 +57,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var spaceId = spaceIdOf(buildState.getGoogleChatSpace());
         var currentThread = state().getThread();
         _info().log("Build state changed for the repository `%s`.", repositoryId.getValue());
-        var sentMessage = GoogleChatClient.sendBuildStateUpdate(buildState,
+        var sentMessage = googleChatClient.sendBuildStateUpdate(buildState,
                                                                 currentThread.getName());
         var thread = sentMessage.getThread();
         var messageId = messageIdOf(sentMessage.getName());
@@ -75,5 +80,9 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
             return Pair.withNullable(messageCreated, threadCreated);
         }
         return Pair.withNullable(messageCreated, null);
+    }
+
+    void setGoogleChatClient(GoogleChatClient googleChatClient) {
+        this.googleChatClient = googleChatClient;
     }
 }

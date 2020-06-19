@@ -21,6 +21,7 @@
 package io.spine.chatbot.server.google.chat;
 
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
+import io.spine.chatbot.api.GoogleChatClient;
 import io.spine.chatbot.github.repository.build.event.BuildStateChanged;
 import io.spine.chatbot.google.chat.ThreadId;
 import io.spine.chatbot.google.chat.thread.ThreadChat;
@@ -33,6 +34,12 @@ import static io.spine.server.route.EventRoute.withId;
 final class ThreadChatProcessRepository
         extends ProcessManagerRepository<ThreadId, ThreadChatProcess, ThreadChat> {
 
+    private final GoogleChatClient googleChatClient;
+
+    ThreadChatProcessRepository(GoogleChatClient googleChatClient) {
+        this.googleChatClient = googleChatClient;
+    }
+
     @OverridingMethodsMustInvokeSuper
     @Override
     protected void setupEventRouting(EventRouting<ThreadId> routing) {
@@ -42,5 +49,10 @@ final class ThreadChatProcessRepository
             var id = threadIdOf(repositoryId.getValue());
             return withId(id);
         });
+    }
+
+    @Override
+    protected void configure(ThreadChatProcess processManager) {
+        processManager.setGoogleChatClient(googleChatClient);
     }
 }

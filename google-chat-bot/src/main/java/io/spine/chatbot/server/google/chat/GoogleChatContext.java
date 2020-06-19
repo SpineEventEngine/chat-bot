@@ -20,8 +20,12 @@
 
 package io.spine.chatbot.server.google.chat;
 
+import io.spine.chatbot.api.GoogleChat;
+import io.spine.chatbot.api.GoogleChatClient;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Provides {@link BoundedContextBuilder} for the Google Chat context.
@@ -34,8 +38,8 @@ public final class GoogleChatContext {
     private final BoundedContextBuilder contextBuilder;
 
     /** Prevents instantiation of this utility class. **/
-    private GoogleChatContext() {
-        this.contextBuilder = configureContextBuilder();
+    private GoogleChatContext(GoogleChatClient googleChatClient) {
+        this.contextBuilder = configureContextBuilder(googleChatClient);
     }
 
     /** Returns the context builder associated with the Google Chat context. **/
@@ -44,12 +48,13 @@ public final class GoogleChatContext {
     }
 
     /** Creates a new instance of the Google Chat context builder. **/
-    private static BoundedContextBuilder configureContextBuilder() {
+    private static BoundedContextBuilder
+    configureContextBuilder(GoogleChatClient googleChatClient) {
         return BoundedContext
                 .singleTenant(NAME)
                 .add(SpaceAggregate.class)
                 .add(new ThreadAggregateRepository())
-                .add(new ThreadChatProcessRepository());
+                .add(new ThreadChatProcessRepository(googleChatClient));
     }
 
     /** Creates a new builder of the Google Chat context. **/
@@ -60,16 +65,26 @@ public final class GoogleChatContext {
     /** A Builder for configuring Google Chat context. **/
     public static final class Builder {
 
-        //TODO:2020-06-18:ysergiichuk: add ability to configure GoogleChatClient
+        private GoogleChatClient googleChatClient;
 
         private Builder() {
+        }
+
+        /** Sets Google Chat client to be used within the context. **/
+        public Builder setGoogleChatClient(GoogleChatClient googleChatClient) {
+            checkNotNull(googleChatClient);
+            this.googleChatClient = googleChatClient;
+            return this;
         }
 
         /**
          * Finishes configuration of the context and builds a new instance.
          */
         public GoogleChatContext build() {
-            return new GoogleChatContext();
+            if (googleChatClient == null) {
+                googleChatClient = GoogleChat.defaultGoogleChatClient();
+            }
+            return new GoogleChatContext(googleChatClient);
         }
     }
 }

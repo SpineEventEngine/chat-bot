@@ -20,34 +20,18 @@
 
 package io.spine.chatbot.api;
 
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.chat.v1.HangoutsChat;
 import com.google.api.services.chat.v1.model.Message;
-import com.google.auth.http.HttpCredentialsAdapter;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.chatbot.github.repository.build.BuildState;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
-import static io.spine.chatbot.api.BuildStateUpdates.buildStateMessage;
 
 /**
- * Google Chat client.
+ * Google Chat API client abstraction.
  *
- * @see <a href="https://developers.google.com/hangouts/chat/concepts">Hangouts Chat API</a>
+ * <p>Abstracts out usage of the chat API by exposing only ready-to-use ChatBot-specific
+ * methods.
  */
-public final class GoogleChatClient {
-
-    private static final String BOT_NAME = "Spine Chat Bot";
-    private static final String CHAT_BOT_SCOPE = "https://www.googleapis.com/auth/chat.bot";
-
-    /** Prevents direct instantiation. **/
-    private GoogleChatClient() {
-    }
+public interface GoogleChatClient {
 
     /**
      * Sends {@link BuildState} status message to a related space and thread.
@@ -56,38 +40,5 @@ public final class GoogleChatClient {
      *
      * @return a sent message
      */
-    public static Message sendBuildStateUpdate(BuildState buildState, @Nullable String threadName) {
-        var message = buildStateMessage(buildState, threadName);
-        return sendMessage(hangoutsChat(), buildState.getGoogleChatSpace(), message);
-    }
-
-    private static HangoutsChat hangoutsChat() {
-        try {
-            var credentials = GoogleCredentials.getApplicationDefault()
-                                               .createScoped(CHAT_BOT_SCOPE);
-            var credentialsAdapter = new HttpCredentialsAdapter(credentials);
-            var chat = new HangoutsChat.Builder(
-                    GoogleNetHttpTransport.newTrustedTransport(),
-                    JacksonFactory.getDefaultInstance(),
-                    credentialsAdapter)
-                    .setApplicationName(BOT_NAME)
-                    .build();
-            return chat;
-        } catch (IOException | GeneralSecurityException e) {
-            throw new RuntimeException("Unable to create Hangouts Chat client", e);
-        }
-    }
-
-    @CanIgnoreReturnValue
-    private static Message sendMessage(HangoutsChat chat, String space, Message message) {
-        try {
-            return chat
-                    .spaces()
-                    .messages()
-                    .create(space, message)
-                    .execute();
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to send message to space " + space, e);
-        }
-    }
+    Message sendBuildStateUpdate(BuildState buildState, @Nullable String threadName);
 }

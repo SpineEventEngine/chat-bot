@@ -20,19 +20,29 @@
 
 package io.spine.chatbot.server.google.chat;
 
+import io.spine.chatbot.api.InMemoryGoogleChatClient;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.ContextAwareTest;
+import org.junit.jupiter.api.AfterEach;
 
 /**
  * An abstract test-base for Google Chat context tests.
  */
 class GoogleChatTest extends ContextAwareTest {
 
+    final InMemoryGoogleChatClient googleChatClient = InMemoryGoogleChatClient.strictClient();
+
     @Override
     protected BoundedContextBuilder contextBuilder() {
         return GoogleChatContext
                 .newBuilder()
+                .setGoogleChatClient(googleChatClient)
                 .build()
                 .contextBuilder();
+    }
+
+    @AfterEach
+    void tearDown() {
+        googleChatClient.reset();
     }
 }
