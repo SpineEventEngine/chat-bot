@@ -55,7 +55,7 @@ public final class GitHubContext {
                 .singleTenant(NAME)
                 .add(OrganizationAggregate.class)
                 .add(RepositoryAggregate.class)
-                .add(new OrganizationRepositoriesRepository())
+                .add(new OrgReposRepository())
                 .add(new SpineOrgInitRepository(travisClient))
                 .add(new RepositoryBuildRepository(travisClient));
     }

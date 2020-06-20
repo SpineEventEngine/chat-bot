@@ -20,34 +20,32 @@
 
 package io.spine.chatbot.server.github;
 
+import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.organization.OrganizationRepositories;
-import io.spine.chatbot.github.organization.event.OrganizationRegistered;
 import io.spine.chatbot.github.repository.event.RepositoryRegistered;
-import io.spine.core.Subscribe;
-import io.spine.server.projection.Projection;
+import io.spine.server.projection.ProjectionRepository;
+import io.spine.server.route.EventRouting;
+
+import static io.spine.protobuf.Messages.isNotDefault;
+import static io.spine.server.route.EventRoute.noTargets;
+import static io.spine.server.route.EventRoute.withId;
 
 /**
- * Organization repositories projection.
- *
- * <p>Holds IDs of all registered repositories in the organization.
+ * The repository for {@link OrganizationRepositories}.
  */
-final class OrganizationRepositoriesProjection
-        extends Projection<OrganizationId, OrganizationRepositories, OrganizationRepositories.Builder> {
+final class OrgReposRepository
+        extends ProjectionRepository<OrganizationId,
+        OrgReposProjection,
+        OrganizationRepositories> {
 
-    /**
-     * Registers the organization to watch the repositories for.
-     */
-    @Subscribe
-    void on(OrganizationRegistered e) {
-        builder().setId(e.getId());
-    }
-
-    /**
-     * Registers the organization repository.
-     */
-    @Subscribe
-    void on(RepositoryRegistered e) {
-        builder().addRepositories(e.getId());
+    @OverridingMethodsMustInvokeSuper
+    @Override
+    protected void setupEventRouting(EventRouting<OrganizationId> routing) {
+        super.setupEventRouting(routing);
+        routing.route(RepositoryRegistered.class, (event, context) ->
+                isNotDefault(event.getOrganization())
+                ? withId(event.getOrganization())
+                : noTargets());
     }
 }
