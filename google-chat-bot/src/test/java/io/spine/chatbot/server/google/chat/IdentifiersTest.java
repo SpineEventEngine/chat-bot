@@ -46,7 +46,8 @@ final class IdentifiersTest extends UtilityClassTest<Identifiers> {
         super(Identifiers.class);
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
+    // nested tests do not work with static classes
+    @SuppressWarnings({"ClassCanBeStatic", "ResultOfMethodCallIgnored"})
     @TestInstance(PER_CLASS)
     @Nested
     @DisplayName("not accept invalid")
@@ -66,10 +67,12 @@ final class IdentifiersTest extends UtilityClassTest<Identifiers> {
             Assertions.assertThrows(ValidationException.class, () -> messageIdOf(value));
         }
 
+        @SuppressWarnings("unused") // method is used as parameterized test source
         private Stream<String> spaceIdsSource() {
             return Stream.of("spaces/", "spacs/12415", "", "   ");
         }
 
+        @SuppressWarnings("unused") // method is used as parameterized test source
         private Stream<String> messageIdsSource() {
             return Stream.of("spaces/", "spaces/qwe124", "spaces/eqwt23/messages/", "", "   ");
         }
