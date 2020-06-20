@@ -75,7 +75,7 @@ final class SpineOrgInitProcess
      */
     @Command
     Iterable<CommandMessage> on(@External SpaceRegistered e) {
-        if (state().isInitialized()) {
+        if (state().getInitialized()) {
             return ImmutableSet.of();
         }
         var spaceId = e.getId();
