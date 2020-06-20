@@ -21,6 +21,7 @@
 package io.spine.chatbot.api;
 
 import com.google.protobuf.Message;
+import io.spine.chatbot.api.google.secret.Secrets;
 import io.spine.chatbot.travis.BuildsResponse;
 import io.spine.chatbot.travis.RepositoriesResponse;
 

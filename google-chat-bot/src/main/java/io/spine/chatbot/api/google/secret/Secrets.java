@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api;
+package io.spine.chatbot.api.google.secret;
 
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;
@@ -29,20 +29,22 @@ import java.nio.charset.Charset;
 /**
  * Utility for accessing application secrets stored in Google Secret Manager.
  */
-final class Secrets {
+public final class Secrets {
 
     @SuppressWarnings("CallToSystemGetenv")
     private static final String PROJECT_ID = System.getenv("GCP_PROJECT_ID");
     private static final String TRAVIS_API_TOKEN = "TravisApiToken";
 
-    /** Prevents direct instantiation of the utility class. **/
+    /**
+     * Prevents direct instantiation of the utility class.
+     */
     private Secrets() {
     }
 
     /**
      * Returns Travis CI API access token.
      */
-    static String travisToken() {
+    public static String travisToken() {
         try (SecretManagerServiceClient client = SecretManagerServiceClient.create()) {
             var secretVersion = SecretVersionName.of(PROJECT_ID, TRAVIS_API_TOKEN, "latest");
             var secret = client.accessSecretVersion(secretVersion)
