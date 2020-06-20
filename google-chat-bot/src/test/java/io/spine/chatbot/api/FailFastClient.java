@@ -29,7 +29,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 /**
  * An abstract API client that exposes the {@code fail-fast} concept to the actual test clients.
  */
-class FailFastClient implements Logging {
+public class FailFastClient implements Logging {
 
     /** Determines whether the client should fail if a particular response is not preconfigured. **/
     private final boolean failFast;
@@ -37,7 +37,7 @@ class FailFastClient implements Logging {
     /**
      * Creates a new client with the specified {@code failFast} behavior.
      */
-    FailFastClient(boolean failFast) {
+    protected FailFastClient(boolean failFast) {
         this.failFast = failFast;
     }
 
@@ -60,7 +60,9 @@ class FailFastClient implements Logging {
      *         if the client is configured to use the fail-fast approach and the supplied
      *         {@code value} is {@code null}
      */
-    <K, V> @NonNull V failOrDefault(@Nullable V value, @NonNull K key, @NonNull V defaultValue) {
+    protected <K, V> @NonNull V failOrDefault(@Nullable V value,
+                                              @NonNull K key,
+                                              @NonNull V defaultValue) {
         if (failFast && value == null) {
             throw newIllegalStateException(
                     "Response of type `%s` is not configured for the key `%s`.",

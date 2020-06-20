@@ -18,15 +18,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api;
+/**
+ * This package contains Google Chat API facade.
+ *
+ * <p>The usage of the Chat API itself it not straight-forward that's why it is recommended to
+ * use the {@link io.spine.chatbot.api.google.chat.GoogleChatClient facade} instead.
+ */
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.chatbot.api.google.chat;
 
-import io.spine.testing.UtilityClassTest;
-import org.junit.jupiter.api.DisplayName;
+import com.google.errorprone.annotations.CheckReturnValue;
 
-@DisplayName("ChatWidgets should")
-final class ChatWidgetsTest extends UtilityClassTest<ChatWidgets> {
-
-    ChatWidgetsTest() {
-        super(ChatWidgets.class);
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

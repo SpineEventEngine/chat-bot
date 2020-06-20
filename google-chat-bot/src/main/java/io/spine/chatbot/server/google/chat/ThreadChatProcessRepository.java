@@ -21,7 +21,7 @@
 package io.spine.chatbot.server.google.chat;
 
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
-import io.spine.chatbot.api.GoogleChatClient;
+import io.spine.chatbot.api.google.chat.GoogleChatClient;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.google.chat.ThreadId;

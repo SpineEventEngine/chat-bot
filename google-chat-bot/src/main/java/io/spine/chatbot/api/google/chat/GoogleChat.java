@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api;
+package io.spine.chatbot.api.google.chat;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -34,7 +34,7 @@ import io.spine.logging.Logging;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-import static io.spine.chatbot.api.BuildStateUpdates.buildStateMessage;
+import static io.spine.chatbot.api.google.chat.BuildStateUpdates.buildStateMessage;
 
 /**
  * Google Chat Hangouts API client.

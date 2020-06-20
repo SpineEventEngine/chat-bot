@@ -18,26 +18,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api;
+package io.spine.chatbot.api.google.chat;
 
-import com.google.api.services.chat.v1.model.Message;
-import io.spine.chatbot.github.repository.build.BuildState;
-import io.spine.chatbot.google.chat.thread.ThreadResource;
+import io.spine.testing.UtilityClassTest;
+import org.junit.jupiter.api.DisplayName;
 
-/**
- * Google Chat API client abstraction.
- *
- * <p>Abstracts out usage of the chat API by exposing only ready-to-use ChatBot-specific
- * methods.
- */
-public interface GoogleChatClient {
+@DisplayName("BuildStateUpdates should")
+final class BuildStateUpdatesTest extends UtilityClassTest<BuildStateUpdates> {
 
-    /**
-     * Sends {@link BuildState} status message to a related space and thread.
-     *
-     * <p>If the {@code thread} has no name specified the message is sent to a new thread.
-     *
-     * @return a sent message
-     */
-    Message sendBuildStateUpdate(BuildState buildState, ThreadResource thread);
+    BuildStateUpdatesTest() {
+        super(BuildStateUpdates.class);
+    }
 }

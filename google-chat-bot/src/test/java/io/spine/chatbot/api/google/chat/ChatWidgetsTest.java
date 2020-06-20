@@ -18,35 +18,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.google.chat;
+package io.spine.chatbot.api.google.chat;
 
-import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
-import io.spine.chatbot.api.google.chat.InMemoryGoogleChatClient;
-import io.spine.server.BoundedContextBuilder;
-import io.spine.testing.server.blackbox.ContextAwareTest;
-import org.junit.jupiter.api.AfterEach;
+import io.spine.testing.UtilityClassTest;
+import org.junit.jupiter.api.DisplayName;
 
-/**
- * An abstract test-base for Google Chat context entity tests.
- */
-class GoogleChatEntityTest extends ContextAwareTest {
+@DisplayName("ChatWidgets should")
+final class ChatWidgetsTest extends UtilityClassTest<ChatWidgets> {
 
-    final InMemoryGoogleChatClient googleChatClient = InMemoryGoogleChatClient.strictClient();
-
-    @Override
-    protected BoundedContextBuilder contextBuilder() {
-        return GoogleChatContext
-                .newBuilder()
-                .setGoogleChatClient(googleChatClient)
-                .build()
-                .contextBuilder();
-    }
-
-    @AfterEach
-    @OverridingMethodsMustInvokeSuper
-    @Override
-    protected void closeContext() {
-        super.closeContext();
-        googleChatClient.reset();
+    ChatWidgetsTest() {
+        super(ChatWidgets.class);
     }
 }
