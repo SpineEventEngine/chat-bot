@@ -33,9 +33,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class GitHubContext {
 
     /**
-     * The name of the Context.
+     * The name of the GitHub Context.
      */
-    static final String NAME = "GitHub";
+    static final String GIT_HUB_CONTEXT_NAME = "GitHub";
 
     private final BoundedContextBuilder contextBuilder;
 
@@ -52,7 +52,7 @@ public final class GitHubContext {
 
     private static BoundedContextBuilder configureContextBuilder(TravisClient travisClient) {
         return BoundedContext
-                .singleTenant(NAME)
+                .singleTenant(GIT_HUB_CONTEXT_NAME)
                 .add(OrganizationAggregate.class)
                 .add(RepositoryAggregate.class)
                 .add(new OrgReposRepository())

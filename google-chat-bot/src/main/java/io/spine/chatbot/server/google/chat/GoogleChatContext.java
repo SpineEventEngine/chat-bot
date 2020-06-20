@@ -32,8 +32,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class GoogleChatContext {
 
-    /** The name of the Context. **/
-    static final String NAME = "GoogleChat";
+    /** The name of the Google Chat Context. **/
+    static final String GOOGLE_CHAT_CONTEXT_NAME = "GoogleChat";
 
     private final BoundedContextBuilder contextBuilder;
 
@@ -54,7 +54,7 @@ public final class GoogleChatContext {
     private static BoundedContextBuilder
     configureContextBuilder(GoogleChatClient googleChatClient) {
         return BoundedContext
-                .singleTenant(NAME)
+                .singleTenant(GOOGLE_CHAT_CONTEXT_NAME)
                 .add(SpaceAggregate.class)
                 .add(new ThreadAggregateRepository())
                 .add(new ThreadChatProcessRepository(googleChatClient));

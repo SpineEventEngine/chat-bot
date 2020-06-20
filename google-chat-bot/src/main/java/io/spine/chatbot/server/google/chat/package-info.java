@@ -24,7 +24,7 @@
  * <p>This package is annotated with {@code BoundedContext} annotation to mark
  * entities of this package (and sub-packages if they existed) as parts of the context.
  */
-@BoundedContext(GoogleChatContext.NAME)
+@BoundedContext(GoogleChatContext.GOOGLE_CHAT_CONTEXT_NAME)
 @CheckReturnValue
 @ParametersAreNonnullByDefault
 package io.spine.chatbot.server.google.chat;
