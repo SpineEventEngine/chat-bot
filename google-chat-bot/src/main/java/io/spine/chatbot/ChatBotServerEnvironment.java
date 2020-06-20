@@ -22,10 +22,13 @@ package io.spine.chatbot;
 
 import com.google.cloud.datastore.DatastoreOptions;
 import io.spine.base.Environment;
-import io.spine.chatbot.delivery.DeliveryFactory;
+import io.spine.base.Production;
+import io.spine.base.Tests;
+import io.spine.chatbot.delivery.LocalDelivery;
 import io.spine.server.ServerEnvironment;
 import io.spine.server.storage.StorageFactory;
 import io.spine.server.storage.datastore.DatastoreStorageFactory;
+import io.spine.server.storage.memory.InMemoryStorageFactory;
 import io.spine.server.transport.memory.InMemoryTransportFactory;
 
 /**
@@ -38,8 +41,6 @@ import io.spine.server.transport.memory.InMemoryTransportFactory;
  *
  * <p>Configures the inbox delivery through the Datastore work registry while
  * in Production environment, otherwise uses local synchronous delivery.
- *
- * @see DeliveryFactory
  */
 final class ChatBotServerEnvironment {
 
@@ -54,13 +55,12 @@ final class ChatBotServerEnvironment {
      */
     static void initializeEnvironment() {
         var se = ServerEnvironment.instance();
-        var environment = Environment.instance();
         var storageFactory = dsStorageFactory();
-        var deliveryFactory = DeliveryFactory.instance(environment, storageFactory);
-        var delivery = deliveryFactory.delivery();
-        se.configureStorage(storageFactory);
-        se.configureTransport(InMemoryTransportFactory.newInstance());
-        se.configureDelivery(delivery);
+        se.use(InMemoryTransportFactory.newInstance(), Production.class);
+        se.use(LocalDelivery.instance, Production.class);
+        se.use(LocalDelivery.instance, Tests.class);
+        se.use(storageFactory, Production.class);
+        se.use(InMemoryStorageFactory.newInstance(), Tests.class);
     }
 
     private static DatastoreStorageFactory dsStorageFactory() {

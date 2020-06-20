@@ -32,22 +32,21 @@ import io.spine.server.storage.memory.InMemoryInboxStorage;
 /**
  * A {@link Delivery} factory that creates deliveries for local or test environments.
  */
-final class LocalDeliveryFactory implements DeliveryFactory {
+public final class LocalDelivery {
 
-    /** A singleton instance of the local delivery factory. **/
-    static final LocalDeliveryFactory instance = new LocalDeliveryFactory();
+    /** A singleton instance of the local delivery. **/
+    public static final Delivery instance = delivery();
 
     /**
      * Prevents instantiation of this class.
      */
-    private LocalDeliveryFactory() {
+    private LocalDelivery() {
     }
 
     /**
      * Creates a new instance of an in-memory local delivery.
      */
-    @Override
-    public Delivery delivery() {
+    private static Delivery delivery() {
         var delivery = Delivery
                 .newBuilder()
                 .setInboxStorage(singleTenantInboxStorage())

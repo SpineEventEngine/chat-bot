@@ -27,28 +27,20 @@ import io.spine.server.storage.datastore.DatastoreStorageFactory;
 import io.spine.server.storage.datastore.DsShardedWorkRegistry;
 
 /**
- * A {@link Delivery} factory that creates deliveries used in distributed cloud environments.
+ * A distributed cloud environment {@link Delivery}.
  *
- * <p>The distributed delivery is based on {@link DatastoreStorageFactory datastore}.
- *
- * <p>Uses {@link DsShardedWorkRegistry} as the {@link ShardedWorkRegistry}.
+ * <p>The delivery is based on the {@link DatastoreStorageFactory Datastore} and uses
+ * {@link DsShardedWorkRegistry} as the {@link ShardedWorkRegistry work registry}.
  */
-final class DsDeliveryFactory implements DeliveryFactory {
+final class DistributedDelivery {
 
     /** The number of shards used for the signals delivery. **/
     private static final int NUMBER_OF_SHARDS = 50;
 
-    private final DatastoreStorageFactory storageFactory;
-
-    private DsDeliveryFactory(DatastoreStorageFactory factory) {
-        storageFactory = factory;
-    }
-
     /**
-     * Creates a new instance of the delivery factory.
+     * Prevents instantiation of this utility class.
      */
-    static DeliveryFactory instance(DatastoreStorageFactory storageFactory) {
-        return new DsDeliveryFactory(storageFactory);
+    private DistributedDelivery() {
     }
 
     /**
@@ -56,8 +48,7 @@ final class DsDeliveryFactory implements DeliveryFactory {
      *
      * <p>Uses uniformly sharded strategy and single-tenant inbox storage.
      */
-    @Override
-    public Delivery delivery() {
+    public static Delivery instance(DatastoreStorageFactory storageFactory) {
         var workRegistry = new DsShardedWorkRegistry(storageFactory);
         var inboxStorage = storageFactory.createInboxStorage(false);
         var delivery = Delivery
