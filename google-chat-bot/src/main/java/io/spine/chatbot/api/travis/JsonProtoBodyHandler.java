@@ -28,6 +28,8 @@ import java.net.http.HttpResponse.BodySubscribers;
 import java.net.http.HttpResponse.ResponseInfo;
 import java.nio.charset.StandardCharsets;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * A {@link HttpResponse.BodyHandler BodyHandler} for JSON Protobuf messages.
  *
@@ -49,6 +51,7 @@ final class JsonProtoBodyHandler<T extends Message> implements HttpResponse.Body
      * Creates a body handler for a specified Protobuf message.
      */
     static <T extends Message> JsonProtoBodyHandler<T> jsonBodyHandler(Class<T> type) {
+        checkNotNull(type);
         return new JsonProtoBodyHandler<>(type);
     }
 
