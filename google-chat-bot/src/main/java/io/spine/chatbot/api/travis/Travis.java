@@ -20,17 +20,12 @@
 
 package io.spine.chatbot.api.travis;
 
-import com.google.protobuf.Message;
 import io.spine.chatbot.api.google.secret.Secrets;
-import io.spine.chatbot.travis.BuildsResponse;
-import io.spine.chatbot.travis.RepositoriesResponse;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.nio.charset.StandardCharsets;
 
 import static io.spine.chatbot.api.travis.JsonProtoBodyHandler.jsonBodyHandler;
 import static java.lang.String.format;
@@ -65,38 +60,27 @@ public final class Travis implements TravisClient {
     }
 
     @Override
-    public BuildsResponse queryBuildsFor(String repoSlug) {
-        var encodedSlug = URLEncoder.encode(repoSlug, StandardCharsets.UTF_8);
-        var repositoryBuildsQuery = "/repo/"
-                + encodedSlug
-                + "/builds?limit=1&branch.name=master&include=build.commit";
-        var result = queryForResponse(repositoryBuildsQuery, BuildsResponse.class);
+    public <T extends TravisResponse> T execute(Query<T> query) {
+        var result = execute(query.request(), query.responseType());
         return result;
     }
 
-    @Override
-    public RepositoriesResponse queryRepositoriesFor(String owner) {
-        var encodedOwner = URLEncoder.encode(owner, StandardCharsets.UTF_8);
-        var ownerRepositoriesQuery = "/owner/" + encodedOwner + "/repos";
-        var result = queryForResponse(ownerRepositoriesQuery, RepositoriesResponse.class);
-        return result;
-    }
-
-    private <T extends Message> T queryForResponse(String query, Class<T> responseType) {
-        var request = apiRequest(query, apiToken);
+    private <T extends TravisResponse> T execute(String request, Class<T> responseType) {
+        var apiRequest = apiRequest(request, apiToken);
         try {
-            var result = CLIENT.send(request, jsonBodyHandler(responseType));
+            var result = CLIENT.send(apiRequest, jsonBodyHandler(responseType));
             return result.body();
         } catch (IOException | InterruptedException e) {
-            var message = format("Unable to query data for response of type '%s' using query '%s'.",
-                                 responseType, query);
+            var message = format(
+                    "Unable to query data for response of type '%s' using request '%s'.",
+                    responseType, request);
             throw new RuntimeException(message, e);
         }
     }
 
-    private static HttpRequest apiRequest(String apiPath, String token) {
+    private static HttpRequest apiRequest(String request, String token) {
         return authorizedApiRequest(token)
-                .uri(URI.create(BASE_URL + apiPath))
+                .uri(URI.create(BASE_URL + request))
                 .build();
     }
 

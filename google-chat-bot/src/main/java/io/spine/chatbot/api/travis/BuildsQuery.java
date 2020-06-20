@@ -21,20 +21,26 @@
 package io.spine.chatbot.api.travis;
 
 /**
- * A Travis CI API client.
+ * Travis CI builds API query.
  *
- * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
+ * @see <a href="https://developer.travis-ci.com/resource/builds#find">Find build</a>
  */
-public interface TravisClient {
+public final class BuildsQuery extends Query<BuildsResponse> {
+
+    private BuildsQuery(String request) {
+        super(request, BuildsResponse.class);
+    }
 
     /**
-     * Executes supplied {@code query} and returns response of type {@code T}.
+     * Creates a repository builds query for a repository with the specified {@code slug}.
      *
-     * @param query
-     *         query to execute
-     * @param <T>
-     *         type of the query response
-     * @return query execution result
+     * <p>Requests only a single build from the {@code master} branch
      */
-    <T extends TravisResponse> T execute(Query<T> query);
+    public static BuildsQuery forRepo(String repoSlug) {
+        var encodedSlug = encode(repoSlug);
+        var request = "/repo/"
+                + encodedSlug
+                + "/builds?limit=1&branch.name=master&include=build.commit";
+        return new BuildsQuery(request);
+    }
 }

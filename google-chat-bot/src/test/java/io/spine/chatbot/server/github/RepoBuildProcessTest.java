@@ -20,6 +20,10 @@
 
 package io.spine.chatbot.server.github;
 
+import io.spine.chatbot.api.travis.Build;
+import io.spine.chatbot.api.travis.BuildsResponse;
+import io.spine.chatbot.api.travis.Commit;
+import io.spine.chatbot.api.travis.Repository;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
@@ -28,10 +32,6 @@ import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.github.repository.build.event.BuildStable;
-import io.spine.chatbot.travis.Build;
-import io.spine.chatbot.travis.BuildsResponse;
-import io.spine.chatbot.travis.Commit;
-import io.spine.chatbot.travis.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

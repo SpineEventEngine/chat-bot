@@ -20,21 +20,49 @@
 
 package io.spine.chatbot.api.travis;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
- * A Travis CI API client.
+ * A Travis CI API query.
  *
- * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
+ * @param <T>
+ *         type of the expected query execution response
  */
-public interface TravisClient {
+public class Query<T extends TravisResponse> {
+
+    private final Class<T> responseType;
+    private final String request;
 
     /**
-     * Executes supplied {@code query} and returns response of type {@code T}.
-     *
-     * @param query
-     *         query to execute
-     * @param <T>
-     *         type of the query response
-     * @return query execution result
+     * Creates a new API query with the specified {@code request}.
      */
-    <T extends TravisResponse> T execute(Query<T> query);
+    Query(String request, Class<T> responseType) {
+        this.request = checkNotNull(request);
+        this.responseType = checkNotNull(responseType);
+    }
+
+    /**
+     * Returns query REST request URL.
+     */
+    String request() {
+        return request;
+    }
+
+    /**
+     * Returns query response type.
+     */
+    Class<T> responseType() {
+        return responseType;
+    }
+
+    /**
+     * Encodes passed value using {@link URLEncoder} and standard
+     * {@link StandardCharsets#UTF_8 UTF_8} charset.
+     */
+    static String encode(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
 }

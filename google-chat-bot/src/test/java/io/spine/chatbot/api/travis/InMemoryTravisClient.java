@@ -21,21 +21,19 @@
 package io.spine.chatbot.api.travis;
 
 import io.spine.chatbot.api.FailFastClient;
-import io.spine.chatbot.travis.BuildsResponse;
-import io.spine.chatbot.travis.RepositoriesResponse;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.protobuf.Messages.defaultInstance;
 
 /**
  * An in-memory test-only implementation of the Travis CI API client.
  */
 public final class InMemoryTravisClient extends FailFastClient implements TravisClient {
 
-    private final Map<String, BuildsResponse> buildsResponses = new ConcurrentHashMap<>();
-    private final Map<String, RepositoriesResponse> repositoriesResponses = new ConcurrentHashMap<>();
+    private final Map<Query<?>, TravisResponse> responses = new ConcurrentHashMap<>();
 
     private InMemoryTravisClient(boolean failFast) {
         super(failFast);
@@ -56,19 +54,12 @@ public final class InMemoryTravisClient extends FailFastClient implements Travis
     }
 
     @Override
-    public BuildsResponse queryBuildsFor(String repoSlug) {
-        checkNotNull(repoSlug);
-        var stubbedValue = buildsResponses.get(repoSlug);
-        var result = failOrDefault(stubbedValue, repoSlug, BuildsResponse.getDefaultInstance());
-        return result;
-    }
-
-    @Override
-    public RepositoriesResponse queryRepositoriesFor(String owner) {
-        checkNotNull(owner);
-        var stubbedValue = repositoriesResponses.get(owner);
-        var result = failOrDefault(stubbedValue, owner, RepositoriesResponse.getDefaultInstance());
-        return result;
+    public <T extends TravisResponse> T execute(Query<T> query) {
+        checkNotNull(query);
+        var stubbedValue = responses.get(query);
+        var responseType = query.responseType();
+        var result = failOrDefault(stubbedValue, query, defaultInstance(responseType));
+        return responseType.cast(result);
     }
 
     /**
@@ -77,7 +68,7 @@ public final class InMemoryTravisClient extends FailFastClient implements Travis
     public void setBuildsFor(String repoSlug, BuildsResponse builds) {
         checkNotNull(repoSlug);
         checkNotNull(builds);
-        buildsResponses.put(repoSlug, builds);
+        responses.put(BuildsQuery.forRepo(repoSlug), builds);
     }
 
     /**
@@ -86,14 +77,13 @@ public final class InMemoryTravisClient extends FailFastClient implements Travis
     public void setRepositoriesFor(String owner, RepositoriesResponse repositories) {
         checkNotNull(owner);
         checkNotNull(repositories);
-        repositoriesResponses.put(owner, repositories);
+        responses.put(ReposQuery.forOwner(owner), repositories);
     }
 
     /**
      * Resets state of the configured responses.
      */
     public void reset() {
-        buildsResponses.clear();
-        repositoriesResponses.clear();
+        responses.clear();
     }
 }

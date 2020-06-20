@@ -18,32 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.delivery;
+package io.spine.chatbot.api.travis;
 
-import io.spine.base.Environment;
-import io.spine.server.delivery.Delivery;
-import io.spine.server.storage.datastore.DatastoreStorageFactory;
+import com.google.protobuf.Message;
 
 /**
- * A utility class for configuring {@link Delivery} for environments.
+ * Travis CI API response marker.
  */
-public interface DeliveryFactory {
+public interface TravisResponse extends Message {
 
-    /**
-     * Creates a new fully-configured delivery.
-     */
-    Delivery delivery();
-
-    /**
-     * Creates a new instance of a delivery factory for the specified {@code environment}
-     * and using the {@code storageFactory} if required.
-     */
-    static DeliveryFactory instance(Environment environment,
-                                    DatastoreStorageFactory storageFactory) {
-        if (environment.isProduction()) {
-            return DsDeliveryFactory.instance(storageFactory);
-        } else {
-            return LocalDeliveryFactory.instance;
-        }
-    }
 }

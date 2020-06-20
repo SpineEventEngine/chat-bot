@@ -24,13 +24,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.CommandMessage;
+import io.spine.chatbot.api.travis.ReposQuery;
+import io.spine.chatbot.api.travis.Repository;
 import io.spine.chatbot.api.travis.TravisClient;
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
-import io.spine.chatbot.travis.Repository;
 import io.spine.core.External;
 import io.spine.logging.Logging;
 import io.spine.server.command.Command;
@@ -80,7 +81,7 @@ final class SpineOrgInitProcess
         var spaceId = e.getId();
         var commands = ImmutableSet.<CommandMessage>builder();
         commands.add(registerOrgCommand(SPINE_ORGANIZATION, spaceId.getValue()));
-        travisClient.queryRepositoriesFor(SPINE_ORG)
+        travisClient.execute(ReposQuery.forOwner(SPINE_ORG))
                     .getRepositoriesList()
                     .stream()
                     .filter(repository -> WATCHED_REPOS.contains(repository.getName()))

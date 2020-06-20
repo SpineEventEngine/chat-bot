@@ -24,6 +24,9 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.Time;
+import io.spine.chatbot.api.travis.Build;
+import io.spine.chatbot.api.travis.BuildsQuery;
+import io.spine.chatbot.api.travis.Commit;
 import io.spine.chatbot.api.travis.TravisClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.BuildState;
@@ -34,8 +37,6 @@ import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.github.repository.build.event.BuildStable;
-import io.spine.chatbot.travis.Build;
-import io.spine.chatbot.travis.Commit;
 import io.spine.net.Urls;
 import io.spine.server.command.Assign;
 import io.spine.server.procman.ProcessManager;
@@ -81,7 +82,7 @@ final class RepoBuildProcess
      */
     @Assign
     EitherOf3<BuildFailed, BuildRecovered, BuildStable> handle(CheckRepositoryBuild c) {
-        var builds = travisClient.queryBuildsFor(id().getValue())
+        var builds = travisClient.execute(BuildsQuery.forRepo(id().getValue()))
                                  .getBuildsList();
         if (builds.isEmpty()) {
             //TODO:2020-06-19:yuri-sergiichuk: replace with `NoBuildsFound` rejection after migration

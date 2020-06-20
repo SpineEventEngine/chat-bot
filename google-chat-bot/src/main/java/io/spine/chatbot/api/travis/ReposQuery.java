@@ -21,20 +21,24 @@
 package io.spine.chatbot.api.travis;
 
 /**
- * A Travis CI API client.
+ * Travis CI repositories API query.
  *
- * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
+ * @see <a href="https://developer.travis-ci.com/resource/repositories#for_owner">
+ *         Repos for owner</a>
  */
-public interface TravisClient {
+public final class ReposQuery extends Query<RepositoriesResponse> {
+
+    private ReposQuery(String request) {
+        super(request, RepositoriesResponse.class);
+    }
 
     /**
-     * Executes supplied {@code query} and returns response of type {@code T}.
-     *
-     * @param query
-     *         query to execute
-     * @param <T>
-     *         type of the query response
-     * @return query execution result
+     * Creates a repository query for repositories of the specified {@code owner}
+     * (either a user or an organization).
      */
-    <T extends TravisResponse> T execute(Query<T> query);
+    public static ReposQuery forOwner(String owner) {
+        var encodedOwner = encode(owner);
+        var request = "/owner/" + encodedOwner + "/repos";
+        return new ReposQuery(request);
+    }
 }
