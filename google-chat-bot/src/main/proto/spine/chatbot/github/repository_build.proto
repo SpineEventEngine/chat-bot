@@ -59,6 +59,7 @@ enum BuildStateStatusChange {
     // The build has failed.
     //
     // It could be either a build configuration failure or the actual code build issue.
+    //
     FAILED = 1;
 
     // The build has recovered from the failed state.
@@ -102,11 +103,13 @@ message BuildState {
         // The build has failed.
         //
         // Denotes that the developer code could not be successfully built.
+        //
         FAILED = 5;
 
         // The build configuration has failed.
         //
         // Denotes that the build configuration or pre-build steps failed.
+        //
         ERRORED = 6;
 
         // The build is cancelled.
@@ -122,6 +125,7 @@ message BuildState {
     // The User or Organization that created the build.
     string created_by = 7;
 
+    // A git commit.
     message Commit {
 
         // Checksum the commit has in git and is identified by.

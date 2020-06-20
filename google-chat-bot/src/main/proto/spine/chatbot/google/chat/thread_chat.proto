@@ -33,7 +33,10 @@ option java_generate_equals_and_hash = true;
 import "spine/chatbot/google/chat/identifiers.proto";
 import "spine/chatbot/google/chat/thread.proto";
 
-// A thread in Google Chat room.
+// A thread chatting process.
+//
+// Acknowledges incoming events and publishes messages to a respective thread if needed.
+//
 message ThreadChat {
     option (entity).kind = PROCESS_MANAGER;
     option (entity).visibility = FULL;

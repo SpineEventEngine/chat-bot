@@ -44,6 +44,7 @@ message ThreadId {
     //
     // E.g. if the thread is denoted to the build status of a GitHub repository,
     // the GitHub repository slug could be used as the thread ID.
+    //
     string value = 1 [(required) = true];
 }
 

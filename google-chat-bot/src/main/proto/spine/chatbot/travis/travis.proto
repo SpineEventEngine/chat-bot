@@ -30,6 +30,10 @@ option java_outer_classname = "TravisCiProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
+// The owner of a resource.
+//
+// This will be either a user or an organization.
+//
 message Owner {
 
     // Value uniquely identifying the owner.
@@ -51,6 +55,7 @@ message Repository {
     // The repository's slug.
     //
     // Same as {repository.owner.name}/{repository.name}.
+    //
     string slug = 3;
 }
 
@@ -133,11 +138,13 @@ message Build {
 // A Travis `builds` API endpoint response.
 message BuildsResponse {
 
+    // Builds fetched by the API call.
     repeated Build builds = 1;
 }
 
 // A travis `repos` API endpoint response.
 message RepositoriesResponse {
 
+    // Repositories fetched by the API call.
     repeated Repository repositories = 1;
 }

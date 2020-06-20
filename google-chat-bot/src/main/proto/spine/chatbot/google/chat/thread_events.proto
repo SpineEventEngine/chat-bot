@@ -33,7 +33,7 @@ option java_generate_equals_and_hash = true;
 import "spine/chatbot/google/chat/identifiers.proto";
 import "spine/chatbot/google/chat/thread.proto";
 
-// Denotes that a message was created in the space.
+// A Google Chat thread initialized.
 message ThreadInitialized {
 
     ThreadId id = 1 [(required) = true];
@@ -45,7 +45,7 @@ message ThreadInitialized {
     SpaceId space_id = 3 [(required) = true];
 }
 
-// Denotes that a message was created in the space.
+// A message added to the thead..
 message MessageAdded {
 
     MessageId id = 1 [(required) = true];

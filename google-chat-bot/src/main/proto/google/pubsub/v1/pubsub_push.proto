@@ -2,9 +2,13 @@ syntax = "proto3";
 
 package google.pubsub.v1;
 
+import "spine/options.proto";
+
 option java_multiple_files = true;
 option java_outer_classname = "PubsubPushProto";
 option java_package = "com.google.pubsub.v1";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
 
 import "google/pubsub/v1/pubsub.proto";
 
@@ -12,9 +16,10 @@ import "google/pubsub/v1/pubsub.proto";
 message PubsubPushNotification {
 
     // Pubsub message.
-    PubsubMessage message = 1;
+    PubsubMessage message = 1 [(required) = true];
 
     // The name of the Pubsub subscription that pushed the current notification.
     // Format is `projects/{project}/subscriptions/{subscription}`.
-    string subscription = 2;
+    //
+    string subscription = 2 [(required) = true, (pattern).regex = "projects/.+/subscriptions/.+"];
 }

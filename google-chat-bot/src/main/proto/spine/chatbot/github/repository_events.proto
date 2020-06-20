@@ -34,7 +34,7 @@ import "spine/net/url.proto";
 
 import "spine/chatbot/github/identifiers.proto";
 
-// Denotes that a new repository is registered.
+// A repository is registered.
 message RepositoryRegistered {
 
     RepositoryId id = 1 [(required) = true];

@@ -34,7 +34,7 @@ import "spine/net/url.proto";
 
 import "spine/chatbot/github/identifiers.proto";
 
-// Registers a new repository in the system.
+// Register repository command.
 message RegisterRepository {
 
     RepositoryId id = 1 [(required) = true];

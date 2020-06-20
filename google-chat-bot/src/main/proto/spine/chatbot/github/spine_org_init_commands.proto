@@ -25,27 +25,19 @@ package spine.chatbot.github;
 import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io.chatbot";
-option java_package = "io.spine.chatbot.github.organization.init";
-option java_outer_classname = "OrganizationInitProto";
+option java_package = "io.spine.chatbot.github.organization.init.command";
+option java_outer_classname = "SpineOrgInitCommandsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/chatbot/github/identifiers.proto";
 
-// The initialization process of the default watched organization resources.
-//
-// Ensures that watched resources organization and its repositories are initialized
-// for a particular Chat Space.
-message OrganizationInit {
-    option (entity).kind = PROCESS_MANAGER;
-    option (entity).visibility = FULL;
+// Spine Event Engine organization initialization command.
+message InitSpineOrg {
 
-    // The ID of the organization for which the initialization is performed.
-    OrganizationId id = 1;
+    // ID of the Spine Event Engine organization.
+    OrganizationId id = 1 [(required) = true];
 
     // Name of the Google Chat space associated with the organization in form `spaces/<space_id>`.
-    string google_chat_space = 2;
-
-    // Determines whether the organization resources are already initialized.
-    bool is_initialized = 3;
+    string google_chat_space = 2 [(required) = true, (pattern).regex = "spaces/.+"];
 }

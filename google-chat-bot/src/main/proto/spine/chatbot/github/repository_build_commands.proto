@@ -33,7 +33,7 @@ option java_generate_equals_and_hash = true;
 
 import "spine/chatbot/github/identifiers.proto";
 
-// Requests a check of the repository CI build.
+// Check repository CI build state command.
 message CheckRepositoryBuild {
 
     // ID of the repository to perform a check for.

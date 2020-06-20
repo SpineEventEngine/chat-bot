@@ -43,5 +43,6 @@ message RepositoryId {
     // Slug of the repository.
     //
     // E.g. `SpineEventEngine/base`. The slug is used as a human-friendly unique identifier.
+    //
     string value = 1 [(required) = true];
 }

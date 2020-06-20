@@ -34,6 +34,7 @@ import "spine/net/url.proto";
 
 import "spine/chatbot/github/identifiers.proto";
 
+// An organization is registered.
 message OrganizationRegistered {
 
     OrganizationId id = 1 [(required) = true];

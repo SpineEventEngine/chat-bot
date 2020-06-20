@@ -32,6 +32,7 @@ option java_generate_equals_and_hash = true;
 
 import "spine/chatbot/google/chat/identifiers.proto";
 
+// Register Google Chat space command.
 message RegisterSpace {
 
     SpaceId id = 1 [(required) = true];
