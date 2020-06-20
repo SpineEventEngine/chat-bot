@@ -28,7 +28,7 @@ import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.annotation.MicronautTest;
-import io.spine.chatbot.api.InMemoryTravisClient;
+import io.spine.chatbot.api.travis.InMemoryTravisClient;
 import io.spine.chatbot.server.github.GitHubContext;
 import io.spine.chatbot.server.google.chat.GoogleChatContext;
 import io.spine.json.Json;

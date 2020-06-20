@@ -24,7 +24,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.CommandMessage;
-import io.spine.chatbot.api.TravisClient;
+import io.spine.chatbot.api.travis.TravisClient;
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.init.OrganizationInit;

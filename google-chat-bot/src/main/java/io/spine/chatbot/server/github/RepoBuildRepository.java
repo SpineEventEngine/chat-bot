@@ -20,7 +20,7 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.api.TravisClient;
+import io.spine.chatbot.api.travis.TravisClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.server.procman.ProcessManagerRepository;

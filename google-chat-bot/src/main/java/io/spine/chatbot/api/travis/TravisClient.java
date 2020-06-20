@@ -18,35 +18,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.chatbot.api.travis;
 
-import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
-import io.spine.chatbot.api.travis.InMemoryTravisClient;
-import io.spine.server.BoundedContextBuilder;
-import io.spine.testing.server.blackbox.ContextAwareTest;
-import org.junit.jupiter.api.AfterEach;
+import io.spine.chatbot.travis.BuildsResponse;
+import io.spine.chatbot.travis.RepositoriesResponse;
 
 /**
- * An abstract test-base for GitHub context entity tests.
+ * A Travis CI API client.
+ *
+ * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
  */
-class GitHubEntityTest extends ContextAwareTest {
+public interface TravisClient {
 
-    final InMemoryTravisClient travisClient = InMemoryTravisClient.strictClient();
+    /**
+     * Queries Travis CI build statuses for a repository determined by the supplied repository slug.
+     */
+    BuildsResponse queryBuildsFor(String repoSlug);
 
-    @Override
-    protected BoundedContextBuilder contextBuilder() {
-        return GitHubContext
-                .newBuilder()
-                .setTravis(travisClient)
-                .build()
-                .contextBuilder();
-    }
-
-    @AfterEach
-    @OverridingMethodsMustInvokeSuper
-    @Override
-    protected void closeContext() {
-        super.closeContext();
-        travisClient.reset();
-    }
+    /**
+     * Queries Travis CI repositories information for a specified {@code owner}.
+     */
+    RepositoriesResponse queryRepositoriesFor(String owner);
 }

@@ -18,8 +18,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api;
+package io.spine.chatbot.api.travis;
 
+import io.spine.chatbot.api.FailFastClient;
 import io.spine.chatbot.travis.BuildsResponse;
 import io.spine.chatbot.travis.RepositoriesResponse;
 

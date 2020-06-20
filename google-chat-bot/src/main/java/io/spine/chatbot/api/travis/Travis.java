@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api;
+package io.spine.chatbot.api.travis;
 
 import com.google.protobuf.Message;
 import io.spine.chatbot.api.google.secret.Secrets;
@@ -32,7 +32,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.nio.charset.StandardCharsets;
 
-import static io.spine.chatbot.api.JsonProtoBodyHandler.jsonBodyHandler;
+import static io.spine.chatbot.api.travis.JsonProtoBodyHandler.jsonBodyHandler;
 import static java.lang.String.format;
 
 /**
@@ -60,7 +60,7 @@ public final class Travis implements TravisClient {
     /**
      * Creates a new Travis client with the default secure Travis token.
      */
-    public static TravisClient defaultTravisClient() {
+    public static TravisClient instance() {
         return new Travis(Secrets.travisToken());
     }
 

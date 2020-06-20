@@ -18,25 +18,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api;
-
-import io.spine.chatbot.travis.BuildsResponse;
-import io.spine.chatbot.travis.RepositoriesResponse;
-
 /**
- * A Travis CI API client.
+ * This package contains Travis CI v3 API client.
+ *
+ * <p>The travis itself does not provide an idiomatic Java client, so the API contains only
+ * specific required functionality.
  *
  * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
  */
-public interface TravisClient {
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.chatbot.api.travis;
 
-    /**
-     * Queries Travis CI build statuses for a repository determined by the supplied repository slug.
-     */
-    BuildsResponse queryBuildsFor(String repoSlug);
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    /**
-     * Queries Travis CI repositories information for a specified {@code owner}.
-     */
-    RepositoriesResponse queryRepositoriesFor(String owner);
-}
+import javax.annotation.ParametersAreNonnullByDefault;

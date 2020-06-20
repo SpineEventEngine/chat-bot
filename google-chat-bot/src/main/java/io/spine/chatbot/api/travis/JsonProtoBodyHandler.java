@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api;
+package io.spine.chatbot.api.travis;
 
 import com.google.protobuf.Message;
 import io.spine.json.Json;
@@ -28,7 +28,15 @@ import java.net.http.HttpResponse.BodySubscribers;
 import java.net.http.HttpResponse.ResponseInfo;
 import java.nio.charset.StandardCharsets;
 
-/** A {@link HttpResponse.BodyHandler BodyHandler} for JSON Protobuf messages. **/
+/**
+ * A {@link HttpResponse.BodyHandler BodyHandler} for JSON Protobuf messages.
+ *
+ * <p>The handler converts input JSON strings into the Protobuf messages relying on the
+ * Spine {@link Json} conversion functionality.
+ *
+ * @param <T>
+ *         the Protobuf message supplied in the response body
+ */
 final class JsonProtoBodyHandler<T extends Message> implements HttpResponse.BodyHandler<T> {
 
     private final Class<T> type;
@@ -37,7 +45,9 @@ final class JsonProtoBodyHandler<T extends Message> implements HttpResponse.Body
         this.type = type;
     }
 
-    /** Creates a body handler for a specified type. **/
+    /**
+     * Creates a body handler for a specified Protobuf message.
+     */
     static <T extends Message> JsonProtoBodyHandler<T> jsonBodyHandler(Class<T> type) {
         return new JsonProtoBodyHandler<>(type);
     }
