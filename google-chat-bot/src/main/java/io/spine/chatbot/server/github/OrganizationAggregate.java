@@ -29,10 +29,19 @@ import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 
+/**
+ * A GitHub organization.
+ *
+ * <p>The ChatBot watches organization resources and the organization is the root entity
+ * the resources are organized around.
+ */
 final class OrganizationAggregate
         extends Aggregate<OrganizationId, Organization, Organization.Builder>
         implements Logging {
 
+    /**
+     * Registers a new organization.
+     */
     @Assign
     OrganizationRegistered handle(RegisterOrganization c) {
         _info().log("Registering organization `%s`.", idAsString());

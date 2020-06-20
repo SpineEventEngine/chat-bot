@@ -31,6 +31,9 @@ import io.spine.server.route.EventRouting;
 import static io.spine.chatbot.server.github.OrganizationInitProcess.SPINE_ORGANIZATION;
 import static io.spine.server.route.EventRoute.withId;
 
+/**
+ * The repository for Spine Event Engine initialization process.
+ */
 final class OrganizationInitRepository
         extends ProcessManagerRepository<OrganizationId, OrganizationInitProcess, OrganizationInit> {
 

@@ -85,7 +85,7 @@ final class IncomingEventsController implements Logging {
                 .setThreaded(isThreaded(space))
                 .setId(Identifiers.spaceIdOf(space.getName()))
                 .vBuild();
-        client.postSyncCommand(registerSpace, SpaceRegistered.class);
+        client.post(registerSpace, SpaceRegistered.class);
     }
 
     private static boolean isThreaded(Space space) {

@@ -43,11 +43,15 @@ import io.spine.server.transport.memory.InMemoryTransportFactory;
  */
 final class ChatBotServerEnvironment {
 
-    /** Prevents instantiation of this utility class. **/
+    /**
+     * Prevents instantiation of this utility class.
+     */
     private ChatBotServerEnvironment() {
     }
 
-    /** Initializes {@link ServerEnvironment} for ChatBot. **/
+    /**
+     * Initializes {@link ServerEnvironment} for ChatBot.
+     */
     static void initializeEnvironment() {
         var se = ServerEnvironment.instance();
         var environment = Environment.instance();

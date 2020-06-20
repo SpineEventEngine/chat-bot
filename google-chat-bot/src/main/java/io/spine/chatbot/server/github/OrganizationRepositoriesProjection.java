@@ -27,14 +27,25 @@ import io.spine.chatbot.github.repository.event.RepositoryRegistered;
 import io.spine.core.Subscribe;
 import io.spine.server.projection.Projection;
 
+/**
+ * Organization repositories projection.
+ *
+ * <p>Holds IDs of all registered repositories in the organization.
+ */
 final class OrganizationRepositoriesProjection
         extends Projection<OrganizationId, OrganizationRepositories, OrganizationRepositories.Builder> {
 
+    /**
+     * Registers the organization to watch the repositories for.
+     */
     @Subscribe
     void on(OrganizationRegistered e) {
         builder().setId(e.getId());
     }
 
+    /**
+     * Registers the organization repository.
+     */
     @Subscribe
     void on(RepositoryRegistered e) {
         builder().addRepositories(e.getId());

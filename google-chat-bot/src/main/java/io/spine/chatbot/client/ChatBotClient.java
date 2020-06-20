@@ -29,6 +29,7 @@ import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.OrganizationRepositories;
 import io.spine.client.Client;
 import io.spine.client.ClientRequest;
+import io.spine.client.CommandRequest;
 import io.spine.client.Subscription;
 
 import java.util.Collection;
@@ -49,7 +50,9 @@ public final class ChatBotClient {
         this.client = client;
     }
 
-    /** Creates a new in-process client configured for the specified server. **/
+    /**
+     * Creates a new in-process client configured for the specified server.
+     */
     public static ChatBotClient inProcessClient(String serverName) {
         Client client = Client
                 .inProcess(serverName)
@@ -57,12 +60,19 @@ public final class ChatBotClient {
         return new ChatBotClient(client);
     }
 
-    /** Returns Spine client guest request. **/
+    /**
+     * Returns Spine client guest request.
+     */
     public ClientRequest asGuest() {
         return client.asGuest();
     }
 
-    /** Cancels the passed subscription. **/
+    /**
+     * Cancels the passed subscription.
+     *
+     * @see io.spine.client.Subscriptions#cancel(Subscription)
+     * @see CommandRequest#post()
+     */
     @CanIgnoreReturnValue
     public boolean cancelSubscription(Subscription subscription) {
         return client.subscriptions()
@@ -94,12 +104,12 @@ public final class ChatBotClient {
      * Posts a command and waits synchronously till the expected outcome event is published.
      */
     public <E extends EventMessage> void
-    postSyncCommand(CommandMessage command, Class<E> expectedOutcome) {
-        postSyncCommand(command, expectedOutcome, 1);
+    post(CommandMessage command, Class<E> expectedOutcome) {
+        post(command, expectedOutcome, 1);
     }
 
     private <E extends EventMessage> void
-    postSyncCommand(CommandMessage command, Class<E> expectedOutcome, int expectedEvents) {
+    post(CommandMessage command, Class<E> expectedOutcome, int expectedEvents) {
         var latch = new CountDownLatch(expectedEvents);
         var subscriptions = client
                 .asGuest()

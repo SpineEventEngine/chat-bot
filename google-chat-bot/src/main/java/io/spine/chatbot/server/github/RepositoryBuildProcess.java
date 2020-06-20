@@ -49,6 +49,23 @@ import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.ST
 import static io.spine.net.Urls.travisBuildUrlFor;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
+/**
+ * A repository build process.
+ *
+ * <p>Performs repository build checks and acknowledges the state of the repository builds.
+ * As a result, emits build status events such as:
+ *
+ * <ul>
+ *     <li>{@link BuildFailed} — whenever the build is failed;
+ *     <li>{@link BuildRecovered} — whenever the build state changes from {@code failed}
+ *     to {@code passing}.
+ *     <li>{@link BuildStable} — whenever the build state is {@code passing} and was
+ *     {@code passing} previously.
+ * </ul>
+ *
+ * <p>The {@code cancelled}, {@code failed} and {@code errored} statuses are considered
+ * {@link #FAILED_STATUSES failed statuses}.
+ */
 final class RepositoryBuildProcess
         extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder> {
 
@@ -59,6 +76,9 @@ final class RepositoryBuildProcess
     @LazyInit
     private @MonotonicNonNull TravisClient travisClient;
 
+    /**
+     * Checks the repository build state and propagates the respective events.
+     */
     @Assign
     EitherOf3<BuildFailed, BuildRecovered, BuildStable> handle(CheckRepositoryBuild c) {
         var builds = travisClient.queryBuildsFor(id().getValue())

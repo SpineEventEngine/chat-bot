@@ -45,17 +45,26 @@ public final class Application {
 
     static final String SERVER_NAME = "ChatBotServer";
 
-    /** Prevents direct instantiation. **/
+    /**
+     * Prevents direct instantiation.
+     */
     private Application() {
     }
 
-    /** Starts the application. **/
+    /**
+     * Starts the application.
+     *
+     * <p>Performs bounded contexts initialization, starts Spine {@link Server} and runs
+     * the {@link Micronaut}.
+     */
     public static void main(String[] args) {
         initializeSpine();
         Micronaut.run(Application.class, args);
     }
 
-    /** Initializes Spine server environment and starts Spine {@link Server}. **/
+    /**
+     * Initializes Spine server environment and starts Spine {@link Server}.
+     */
     private static void initializeSpine() {
         ChatBotServerEnvironment.initializeEnvironment();
         var gitHubContext = GitHubContext
@@ -67,7 +76,9 @@ public final class Application {
         startSpineServer(gitHubContext, googleChatContext);
     }
 
-    /** Starts Spine in-process server. **/
+    /**
+     * Starts Spine in-process server.
+     */
     @VisibleForTesting
     static void startSpineServer(GitHubContext gitHubContext,
                                  GoogleChatContext googleChatContext) {

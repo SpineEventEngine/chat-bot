@@ -37,17 +37,20 @@ public final class GoogleChatContext {
 
     private final BoundedContextBuilder contextBuilder;
 
-    /** Prevents instantiation of this utility class. **/
     private GoogleChatContext(GoogleChatClient googleChatClient) {
         this.contextBuilder = configureContextBuilder(googleChatClient);
     }
 
-    /** Returns the context builder associated with the Google Chat context. **/
+    /**
+     * Returns the context builder associated with the Google Chat context.
+     */
     public BoundedContextBuilder contextBuilder() {
         return this.contextBuilder;
     }
 
-    /** Creates a new instance of the Google Chat context builder. **/
+    /**
+     * Creates a new instance of the Google Chat context builder.
+     */
     private static BoundedContextBuilder
     configureContextBuilder(GoogleChatClient googleChatClient) {
         return BoundedContext
@@ -57,20 +60,29 @@ public final class GoogleChatContext {
                 .add(new ThreadChatProcessRepository(googleChatClient));
     }
 
-    /** Creates a new builder of the Google Chat context. **/
+    /**
+     * Creates a new builder of the Google Chat context.
+     */
     public static Builder newBuilder() {
         return new Builder();
     }
 
-    /** A Builder for configuring Google Chat context. **/
+    /**
+     * A Builder for configuring Google Chat context.
+     */
     public static final class Builder {
 
         private GoogleChatClient googleChatClient;
 
+        /**
+         * Prevents direct instantiation.
+         */
         private Builder() {
         }
 
-        /** Sets Google Chat client to be used within the context. **/
+        /**
+         * Sets Google Chat client to be used within the context.
+         */
         public Builder setGoogleChatClient(GoogleChatClient googleChatClient) {
             checkNotNull(googleChatClient);
             this.googleChatClient = googleChatClient;

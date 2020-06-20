@@ -31,11 +31,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class Identifiers {
 
-    /** Prevents instantiation of this utility class. **/
+    /**
+     * Prevents instantiation of this utility class.
+     */
     private Identifiers() {
     }
 
-    /** Creates a new {@link ThreadId} out of the specified {@code value}. **/
+    /**
+     * Creates a new {@link ThreadId} out of the specified {@code value}.
+     */
     public static ThreadId threadIdOf(String value) {
         checkNotNull(value);
         return ThreadId
@@ -44,7 +48,9 @@ public final class Identifiers {
                 .vBuild();
     }
 
-    /** Creates a new {@link SpaceId} out of the specified {@code value}. **/
+    /**
+     * Creates a new {@link SpaceId} out of the specified {@code value}.
+     */
     public static SpaceId spaceIdOf(String value) {
         checkNotNull(value);
         return SpaceId
@@ -53,7 +59,9 @@ public final class Identifiers {
                 .vBuild();
     }
 
-    /** Creates a new {@link MessageId} out of the specified {@code value}. **/
+    /**
+     * Creates a new {@link MessageId} out of the specified {@code value}.
+     */
     public static MessageId messageIdOf(String value) {
         checkNotNull(value);
         return MessageId

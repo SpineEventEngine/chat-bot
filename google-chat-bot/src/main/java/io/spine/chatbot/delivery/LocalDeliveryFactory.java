@@ -37,7 +37,9 @@ final class LocalDeliveryFactory implements DeliveryFactory {
     /** A singleton instance of the local delivery factory. **/
     static final LocalDeliveryFactory instance = new LocalDeliveryFactory();
 
-    /** Prevents instantiation of this class. **/
+    /**
+     * Prevents instantiation of this class.
+     */
     private LocalDeliveryFactory() {
     }
 

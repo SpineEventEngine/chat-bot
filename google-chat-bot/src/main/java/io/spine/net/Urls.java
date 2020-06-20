@@ -37,14 +37,18 @@ public final class Urls {
     private Urls() {
     }
 
-    /** Creates a new {@link Url} out of supplied spec. **/
+    /**
+     * Creates a new {@link Url} out of supplied spec.
+     */
     public static Url urlOfSpec(String spec) {
         return Url.newBuilder()
                   .setSpec(spec)
                   .vBuild();
     }
 
-    /** Creates a new Travis CI build URL. **/
+    /**
+     * Creates a new Travis CI build URL.
+     */
     public static Url travisBuildUrlFor(String repoSlug, long buildId) {
         checkNotNull(repoSlug);
         var spec = format("%s/%s/builds/%d",
@@ -52,7 +56,9 @@ public final class Urls {
         return urlOfSpec(spec);
     }
 
-    /** Creates a new Travis CI repository URL. **/
+    /**
+     * Creates a new Travis CI repository URL.
+     */
     public static Url travisRepoUrlFor(String repoSlug) {
         checkNotNull(repoSlug);
         var spec = format("%s/%s",
@@ -60,7 +66,9 @@ public final class Urls {
         return urlOfSpec(spec);
     }
 
-    /** Creates a new GitHub repository URL. **/
+    /**
+     * Creates a new GitHub repository URL.
+     */
     public static Url githubRepoUrlFor(String repoSlug) {
         checkNotNull(repoSlug);
         var spec = format("%s/%s", GITHUB, repoSlug);

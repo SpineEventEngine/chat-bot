@@ -29,10 +29,18 @@ import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 
+/**
+ * A GitHub repository.
+ *
+ * <p>The ChatBot watches for the repository build status.
+ */
 final class RepositoryAggregate
         extends Aggregate<RepositoryId, Repository, Repository.Builder>
         implements Logging {
 
+    /**
+     * Registers the repository.
+     */
     @Assign
     RepositoryRegistered handle(RegisterRepository c) {
         _info().log("Registering repository `%s`.", idAsString());

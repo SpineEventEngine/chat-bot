@@ -31,6 +31,9 @@ import static io.spine.protobuf.Messages.isNotDefault;
 import static io.spine.server.route.EventRoute.noTargets;
 import static io.spine.server.route.EventRoute.withId;
 
+/**
+ * The repository for {@link OrganizationRepositories}.
+ */
 final class OrganizationRepositoriesRepository
         extends ProjectionRepository<OrganizationId,
         OrganizationRepositoriesProjection,

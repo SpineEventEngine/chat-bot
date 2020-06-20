@@ -43,6 +43,12 @@ import static io.spine.net.Urls.githubRepoUrlFor;
 import static io.spine.net.Urls.travisRepoUrlFor;
 import static io.spine.net.Urls.urlOfSpec;
 
+/**
+ * Spine Event Engine organization initialization process.
+ *
+ * <p>Registers Spine organization and the watched {@link #WATCHED_REPOS repositories} upon adding
+ * the ChatBot to the space.
+ */
 final class OrganizationInitProcess
         extends ProcessManager<OrganizationId, OrganizationInit, OrganizationInit.Builder>
         implements Logging {
@@ -57,6 +63,13 @@ final class OrganizationInitProcess
     @LazyInit
     private @MonotonicNonNull TravisClient travisClient;
 
+    /**
+     * Registers {@link #SPINE_ORGANIZATION Spine} organization and watched resources that are
+     * currently available in the Travis CI.
+     *
+     * <p>If a particular repository is not available in Travis, it is then skipped
+     * and not registered.
+     */
     @Command
     Iterable<CommandMessage> on(@External SpaceRegistered e) {
         if (state().getIsInitialized()) {
@@ -64,7 +77,7 @@ final class OrganizationInitProcess
         }
         var spaceId = e.getId();
         var commands = ImmutableSet.<CommandMessage>builder();
-        commands.add(registerOrganizationCommand(SPINE_ORGANIZATION, spaceId.getValue()));
+        commands.add(registerOrgCommand(SPINE_ORGANIZATION, spaceId.getValue()));
         travisClient.queryRepositoriesFor(SPINE_ORG)
                     .getRepositoriesList()
                     .stream()
@@ -76,21 +89,19 @@ final class OrganizationInitProcess
         return commands.build();
     }
 
-    private static RegisterRepository registerRepoCommand(Repository repository,
-                                                          OrganizationId orgId) {
-        var slug = repository.getSlug();
+    private static RegisterRepository registerRepoCommand(Repository repo, OrganizationId orgId) {
+        var slug = repo.getSlug();
         return RegisterRepository
                 .newBuilder()
                 .setOrganization(orgId)
                 .setGithubUrl(githubRepoUrlFor(slug))
                 .setId(repositoryIdOf(slug))
-                .setName(repository.getName())
+                .setName(repo.getName())
                 .setTravisCiUrl(travisRepoUrlFor(slug))
                 .vBuild();
     }
 
-    private RegisterOrganization registerOrganizationCommand(OrganizationId spineOrgId,
-                                                             String spaceName) {
+    private RegisterOrganization registerOrgCommand(OrganizationId spineOrgId, String spaceName) {
         _info().log("Registering `Spine Event Engine` organization.");
         return RegisterOrganization
                 .newBuilder()

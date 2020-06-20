@@ -28,11 +28,15 @@ import io.spine.chatbot.github.RepositoryId;
  */
 public final class Identifiers {
 
-    /** Prevents instantiation of this utility class. **/
+    /**
+     * Prevents instantiation of this utility class.
+     */
     private Identifiers() {
     }
 
-    /** Creates a new {@link OrganizationId} out of the specified {@code name}. **/
+    /**
+     * Creates a new {@link OrganizationId} out of the specified {@code name}.
+     */
     public static OrganizationId organizationIdOf(String name) {
         return OrganizationId
                 .newBuilder()
@@ -40,7 +44,9 @@ public final class Identifiers {
                 .vBuild();
     }
 
-    /** Creates a new {@link RepositoryId} out of the specified {@code slug}. **/
+    /**
+     * Creates a new {@link RepositoryId} out of the specified {@code slug}.
+     */
     public static RepositoryId repositoryIdOf(String slug) {
         return RepositoryId
                 .newBuilder()

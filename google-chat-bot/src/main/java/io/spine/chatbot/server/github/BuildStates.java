@@ -31,11 +31,15 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
  */
 final class BuildStates {
 
-    /** Prevents instantiation of this utility class. **/
+    /**
+     * Prevents instantiation of this utility class.
+     */
     private BuildStates() {
     }
 
-    /** Creates an instance of the build state of out its string representation. */
+    /**
+     * Creates an instance of the build state of out its string representation.
+     */
     static BuildState.State buildStateFrom(String state) {
         checkNotNull(state);
         for (BuildState.State buildState : BuildState.State.values()) {

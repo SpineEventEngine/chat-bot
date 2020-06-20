@@ -39,12 +39,13 @@ public final class GitHubContext {
 
     private final BoundedContextBuilder contextBuilder;
 
-    /** Prevents instantiation of this utility class. **/
     private GitHubContext(TravisClient travisClient) {
         this.contextBuilder = configureContextBuilder(travisClient);
     }
 
-    /** Returns the context builder associated with the GitHub context. **/
+    /**
+     * Returns the context builder associated with the GitHub context.
+     */
     public BoundedContextBuilder contextBuilder() {
         return this.contextBuilder;
     }
@@ -59,12 +60,16 @@ public final class GitHubContext {
                 .add(new RepositoryBuildRepository(travisClient));
     }
 
-    /** Creates a new builder of the GitHub context. **/
+    /**
+     * Creates a new builder of the GitHub context.
+     */
     public static Builder newBuilder() {
         return new Builder();
     }
 
-    /** A Builder for configuring GitHub context. **/
+    /**
+     * A Builder for configuring GitHub context.
+     */
     public static final class Builder {
 
         private TravisClient travisClient;
@@ -72,7 +77,9 @@ public final class GitHubContext {
         private Builder() {
         }
 
-        /** Sets Travis CI client to be used within the context. **/
+        /**
+         * Sets Travis CI client to be used within the context.
+         */
         public Builder setTravis(TravisClient travisClient) {
             checkNotNull(travisClient);
             this.travisClient = travisClient;

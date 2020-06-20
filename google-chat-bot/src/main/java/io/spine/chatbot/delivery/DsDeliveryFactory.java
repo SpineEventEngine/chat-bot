@@ -44,7 +44,9 @@ final class DsDeliveryFactory implements DeliveryFactory {
         storageFactory = factory;
     }
 
-    /** Creates a new instance of the delivery factory. **/
+    /**
+     * Creates a new instance of the delivery factory.
+     */
     static DeliveryFactory instance(DatastoreStorageFactory storageFactory) {
         return new DsDeliveryFactory(storageFactory);
     }

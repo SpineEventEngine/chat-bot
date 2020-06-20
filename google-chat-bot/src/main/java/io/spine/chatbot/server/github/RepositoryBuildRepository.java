@@ -25,6 +25,9 @@ import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.server.procman.ProcessManagerRepository;
 
+/**
+ * The repository for {@link RepositoryBuildProcess}es.
+ */
 final class RepositoryBuildRepository
         extends ProcessManagerRepository<RepositoryId, RepositoryBuildProcess, RepositoryBuild> {
 
