@@ -53,7 +53,7 @@ public final class GoogleChat implements GoogleChatClient, Logging {
     }
 
     /**
-     * Creates default Google Chat client.
+     * Creates Google Chat client.
      */
     public static GoogleChatClient instance() {
         return new GoogleChat(hangoutsChat());
