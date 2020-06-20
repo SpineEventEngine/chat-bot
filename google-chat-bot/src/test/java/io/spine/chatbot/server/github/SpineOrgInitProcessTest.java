@@ -31,10 +31,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.OrganizationInitProcess.SPINE_ORGANIZATION;
+import static io.spine.chatbot.server.github.SpineOrgInitProcess.SPINE_ORGANIZATION;
 
-@DisplayName("OrganizationInitProcess should")
-final class OrganizationInitProcessTest extends GitHubEntityTest {
+@DisplayName("SpineOrgInitProcess should")
+final class SpineOrgInitProcessTest extends GitHubEntityTest {
 
     @Nested
     @DisplayName("perform initialization of watched spine resources")

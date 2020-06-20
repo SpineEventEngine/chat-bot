@@ -49,7 +49,7 @@ import static io.spine.net.Urls.urlOfSpec;
  * <p>Registers Spine organization and the watched {@link #WATCHED_REPOS repositories} upon adding
  * the ChatBot to the space.
  */
-final class OrganizationInitProcess
+final class SpineOrgInitProcess
         extends ProcessManager<OrganizationId, OrganizationInit, OrganizationInit.Builder>
         implements Logging {
 
@@ -58,6 +58,8 @@ final class OrganizationInitProcess
     private static final ImmutableList<String> WATCHED_REPOS = ImmutableList.of(
             "base", "time", "core-java", "web", "gcloud-java", "bootstrap", "money", "jdbc-storage"
     );
+
+    /** The initialization process ID. **/
     static final OrganizationId SPINE_ORGANIZATION = organizationIdOf(SPINE_ORG);
 
     @LazyInit
@@ -72,7 +74,7 @@ final class OrganizationInitProcess
      */
     @Command
     Iterable<CommandMessage> on(@External SpaceRegistered e) {
-        if (state().getIsInitialized()) {
+        if (state().isInitialized()) {
             return ImmutableSet.of();
         }
         var spaceId = e.getId();
@@ -85,7 +87,7 @@ final class OrganizationInitProcess
                     .map(repository -> registerRepoCommand(repository, SPINE_ORGANIZATION))
                     .forEach(commands::add);
         builder().setGoogleChatSpace(spaceId.getValue())
-                 .setIsInitialized(true);
+                 .setInitialized(true);
         return commands.build();
     }
 

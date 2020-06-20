@@ -28,18 +28,18 @@ import io.spine.chatbot.google.chat.event.SpaceRegistered;
 import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.server.route.EventRouting;
 
-import static io.spine.chatbot.server.github.OrganizationInitProcess.SPINE_ORGANIZATION;
+import static io.spine.chatbot.server.github.SpineOrgInitProcess.SPINE_ORGANIZATION;
 import static io.spine.server.route.EventRoute.withId;
 
 /**
- * The repository for Spine Event Engine initialization process.
+ * The repository for {@link SpineOrgInitProcess}.
  */
-final class OrganizationInitRepository
-        extends ProcessManagerRepository<OrganizationId, OrganizationInitProcess, OrganizationInit> {
+final class SpineOrgInitRepository
+        extends ProcessManagerRepository<OrganizationId, SpineOrgInitProcess, OrganizationInit> {
 
     private final TravisClient travisClient;
 
-    OrganizationInitRepository(TravisClient travisClient) {
+    SpineOrgInitRepository(TravisClient travisClient) {
         this.travisClient = travisClient;
     }
 
@@ -51,7 +51,7 @@ final class OrganizationInitRepository
     }
 
     @Override
-    protected void configure(OrganizationInitProcess processManager) {
+    protected void configure(SpineOrgInitProcess processManager) {
         processManager.setTravisClient(travisClient);
     }
 }

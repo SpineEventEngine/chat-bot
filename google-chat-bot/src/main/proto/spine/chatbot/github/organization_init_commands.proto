@@ -26,16 +26,16 @@ import "spine/options.proto";
 
 option (type_url_prefix) = "type.spine.io.chatbot";
 option java_package = "io.spine.chatbot.github.organization.init.command";
-option java_outer_classname = "SpineOrgInitCommandsProto";
+option java_outer_classname = "OrganizationInitCommandsProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/chatbot/github/identifiers.proto";
 
-// Spine Event Engine organization initialization command.
-message InitSpineOrg {
+// Initialize watched organization resources command.
+message InitializeOrganization {
 
-    // ID of the Spine Event Engine organization.
+    // ID of the organization to perform initialization for.
     OrganizationId id = 1 [(required) = true];
 
     // Name of the Google Chat space associated with the organization in form `spaces/<space_id>`.
