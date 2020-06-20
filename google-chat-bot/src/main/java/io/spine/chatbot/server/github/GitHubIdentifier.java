@@ -26,12 +26,12 @@ import io.spine.chatbot.github.RepositoryId;
 /**
  * A utility for working with {@link GitHubContext} identifiers.
  */
-public final class Identifiers {
+public final class GitHubIdentifier {
 
     /**
      * Prevents instantiation of this utility class.
      */
-    private Identifiers() {
+    private GitHubIdentifier() {
     }
 
     /**

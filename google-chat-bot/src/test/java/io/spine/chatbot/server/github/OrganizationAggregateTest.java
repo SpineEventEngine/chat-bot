@@ -30,7 +30,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.Identifiers.organizationIdOf;
+import static io.spine.chatbot.server.github.GitHubIdentifier.organizationIdOf;
 import static io.spine.net.Urls.urlOfSpec;
 
 @DisplayName("OrganizationAggregate should")

@@ -24,10 +24,10 @@ import io.spine.chatbot.server.google.chat.Identifiers;
 import io.spine.testing.UtilityClassTest;
 import org.junit.jupiter.api.DisplayName;
 
-@DisplayName("GitHub Identifiers should")
-final class IdentifiersTest extends UtilityClassTest<Identifiers> {
+@DisplayName("GitHub GitHubIdentifier should")
+final class GitHubIdentifierTest extends UtilityClassTest<Identifiers> {
 
-    IdentifiersTest() {
+    GitHubIdentifierTest() {
         super(Identifiers.class);
     }
 }

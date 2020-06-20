@@ -37,8 +37,8 @@ import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
-import static io.spine.chatbot.server.github.Identifiers.organizationIdOf;
-import static io.spine.chatbot.server.github.Identifiers.repositoryIdOf;
+import static io.spine.chatbot.server.github.GitHubIdentifier.organizationIdOf;
+import static io.spine.chatbot.server.github.GitHubIdentifier.repositoryIdOf;
 import static io.spine.net.Urls.githubRepoUrlFor;
 import static io.spine.net.Urls.travisRepoUrlFor;
 import static io.spine.net.Urls.urlOfSpec;

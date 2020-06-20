@@ -39,7 +39,7 @@ import static io.spine.chatbot.server.google.chat.Identifiers.messageIdOf;
 import static io.spine.chatbot.server.google.chat.Identifiers.spaceIdOf;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-@DisplayName("GoogleChat Identifiers should")
+@DisplayName("GoogleChat GitHubIdentifier should")
 final class IdentifiersTest extends UtilityClassTest<Identifiers> {
 
     IdentifiersTest() {
