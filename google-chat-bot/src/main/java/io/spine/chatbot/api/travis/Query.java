@@ -20,6 +20,9 @@
 
 package io.spine.chatbot.api.travis;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -64,5 +67,32 @@ public class Query<T extends TravisResponse> {
      */
     static String encode(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Query)) {
+            return false;
+        }
+        Query<?> query = (Query<?>) o;
+        return Objects.equal(responseType, query.responseType) &&
+                Objects.equal(request, query.request);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(responseType, request);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects
+                .toStringHelper(this)
+                .add("request", request)
+                .add("responseType", responseType)
+                .toString();
     }
 }
