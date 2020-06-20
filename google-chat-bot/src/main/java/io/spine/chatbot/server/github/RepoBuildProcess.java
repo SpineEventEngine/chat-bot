@@ -66,7 +66,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  * <p>The {@code cancelled}, {@code failed} and {@code errored} statuses are considered
  * {@link #FAILED_STATUSES failed statuses}.
  */
-final class RepositoryBuildProcess
+final class RepoBuildProcess
         extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder> {
 
     private static final ImmutableSet<BuildState.State> FAILED_STATUSES = ImmutableSet.of(

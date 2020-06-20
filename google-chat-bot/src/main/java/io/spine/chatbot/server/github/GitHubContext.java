@@ -57,7 +57,7 @@ public final class GitHubContext {
                 .add(RepositoryAggregate.class)
                 .add(new OrgReposRepository())
                 .add(new SpineOrgInitRepository(travisClient))
-                .add(new RepositoryBuildRepository(travisClient));
+                .add(new RepoBuildRepository(travisClient));
     }
 
     /**

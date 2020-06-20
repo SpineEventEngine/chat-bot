@@ -38,10 +38,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.server.github.Identifiers.repositoryIdOf;
-import static io.spine.chatbot.server.github.RepositoryBuildProcess.buildStateFrom;
+import static io.spine.chatbot.server.github.RepoBuildProcess.buildStateFrom;
 
-@DisplayName("RepositoryBuildProcess should")
-final class RepositoryBuildProcessTest extends GitHubEntityTest {
+@DisplayName("RepoBuildProcess should")
+final class RepoBuildProcessTest extends GitHubEntityTest {
 
     private static final RepositoryId repositoryId = repositoryIdOf("SpineEventEngine/web");
 

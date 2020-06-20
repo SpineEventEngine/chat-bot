@@ -26,19 +26,19 @@ import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.server.procman.ProcessManagerRepository;
 
 /**
- * The repository for {@link RepositoryBuildProcess}es.
+ * The repository for {@link RepoBuildProcess}es.
  */
-final class RepositoryBuildRepository
-        extends ProcessManagerRepository<RepositoryId, RepositoryBuildProcess, RepositoryBuild> {
+final class RepoBuildRepository
+        extends ProcessManagerRepository<RepositoryId, RepoBuildProcess, RepositoryBuild> {
 
     private final TravisClient travisClient;
 
-    RepositoryBuildRepository(TravisClient client) {
+    RepoBuildRepository(TravisClient client) {
         travisClient = client;
     }
 
     @Override
-    protected void configure(RepositoryBuildProcess processManager) {
+    protected void configure(RepoBuildProcess processManager) {
         super.configure(processManager);
         processManager.setTravisClient(travisClient);
     }
