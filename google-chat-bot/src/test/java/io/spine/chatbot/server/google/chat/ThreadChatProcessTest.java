@@ -86,7 +86,7 @@ final class ThreadChatProcessTest {
         private final String googleChatSpace = "spaces/1241pjwqe";
         private final SpaceId spaceId = spaceIdOf(googleChatSpace);
         private final String buildNumber = "551";
-        private final Thread newThread = new Thread().setName("spaces/1241pjwqe/thread/k12d1o2r1");
+        private final Thread newThread = new Thread().setName("spaces/1241pjwqe/threads/k12d1o2r1");
         private final Message sentMessage = new Message()
                 .setName("spaces/1241pjwqe/messages/12154363643624")
                 .setThread(newThread);
