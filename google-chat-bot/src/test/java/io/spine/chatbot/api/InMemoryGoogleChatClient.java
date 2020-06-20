@@ -22,8 +22,8 @@ package io.spine.chatbot.api;
 
 import com.google.api.services.chat.v1.model.Message;
 import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.chatbot.google.chat.thread.ThreadResource;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -55,7 +55,7 @@ public final class InMemoryGoogleChatClient extends FailFastClient implements Go
     }
 
     @Override
-    public Message sendBuildStateUpdate(BuildState buildState, @Nullable String threadName) {
+    public Message sendBuildStateUpdate(BuildState buildState, ThreadResource thread) {
         var stubbedValue = sentMessages.get(buildState.getNumber());
         var result = failOrDefault(stubbedValue, buildState.getNumber(), new Message());
         return result;

@@ -28,22 +28,23 @@ import com.google.api.services.chat.v1.model.Thread;
 import com.google.api.services.chat.v1.model.WidgetMarkup;
 import com.google.common.collect.ImmutableList;
 import io.spine.chatbot.github.repository.build.BuildState;
-import io.spine.validate.Validate;
+import io.spine.chatbot.google.chat.thread.ThreadResource;
+import io.spine.protobuf.Messages;
 
-import javax.annotation.Nullable;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
 import static io.spine.chatbot.api.ChatWidgets.cardWith;
 import static io.spine.chatbot.api.ChatWidgets.linkButton;
 import static io.spine.chatbot.api.ChatWidgets.sectionWithWidget;
 import static io.spine.chatbot.api.ChatWidgets.textParagraph;
+import static io.spine.validate.Validate.checkValid;
 
 /**
  * A Google Chat utility class that creates {@link BuildState} update messages.
  */
 final class BuildStateUpdates {
 
-    /** Prevents instantiation of this utility class. **/
+    /**
+     * Prevents instantiation of this utility class.
+     */
     private BuildStateUpdates() {
     }
 
@@ -51,11 +52,11 @@ final class BuildStateUpdates {
      * Creates a new {@link BuildState} update message of of the supplied state and the thread
      * name.
      *
-     * <p>If the thread name is {@code null} or empty, assumes that the update message should be
+     * <p>If the thread has no name set, assumes that the update message should be
      * sent to a new thread.
      */
-    static Message buildStateMessage(BuildState buildState, @Nullable String threadName) {
-        Validate.checkValid(buildState);
+    static Message buildStateMessage(BuildState buildState, ThreadResource thread) {
+        checkValid(buildState);
         var cardHeader = new CardHeader()
                 .setTitle(buildState.getRepositorySlug())
                 .setImageUrl("https://www.freeiconspng.com/uploads/failure-icon-2.png");
@@ -65,8 +66,8 @@ final class BuildStateUpdates {
                 actions(buildState)
         );
         var message = new Message().setCards(cardWith(cardHeader, sections));
-        if (!isNullOrEmpty(threadName)) {
-            message.setThread(new Thread().setName(threadName));
+        if (Messages.isNotDefault(thread)) {
+            message.setThread(new Thread().setName(thread.getName()));
         }
         return message;
     }

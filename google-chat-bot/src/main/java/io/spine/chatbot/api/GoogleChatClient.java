@@ -22,8 +22,7 @@ package io.spine.chatbot.api;
 
 import com.google.api.services.chat.v1.model.Message;
 import io.spine.chatbot.github.repository.build.BuildState;
-
-import javax.annotation.Nullable;
+import io.spine.chatbot.google.chat.thread.ThreadResource;
 
 /**
  * Google Chat API client abstraction.
@@ -36,9 +35,9 @@ public interface GoogleChatClient {
     /**
      * Sends {@link BuildState} status message to a related space and thread.
      *
-     * <p>If the thread name is not specified the message is sent to a new thread.
+     * <p>If the {@code thread} has no name specified the message is sent to a new thread.
      *
      * @return a sent message
      */
-    Message sendBuildStateUpdate(BuildState buildState, @Nullable String threadName);
+    Message sendBuildStateUpdate(BuildState buildState, ThreadResource thread);
 }

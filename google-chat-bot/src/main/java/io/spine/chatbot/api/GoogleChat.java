@@ -28,9 +28,9 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.chatbot.google.chat.thread.ThreadResource;
 import io.spine.logging.Logging;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
@@ -55,15 +55,15 @@ public final class GoogleChat implements GoogleChatClient, Logging {
     /**
      * Creates default Google Chat client.
      */
-    public static GoogleChatClient defaultGoogleChatClient() {
+    public static GoogleChatClient instance() {
         return new GoogleChat(hangoutsChat());
     }
 
     @Override
-    public Message sendBuildStateUpdate(BuildState buildState, @Nullable String threadName) {
+    public Message sendBuildStateUpdate(BuildState buildState, ThreadResource thread) {
         var repoSlug = buildState.getRepositorySlug();
         _debug().log("Sending build state update message for repository `%s`.", repoSlug);
-        var message = buildStateMessage(buildState, threadName);
+        var message = buildStateMessage(buildState, thread);
         var result = sendMessage(buildState.getGoogleChatSpace(), message);
         _debug().log(
                 "Build state update message with ID `%s` for repository `%s` sent to thread `%s`.",

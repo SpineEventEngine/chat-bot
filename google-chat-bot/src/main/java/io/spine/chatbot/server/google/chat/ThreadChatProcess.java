@@ -20,7 +20,6 @@
 
 package io.spine.chatbot.server.google.chat;
 
-import com.google.common.base.Strings;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.chatbot.api.GoogleChatClient;
 import io.spine.chatbot.github.RepositoryId;
@@ -33,6 +32,7 @@ import io.spine.chatbot.google.chat.event.ThreadCreated;
 import io.spine.chatbot.google.chat.thread.ThreadChat;
 import io.spine.core.External;
 import io.spine.logging.Logging;
+import io.spine.protobuf.Messages;
 import io.spine.server.event.React;
 import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.Pair;
@@ -85,7 +85,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
 
     private Pair<MessageCreated, Optional<ThreadCreated>>
     processBuildStateUpdate(BuildState buildState, RepositoryId repositoryId) {
-        var sentMessage = googleChatClient.sendBuildStateUpdate(buildState, currentThreadName());
+        var sentMessage = googleChatClient.sendBuildStateUpdate(buildState, state().getThread());
         var messageId = messageIdOf(sentMessage.getName());
         var threadId = threadIdOf(repositoryId.getValue());
         var spaceId = spaceIdOf(buildState.getGoogleChatSpace());
@@ -114,12 +114,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
     }
 
     private boolean shouldCreateThread() {
-        return Strings.isNullOrEmpty(currentThreadName());
-    }
-
-    private String currentThreadName() {
-        return state().getThread()
-                      .getName();
+        return Messages.isDefault(state().getThread());
     }
 
     void setGoogleChatClient(GoogleChatClient googleChatClient) {
