@@ -29,12 +29,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * A utility for working with {@link GoogleChatContext} identifiers.
  */
-public final class Identifiers {
+public final class GoogleChatIdentifier {
 
     /**
      * Prevents instantiation of this utility class.
      */
-    private Identifiers() {
+    private GoogleChatIdentifier() {
     }
 
     /**

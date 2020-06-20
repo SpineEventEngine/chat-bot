@@ -23,7 +23,7 @@ package io.spine.chatbot.server.github;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
-import io.spine.chatbot.server.google.chat.Identifiers;
+import io.spine.chatbot.server.google.chat.GoogleChatIdentifier;
 import io.spine.chatbot.travis.RepositoriesResponse;
 import io.spine.chatbot.travis.Repository;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +40,7 @@ final class SpineOrgInitProcessTest extends GitHubEntityTest {
     @DisplayName("perform initialization of watched spine resources")
     final class Init {
 
-        private final SpaceId spaceId = Identifiers.spaceIdOf("spaces/qjwrp1441");
+        private final SpaceId spaceId = GoogleChatIdentifier.spaceIdOf("spaces/qjwrp1441");
         private final Repository repository = Repository
                 .newBuilder()
                 .setId(123312L)

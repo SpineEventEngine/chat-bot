@@ -36,7 +36,7 @@ final class SpaceAggregateTest extends GoogleChatEntityTest {
     @DisplayName("register a space")
     final class Register {
 
-        private final SpaceId spaceId = Identifiers.spaceIdOf("spaces/poqwdpQ21");
+        private final SpaceId spaceId = GoogleChatIdentifier.spaceIdOf("spaces/poqwdpQ21");
         private final String displayName = "Spine Developers";
 
         @BeforeEach

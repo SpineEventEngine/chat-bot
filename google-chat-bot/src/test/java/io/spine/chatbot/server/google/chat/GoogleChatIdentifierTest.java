@@ -35,15 +35,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.chatbot.server.google.chat.Identifiers.messageIdOf;
-import static io.spine.chatbot.server.google.chat.Identifiers.spaceIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.messageIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.spaceIdOf;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-@DisplayName("GoogleChat GitHubIdentifier should")
-final class IdentifiersTest extends UtilityClassTest<Identifiers> {
+@DisplayName("GoogleChatIdentifier should")
+final class GoogleChatIdentifierTest extends UtilityClassTest<GoogleChatIdentifier> {
 
-    IdentifiersTest() {
-        super(Identifiers.class);
+    GoogleChatIdentifierTest() {
+        super(GoogleChatIdentifier.class);
     }
 
     // nested tests do not work with static classes

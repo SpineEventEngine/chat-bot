@@ -34,9 +34,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.google.chat.Identifiers.messageIdOf;
-import static io.spine.chatbot.server.google.chat.Identifiers.spaceIdOf;
-import static io.spine.chatbot.server.google.chat.Identifiers.threadIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.messageIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.spaceIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.threadIdOf;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
 
 @DisplayName("ThreadAggregate should")

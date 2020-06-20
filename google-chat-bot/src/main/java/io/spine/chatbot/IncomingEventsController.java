@@ -31,7 +31,7 @@ import io.spine.chatbot.google.chat.event.SpaceRegistered;
 import io.spine.chatbot.google.chat.incoming.ChatEvent;
 import io.spine.chatbot.google.chat.incoming.Space;
 import io.spine.chatbot.google.chat.incoming.SpaceType;
-import io.spine.chatbot.server.google.chat.Identifiers;
+import io.spine.chatbot.server.google.chat.GoogleChatIdentifier;
 import io.spine.json.Json;
 import io.spine.logging.Logging;
 
@@ -83,7 +83,7 @@ final class IncomingEventsController implements Logging {
                 .newBuilder()
                 .setDisplayName(space.getDisplayName())
                 .setThreaded(isThreaded(space))
-                .setId(Identifiers.spaceIdOf(space.getName()))
+                .setId(GoogleChatIdentifier.spaceIdOf(space.getName()))
                 .vBuild();
         client.post(registerSpace, SpaceRegistered.class);
     }

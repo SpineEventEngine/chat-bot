@@ -40,9 +40,9 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.util.Optional;
 
-import static io.spine.chatbot.server.google.chat.Identifiers.messageIdOf;
-import static io.spine.chatbot.server.google.chat.Identifiers.spaceIdOf;
-import static io.spine.chatbot.server.google.chat.Identifiers.threadIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.messageIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.spaceIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.threadIdOf;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
 
 /**
