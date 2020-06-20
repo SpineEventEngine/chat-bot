@@ -38,8 +38,7 @@ import java.io.IOException;
 final class BeanFactory {
 
     /**
-     * Registers {@link com.google.pubsub.v1.PubsubPushNotification push notification}
-     * Jackson deserializer.
+     * Registers {@link PubsubPushNotification push notification} Jackson deserializer.
      */
     @Singleton
     @Bean
@@ -49,6 +48,9 @@ final class BeanFactory {
 
     /**
      * Spine-based {@link PubsubPushNotification} Jackson deserializer.
+     *
+     * @see <a href="https://github.com/FasterXML/jackson-databind/wiki/Deserialization-Features">
+     *         Jackson Deserialization</a>
      */
     private static final class PubsubPushNotificationDeserializer
             extends JsonDeserializer<PubsubPushNotification> {
