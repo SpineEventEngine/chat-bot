@@ -29,8 +29,16 @@ import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
 
+/**
+ * A room or direct message chat in the Google Chat.
+ *
+ * <p>Whenever the ChatBot is added to the space, the space is registered in the context.
+ */
 final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> implements Logging {
 
+    /**
+     * Registers the space in the context.
+     */
     @Assign
     SpaceRegistered handle(RegisterSpace c) {
         _info().log("Registering space `%s`.", idAsString());

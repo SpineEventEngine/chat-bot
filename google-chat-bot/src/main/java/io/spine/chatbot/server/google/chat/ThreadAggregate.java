@@ -31,8 +31,17 @@ import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.event.React;
 
+/**
+ * A thread in the Google Chat room.
+ *
+ * <p>A new thread is initialized as early as a new conversation is started in the room.
+ * It is being initialized with the creation of the first message of the conversation.
+ */
 final class ThreadAggregate extends Aggregate<ThreadId, Thread, Thread.Builder> implements Logging {
 
+    /**
+     * Initializes the thread information upon the creation of the thread.
+     */
     @React
     ThreadInitialized on(ThreadCreated e) {
         _info().log("A new thread `%s` created.", idAsString());
@@ -50,6 +59,9 @@ final class ThreadAggregate extends Aggregate<ThreadId, Thread, Thread.Builder> 
                  .setSpaceId(e.getSpaceId());
     }
 
+    /**
+     * Acknowledges creation of a new thread message.
+     */
     @React
     MessageAdded on(MessageCreated e) {
         var messageId = e.getId();

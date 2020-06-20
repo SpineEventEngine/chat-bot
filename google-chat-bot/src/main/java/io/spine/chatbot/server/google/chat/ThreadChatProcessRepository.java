@@ -37,6 +37,9 @@ import java.util.Set;
 import static io.spine.chatbot.server.google.chat.Identifiers.threadIdOf;
 import static io.spine.server.route.EventRoute.withId;
 
+/**
+ * The repository for {@link ThreadChatProcess}es.
+ */
 final class ThreadChatProcessRepository
         extends ProcessManagerRepository<ThreadId, ThreadChatProcess, ThreadChat> {
 

@@ -45,12 +45,18 @@ import static io.spine.chatbot.server.google.chat.Identifiers.spaceIdOf;
 import static io.spine.chatbot.server.google.chat.Identifiers.threadIdOf;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
 
+/**
+ * A process of notifying thread members about the changes in the watched resouces.
+ */
 final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, ThreadChat.Builder>
         implements Logging {
 
     @LazyInit
     private @MonotonicNonNull GoogleChatClient googleChatClient;
 
+    /**
+     * Notifies thread members about a failed CI build.
+     */
     @React
     Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildFailed e) {
         var change = e.getChange();
@@ -61,6 +67,12 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         return processBuildStateUpdate(buildState, repositoryId);
     }
 
+    /**
+     * Notifies thread members about a recovered CI build.
+     *
+     * <p>The build is considered a recovered when it changes its state from
+     * {@code failed} to {@code passing}.
+     */
     @React
     Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildRecovered e) {
         var change = e.getChange();

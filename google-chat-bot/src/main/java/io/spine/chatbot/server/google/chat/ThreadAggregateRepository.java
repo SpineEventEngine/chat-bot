@@ -28,6 +28,9 @@ import io.spine.server.route.EventRouting;
 
 import static io.spine.server.route.EventRoute.withId;
 
+/**
+ * The repository for {@link ThreadAggregate}s.
+ */
 final class ThreadAggregateRepository extends AggregateRepository<ThreadId, ThreadAggregate> {
 
     @Override
