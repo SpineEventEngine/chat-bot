@@ -32,6 +32,7 @@ import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.github.repository.build.event.BuildStable;
+import io.spine.chatbot.github.repository.build.rejection.RepositoryBuildRejections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -44,6 +45,23 @@ import static io.spine.chatbot.server.github.RepoBuildProcess.buildStateFrom;
 final class RepoBuildProcessTest extends GitHubEntityTest {
 
     private static final RepositoryId repositoryId = repositoryIdOf("SpineEventEngine/web");
+
+    @Test
+    @DisplayName("throw NoBuildsFound rejection when Travic API cannot return builds for a repo")
+    void throwNoBuildsFoundRejection() {
+        travisClient.setBuildsFor(repositoryId.getValue(), BuildsResponse.getDefaultInstance());
+        var checkRepoBuild = CheckRepositoryBuild
+                .newBuilder()
+                .setId(repositoryId)
+                .vBuild();
+        context().receivesCommand(checkRepoBuild);
+
+        var noBuildsFound = RepositoryBuildRejections.NoBuildsFound
+                .newBuilder()
+                .setId(repositoryId)
+                .vBuild();
+        context().assertEvent(noBuildsFound);
+    }
 
     @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
     @Nested

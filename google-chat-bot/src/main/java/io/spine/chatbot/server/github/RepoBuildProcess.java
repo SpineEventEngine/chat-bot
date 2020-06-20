@@ -37,6 +37,7 @@ import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.github.repository.build.event.BuildStable;
+import io.spine.chatbot.github.repository.build.rejection.NoBuildsFound;
 import io.spine.net.Urls;
 import io.spine.server.command.Assign;
 import io.spine.server.procman.ProcessManager;
@@ -64,6 +65,8 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  *     {@code passing} previously.
  * </ul>
  *
+ * Or, if the repository builds could not be retrieved, throws {@link NoBuildsFound} rejection.
+ *
  * <p>The {@code cancelled}, {@code failed} and {@code errored} statuses are considered
  * {@link #FAILED_STATUSES failed statuses}.
  */
@@ -79,17 +82,20 @@ final class RepoBuildProcess
 
     /**
      * Checks the repository build state and propagates the respective events.
+     *
+     * <p>If the repository build state could not be retrieved,
+     * throws {@link NoBuildsFound} rejection.
      */
     @Assign
-    EitherOf3<BuildFailed, BuildRecovered, BuildStable> handle(CheckRepositoryBuild c) {
+    EitherOf3<BuildFailed, BuildRecovered, BuildStable> handle(CheckRepositoryBuild c)
+            throws NoBuildsFound {
         var builds = travisClient.execute(BuildsQuery.forRepo(id().getValue()))
                                  .getBuildsList();
         if (builds.isEmpty()) {
-            //TODO:2020-06-19:yuri-sergiichuk: replace with `NoBuildsFound` rejection after migration
-            // to the new java11-compatible Bootstrap version
-            throw newIllegalStateException(
-                    "No build found for the repository `%s`.", id().getValue()
-            );
+            throw NoBuildsFound
+                    .newBuilder()
+                    .setId(c.getId())
+                    .build();
         }
         var build = builds.get(0);
         var buildState = buildStateFrom(build);

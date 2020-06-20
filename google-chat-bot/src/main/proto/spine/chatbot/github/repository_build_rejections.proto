@@ -31,11 +31,7 @@ option java_generate_equals_and_hash = true;
 
 option (every_is).java_type = "io.spine.chatbot.server.github.RepositoryAwareEvent";
 
-
 import "spine/chatbot/github/identifiers.proto";
-
-//TODO:2020-06-19:yuri-sergiichuk: rename file back to `.proto` after migration
-// to the new java11-compatible Bootstrap version
 
 // No CI builds found for the repository.
 message NoBuildsFound {
