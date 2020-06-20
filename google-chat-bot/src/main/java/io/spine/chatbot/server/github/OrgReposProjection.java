@@ -20,6 +20,7 @@
 
 package io.spine.chatbot.server.github;
 
+import com.google.common.collect.Sets;
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.organization.OrganizationRepositories;
 import io.spine.chatbot.github.organization.event.OrganizationRegistered;
@@ -48,6 +49,9 @@ final class OrgReposProjection
      */
     @Subscribe
     void on(RepositoryRegistered e) {
-        builder().addRepositories(e.getId());
+        var repositories = Sets.newHashSet(builder().getRepositoriesList());
+        repositories.add(e.getId());
+        builder().clearRepositories()
+                 .addAllRepositories(repositories);
     }
 }
