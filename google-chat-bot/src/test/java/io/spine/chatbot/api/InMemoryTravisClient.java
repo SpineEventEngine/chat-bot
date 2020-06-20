@@ -40,12 +40,16 @@ public final class InMemoryTravisClient extends FailFastClient implements Travis
         super(failFast);
     }
 
-    /** Creates a {@link #failFast} in-memory Travis CI client. **/
+    /**
+     * Creates a {@link #failFast} in-memory Travis CI client.
+     */
     public static InMemoryTravisClient strictClient() {
         return new InMemoryTravisClient(true);
     }
 
-    /** Creates a lenient in-memory Travis CI client. **/
+    /**
+     * Creates a lenient in-memory Travis CI client.
+     */
     public static InMemoryTravisClient lenientClient() {
         return new InMemoryTravisClient(false);
     }
@@ -66,21 +70,27 @@ public final class InMemoryTravisClient extends FailFastClient implements Travis
         return result;
     }
 
-    /** Sets up a stub {@code builds} response for a specified {@code repoSlug}. **/
+    /**
+     * Sets up a stub {@code builds} response for a specified {@code repoSlug}.
+     */
     public void setBuildsFor(String repoSlug, BuildsResponse builds) {
         checkNotNull(repoSlug);
         checkNotNull(builds);
         buildsResponses.put(repoSlug, builds);
     }
 
-    /** Sets up a stub {@code repositories} response for a specified {@code owner}. **/
+    /**
+     * Sets up a stub {@code repositories} response for a specified {@code owner}.
+     */
     public void setRepositoriesFor(String owner, RepositoriesResponse repositories) {
         checkNotNull(owner);
         checkNotNull(repositories);
         repositoriesResponses.put(owner, repositories);
     }
 
-    /** Resets state of the configured responses. **/
+    /**
+     * Resets state of the configured responses.
+     */
     public void reset() {
         buildsResponses.clear();
         repositoriesResponses.clear();

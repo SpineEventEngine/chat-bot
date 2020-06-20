@@ -40,12 +40,16 @@ public final class InMemoryGoogleChatClient extends FailFastClient implements Go
         super(failFast);
     }
 
-    /** Creates a {@link #failFast} in-memory Google Chat client. **/
+    /**
+     * Creates a {@link #failFast} in-memory Google Chat client.
+     */
     public static InMemoryGoogleChatClient strictClient() {
         return new InMemoryGoogleChatClient(true);
     }
 
-    /** Creates a lenient in-memory Google Chat client. **/
+    /**
+     * Creates a lenient in-memory Google Chat client.
+     */
     public static InMemoryGoogleChatClient lenientClient() {
         return new InMemoryGoogleChatClient(false);
     }
@@ -67,7 +71,9 @@ public final class InMemoryGoogleChatClient extends FailFastClient implements Go
         sentMessages.put(buildNumber, message);
     }
 
-    /** Resets state of the configured responses. **/
+    /**
+     * Resets state of the configured responses.
+     */
     public void reset() {
         sentMessages.clear();
     }

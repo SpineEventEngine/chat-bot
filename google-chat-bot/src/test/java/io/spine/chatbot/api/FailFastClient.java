@@ -34,7 +34,9 @@ class FailFastClient implements Logging {
     /** Determines whether the client should fail if a particular response is not preconfigured. **/
     private final boolean failFast;
 
-    /** Creates a new client with the specified {@code failFast} behavior. **/
+    /**
+     * Creates a new client with the specified {@code failFast} behavior.
+     */
     FailFastClient(boolean failFast) {
         this.failFast = failFast;
     }
