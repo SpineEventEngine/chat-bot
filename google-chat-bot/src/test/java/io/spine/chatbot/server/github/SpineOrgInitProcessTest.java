@@ -70,7 +70,7 @@ final class SpineOrgInitProcessTest extends GitHubEntityTest {
             var expectedState = OrganizationInit
                     .newBuilder()
                     .setGoogleChatSpace(spaceId.getValue())
-                    .setIsInitialized(true)
+                    .setInitialized(true)
                     .setId(SPINE_ORGANIZATION)
                     .vBuild();
             context().assertState(SPINE_ORGANIZATION, OrganizationInit.class)
