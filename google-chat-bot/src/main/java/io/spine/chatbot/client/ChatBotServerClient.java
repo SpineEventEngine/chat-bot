@@ -42,22 +42,22 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
  *
  * <p>Abstracts working with Spine's {@link Client client}.
  */
-public final class ChatBotClient {
+public final class ChatBotServerClient {
 
     private final Client client;
 
-    private ChatBotClient(Client client) {
+    private ChatBotServerClient(Client client) {
         this.client = client;
     }
 
     /**
      * Creates a new in-process client configured for the specified server.
      */
-    public static ChatBotClient inProcessClient(String serverName) {
+    public static ChatBotServerClient inProcessClient(String serverName) {
         Client client = Client
                 .inProcess(serverName)
                 .build();
-        return new ChatBotClient(client);
+        return new ChatBotServerClient(client);
     }
 
     /**
@@ -103,8 +103,7 @@ public final class ChatBotClient {
     /**
      * Posts a command and waits synchronously till the expected outcome event is published.
      */
-    public <E extends EventMessage> void
-    post(CommandMessage command, Class<E> expectedOutcome) {
+    public <E extends EventMessage> void post(CommandMessage command, Class<E> expectedOutcome) {
         post(command, expectedOutcome, 1);
     }
 

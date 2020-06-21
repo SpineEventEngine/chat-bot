@@ -55,9 +55,10 @@ public final class GoogleChatContext {
     configureContextBuilder(GoogleChatClient googleChatClient) {
         return BoundedContext
                 .singleTenant(GOOGLE_CHAT_CONTEXT_NAME)
-                .add(SpaceAggregate.class)
-                .add(new ThreadAggregateRepository())
-                .add(new ThreadChatProcessRepository(googleChatClient));
+                .add(new SpaceRepository())
+                .add(new ThreadRepository())
+                .add(new ThreadChatRepository(googleChatClient))
+                .addEventDispatcher(new IncomingEventsHandler());
     }
 
     /**

@@ -20,23 +20,21 @@
 
 package io.spine.chatbot.server.google.chat;
 
-import io.spine.chatbot.google.chat.ThreadId;
-import io.spine.chatbot.google.chat.event.MessageCreated;
-import io.spine.chatbot.google.chat.event.ThreadCreated;
+import io.spine.chatbot.google.chat.SpaceId;
+import io.spine.chatbot.google.chat.incoming.event.AddedToSpace;
 import io.spine.server.aggregate.AggregateRepository;
 import io.spine.server.route.EventRouting;
 
 import static io.spine.server.route.EventRoute.withId;
 
 /**
- * The repository for {@link ThreadAggregate}s.
+ * The repository for {@link SpaceAggregate}s.
  */
-final class ThreadAggregateRepository extends AggregateRepository<ThreadId, ThreadAggregate> {
+final class SpaceRepository extends AggregateRepository<SpaceId, SpaceAggregate> {
 
     @Override
-    protected void setupEventRouting(EventRouting<ThreadId> routing) {
+    protected void setupEventRouting(EventRouting<SpaceId> routing) {
         super.setupEventRouting(routing);
-        routing.route(ThreadCreated.class, (event, context) -> withId(event.getId()));
-        routing.route(MessageCreated.class, (event, context) -> withId(event.getThreadId()));
+        routing.route(AddedToSpace.class, (event, context) -> withId(event.getSpaceId()));
     }
 }

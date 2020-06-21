@@ -40,12 +40,11 @@ import static io.spine.server.route.EventRoute.withId;
 /**
  * The repository for {@link ThreadChatProcess}es.
  */
-final class ThreadChatProcessRepository
-        extends ProcessManagerRepository<ThreadId, ThreadChatProcess, ThreadChat> {
+final class ThreadChatRepository extends ProcessManagerRepository<ThreadId, ThreadChatProcess, ThreadChat> {
 
     private final GoogleChatClient googleChatClient;
 
-    ThreadChatProcessRepository(GoogleChatClient googleChatClient) {
+    ThreadChatRepository(GoogleChatClient googleChatClient) {
         this.googleChatClient = googleChatClient;
     }
 

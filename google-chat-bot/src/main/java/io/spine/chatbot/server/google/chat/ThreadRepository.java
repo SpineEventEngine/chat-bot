@@ -20,29 +20,23 @@
 
 package io.spine.chatbot.server.google.chat;
 
-import io.spine.chatbot.google.chat.thread.ThreadResource;
+import io.spine.chatbot.google.chat.ThreadId;
+import io.spine.chatbot.google.chat.event.MessageCreated;
+import io.spine.chatbot.google.chat.event.ThreadCreated;
+import io.spine.server.aggregate.AggregateRepository;
+import io.spine.server.route.EventRouting;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.server.route.EventRoute.withId;
 
 /**
- * A utility for working with {@link ThreadResource}s.
+ * The repository for {@link ThreadAggregate}s.
  */
-public final class ThreadResources {
+final class ThreadRepository extends AggregateRepository<ThreadId, ThreadAggregate> {
 
-    /**
-     * Prevents instantiation of this utility class.
-     */
-    private ThreadResources() {
-    }
-
-    /**
-     * Creates a new {@link ThreadResource} with the specified {@code name}.
-     */
-    public static ThreadResource threadResourceOf(String name) {
-        checkNotNull(name);
-        return ThreadResource
-                .newBuilder()
-                .setName(name)
-                .vBuild();
+    @Override
+    protected void setupEventRouting(EventRouting<ThreadId> routing) {
+        super.setupEventRouting(routing);
+        routing.route(ThreadCreated.class, (event, context) -> withId(event.getId()));
+        routing.route(MessageCreated.class, (event, context) -> withId(event.getThreadId()));
     }
 }

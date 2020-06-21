@@ -22,7 +22,7 @@ package io.spine.chatbot;
 
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
-import io.spine.chatbot.client.ChatBotClient;
+import io.spine.chatbot.client.ChatBotServerClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.logging.Logging;
@@ -42,13 +42,13 @@ final class RepositoriesController implements Logging {
     @Post("/builds/check")
     String checkBuildStatuses() {
         _debug().log("Checking repositories build statues.");
-        var botClient = ChatBotClient.inProcessClient(SERVER_NAME);
+        var botClient = ChatBotServerClient.inProcessClient(SERVER_NAME);
         botClient.listRepositories()
                  .forEach(repository -> checkBuildStatus(botClient, repository));
         return "success";
     }
 
-    private void checkBuildStatus(ChatBotClient botClient, RepositoryId repository) {
+    private void checkBuildStatus(ChatBotServerClient botClient, RepositoryId repository) {
         _info().log("Sending `CheckRepositoryBuild` command for repository `%s`",
                     repository.getValue());
         var checkRepositoryBuild = checkRepoBuildCommand(repository);

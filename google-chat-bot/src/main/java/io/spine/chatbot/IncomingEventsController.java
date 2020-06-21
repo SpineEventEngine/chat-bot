@@ -25,26 +25,26 @@ import com.google.pubsub.v1.PubsubPushNotification;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
-import io.spine.chatbot.client.ChatBotClient;
-import io.spine.chatbot.google.chat.command.RegisterSpace;
-import io.spine.chatbot.google.chat.event.SpaceRegistered;
 import io.spine.chatbot.google.chat.incoming.ChatEvent;
-import io.spine.chatbot.google.chat.incoming.Space;
-import io.spine.chatbot.google.chat.incoming.SpaceType;
-import io.spine.chatbot.server.google.chat.GoogleChatIdentifier;
+import io.spine.chatbot.google.chat.incoming.User;
+import io.spine.core.UserId;
 import io.spine.json.Json;
 import io.spine.logging.Logging;
+import io.spine.server.integration.ThirdPartyContext;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import static io.micronaut.http.MediaType.APPLICATION_JSON;
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * A REST controller for handling incoming events from Google Chat.
  */
 @Controller("/chat")
 final class IncomingEventsController implements Logging {
+
+    private static final String CONTEXT_NAME = "IncomingChatEvents";
 
     /**
      * Processes an incoming Google Chat event.
@@ -57,39 +57,19 @@ final class IncomingEventsController implements Logging {
         var chatEventJson = decodeBase64Json(message.getData());
         _debug().log("Received a new chat event: %s", chatEventJson);
         ChatEvent chatEvent = Json.fromJson(chatEventJson, ChatEvent.class);
-        var client = ChatBotClient.inProcessClient(Application.SERVER_NAME);
-        switch (chatEvent.getType()) {
-            case MESSAGE:
-                _info().log("Processing user message.");
-                break;
-            case ADDED_TO_SPACE:
-                var space = chatEvent.getSpace();
-                _info().log("Bot added to space `%s` (%s).",
-                            space.getDisplayName(), space.getName());
-                onBotAddedToSpace(space, client);
-                break;
-            case REMOVED_FROM_SPACE:
-            case CARD_CLICKED:
-            case UNRECOGNIZED:
-            case ET_UNKNOWN:
-                _debug().log("Unsupported chat event type received: %s", chatEvent.getType());
-                break;
+        var actor = eventActor(chatEvent.getUser());
+        try (ThirdPartyContext incomingEvents = ThirdPartyContext.singleTenant(CONTEXT_NAME)) {
+            incomingEvents.emittedEvent(chatEvent, actor);
+        } catch (Exception e) {
+            throw newIllegalStateException("Unable to handle incoming Google Chat event.", e);
         }
         return "OK";
     }
 
-    private static void onBotAddedToSpace(Space space, ChatBotClient client) {
-        var registerSpace = RegisterSpace
-                .newBuilder()
-                .setDisplayName(space.getDisplayName())
-                .setThreaded(isThreaded(space))
-                .setId(GoogleChatIdentifier.spaceIdOf(space.getName()))
-                .vBuild();
-        client.post(registerSpace, SpaceRegistered.class);
-    }
-
-    private static boolean isThreaded(Space space) {
-        return space.getType() == SpaceType.ROOM;
+    private static UserId eventActor(User user) {
+        return UserId.newBuilder()
+                     .setValue(user.getName())
+                     .vBuild();
     }
 
     private static String decodeBase64Json(ByteString encoded) {
