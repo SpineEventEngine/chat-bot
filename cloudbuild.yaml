@@ -18,7 +18,3 @@ steps:
 timeout: 1200s
 substitutions:
   _SERVICE_NAME: "chat-bot-server"
-
-images: [
-  'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:latest'
-]
