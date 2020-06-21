@@ -57,6 +57,9 @@ final class ChatBotServerEnvironment {
         var se = ServerEnvironment.instance();
         var storageFactory = dsStorageFactory();
         se.use(InMemoryTransportFactory.newInstance(), Production.class);
+        //TODO:2020-06-21:yuri-sergiichuk: switch to io.spine.chatbot.delivery.DistributedDelivery
+        // for Production environment after implementing the delivery strategy.
+        // see https://github.com/SpineEventEngine/chat-bot/issues/5.
         se.use(LocalDelivery.instance, Production.class);
         se.use(LocalDelivery.instance, Tests.class);
         se.use(storageFactory, Production.class);
