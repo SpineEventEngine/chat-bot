@@ -28,6 +28,8 @@ import io.spine.server.Server;
 
 import java.io.IOException;
 
+import static io.spine.util.Exceptions.newIllegalStateException;
+
 /**
  * The entry point to the Google Chat Bot application.
  *
@@ -81,8 +83,7 @@ public final class Application {
      * Starts Spine in-process server.
      */
     @VisibleForTesting
-    static void startSpineServer(GitHubContext gitHubContext,
-                                 GoogleChatContext googleChatContext) {
+    static void startSpineServer(GitHubContext gitHubContext, GoogleChatContext googleChatContext) {
         Server server = Server
                 .inProcess(SERVER_NAME)
                 .add(gitHubContext.contextBuilder())
@@ -91,7 +92,9 @@ public final class Application {
         try {
             server.start();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw newIllegalStateException(
+                    "Unable to start Spine GRPC server `%s`.", SERVER_NAME, e
+            );
         }
     }
 }
