@@ -43,6 +43,7 @@ import java.io.IOException;
  **/
 public final class Application {
 
+    /** Name of the GRPC {@link Server}. **/
     static final String SERVER_NAME = "ChatBotServer";
 
     /**
