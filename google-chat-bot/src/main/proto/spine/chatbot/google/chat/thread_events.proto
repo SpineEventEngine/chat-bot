@@ -45,7 +45,7 @@ message ThreadInitialized {
     SpaceId space_id = 3 [(required) = true];
 }
 
-// A message added to the thead..
+// A message added to the thead.
 message MessageAdded {
 
     MessageId id = 1 [(required) = true];
