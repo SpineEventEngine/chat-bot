@@ -94,8 +94,8 @@ final class BuildStateUpdates {
     private static Section actions(BuildState buildState) {
         BuildState.Commit commit = buildState.getLastCommit();
         WidgetMarkup actionButtons = new WidgetMarkup().setButtons(ImmutableList.of(
-                linkButton("Open build", buildState.getTravisCiUrl()),
-                linkButton("Open changeset", commit.getCompareUrl())
+                linkButton("Build", buildState.getTravisCiUrl()),
+                linkButton("Changeset", commit.getCompareUrl())
         ));
         return sectionWithWidget(actionButtons);
     }
