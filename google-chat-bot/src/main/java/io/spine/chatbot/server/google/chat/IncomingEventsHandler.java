@@ -46,7 +46,8 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
      * <ul>
      *     <li>{@link BotAddedToSpace} — the ChatBot is added to a Google Chat space;
      *     <li>{@link BotRemovedFromSpace} — the ChatBot is removed from the Google Chat space;
-     *     <li>{@link MessageReceived} — the ChatBot received a new incoming message from a user within a Google Chat space;
+     *     <li>{@link MessageReceived} — the ChatBot received a new incoming message from a user
+     *     within a Google Chat space.
      * </ul>
      *
      * <p>If the bot receives a chat event with a not supported currently event type,

@@ -93,7 +93,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
                     .newBuilder()
                     .setSpace(chatSpace())
                     .setUser(User.newBuilder()
-                                 .setName("Lukas"))
+                                 .setName("users/12e1ojep1"))
                     .setType(EventType.ADDED_TO_SPACE)
                     .setEventTime("2020-06-19T15:39:01Z")
                     .vBuild();
