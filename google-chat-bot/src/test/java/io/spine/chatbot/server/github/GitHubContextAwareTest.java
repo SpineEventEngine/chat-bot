@@ -18,26 +18,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.google.chat;
+package io.spine.chatbot.server.github;
 
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
-import io.spine.chatbot.api.google.chat.InMemoryGoogleChatClient;
+import io.spine.chatbot.api.travis.InMemoryTravisClient;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.ContextAwareTest;
 import org.junit.jupiter.api.AfterEach;
 
 /**
- * An abstract test-base for Google Chat context entity tests.
+ * An abstract test-base for GitHub context-based tests.
  */
-class GoogleChatEntityTest extends ContextAwareTest {
+class GitHubContextAwareTest extends ContextAwareTest {
 
-    final InMemoryGoogleChatClient googleChatClient = InMemoryGoogleChatClient.strictClient();
+    private final InMemoryTravisClient travisClient = InMemoryTravisClient.strictClient();
 
     @Override
-    protected BoundedContextBuilder contextBuilder() {
-        return GoogleChatContext
+    protected final BoundedContextBuilder contextBuilder() {
+        return GitHubContext
                 .newBuilder()
-                .setGoogleChatClient(googleChatClient)
+                .setTravis(travisClient)
                 .build()
                 .contextBuilder();
     }
@@ -45,8 +45,15 @@ class GoogleChatEntityTest extends ContextAwareTest {
     @AfterEach
     @OverridingMethodsMustInvokeSuper
     @Override
-    protected void closeContext() {
+    protected final void closeContext() {
         super.closeContext();
-        googleChatClient.reset();
+        travisClient.reset();
+    }
+
+    /**
+     * Returns configured for the {@link #context() context} Travis client.
+     */
+    final InMemoryTravisClient travisClient() {
+        return travisClient;
     }
 }

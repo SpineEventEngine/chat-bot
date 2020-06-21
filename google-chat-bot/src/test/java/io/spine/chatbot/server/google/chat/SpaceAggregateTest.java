@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.spaceIdOf;
 
 @DisplayName("SpaceAggregate should")
-final class SpaceAggregateTest extends GoogleChatEntityTest {
+final class SpaceAggregateTest extends GoogleChatContextAwareTest {
 
     private static final SpaceId spaceId = spaceIdOf("spaces/poqwdpQ21");
     private static final String displayName = "Spine Developers";

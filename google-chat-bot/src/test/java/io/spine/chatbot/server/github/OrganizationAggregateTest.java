@@ -34,7 +34,7 @@ import static io.spine.chatbot.server.github.GitHubIdentifier.organizationIdOf;
 import static io.spine.net.Urls.urlOfSpec;
 
 @DisplayName("OrganizationAggregate should")
-final class OrganizationAggregateTest extends GitHubEntityTest {
+final class OrganizationAggregateTest extends GitHubContextAwareTest {
 
     @Nested
     @DisplayName("register an organization")

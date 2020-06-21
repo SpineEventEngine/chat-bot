@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.chatbot.server.github.SpineOrgInitProcess.SPINE_ORGANIZATION;
 
 @DisplayName("SpineOrgInitProcess should")
-final class SpineOrgInitProcessTest extends GitHubEntityTest {
+final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
 
     @Nested
     @DisplayName("perform initialization of watched spine resources")
@@ -54,7 +54,7 @@ final class SpineOrgInitProcessTest extends GitHubEntityTest {
                     .newBuilder()
                     .addRepositories(repository)
                     .vBuild();
-            travisClient.setRepositoriesFor(SPINE_ORGANIZATION.getValue(), repositoriesResponse);
+            travisClient().setRepositoriesFor(SPINE_ORGANIZATION.getValue(), repositoriesResponse);
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
                     .setId(spaceId)

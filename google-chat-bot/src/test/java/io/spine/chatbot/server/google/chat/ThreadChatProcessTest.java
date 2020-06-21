@@ -79,7 +79,7 @@ final class ThreadChatProcessTest {
         }
     }
 
-    private abstract static class BuildStateChanged extends GoogleChatEntityTest {
+    private abstract static class BuildStateChanged extends GoogleChatContextAwareTest {
 
         private final RepositoryId repositoryId = repositoryIdOf("SpineEventEngine/money");
         private final ThreadId threadId = threadIdOf(repositoryId.getValue());
@@ -93,7 +93,7 @@ final class ThreadChatProcessTest {
 
         @BeforeEach
         void setUp() {
-            googleChatClient.setMessageForBuildStatusUpdate(buildNumber, sentMessage);
+            googleChatClient().setMessageForBuildStatusUpdate(buildNumber, sentMessage);
             var newBuildState = BuildState
                     .newBuilder()
                     .setGoogleChatSpace(googleChatSpace)

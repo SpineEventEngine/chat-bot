@@ -42,14 +42,14 @@ import static io.spine.chatbot.server.github.GitHubIdentifier.repositoryIdOf;
 import static io.spine.chatbot.server.github.RepoBuildProcess.buildStateFrom;
 
 @DisplayName("RepoBuildProcess should")
-final class RepoBuildProcessTest extends GitHubEntityTest {
+final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
     private static final RepositoryId repositoryId = repositoryIdOf("SpineEventEngine/web");
 
     @Test
     @DisplayName("throw NoBuildsFound rejection when Travic API cannot return builds for a repo")
     void throwNoBuildsFoundRejection() {
-        travisClient.setBuildsFor(repositoryId.getValue(), BuildsResponse.getDefaultInstance());
+        travisClient().setBuildsFor(repositoryId.getValue(), BuildsResponse.getDefaultInstance());
         var checkRepoBuild = CheckRepositoryBuild
                 .newBuilder()
                 .setId(repositoryId)
@@ -73,7 +73,7 @@ final class RepoBuildProcessTest extends GitHubEntityTest {
 
         @BeforeEach
         void setUp() {
-            travisClient.setBuildsFor(repositoryId.getValue(), singleBuild(build));
+            travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(build));
             var checkRepoBuild = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -122,13 +122,13 @@ final class RepoBuildProcessTest extends GitHubEntityTest {
 
         @BeforeEach
         void setUp() {
-            travisClient.setBuildsFor(repositoryId.getValue(), singleBuild(previousBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(previousBuild));
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient.setBuildsFor(repositoryId.getValue(), singleBuild(newBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(newBuild));
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -178,13 +178,13 @@ final class RepoBuildProcessTest extends GitHubEntityTest {
 
         @BeforeEach
         void setUp() {
-            travisClient.setBuildsFor(repositoryId.getValue(), singleBuild(previousBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(previousBuild));
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient.setBuildsFor(repositoryId.getValue(), singleBuild(newBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(newBuild));
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
