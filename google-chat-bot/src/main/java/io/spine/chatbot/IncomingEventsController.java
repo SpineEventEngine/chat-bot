@@ -49,7 +49,7 @@ final class IncomingEventsController implements Logging {
     /**
      * Processes an incoming Google Chat event.
      *
-     * <p>When a bot is added to a new space, registers the space in the system.
+     * <p>Dispatches the event using {@link ThirdPartyContext}.
      */
     @Post(value = "/incoming/event", consumes = APPLICATION_JSON)
     String on(@Body PubsubPushNotification pushNotification) {
@@ -67,9 +67,10 @@ final class IncomingEventsController implements Logging {
     }
 
     private static UserId eventActor(User user) {
-        return UserId.newBuilder()
-                     .setValue(user.getName())
-                     .vBuild();
+        return UserId
+                .newBuilder()
+                .setValue(user.getName())
+                .vBuild();
     }
 
     private static String decodeBase64Json(ByteString encoded) {
