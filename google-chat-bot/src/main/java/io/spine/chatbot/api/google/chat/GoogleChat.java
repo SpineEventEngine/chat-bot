@@ -53,7 +53,9 @@ public final class GoogleChat implements GoogleChatClient, Logging {
     }
 
     /**
-     * Creates Google Chat client.
+     * Creates a new Google Chat client.
+     *
+     * <p>The client is backed by {@link HangoutsChat} API.
      */
     public static GoogleChatClient instance() {
         return new GoogleChat(hangoutsChat());

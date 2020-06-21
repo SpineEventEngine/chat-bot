@@ -41,7 +41,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 final class ChatWidgets {
 
-    /** Prevents instantiation of this utility class. **/
+    /**
+     * Prevents instantiation of this utility class.
+     */
     private ChatWidgets() {
     }
 
