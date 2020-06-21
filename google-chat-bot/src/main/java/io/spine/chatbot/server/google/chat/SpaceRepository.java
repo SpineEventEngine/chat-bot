@@ -21,7 +21,7 @@
 package io.spine.chatbot.server.google.chat;
 
 import io.spine.chatbot.google.chat.SpaceId;
-import io.spine.chatbot.google.chat.incoming.event.AddedToSpace;
+import io.spine.chatbot.google.chat.incoming.event.BotAddedToSpace;
 import io.spine.server.aggregate.AggregateRepository;
 import io.spine.server.route.EventRouting;
 
@@ -35,6 +35,6 @@ final class SpaceRepository extends AggregateRepository<SpaceId, SpaceAggregate>
     @Override
     protected void setupEventRouting(EventRouting<SpaceId> routing) {
         super.setupEventRouting(routing);
-        routing.route(AddedToSpace.class, (event, context) -> withId(event.getSpaceId()));
+        routing.route(BotAddedToSpace.class, (event, context) -> withId(event.getSpaceId()));
     }
 }

@@ -25,7 +25,7 @@ import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.command.RegisterSpace;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
 import io.spine.chatbot.google.chat.incoming.SpaceType;
-import io.spine.chatbot.google.chat.incoming.event.AddedToSpace;
+import io.spine.chatbot.google.chat.incoming.event.BotAddedToSpace;
 import io.spine.core.External;
 import io.spine.logging.Logging;
 import io.spine.server.aggregate.Aggregate;
@@ -44,7 +44,7 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
      * Registers a new space when the ChatBot is added to the space.
      */
     @Command
-    RegisterSpace on(@External AddedToSpace e) {
+    RegisterSpace on(@External BotAddedToSpace e) {
         var space = e.getEvent()
                      .getSpace();
         return RegisterSpace

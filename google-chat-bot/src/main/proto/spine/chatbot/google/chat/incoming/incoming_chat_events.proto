@@ -14,7 +14,7 @@ import "spine/chatbot/google/chat/identifiers.proto";
 import "spine/chatbot/google/chat/incoming/incoming_chat_messages.proto";
 
 // The ChatBot is added to a Google Chat space.
-message AddedToSpace {
+message BotAddedToSpace {
 
     // The ID of the Space to which the ChatBot is added.
     SpaceId space_id = 1 [(required) = true];
@@ -24,7 +24,7 @@ message AddedToSpace {
 }
 
 // The ChatBot is removed from the Google Chat space.
-message RemovedFromSpace {
+message BotRemovedFromSpace {
 
     // The ID of the Space from which the ChatBot is removed.
     SpaceId space_id = 1 [(required) = true];

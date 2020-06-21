@@ -21,9 +21,9 @@
 package io.spine.chatbot.server.google.chat;
 
 import io.spine.chatbot.google.chat.incoming.ChatEvent;
-import io.spine.chatbot.google.chat.incoming.event.AddedToSpace;
+import io.spine.chatbot.google.chat.incoming.event.BotAddedToSpace;
+import io.spine.chatbot.google.chat.incoming.event.BotRemovedFromSpace;
 import io.spine.chatbot.google.chat.incoming.event.MessageReceived;
-import io.spine.chatbot.google.chat.incoming.event.RemovedFromSpace;
 import io.spine.core.External;
 import io.spine.logging.Logging;
 import io.spine.server.event.AbstractEventReactor;
@@ -44,8 +44,8 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
      * Processes incoming {@link ChatEvent} message and emits one of the following domain events:
      *
      * <ul>
-     *     <li>{@link AddedToSpace} — the ChatBot is added to a Google Chat space;
-     *     <li>{@link RemovedFromSpace} — the ChatBot is removed from the Google Chat space;
+     *     <li>{@link BotAddedToSpace} — the ChatBot is added to a Google Chat space;
+     *     <li>{@link BotRemovedFromSpace} — the ChatBot is removed from the Google Chat space;
      *     <li>{@link MessageReceived} — the ChatBot received a new incoming message from a user within a Google Chat space;
      * </ul>
      *
@@ -53,7 +53,7 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
      * {@link Nothing} is emitted.
      */
     @React
-    EitherOf4<AddedToSpace, RemovedFromSpace, MessageReceived, Nothing>
+    EitherOf4<BotAddedToSpace, BotRemovedFromSpace, MessageReceived, Nothing>
     on(@External ChatEvent chatEvent) {
         switch (chatEvent.getType()) {
             case MESSAGE:
@@ -70,7 +70,7 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
                 var toSpace = chatEvent.getSpace();
                 _info().log("ChatBot added to space `%s` (%s).",
                             toSpace.getDisplayName(), toSpace.getName());
-                var addedToSpace = AddedToSpace
+                var addedToSpace = BotAddedToSpace
                         .newBuilder()
                         .setEvent(chatEvent)
                         .setSpaceId(spaceIdOf(toSpace.getName()))
@@ -80,7 +80,7 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
                 var fromSpace = chatEvent.getSpace();
                 _info().log("ChatBot removed from space `%s` (%s).",
                             fromSpace.getDisplayName(), fromSpace.getName());
-                var removedFromSpace = RemovedFromSpace
+                var removedFromSpace = BotRemovedFromSpace
                         .newBuilder()
                         .setEvent(chatEvent)
                         .setSpaceId(spaceIdOf(fromSpace.getName()))
