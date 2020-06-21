@@ -73,6 +73,7 @@ application {
 jib {
     to {
         image = "gcr.io/${gcpProject}/chat-bot-server"
+        tags = setOf("latest")
     }
     container {
         mainClass = application.mainClassName
