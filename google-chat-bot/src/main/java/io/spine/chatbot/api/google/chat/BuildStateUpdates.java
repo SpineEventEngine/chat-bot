@@ -29,6 +29,7 @@ import com.google.api.services.chat.v1.model.WidgetMarkup;
 import com.google.common.collect.ImmutableList;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
+import io.spine.chatbot.server.github.BuildStates;
 import io.spine.protobuf.Messages;
 
 import static io.spine.chatbot.api.google.chat.ChatWidgets.cardWith;
@@ -42,6 +43,11 @@ import static io.spine.validate.Validate.checkValid;
  */
 final class BuildStateUpdates {
 
+    private static final String FAILURE_ICON =
+            "https://storage.googleapis.com/spine-chat-bot.appspot.com/failure-icon.png";
+    private static final String SUCCESS_ICON =
+            "https://storage.googleapis.com/spine-chat-bot.appspot.com/success-icon.png";
+
     /**
      * Prevents instantiation of this utility class.
      */
@@ -49,17 +55,17 @@ final class BuildStateUpdates {
     }
 
     /**
-     * Creates a new {@link BuildState} update message of of the supplied state and the thread
-     * name.
+     * Creates a new {@link BuildState} update message from the supplied state and thread.
      *
      * <p>If the thread has no name set, assumes that the update message should be
      * sent to a new thread.
      */
     static Message buildStateMessage(BuildState buildState, ThreadResource thread) {
         checkValid(buildState);
+        var headerIcon = BuildStates.isFailed(buildState) ? FAILURE_ICON : SUCCESS_ICON;
         var cardHeader = new CardHeader()
                 .setTitle(buildState.getRepositorySlug())
-                .setImageUrl("https://www.freeiconspng.com/uploads/failure-icon-2.png");
+                .setImageUrl(headerIcon);
         var sections = ImmutableList.of(
                 buildStateSection(buildState),
                 commitSection(buildState.getLastCommit()),

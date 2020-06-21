@@ -20,16 +20,21 @@
 
 package io.spine.chatbot.server.github;
 
+import com.google.common.collect.ImmutableSet;
 import io.spine.chatbot.github.repository.build.BuildState;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 
 /**
- * A utility class for working with {@link io.spine.chatbot.github.repository.build.BuildState.State
- * BuildState.State}s.
+ * A utility class for working with {@link BuildState.State}s.
  */
-final class BuildStates {
+public final class BuildStates {
+
+    /** Failed Travis build states. **/
+    private static final ImmutableSet<BuildState.State> FAILED_STATUSES = ImmutableSet.of(
+            BuildState.State.CANCELLED, BuildState.State.FAILED, BuildState.State.ERRORED
+    );
 
     /**
      * Prevents instantiation of this utility class.
@@ -50,5 +55,29 @@ final class BuildStates {
         throw newIllegalArgumentException(
                 "Unable to create build state out of the supplied string value `%s`.", state
         );
+    }
+
+    /**
+     * Determines whether the build is failed.
+     *
+     * @return `true` if the build is failed, `false` otherwise
+     * @see #isFailed(BuildState.State)
+     */
+    public static boolean isFailed(BuildState buildState) {
+        checkNotNull(buildState);
+        return isFailed(buildState.getState());
+    }
+
+    /**
+     * Determines whether the build state denotes a filed status.
+     *
+     * <p>The {@code cancelled}, {@code failed} and {@code errored} statuses are considered
+     * {@link #FAILED_STATUSES failed statuses}.
+     *
+     * @return `true` if the build status is failed, `false` otherwise
+     */
+    public static boolean isFailed(BuildState.State state) {
+        checkNotNull(state);
+        return FAILED_STATUSES.contains(state);
     }
 }

@@ -21,7 +21,6 @@
 package io.spine.chatbot.server.github;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.Time;
 import io.spine.chatbot.api.travis.Build;
@@ -66,16 +65,9 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  * </ul>
  *
  * Or, if the repository builds could not be retrieved, throws {@link NoBuildsFound} rejection.
- *
- * <p>The {@code cancelled}, {@code failed} and {@code errored} statuses are considered
- * {@link #FAILED_STATUSES failed statuses}.
  */
 final class RepoBuildProcess
         extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder> {
-
-    private static final ImmutableSet<BuildState.State> FAILED_STATUSES = ImmutableSet.of(
-            BuildState.State.CANCELLED, BuildState.State.FAILED, BuildState.State.ERRORED
-    );
 
     @LazyInit
     private @MonotonicNonNull TravisClient travisClient;
@@ -147,10 +139,10 @@ final class RepoBuildProcess
     private static BuildStateStatusChange stateStatusChangeOf(BuildState buildState) {
         var currentState = buildState.getState();
         var previousState = buildState.getPreviousState();
-        if (FAILED_STATUSES.contains(currentState)) {
+        if (BuildStates.isFailed(currentState)) {
             return FAILED;
         }
-        if (currentState == PASSED && FAILED_STATUSES.contains(previousState)) {
+        if (currentState == PASSED && BuildStates.isFailed(previousState)) {
             return RECOVERED;
         }
         if (currentState == PASSED && previousState == PASSED) {
