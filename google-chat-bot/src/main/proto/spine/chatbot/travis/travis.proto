@@ -90,10 +90,10 @@ message Commit {
     // Commit author.
     Author author = 7;
 
-    // Git commit author information
+    // Git commit author information.
     message Author {
 
-        // Git name of the commit author
+        // Git name of the commit author.
         string name = 1;
     }
 }
