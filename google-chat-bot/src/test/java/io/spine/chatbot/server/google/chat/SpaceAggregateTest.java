@@ -85,7 +85,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
 
     @Nested
     @DisplayName("register a space when a bot is added to the space")
-    final class RegisterDirectly {
+    final class RegisterOnAddedBot {
 
         @BeforeEach
         void setUp() {
