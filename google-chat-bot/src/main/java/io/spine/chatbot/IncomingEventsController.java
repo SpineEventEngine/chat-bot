@@ -61,7 +61,7 @@ final class IncomingEventsController implements Logging {
         try (ThirdPartyContext incomingEvents = ThirdPartyContext.singleTenant(CONTEXT_NAME)) {
             incomingEvents.emittedEvent(chatEvent, actor);
         } catch (Exception e) {
-            throw newIllegalStateException("Unable to handle incoming Google Chat event.", e);
+            throw newIllegalStateException(e, "Unable to handle incoming Google Chat event.");
         }
         return "OK";
     }

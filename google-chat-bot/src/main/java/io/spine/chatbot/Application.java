@@ -93,7 +93,7 @@ public final class Application {
             server.start();
         } catch (IOException e) {
             throw newIllegalStateException(
-                    "Unable to start Spine GRPC server `%s`.", SERVER_NAME, e
+                    e, "Unable to start Spine GRPC server `%s`.", SERVER_NAME
             );
         }
     }
