@@ -31,7 +31,7 @@ import io.spine.logging.Logging;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
 import io.spine.server.command.Assign;
-import io.spine.server.command.Command;
+import io.spine.server.event.React;
 
 /**
  * A room or direct message chat in the Google Chat.
@@ -43,11 +43,11 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
     /**
      * Registers a new space when the ChatBot is added to the space.
      */
-    @Command
-    RegisterSpace on(@External BotAddedToSpace e) {
+    @React
+    SpaceRegistered on(@External BotAddedToSpace e) {
         var space = e.getEvent()
                      .getSpace();
-        return RegisterSpace
+        return SpaceRegistered
                 .newBuilder()
                 .setDisplayName(space.getDisplayName())
                 .setThreaded(isThreaded(space))

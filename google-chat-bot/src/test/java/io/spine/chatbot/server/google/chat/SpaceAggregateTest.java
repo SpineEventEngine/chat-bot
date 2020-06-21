@@ -24,20 +24,27 @@ import io.spine.chatbot.google.chat.Space;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.command.RegisterSpace;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
+import io.spine.chatbot.google.chat.incoming.ChatEvent;
+import io.spine.chatbot.google.chat.incoming.EventType;
+import io.spine.chatbot.google.chat.incoming.SpaceType;
+import io.spine.chatbot.google.chat.incoming.User;
+import io.spine.chatbot.google.chat.incoming.event.BotAddedToSpace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.spaceIdOf;
+
 @DisplayName("SpaceAggregate should")
 final class SpaceAggregateTest extends GoogleChatEntityTest {
+
+    private static final SpaceId spaceId = spaceIdOf("spaces/poqwdpQ21");
+    private static final String displayName = "Spine Developers";
 
     @Nested
     @DisplayName("register a space")
     final class Register {
-
-        private final SpaceId spaceId = GoogleChatIdentifier.spaceIdOf("spaces/poqwdpQ21");
-        private final String displayName = "Spine Developers";
 
         @BeforeEach
         void setUp() {
@@ -73,6 +80,63 @@ final class SpaceAggregateTest extends GoogleChatEntityTest {
                     .vBuild();
             context().assertState(spaceId, Space.class)
                      .isEqualTo(expectedState);
+        }
+    }
+
+    @Nested
+    @DisplayName("register a space when a bot is added to the space")
+    final class RegisterDirectly {
+
+        @BeforeEach
+        void setUp() {
+            var chatEvent = ChatEvent
+                    .newBuilder()
+                    .setSpace(chatSpace())
+                    .setUser(User.newBuilder()
+                                 .setName("Lukas"))
+                    .setType(EventType.ADDED_TO_SPACE)
+                    .setEventTime("2020-06-19T15:39:01Z")
+                    .vBuild();
+            var botAddedToSpace = BotAddedToSpace
+                    .newBuilder()
+                    .setSpaceId(spaceId)
+                    .setEvent(chatEvent)
+                    .vBuild();
+            context().receivesExternalEvent(botAddedToSpace);
+        }
+
+        @Test
+        @DisplayName("producing SpaceRegistered event")
+        void producingEvent() {
+            var spaceRegistered = SpaceRegistered
+                    .newBuilder()
+                    .setId(spaceId)
+                    .setDisplayName(displayName)
+                    .setThreaded(true)
+                    .vBuild();
+            context().assertEvent(spaceRegistered);
+        }
+
+        @Test
+        @DisplayName("setting Space state")
+        void settingState() {
+            var expectedState = Space
+                    .newBuilder()
+                    .setId(spaceId)
+                    .setThreaded(true)
+                    .setDisplayName(displayName)
+                    .vBuild();
+            context().assertState(spaceId, Space.class)
+                     .isEqualTo(expectedState);
+        }
+
+        private io.spine.chatbot.google.chat.incoming.Space chatSpace() {
+            return io.spine.chatbot.google.chat.incoming.Space
+                    .newBuilder()
+                    .setName(spaceId.getValue())
+                    .setDisplayName(displayName)
+                    .setType(SpaceType.ROOM)
+                    .vBuild();
         }
     }
 }
