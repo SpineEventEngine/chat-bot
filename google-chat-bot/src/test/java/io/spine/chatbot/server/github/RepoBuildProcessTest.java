@@ -111,6 +111,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .newBuilder()
                     .setId(repositoryId)
                     .setBuildState(buildState)
+                    .setRepositoryBuildState(buildState.getState())
                     .vBuild();
             context().assertState(repositoryId, RepositoryBuild.class)
                      .isEqualTo(expectedState);
@@ -171,6 +172,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .newBuilder()
                     .setId(repositoryId)
                     .setBuildState(newBuildState)
+                    .setRepositoryBuildState(newBuildState.getState())
                     .vBuild();
             context().assertState(repositoryId, RepositoryBuild.class)
                      .isEqualTo(expectedState);
@@ -231,6 +233,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .newBuilder()
                     .setId(repositoryId)
                     .setBuildState(newBuildState)
+                    .setRepositoryBuildState(newBuildState.getState())
                     .vBuild();
             context().assertState(repositoryId, RepositoryBuild.class)
                      .isEqualTo(expectedState);

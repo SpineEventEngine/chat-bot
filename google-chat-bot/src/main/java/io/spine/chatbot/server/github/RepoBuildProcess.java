@@ -97,6 +97,7 @@ final class RepoBuildProcess
         var build = builds.get(0);
         var buildState = buildStateFrom(build, c.getGoogleChatSpace());
         builder().setLastStatusCheck(Time.currentTime())
+                 .setRepositoryBuildState(buildState.getState())
                  .setBuildState(buildState);
         var stateChange = BuildStateChange
                 .newBuilder()
