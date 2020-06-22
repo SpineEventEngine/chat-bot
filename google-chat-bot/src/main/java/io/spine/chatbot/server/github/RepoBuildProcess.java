@@ -23,9 +23,9 @@ package io.spine.chatbot.server.github;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.Time;
-import io.spine.chatbot.api.travis.Build;
 import io.spine.chatbot.api.travis.BuildsQuery;
 import io.spine.chatbot.api.travis.Commit;
+import io.spine.chatbot.api.travis.RepoBranchBuildResponse;
 import io.spine.chatbot.api.travis.TravisClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.BuildState;
@@ -95,8 +95,7 @@ final class RepoBuildProcess
                     .setId(repositoryId)
                     .build();
         }
-        var build = branchBuild.getLastBuild();
-        var buildState = buildStateFrom(build, c.getGoogleChatSpace());
+        var buildState = buildStateFrom(branchBuild, c.getGoogleChatSpace());
         builder().setLastStatusCheck(Time.currentTime())
                  .setRepositoryBuildState(buildState.getState())
                  .setBuildState(buildState);
@@ -169,17 +168,18 @@ final class RepoBuildProcess
     }
 
     @VisibleForTesting
-    static BuildState buildStateFrom(Build build, String space) {
-        var slug = build.getRepository()
-                        .getSlug();
+    static BuildState buildStateFrom(RepoBranchBuildResponse branchBuild, String space) {
+        var branchBuildName = branchBuild.getName();
+        var slug = branchBuild.getRepository()
+                              .getSlug();
+        var build = branchBuild.getLastBuild();
         return BuildState
                 .newBuilder()
                 .setNumber(build.getNumber())
                 .setGoogleChatSpace(space)
                 .setState(BuildStates.buildStateFrom(build.getState()))
                 .setPreviousState(BuildStates.buildStateFrom(build.getPreviousState()))
-                .setBranch(build.getBranch()
-                                .getName())
+                .setBranch(branchBuildName)
                 .setLastCommit(from(build.getCommit()))
                 .setCreatedBy(build.getCreatedBy()
                                    .getLogin())

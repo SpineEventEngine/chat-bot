@@ -76,11 +76,12 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     final class FailedBuild {
 
         private final Build build = failedBuild();
-        private final BuildState buildState = buildStateFrom(build, chatSpace);
+        private final RepoBranchBuildResponse branchBuild = branchBuildOf(build);
+        private final BuildState buildState = buildStateFrom(branchBuild, chatSpace);
 
         @BeforeEach
         void setUp() {
-            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(build));
+            travisClient().setBuildsFor(repositoryId.getValue(), branchBuild);
             var checkRepoBuild = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -125,14 +126,17 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     final class RecoveredBuild {
 
         private final Build previousBuild = failedBuild();
-        private final BuildState previousBuildState = buildStateFrom(previousBuild, chatSpace);
+        private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
+        private final BuildState previousBuildState = buildStateFrom(previousBranchBuild,
+                                                                     chatSpace);
 
         private final Build newBuild = passingBuild();
-        private final BuildState newBuildState = buildStateFrom(newBuild, chatSpace);
+        private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
+        private final BuildState newBuildState = buildStateFrom(newBranchBuild, chatSpace);
 
         @BeforeEach
         void setUp() {
-            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(previousBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), previousBranchBuild);
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -140,7 +144,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(newBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), newBranchBuild);
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -188,10 +192,13 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         private final Build initialFailedBuild = failedBuild();
 
         private final Build previousBuild = passingBuild();
-        private final BuildState previousBuildState = buildStateFrom(previousBuild, chatSpace);
+        private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
+        private final BuildState previousBuildState = buildStateFrom(previousBranchBuild,
+                                                                     chatSpace);
 
         private final Build newBuild = nextPassingBuild();
-        private final BuildState newBuildState = buildStateFrom(newBuild, chatSpace);
+        private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
+        private final BuildState newBuildState = buildStateFrom(newBranchBuild, chatSpace);
 
         @BeforeEach
         void setUp() {
@@ -203,7 +210,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(previousBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), previousBranchBuild);
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -211,7 +218,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoRecovery);
-            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(newBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), newBranchBuild);
             var checkRepoStable = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -255,6 +262,9 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         return RepoBranchBuildResponse
                 .newBuilder()
                 .setLastBuild(build)
+                .setName("master")
+                .setRepository(Repository.newBuilder()
+                                         .setSlug(repositoryId.getValue()))
                 .buildPartial();
     }
 
