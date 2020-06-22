@@ -31,9 +31,7 @@ import java.nio.charset.StandardCharsets;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * A {@link HttpResponse.BodyHandler BodyHandler} for JSON Protobuf messages.
- *
- * <p>The handler converts input JSON strings into the Protobuf messages relying on the
+ * The handler converts input JSON strings into the Protobuf messages relying on the
  * Spine {@link Json} conversion functionality.
  *
  * @param <T>
