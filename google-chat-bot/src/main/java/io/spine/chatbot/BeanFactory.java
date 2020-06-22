@@ -23,6 +23,9 @@ package io.spine.chatbot;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.annotations.VisibleForTesting;
+import com.google.pubsub.v1.PubsubMessage;
 import com.google.pubsub.v1.PubsubPushNotification;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
@@ -52,18 +55,36 @@ final class BeanFactory {
      * @see <a href="https://github.com/FasterXML/jackson-databind/wiki/Deserialization-Features">
      *         Jackson Deserialization</a>
      */
-    private static final class PubsubPushNotificationDeserializer
+    @VisibleForTesting
+    static final class PubsubPushNotificationDeserializer
             extends JsonDeserializer<PubsubPushNotification> {
 
         /**
          * Deserializes {@link PubsubPushNotification} JSON string into a Protobuf message.
+         *
+         * <p>While Protobuf JSON parser is not able to handle same fields that are set using
+         * {@code lowerCamelCase} and {@code snake_case} notations, we manually drop duplicate
+         * fields.
+         *
+         * @see <a href="https://github.com/protocolbuffers/protobuf/issues/7641">
+         *         JsonFormat fails to parse JSON with both `lowerCamelCase` and `snake_case`
+         *         fields</a>
          */
         @Override
         public PubsubPushNotification deserialize(JsonParser parser, DeserializationContext ctxt) {
             try {
-                var protoJson = parser.readValueAsTree()
-                                      .toString();
-                var result = Json.fromJson(protoJson, PubsubPushNotification.class);
+                var jsonNode = ctxt.readTree(parser);
+                var messageNode = (ObjectNode) jsonNode.get("message");
+                messageNode.remove("message_id");
+                messageNode.remove("publish_time");
+                var pubsubMessage = Json.fromJson(messageNode.toString(), PubsubMessage.class);
+                var subscription = jsonNode.get("subscription")
+                                           .asText();
+                var result = PubsubPushNotification
+                        .newBuilder()
+                        .setMessage(pubsubMessage)
+                        .setSubscription(subscription)
+                        .vBuild();
                 return result;
             } catch (IOException e) {
                 throw new RuntimeException("Unable to deserialize PubsubPushNotification json.", e);
