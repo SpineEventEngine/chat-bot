@@ -22,10 +22,4 @@ message PubsubPushNotification {
     // Format is `projects/{project}/subscriptions/{subscription}`.
     //
     string subscription = 2 [(required) = true, (pattern).regex = "projects/.+/subscriptions/.+"];
-
-    // Pubsub message ID.
-    string message_id = 3 [(required) = true];
-
-    // Message publishing time.
-    google.protobuf.Timestamp publish_time = 4 [(required) = true];
 }
