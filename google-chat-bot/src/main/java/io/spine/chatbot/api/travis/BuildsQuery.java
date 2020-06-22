@@ -25,10 +25,10 @@ package io.spine.chatbot.api.travis;
  *
  * @see <a href="https://developer.travis-ci.com/resource/builds#find">Find build</a>
  */
-public final class BuildsQuery extends Query<BuildsResponse> {
+public final class BuildsQuery extends Query<RepoBranchBuildResponse> {
 
     private BuildsQuery(String request) {
-        super(request, BuildsResponse.class);
+        super(request, RepoBranchBuildResponse.class);
     }
 
     /**
@@ -40,7 +40,7 @@ public final class BuildsQuery extends Query<BuildsResponse> {
         var encodedSlug = encode(repoSlug);
         var request = "/repo/"
                 + encodedSlug
-                + "/builds?limit=1&branch.name=master&include=build.commit";
+                + "/branch/master?&include=build.commit";
         return new BuildsQuery(request);
     }
 }

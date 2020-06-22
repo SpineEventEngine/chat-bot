@@ -21,8 +21,8 @@
 package io.spine.chatbot.server.github;
 
 import io.spine.chatbot.api.travis.Build;
-import io.spine.chatbot.api.travis.BuildsResponse;
 import io.spine.chatbot.api.travis.Commit;
+import io.spine.chatbot.api.travis.RepoBranchBuildResponse;
 import io.spine.chatbot.api.travis.Repository;
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
@@ -53,7 +53,8 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     @Test
     @DisplayName("throw NoBuildsFound rejection when Travic API cannot return builds for a repo")
     void throwNoBuildsFoundRejection() {
-        travisClient().setBuildsFor(repositoryId.getValue(), BuildsResponse.getDefaultInstance());
+        travisClient().setBuildsFor(repositoryId.getValue(),
+                                    RepoBranchBuildResponse.getDefaultInstance());
         var checkRepoBuild = CheckRepositoryBuild
                 .newBuilder()
                 .setId(repositoryId)
@@ -79,7 +80,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         @BeforeEach
         void setUp() {
-            travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(build));
+            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(build));
             var checkRepoBuild = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -131,7 +132,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         @BeforeEach
         void setUp() {
-            travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(previousBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(previousBuild));
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -139,7 +140,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(newBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(newBuild));
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -192,7 +193,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         @BeforeEach
         void setUp() {
-            travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(previousBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(previousBuild));
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -200,7 +201,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(newBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(newBuild));
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -240,10 +241,10 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         }
     }
 
-    private static BuildsResponse singleBuild(Build build) {
-        return BuildsResponse
+    private static RepoBranchBuildResponse branchBuildOf(Build build) {
+        return RepoBranchBuildResponse
                 .newBuilder()
-                .addBuilds(build)
+                .setLastBuild(build)
                 .buildPartial();
     }
 

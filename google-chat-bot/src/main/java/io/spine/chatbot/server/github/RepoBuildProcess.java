@@ -49,6 +49,7 @@ import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.FA
 import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.RECOVERED;
 import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.STABLE;
 import static io.spine.net.Urls.travisBuildUrlFor;
+import static io.spine.protobuf.Messages.isDefault;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
@@ -85,16 +86,15 @@ final class RepoBuildProcess
             throws NoBuildsFound {
         var repositoryId = c.getId();
         _info().log("Checking build status for repository `%s`.", repositoryId.getValue());
-        var builds = travisClient.execute(BuildsQuery.forRepo(repositoryId.getValue()))
-                                 .getBuildsList();
-        if (builds.isEmpty()) {
+        var branchBuild = travisClient.execute(BuildsQuery.forRepo(repositoryId.getValue()));
+        if (isDefault(branchBuild.getLastBuild())) {
             _warn().log("No builds found for the repository `%s`.", repositoryId.getValue());
             throw NoBuildsFound
                     .newBuilder()
                     .setId(repositoryId)
                     .build();
         }
-        var build = builds.get(0);
+        var build = branchBuild.getLastBuild();
         var buildState = buildStateFrom(build, c.getGoogleChatSpace());
         builder().setLastStatusCheck(Time.currentTime())
                  .setRepositoryBuildState(buildState.getState())

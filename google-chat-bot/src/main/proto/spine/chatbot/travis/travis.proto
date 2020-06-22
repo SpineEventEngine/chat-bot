@@ -135,16 +135,28 @@ message Build {
     Owner created_by = 11;
 }
 
-// A Travis `builds` API endpoint response.
-message BuildsResponse {
+// A Travis `branch` API endpoint response.
+message RepoBranchBuildResponse {
 
     option (is).java_type = "TravisResponse";
 
-    // Builds fetched by the API call.
-    repeated Build builds = 1;
+    // Name of the git branch.
+    string name = 1;
+
+    // The repository.
+    Repository repository = 2;
+
+    // Whether or not this is the repository's default branch.
+    bool default_branch = 3;
+
+    // Whether or not the branch still exists on GitHub.
+    bool exists_on_github = 4;
+
+    // Last build on the branch.
+    Build last_build = 5;
 }
 
-// A travis `repos` API endpoint response.
+// A Travis `repos` API endpoint response.
 message RepositoriesResponse {
 
     option (is).java_type = "TravisResponse";

@@ -63,12 +63,12 @@ public final class InMemoryTravisClient extends FailFastClient implements Travis
     }
 
     /**
-     * Sets up a stub {@code builds} response for a specified {@code repoSlug}.
+     * Sets up a stub {@code branchBuild} response for a specified {@code repoSlug}.
      */
-    public void setBuildsFor(String repoSlug, BuildsResponse builds) {
+    public void setBuildsFor(String repoSlug, RepoBranchBuildResponse branchBuild) {
         checkNotNull(repoSlug);
-        checkNotNull(builds);
-        responses.put(BuildsQuery.forRepo(repoSlug), builds);
+        checkNotNull(branchBuild);
+        responses.put(BuildsQuery.forRepo(repoSlug), branchBuild);
     }
 
     /**

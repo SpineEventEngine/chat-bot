@@ -11,3 +11,10 @@ GET https://{{host}}/owner/SpineEventEngine/repos
 Accept: application/json
 Authorization: token {{token}}
 Travis-API-Version: 3
+
+### List Travis CI repository branch builds
+
+GET https://{{host}}/repo/SpineEventEngine%2Fcore-java/branch/master?limit=3&include=build.commit
+Accept: application/json
+Authorization: token {{token}}
+Travis-API-Version: 3
