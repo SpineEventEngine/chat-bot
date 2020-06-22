@@ -185,6 +185,8 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     @DisplayName("handle stable builds")
     final class StableBuild {
 
+        private final Build initialFailedBuild = failedBuild();
+
         private final Build previousBuild = passingBuild();
         private final BuildState previousBuildState = buildStateFrom(previousBuild, chatSpace);
 
@@ -193,7 +195,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         @BeforeEach
         void setUp() {
-            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(previousBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(initialFailedBuild));
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -201,7 +203,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(newBuild));
+            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(previousBuild));
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
@@ -209,6 +211,14 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoRecovery);
+            travisClient().setBuildsFor(repositoryId.getValue(), branchBuildOf(newBuild));
+            var checkRepoStable = CheckRepositoryBuild
+                    .newBuilder()
+                    .setId(repositoryId)
+                    .setGoogleChatSpace(chatSpace)
+                    .setOrganization(orgId)
+                    .vBuild();
+            context().receivesCommand(checkRepoStable);
         }
 
         @Test

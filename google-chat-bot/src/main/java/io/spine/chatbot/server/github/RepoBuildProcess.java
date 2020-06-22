@@ -45,6 +45,7 @@ import io.spine.server.tuple.EitherOf3;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import static io.spine.chatbot.github.repository.build.BuildState.State.PASSED;
+import static io.spine.chatbot.github.repository.build.BuildState.State.S_UNKNOWN;
 import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.FAILED;
 import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.RECOVERED;
 import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.STABLE;
@@ -111,7 +112,8 @@ final class RepoBuildProcess
     private EitherOf3<BuildFailed, BuildRecovered, BuildStable>
     determineOutcome(RepositoryId id, BuildStateChange stateChange) {
         var newBuildState = stateChange.getNewValue();
-        var stateStatusChange = stateStatusChangeOf(newBuildState);
+        var previousBuildState = stateChange.getPreviousValue();
+        var stateStatusChange = stateStatusChangeOf(newBuildState, previousBuildState);
         switch (stateStatusChange) {
             case FAILED:
                 _info().log("Build for repository `%s` failed with status `%s`.",
@@ -147,16 +149,17 @@ final class RepoBuildProcess
         }
     }
 
-    private static BuildStateStatusChange stateStatusChangeOf(BuildState buildState) {
-        var currentState = buildState.getState();
-        var previousState = buildState.getPreviousState();
+    private static BuildStateStatusChange stateStatusChangeOf(BuildState newBuildState,
+                                                              BuildState previousBuildState) {
+        var currentState = newBuildState.getState();
+        var previousState = previousBuildState.getState();
         if (BuildStates.isFailed(currentState)) {
             return FAILED;
         }
         if (currentState == PASSED && BuildStates.isFailed(previousState)) {
             return RECOVERED;
         }
-        if (currentState == PASSED && previousState == PASSED) {
+        if (currentState == PASSED && (previousState == PASSED || previousState == S_UNKNOWN)) {
             return STABLE;
         }
         throw newIllegalStateException(
