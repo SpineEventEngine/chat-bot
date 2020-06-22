@@ -76,9 +76,12 @@ final class SpineOrgInitProcess
     @Command
     Iterable<CommandMessage> on(@External SpaceRegistered e) {
         if (state().getInitialized()) {
+            _info().log("Spine organization is already initialized. Skipping the process.");
             return ImmutableSet.of();
         }
         var spaceId = e.getId();
+        _info().log("Starting Spine organization initialization process in space `%s`.",
+                    spaceId.getValue());
         var commands = ImmutableSet.<CommandMessage>builder();
         commands.add(registerOrgCommand(SPINE_ORGANIZATION, spaceId.getValue()));
         travisClient.execute(ReposQuery.forOwner(SPINE_ORG))
@@ -92,8 +95,9 @@ final class SpineOrgInitProcess
         return commands.build();
     }
 
-    private static RegisterRepository registerRepoCommand(Repository repo, OrganizationId orgId) {
+    private RegisterRepository registerRepoCommand(Repository repo, OrganizationId orgId) {
         var slug = repo.getSlug();
+        _info().log("Registering `%s` repository.", slug);
         return RegisterRepository
                 .newBuilder()
                 .setOrganization(orgId)

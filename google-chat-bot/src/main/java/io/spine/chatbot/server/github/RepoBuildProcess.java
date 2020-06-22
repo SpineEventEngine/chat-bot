@@ -37,6 +37,7 @@ import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.github.repository.build.event.BuildStable;
 import io.spine.chatbot.github.repository.build.rejection.NoBuildsFound;
+import io.spine.logging.Logging;
 import io.spine.net.Urls;
 import io.spine.server.command.Assign;
 import io.spine.server.procman.ProcessManager;
@@ -67,7 +68,8 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  * Or, if the repository builds could not be retrieved, throws {@link NoBuildsFound} rejection.
  */
 final class RepoBuildProcess
-        extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder> {
+        extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder>
+        implements Logging {
 
     @LazyInit
     private @MonotonicNonNull TravisClient travisClient;
@@ -81,12 +83,15 @@ final class RepoBuildProcess
     @Assign
     EitherOf3<BuildFailed, BuildRecovered, BuildStable> handle(CheckRepositoryBuild c)
             throws NoBuildsFound {
-        var builds = travisClient.execute(BuildsQuery.forRepo(id().getValue()))
+        var repositoryId = c.getId();
+        _info().log("Checking build status for repository `%s`.", repositoryId.getValue());
+        var builds = travisClient.execute(BuildsQuery.forRepo(repositoryId.getValue()))
                                  .getBuildsList();
         if (builds.isEmpty()) {
+            _warn().log("No builds found for the repository `%s`.", repositoryId.getValue());
             throw NoBuildsFound
                     .newBuilder()
-                    .setId(c.getId())
+                    .setId(repositoryId)
                     .build();
         }
         var build = builds.get(0);
@@ -98,15 +103,18 @@ final class RepoBuildProcess
                 .setPreviousValue(state().getBuildState())
                 .setNewValue(buildState)
                 .vBuild();
-        var result = determineOutcome(c.getId(), stateChange);
+        var result = determineOutcome(repositoryId, stateChange);
         return result;
     }
 
-    private static EitherOf3<BuildFailed, BuildRecovered, BuildStable>
+    private EitherOf3<BuildFailed, BuildRecovered, BuildStable>
     determineOutcome(RepositoryId id, BuildStateChange stateChange) {
-        var stateStatusChange = stateStatusChangeOf(stateChange.getNewValue());
+        var newBuildState = stateChange.getNewValue();
+        var stateStatusChange = stateStatusChangeOf(newBuildState);
         switch (stateStatusChange) {
             case FAILED:
+                _info().log("Build for repository `%s` failed with status `%s`.",
+                            id.getValue(), newBuildState.getState());
                 var buildFailed = BuildFailed
                         .newBuilder()
                         .setId(id)
@@ -114,6 +122,7 @@ final class RepoBuildProcess
                         .vBuild();
                 return EitherOf3.withA(buildFailed);
             case RECOVERED:
+                _info().log("Build for repository `%s` is recovered.", id.getValue());
                 var buildRecovered = BuildRecovered
                         .newBuilder()
                         .setId(id)
@@ -121,6 +130,7 @@ final class RepoBuildProcess
                         .vBuild();
                 return EitherOf3.withB(buildRecovered);
             case STABLE:
+                _info().log("Build for repository `%s` is stable.", id.getValue());
                 var buildStable = BuildStable
                         .newBuilder()
                         .setId(id)
