@@ -64,11 +64,12 @@ public final class GoogleChat implements GoogleChatClient, Logging {
     @Override
     public Message sendBuildStateUpdate(BuildState buildState, ThreadResource thread) {
         var repoSlug = buildState.getRepositorySlug();
-        _debug().log("Building state update message for repository `%s`.", repoSlug);
+        var debug = _debug();
+        debug.log("Building state update message for repository `%s`.", repoSlug);
         var message = buildStateMessage(buildState, thread);
-        _debug().log("Sending state update message for repository `%s`.", repoSlug);
+        debug.log("Sending state update message for repository `%s`.", repoSlug);
         var result = sendMessage(buildState.getGoogleChatSpace(), message);
-        _debug().log(
+        debug.log(
                 "Build state update message with ID `%s` for repository `%s` sent to thread `%s`.",
                 result.getName(), repoSlug, result.getThread()
                                                   .getName()
