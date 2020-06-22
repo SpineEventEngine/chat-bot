@@ -21,9 +21,11 @@
 package io.spine.chatbot;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.flogger.FluentLogger;
 import io.micronaut.runtime.Micronaut;
 import io.spine.chatbot.server.github.GitHubContext;
 import io.spine.chatbot.server.google.chat.GoogleChatContext;
+import io.spine.logging.Logging;
 import io.spine.server.Server;
 
 import java.io.IOException;
@@ -45,6 +47,15 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  **/
 public final class Application {
 
+    static {
+        System.setProperty(
+                "flogger.backend_factory",
+                "com.google.common.flogger.backend.log4j2.Log4j2BackendFactory#getInstance"
+        );
+    }
+
+    private static final FluentLogger LOGGER = Logging.loggerFor(Application.class);
+
     /** Name of the GRPC {@link Server}. **/
     static final String SERVER_NAME = "ChatBotServer";
 
@@ -61,6 +72,8 @@ public final class Application {
      * the {@link Micronaut}.
      */
     public static void main(String[] args) {
+        LOGGER.atFine()
+              .log("Starting Spine ChatBot application.");
         initializeSpine();
         Micronaut.run(Application.class, args);
     }
@@ -69,6 +82,8 @@ public final class Application {
      * Initializes Spine server environment and starts Spine {@link Server}.
      */
     private static void initializeSpine() {
+        LOGGER.atConfig()
+              .log("Initializing server environment.");
         ChatBotServerEnvironment.initializeEnvironment();
         var gitHubContext = GitHubContext
                 .newBuilder()
@@ -84,6 +99,8 @@ public final class Application {
      */
     @VisibleForTesting
     static void startSpineServer(GitHubContext gitHubContext, GoogleChatContext googleChatContext) {
+        LOGGER.atConfig()
+              .log("Starting server.");
         Server server = Server
                 .inProcess(SERVER_NAME)
                 .add(gitHubContext.contextBuilder())

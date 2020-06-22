@@ -49,6 +49,11 @@ dependencies {
     implementation(Deps.build.log4j2.core)
     runtimeOnly(Deps.build.log4j2.api)
     runtimeOnly(Deps.build.log4j2.slf4jBridge)
+    implementation(Deps.build.flogger)
+    implementation("com.google.flogger:flogger-log4j2-backend:${Deps.versions.flogger}") {
+        exclude("org.apache.logging.log4j:log4j-api")
+        exclude("org.apache.logging.log4j:log4j-core")
+    }
 
     implementation("io.spine.gcloud:spine-datastore:${Deps.versions.spineGcloud}")
     implementation(Deps.build.google.secretManager)
