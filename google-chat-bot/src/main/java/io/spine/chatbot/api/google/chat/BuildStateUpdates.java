@@ -114,6 +114,7 @@ final class BuildStateUpdates {
 
     private static String capitalizeState(BuildState.State state) {
         var name = state.name();
-        return name.charAt(0) + name.toLowerCase();
+        return name.charAt(0) + name.substring(1)
+                                    .toLowerCase();
     }
 }
