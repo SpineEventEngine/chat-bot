@@ -84,7 +84,7 @@ public final class Application {
     private static void initializeSpine() {
         LOGGER.atConfig()
               .log("Initializing server environment.");
-        ChatBotServerEnvironment.initializeEnvironment();
+        ChatBotServerEnvironment.init();
         var gitHubContext = GitHubContext
                 .newBuilder()
                 .build();

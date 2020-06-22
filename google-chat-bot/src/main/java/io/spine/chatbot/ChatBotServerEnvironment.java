@@ -53,7 +53,7 @@ final class ChatBotServerEnvironment {
     /**
      * Initializes {@link ServerEnvironment} for ChatBot.
      */
-    static void initializeEnvironment() {
+    static void init() {
         var se = ServerEnvironment.instance();
         var storageFactory = dsStorageFactory();
         se.use(InMemoryTransportFactory.newInstance(), Production.class);
