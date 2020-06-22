@@ -95,7 +95,7 @@ final class RepoBuildProcess
                     .build();
         }
         var build = builds.get(0);
-        var buildState = buildStateFrom(build);
+        var buildState = buildStateFrom(build, c.getGoogleChatSpace());
         builder().setLastStatusCheck(Time.currentTime())
                  .setBuildState(buildState);
         var stateChange = BuildStateChange
@@ -165,11 +165,13 @@ final class RepoBuildProcess
     }
 
     @VisibleForTesting
-    static BuildState buildStateFrom(Build build) {
+    static BuildState buildStateFrom(Build build, String space) {
         var slug = build.getRepository()
                         .getSlug();
         return BuildState
                 .newBuilder()
+                .setNumber(build.getNumber())
+                .setGoogleChatSpace(space)
                 .setState(BuildStates.buildStateFrom(build.getState()))
                 .setPreviousState(BuildStates.buildStateFrom(build.getPreviousState()))
                 .setBranch(build.getBranch()

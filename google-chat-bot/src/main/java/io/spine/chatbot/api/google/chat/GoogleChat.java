@@ -64,8 +64,9 @@ public final class GoogleChat implements GoogleChatClient, Logging {
     @Override
     public Message sendBuildStateUpdate(BuildState buildState, ThreadResource thread) {
         var repoSlug = buildState.getRepositorySlug();
-        _debug().log("Sending build state update message for repository `%s`.", repoSlug);
+        _debug().log("Building state update message for repository `%s`.", repoSlug);
         var message = buildStateMessage(buildState, thread);
+        _debug().log("Sending state update message for repository `%s`.", repoSlug);
         var result = sendMessage(buildState.getGoogleChatSpace(), message);
         _debug().log(
                 "Build state update message with ID `%s` for repository `%s` sent to thread `%s`.",
@@ -84,6 +85,7 @@ public final class GoogleChat implements GoogleChatClient, Logging {
                     .create(space, message)
                     .execute();
         } catch (IOException e) {
+            _error().log("Unable to send message to space `%s`.", space, e);
             throw new RuntimeException("Unable to send message to space " + space, e);
         }
     }
@@ -101,7 +103,11 @@ public final class GoogleChat implements GoogleChatClient, Logging {
                     .build();
             return chat;
         } catch (IOException | GeneralSecurityException e) {
-            throw new RuntimeException("Unable to create Hangouts Chat client", e);
+            String message = "Unable to create Hangouts Chat client.";
+            Logging.loggerFor(GoogleChat.class)
+                   .atSevere()
+                   .log(message, e);
+            throw new RuntimeException(message, e);
         }
     }
 }

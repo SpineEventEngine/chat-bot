@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.base.CommandMessage;
 import io.spine.base.EventMessage;
+import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.OrganizationRepositories;
@@ -35,6 +36,7 @@ import io.spine.client.Subscription;
 import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
 
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
 /**
@@ -77,6 +79,28 @@ public final class ChatBotServerClient {
     public boolean cancelSubscription(Subscription subscription) {
         return client.subscriptions()
                      .cancel(subscription);
+    }
+
+    /**
+     * Retrieves all registered organizations.
+     */
+    public ImmutableList<Organization> listOrganizations() {
+        return client.asGuest()
+                     .select(Organization.class)
+                     .run();
+    }
+
+    /**
+     * Returns list of all registered repositories for the {@code organization}.
+     */
+    public ImmutableList<RepositoryId> listOrgRepos(OrganizationId organization) {
+        var orgRepos = client.asGuest()
+                             .select(OrganizationRepositories.class)
+                             .byId(organization)
+                             .run();
+        checkState(orgRepos.size() == 1);
+        return ImmutableList.copyOf(orgRepos.get(0)
+                                            .getRepositoriesList());
     }
 
     /**

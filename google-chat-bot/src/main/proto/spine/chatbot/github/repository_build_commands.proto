@@ -38,4 +38,10 @@ message CheckRepositoryBuild {
 
     // ID of the repository to perform a check for.
     RepositoryId id = 1 [(required) = true];
+
+    // ID of the organization the repository belongs to.
+    OrganizationId organization = 2 [(required) = true];
+
+    // Name of the Google Chat space associated with the organization in form `spaces/<space_id>`.
+    string google_chat_space = 3 [(required) = true, (pattern).regex = "spaces/.+"];
 }

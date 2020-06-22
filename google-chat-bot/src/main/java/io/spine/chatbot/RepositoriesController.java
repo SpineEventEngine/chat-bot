@@ -24,6 +24,7 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.spine.chatbot.client.ChatBotServerClient;
 import io.spine.chatbot.github.RepositoryId;
+import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.logging.Logging;
 
@@ -43,15 +44,20 @@ final class RepositoriesController implements Logging {
     String checkBuildStatuses() {
         _debug().log("Checking repositories build statues.");
         var botClient = ChatBotServerClient.inProcessClient(SERVER_NAME);
-        botClient.listRepositories()
-                 .forEach(repository -> checkBuildStatus(botClient, repository));
+        var organizations = botClient.listOrganizations();
+        for (var organization : organizations) {
+            var repos = botClient.listOrgRepos(organization.getId());
+            repos.forEach(repo -> checkBuildStatus(botClient, repo, organization));
+        }
         return "success";
     }
 
-    private void checkBuildStatus(ChatBotServerClient botClient, RepositoryId repository) {
+    private void checkBuildStatus(ChatBotServerClient botClient,
+                                  RepositoryId repository,
+                                  Organization organization) {
         _info().log("Sending `CheckRepositoryBuild` command for repository `%s`",
                     repository.getValue());
-        var checkRepositoryBuild = checkRepoBuildCommand(repository);
+        var checkRepositoryBuild = checkRepoBuildCommand(repository, organization);
         var subscriptions = botClient
                 .asGuest()
                 .command(checkRepositoryBuild)
@@ -66,10 +72,13 @@ final class RepositoriesController implements Logging {
         );
     }
 
-    private static CheckRepositoryBuild checkRepoBuildCommand(RepositoryId id) {
+    private static CheckRepositoryBuild
+    checkRepoBuildCommand(RepositoryId id, Organization organization) {
         return CheckRepositoryBuild
                 .newBuilder()
                 .setId(id)
+                .setOrganization(organization.getId())
+                .setGoogleChatSpace(organization.getGoogleChatSpace())
                 .vBuild();
     }
 }

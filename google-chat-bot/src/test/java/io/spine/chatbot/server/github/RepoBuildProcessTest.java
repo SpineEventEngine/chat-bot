@@ -24,6 +24,7 @@ import io.spine.chatbot.api.travis.Build;
 import io.spine.chatbot.api.travis.BuildsResponse;
 import io.spine.chatbot.api.travis.Commit;
 import io.spine.chatbot.api.travis.Repository;
+import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
@@ -38,13 +39,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.chatbot.server.github.GitHubIdentifier.organizationIdOf;
 import static io.spine.chatbot.server.github.GitHubIdentifier.repositoryIdOf;
 import static io.spine.chatbot.server.github.RepoBuildProcess.buildStateFrom;
 
 @DisplayName("RepoBuildProcess should")
 final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
+    private static final OrganizationId orgId = organizationIdOf("SpineEventEngine");
     private static final RepositoryId repositoryId = repositoryIdOf("SpineEventEngine/web");
+    private static final String chatSpace = "spaces/1245wrq";
 
     @Test
     @DisplayName("throw NoBuildsFound rejection when Travic API cannot return builds for a repo")
@@ -53,6 +57,8 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         var checkRepoBuild = CheckRepositoryBuild
                 .newBuilder()
                 .setId(repositoryId)
+                .setOrganization(orgId)
+                .setGoogleChatSpace(chatSpace)
                 .vBuild();
         context().receivesCommand(checkRepoBuild);
 
@@ -69,7 +75,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     final class FailedBuild {
 
         private final Build build = failedBuild();
-        private final BuildState buildState = buildStateFrom(build);
+        private final BuildState buildState = buildStateFrom(build, chatSpace);
 
         @BeforeEach
         void setUp() {
@@ -77,6 +83,8 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
             var checkRepoBuild = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
+                    .setGoogleChatSpace(chatSpace)
+                    .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoBuild);
         }
@@ -115,10 +123,10 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     final class RecoveredBuild {
 
         private final Build previousBuild = failedBuild();
-        private final BuildState previousBuildState = buildStateFrom(previousBuild);
+        private final BuildState previousBuildState = buildStateFrom(previousBuild, chatSpace);
 
         private final Build newBuild = passingBuild();
-        private final BuildState newBuildState = buildStateFrom(newBuild);
+        private final BuildState newBuildState = buildStateFrom(newBuild, chatSpace);
 
         @BeforeEach
         void setUp() {
@@ -126,12 +134,16 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
+                    .setGoogleChatSpace(chatSpace)
+                    .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
             travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(newBuild));
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
+                    .setGoogleChatSpace(chatSpace)
+                    .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoRecovery);
         }
@@ -171,10 +183,10 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     final class StableBuild {
 
         private final Build previousBuild = passingBuild();
-        private final BuildState previousBuildState = buildStateFrom(previousBuild);
+        private final BuildState previousBuildState = buildStateFrom(previousBuild, chatSpace);
 
         private final Build newBuild = nextPassingBuild();
-        private final BuildState newBuildState = buildStateFrom(newBuild);
+        private final BuildState newBuildState = buildStateFrom(newBuild, chatSpace);
 
         @BeforeEach
         void setUp() {
@@ -182,12 +194,16 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
+                    .setGoogleChatSpace(chatSpace)
+                    .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
             travisClient().setBuildsFor(repositoryId.getValue(), singleBuild(newBuild));
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setId(repositoryId)
+                    .setGoogleChatSpace(chatSpace)
+                    .setOrganization(orgId)
                     .vBuild();
             context().receivesCommand(checkRepoRecovery);
         }
@@ -317,10 +333,11 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     }
 
     private static Repository webRepository() {
-        return Repository.newBuilder()
-                         .setId(1112)
-                         .setName("web")
-                         .setSlug(repositoryId.getValue())
-                         .buildPartial();
+        return Repository
+                .newBuilder()
+                .setId(1112)
+                .setName("web")
+                .setSlug(repositoryId.getValue())
+                .buildPartial();
     }
 }
