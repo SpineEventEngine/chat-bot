@@ -102,7 +102,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
                     .setSpaceId(spaceId)
                     .setEvent(chatEvent)
                     .vBuild();
-            context().receivesExternalEvent(botAddedToSpace);
+            context().receivesEvent(botAddedToSpace);
         }
 
         @Test

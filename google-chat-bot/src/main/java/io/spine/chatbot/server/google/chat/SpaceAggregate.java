@@ -26,7 +26,6 @@ import io.spine.chatbot.google.chat.command.RegisterSpace;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
 import io.spine.chatbot.google.chat.incoming.SpaceType;
 import io.spine.chatbot.google.chat.incoming.event.BotAddedToSpace;
-import io.spine.core.External;
 import io.spine.logging.Logging;
 import io.spine.server.aggregate.Aggregate;
 import io.spine.server.aggregate.Apply;
@@ -44,14 +43,17 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
      * Registers a new space when the ChatBot is added to the space.
      */
     @React
-    SpaceRegistered on(@External BotAddedToSpace e) {
+    SpaceRegistered on(BotAddedToSpace e) {
         var space = e.getEvent()
                      .getSpace();
+        var displayName = space.getDisplayName();
+        var spaceId = e.getSpaceId();
+        _info().log("Registering space `%s` (`%s`).", displayName, spaceId.getValue());
         return SpaceRegistered
                 .newBuilder()
-                .setDisplayName(space.getDisplayName())
+                .setDisplayName(displayName)
                 .setThreaded(isThreaded(space))
-                .setId(e.getSpaceId())
+                .setId(spaceId)
                 .vBuild();
     }
 
@@ -60,10 +62,11 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
      */
     @Assign
     SpaceRegistered handle(RegisterSpace c) {
-        _info().log("Registering space `%s`.", idAsString());
+        var spaceId = c.getId();
+        _info().log("Registering space `%s`.", spaceId.getValue());
         var result = SpaceRegistered
                 .newBuilder()
-                .setId(c.getId())
+                .setId(spaceId)
                 .setSingleUserBotDm(c.getSingleUserBotDm())
                 .setThreaded(c.getThreaded())
                 .setDisplayName(c.getDisplayName())
