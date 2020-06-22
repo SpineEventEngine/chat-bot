@@ -90,11 +90,11 @@ public final class GitHubContext {
          * Finishes configuration of the context and builds a new instance.
          *
          * <p>If the {@link #travisClient} was not explicitly configured, uses the
-         * {@link Travis#instance() default} client.
+         * {@link Travis#newInstance() default} client.
          */
         public GitHubContext build() {
             if (travisClient == null) {
-                travisClient = Travis.instance();
+                travisClient = Travis.newInstance();
             }
             return new GitHubContext(travisClient);
         }

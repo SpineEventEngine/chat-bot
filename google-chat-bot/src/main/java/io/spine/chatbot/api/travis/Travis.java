@@ -55,7 +55,7 @@ public final class Travis implements TravisClient {
     /**
      * Creates a new Travis client with the default secure Travis token.
      */
-    public static TravisClient instance() {
+    public static TravisClient newInstance() {
         return new Travis(Secrets.travisToken());
     }
 

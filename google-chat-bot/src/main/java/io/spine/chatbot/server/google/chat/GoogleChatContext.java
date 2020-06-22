@@ -95,7 +95,7 @@ public final class GoogleChatContext {
          */
         public GoogleChatContext build() {
             if (googleChatClient == null) {
-                googleChatClient = GoogleChat.instance();
+                googleChatClient = GoogleChat.newInstance();
             }
             return new GoogleChatContext(googleChatClient);
         }
