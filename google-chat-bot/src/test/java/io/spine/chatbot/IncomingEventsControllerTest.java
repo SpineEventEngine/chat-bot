@@ -37,8 +37,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static io.micronaut.http.HttpRequest.POST;
 import static io.spine.chatbot.Application.startSpineServer;
@@ -73,7 +71,7 @@ final class IncomingEventsControllerTest {
         var pubsubMessage = PubsubMessage
                 .newBuilder()
                 .setMessageId("129y418y4houfhiuehwr")
-                .setData(base64Encode(CHAT_MESSAGE_EVENT))
+                .setData(ByteString.copyFromUtf8(CHAT_MESSAGE_EVENT))
                 .build();
         var pushNotification = PubsubPushNotification
                 .newBuilder()
@@ -85,11 +83,6 @@ final class IncomingEventsControllerTest {
         String actual = client.toBlocking()
                               .retrieve(request);
         assertEquals("OK", actual);
-    }
-
-    private static ByteString base64Encode(String value) {
-        var encoder = Base64.getEncoder();
-        return ByteString.copyFrom(encoder.encode(value.getBytes(StandardCharsets.UTF_8)));
     }
 
     private static final String CHAT_MESSAGE_EVENT = "" +

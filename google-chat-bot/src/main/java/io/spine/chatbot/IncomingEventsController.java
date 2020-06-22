@@ -20,7 +20,6 @@
 
 package io.spine.chatbot;
 
-import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubPushNotification;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -31,9 +30,6 @@ import io.spine.core.UserId;
 import io.spine.json.Json;
 import io.spine.logging.Logging;
 import io.spine.server.integration.ThirdPartyContext;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static io.micronaut.http.MediaType.APPLICATION_JSON;
 import static io.spine.util.Exceptions.newIllegalStateException;
@@ -54,7 +50,8 @@ final class IncomingEventsController implements Logging {
     @Post(value = "/incoming/event", consumes = APPLICATION_JSON)
     String on(@Body PubsubPushNotification pushNotification) {
         var message = pushNotification.getMessage();
-        var chatEventJson = decodeBase64Json(message.getData());
+        var chatEventJson = message.getData()
+                                   .toStringUtf8();
         _debug().log("Received a new chat event: %s", chatEventJson);
         ChatEvent chatEvent = Json.fromJson(chatEventJson, ChatEvent.class);
         var actor = eventActor(chatEvent.getUser());
@@ -71,11 +68,5 @@ final class IncomingEventsController implements Logging {
                 .newBuilder()
                 .setValue(user.getName())
                 .vBuild();
-    }
-
-    private static String decodeBase64Json(ByteString encoded) {
-        var decodedBytes = Base64.getDecoder()
-                                 .decode(encoded.toByteArray());
-        return new String(decodedBytes, StandardCharsets.UTF_8);
     }
 }
