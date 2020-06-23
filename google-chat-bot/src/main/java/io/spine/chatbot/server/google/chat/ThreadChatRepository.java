@@ -69,8 +69,8 @@ final class ThreadChatRepository
 
         @Override
         public Set<ThreadId> apply(M event, EventContext context) {
-            var repositoryId = event.getId();
-            return withId(thread(repositoryId.getValue()));
+            var repository = event.repository();
+            return withId(thread(repository.getValue()));
         }
     }
 }

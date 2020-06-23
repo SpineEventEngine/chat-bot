@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
-import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
+import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
 
 @DisplayName("ThreadAggregate should")
 final class ThreadAggregateTest extends GoogleChatContextAwareTest {
@@ -46,18 +46,18 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
     @DisplayName("initialize a thread")
     final class InitThread {
 
-        private final ThreadId threadId = thread("SpineEventEngine/base");
-        private final SpaceId spaceId = space("spaces/qpojdwpiq1241");
-        private final ThreadResource threadResource =
-                threadResourceOf("spaces/qpojdwpiq1241/threads/qwdojp12");
+        private final ThreadId thread = thread("SpineEventEngine/base");
+        private final SpaceId space = space("spaces/qpojdwpiq1241");
+        private final ThreadResource resource =
+                threadResource("spaces/qpojdwpiq1241/threads/qwdojp12");
 
         @BeforeEach
         void setUp() {
             var threadCreated = ThreadCreated
                     .newBuilder()
-                    .setId(threadId)
-                    .setSpaceId(spaceId)
-                    .setThread(threadResource)
+                    .setThread(thread)
+                    .setSpace(space)
+                    .setResource(resource)
                     .vBuild();
             context().receivesEvent(threadCreated);
         }
@@ -67,9 +67,9 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
         void producingEvent() {
             var threadInitialized = ThreadInitialized
                     .newBuilder()
-                    .setId(threadId)
-                    .setSpaceId(spaceId)
-                    .setThread(threadResource)
+                    .setThread(thread)
+                    .setSpace(space)
+                    .setResource(resource)
                     .vBuild();
             context().assertEvent(threadInitialized);
         }
@@ -79,11 +79,11 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
         void settingState() {
             var state = Thread
                     .newBuilder()
-                    .setId(threadId)
-                    .setSpaceId(spaceId)
-                    .setThread(threadResource)
+                    .setThread(thread)
+                    .setSpace(space)
+                    .setResource(resource)
                     .vBuild();
-            context().assertState(threadId, Thread.class)
+            context().assertState(thread, Thread.class)
                      .isEqualTo(state);
         }
     }
@@ -92,26 +92,25 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
     @DisplayName("add created message")
     final class AddMessage {
 
-        private final ThreadId threadId = thread("SpineEventEngine/base");
-        private final SpaceId spaceId = space("spaces/qpojdwpiq1241");
-        private final MessageId messageId =
-                message("spaces/qpojdwpiq1241/messages/dqpwjpop12");
+        private final ThreadId thread = thread("SpineEventEngine/base");
+        private final SpaceId space = space("spaces/qpojdwpiq1241");
+        private final MessageId message = message("spaces/qpojdwpiq1241/messages/dqpwjpop12");
         private final ThreadResource threadResource =
-                threadResourceOf("spaces/qpojdwpiq1241/threads/qwdojp12");
+                threadResource("spaces/qpojdwpiq1241/threads/qwdojp12");
 
         @BeforeEach
         void setUp() {
             var threadCreated = ThreadCreated
                     .newBuilder()
-                    .setId(threadId)
-                    .setSpaceId(spaceId)
-                    .setThread(threadResource)
+                    .setThread(thread)
+                    .setSpace(space)
+                    .setResource(threadResource)
                     .vBuild();
             var messageCreated = MessageCreated
                     .newBuilder()
-                    .setId(messageId)
-                    .setSpaceId(spaceId)
-                    .setThreadId(threadId)
+                    .setMessage(message)
+                    .setSpace(space)
+                    .setThread(thread)
                     .vBuild();
             context().receivesEvent(threadCreated)
                      .receivesEvent(messageCreated);
@@ -122,8 +121,8 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
         void producingEvent() {
             var messageAdded = MessageAdded
                     .newBuilder()
-                    .setId(messageId)
-                    .setThreadId(threadId)
+                    .setMessage(message)
+                    .setThread(thread)
                     .vBuild();
             context().assertEvent(messageAdded);
         }
@@ -133,12 +132,12 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
         void settingState() {
             var state = Thread
                     .newBuilder()
-                    .setId(threadId)
-                    .setSpaceId(spaceId)
-                    .setThread(threadResource)
-                    .addMessages(messageId)
+                    .setThread(thread)
+                    .setSpace(space)
+                    .setResource(threadResource)
+                    .addMessages(message)
                     .vBuild();
-            context().assertState(threadId, Thread.class)
+            context().assertState(thread, Thread.class)
                      .isEqualTo(state);
         }
     }

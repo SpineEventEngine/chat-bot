@@ -38,7 +38,7 @@ public final class ThreadResources {
     /**
      * Creates a new {@link ThreadResource} with the specified {@code name}.
      */
-    public static ThreadResource threadResourceOf(String name) {
+    public static ThreadResource threadResource(String name) {
         checkNotNull(name);
         return ThreadResource
                 .newBuilder()

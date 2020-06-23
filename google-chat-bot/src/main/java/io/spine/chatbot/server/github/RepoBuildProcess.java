@@ -85,14 +85,14 @@ final class RepoBuildProcess
     @Assign
     EitherOf3<BuildFailed, BuildRecovered, BuildStable> handle(CheckRepositoryBuild c)
             throws NoBuildsFound {
-        var repositoryId = c.getId();
+        var repositoryId = c.getRepository();
         _info().log("Checking build status for repository `%s`.", repositoryId.getValue());
         var branchBuild = client.execute(BuildsQuery.forRepo(repositoryId.getValue()));
         if (isDefault(branchBuild.getLastBuild())) {
             _warn().log("No builds found for the repository `%s`.", repositoryId.getValue());
             throw NoBuildsFound
                     .newBuilder()
-                    .setId(repositoryId)
+                    .setRepository(repositoryId)
                     .build();
         }
         var buildState = buildStateFrom(branchBuild, c.getGoogleChatSpace());
@@ -109,33 +109,33 @@ final class RepoBuildProcess
     }
 
     private EitherOf3<BuildFailed, BuildRecovered, BuildStable>
-    determineOutcome(RepositoryId id, BuildStateChange stateChange) {
+    determineOutcome(RepositoryId repository, BuildStateChange stateChange) {
         var newBuildState = stateChange.getNewValue();
         var previousBuildState = stateChange.getPreviousValue();
         var stateStatusChange = stateStatusChangeOf(newBuildState, previousBuildState);
         switch (stateStatusChange) {
             case FAILED:
                 _info().log("Build for repository `%s` failed with status `%s`.",
-                            id.getValue(), newBuildState.getState());
+                            repository.getValue(), newBuildState.getState());
                 var buildFailed = BuildFailed
                         .newBuilder()
-                        .setId(id)
+                        .setRepository(repository)
                         .setChange(stateChange)
                         .vBuild();
                 return EitherOf3.withA(buildFailed);
             case RECOVERED:
-                _info().log("Build for repository `%s` is recovered.", id.getValue());
+                _info().log("Build for repository `%s` is recovered.", repository.getValue());
                 var buildRecovered = BuildRecovered
                         .newBuilder()
-                        .setId(id)
+                        .setRepository(repository)
                         .setChange(stateChange)
                         .vBuild();
                 return EitherOf3.withB(buildRecovered);
             case STABLE:
-                _info().log("Build for repository `%s` is stable.", id.getValue());
+                _info().log("Build for repository `%s` is stable.", repository.getValue());
                 var buildStable = BuildStable
                         .newBuilder()
-                        .setId(id)
+                        .setRepository(repository)
                         .setChange(stateChange)
                         .vBuild();
                 return EitherOf3.withC(buildStable);

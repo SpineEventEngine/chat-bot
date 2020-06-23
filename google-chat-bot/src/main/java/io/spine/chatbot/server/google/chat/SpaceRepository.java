@@ -35,6 +35,6 @@ final class SpaceRepository extends AggregateRepository<SpaceId, SpaceAggregate>
     @Override
     protected void setupEventRouting(EventRouting<SpaceId> routing) {
         super.setupEventRouting(routing);
-        routing.route(BotAddedToSpace.class, (event, context) -> withId(event.getSpaceId()));
+        routing.route(BotAddedToSpace.class, (event, context) -> withId(event.getSpace()));
     }
 }

@@ -39,8 +39,8 @@ import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 @DisplayName("SpaceAggregate should")
 final class SpaceAggregateTest extends GoogleChatContextAwareTest {
 
-    private static final SpaceId spaceId = space("spaces/poqwdpQ21");
-    private static final String displayName = "Spine Developers";
+    private static final SpaceId SPACE = space("spaces/poqwdpQ21");
+    private static final String DISPLAY_NAME = "Spine Developers";
 
     @Nested
     @DisplayName("register a space")
@@ -50,9 +50,9 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         void setUp() {
             var registerSpace = RegisterSpace
                     .newBuilder()
-                    .setId(spaceId)
+                    .setSpace(SPACE)
                     .setThreaded(true)
-                    .setDisplayName(displayName)
+                    .setDisplayName(DISPLAY_NAME)
                     .vBuild();
             context().receivesCommand(registerSpace);
         }
@@ -62,8 +62,8 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         void producingEvent() {
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
-                    .setId(spaceId)
-                    .setDisplayName(displayName)
+                    .setSpace(SPACE)
+                    .setDisplayName(DISPLAY_NAME)
                     .setThreaded(true)
                     .vBuild();
             context().assertEvent(spaceRegistered);
@@ -74,11 +74,11 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         void settingState() {
             var expectedState = Space
                     .newBuilder()
-                    .setId(spaceId)
+                    .setSpace(SPACE)
                     .setThreaded(true)
-                    .setDisplayName(displayName)
+                    .setDisplayName(DISPLAY_NAME)
                     .vBuild();
-            context().assertState(spaceId, Space.class)
+            context().assertState(SPACE, Space.class)
                      .isEqualTo(expectedState);
         }
     }
@@ -99,7 +99,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
                     .vBuild();
             var botAddedToSpace = BotAddedToSpace
                     .newBuilder()
-                    .setSpaceId(spaceId)
+                    .setSpace(SPACE)
                     .setEvent(chatEvent)
                     .vBuild();
             context().receivesEvent(botAddedToSpace);
@@ -110,8 +110,8 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         void producingEvent() {
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
-                    .setId(spaceId)
-                    .setDisplayName(displayName)
+                    .setSpace(SPACE)
+                    .setDisplayName(DISPLAY_NAME)
                     .setThreaded(true)
                     .vBuild();
             context().assertEvent(spaceRegistered);
@@ -122,19 +122,19 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         void settingState() {
             var expectedState = Space
                     .newBuilder()
-                    .setId(spaceId)
+                    .setSpace(SPACE)
                     .setThreaded(true)
-                    .setDisplayName(displayName)
+                    .setDisplayName(DISPLAY_NAME)
                     .vBuild();
-            context().assertState(spaceId, Space.class)
+            context().assertState(SPACE, Space.class)
                      .isEqualTo(expectedState);
         }
 
         private io.spine.chatbot.google.chat.incoming.Space chatSpace() {
             return io.spine.chatbot.google.chat.incoming.Space
                     .newBuilder()
-                    .setName(spaceId.getValue())
-                    .setDisplayName(displayName)
+                    .setName(SPACE.getValue())
+                    .setDisplayName(DISPLAY_NAME)
                     .setType(SpaceType.ROOM)
                     .vBuild();
         }

@@ -40,19 +40,20 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
     @DisplayName("register an organization")
     final class Register {
 
-        private final OrganizationId organizationId = organization("TestOrganization");
+        private static final String orgName = "Test Organization";
+        private static final String googleChatSpace = "spaces/qwdp123ttQ";
+
+        private final OrganizationId organization = organization("TestOrganization");
 
         private final Url githubUrl = urlOfSpec("https://github.com/TestOrganization");
         private final Url travisCiUrl = urlOfSpec("https://travis-ci.com/TestOrganization");
         private final Url websiteUrl = urlOfSpec("https://test-organization.com");
-        private final String orgName = "Test Organization";
-        private final String googleChatSpace = "spaces/qwdp123ttQ";
 
         @BeforeEach
         void setUp() {
             var registerOrganization = RegisterOrganization
                     .newBuilder()
-                    .setId(organizationId)
+                    .setOrganization(organization)
                     .setGithubUrl(githubUrl)
                     .setTravisCiUrl(travisCiUrl)
                     .setWebsiteUrl(websiteUrl)
@@ -67,7 +68,7 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
         void producingEvent() {
             var organizationRegistered = OrganizationRegistered
                     .newBuilder()
-                    .setId(organizationId)
+                    .setOrganization(organization)
                     .setGithubUrl(githubUrl)
                     .setTravisCiUrl(travisCiUrl)
                     .setWebsiteUrl(websiteUrl)
@@ -82,14 +83,14 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
         void settingState() {
             var expectedState = Organization
                     .newBuilder()
-                    .setId(organizationId)
+                    .setOrganization(organization)
                     .setGithubUrl(githubUrl)
                     .setTravisCiUrl(travisCiUrl)
                     .setWebsiteUrl(websiteUrl)
                     .setName(orgName)
                     .setGoogleChatSpace(googleChatSpace)
                     .vBuild();
-            context().assertState(organizationId, Organization.class)
+            context().assertState(organization, Organization.class)
                      .isEqualTo(expectedState);
         }
     }

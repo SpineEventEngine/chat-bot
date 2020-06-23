@@ -42,7 +42,7 @@ import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
-import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
+import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
 
 @DisplayName("ThreadChatProcess should")
 final class ThreadChatProcessTest {
@@ -57,7 +57,7 @@ final class ThreadChatProcessTest {
                                            BuildStateChange stateChange) {
             return BuildFailed
                     .newBuilder()
-                    .setId(repositoryId)
+                    .setRepository(repositoryId)
                     .setChange(stateChange)
                     .vBuild();
         }
@@ -73,7 +73,7 @@ final class ThreadChatProcessTest {
                                            BuildStateChange stateChange) {
             return BuildRecovered
                     .newBuilder()
-                    .setId(repositoryId)
+                    .setRepository(repositoryId)
                     .setChange(stateChange)
                     .vBuild();
         }
@@ -81,11 +81,13 @@ final class ThreadChatProcessTest {
 
     private abstract static class BuildStateChanged extends GoogleChatContextAwareTest {
 
-        private final RepositoryId repositoryId = repository("SpineEventEngine/money");
-        private final ThreadId threadId = thread(repositoryId.getValue());
-        private final String googleChatSpace = "spaces/1241pjwqe";
-        private final SpaceId spaceId = space(googleChatSpace);
-        private final String buildNumber = "551";
+        private static final String googleChatSpace = "spaces/1241pjwqe";
+        private static final String buildNumber = "551";
+
+        private final RepositoryId repository = repository("SpineEventEngine/money");
+        private final ThreadId thread = thread(repository.getValue());
+        private final SpaceId space = space(googleChatSpace);
+
         private final Thread newThread = new Thread().setName("spaces/1241pjwqe/threads/k12d1o2r1");
         private final Message sentMessage = new Message()
                 .setName("spaces/1241pjwqe/messages/12154363643624")
@@ -103,7 +105,7 @@ final class ThreadChatProcessTest {
                     .newBuilder()
                     .setNewValue(newBuildState)
                     .vBuild();
-            var buildFailed = buildStateChangeEvent(repositoryId, buildStateChange);
+            var buildFailed = buildStateChangeEvent(repository, buildStateChange);
             context().receivesExternalEvent(buildFailed);
         }
 
@@ -115,15 +117,15 @@ final class ThreadChatProcessTest {
         void producingEvents() {
             var messageCreated = MessageCreated
                     .newBuilder()
-                    .setId(message(sentMessage.getName()))
-                    .setThreadId(threadId)
-                    .setSpaceId(spaceId)
+                    .setMessage(message(sentMessage.getName()))
+                    .setThread(thread)
+                    .setSpace(space)
                     .vBuild();
             var threadCreated = ThreadCreated
                     .newBuilder()
-                    .setId(threadId)
-                    .setThread(threadResourceOf(newThread.getName()))
-                    .setSpaceId(spaceId)
+                    .setThread(thread)
+                    .setResource(threadResource(newThread.getName()))
+                    .setSpace(space)
                     .vBuild();
             context().assertEvent(messageCreated);
             context().assertEvent(threadCreated);
@@ -134,11 +136,11 @@ final class ThreadChatProcessTest {
         void settingState() {
             var expectedState = ThreadChat
                     .newBuilder()
-                    .setId(threadId)
-                    .setSpaceId(spaceId)
-                    .setThread(threadResourceOf(newThread.getName()))
+                    .setThread(thread)
+                    .setSpace(space)
+                    .setResource(threadResource(newThread.getName()))
                     .vBuild();
-            context().assertState(threadId, ThreadChat.class)
+            context().assertState(thread, ThreadChat.class)
                      .isEqualTo(expectedState);
         }
     }

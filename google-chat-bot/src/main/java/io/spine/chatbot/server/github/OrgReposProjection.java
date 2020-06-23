@@ -41,7 +41,7 @@ final class OrgReposProjection
      */
     @Subscribe
     void on(OrganizationRegistered e) {
-        builder().setId(e.getId());
+        builder().setOrganization(e.getOrganization());
     }
 
     /**
@@ -50,7 +50,7 @@ final class OrgReposProjection
     @Subscribe
     void on(RepositoryRegistered e) {
         var repositories = Sets.newHashSet(builder().getRepositoriesList());
-        repositories.add(e.getId());
+        repositories.add(e.getRepository());
         builder().clearRepositories()
                  .addAllRepositories(repositories);
     }

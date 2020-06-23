@@ -57,7 +57,7 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
             travisClient().setRepositoriesFor(SPINE_ORGANIZATION.getValue(), repositoriesResponse);
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
-                    .setId(spaceId)
+                    .setSpace(spaceId)
                     .setDisplayName("Test space")
                     .setThreaded(true)
                     .vBuild();
@@ -71,7 +71,7 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
                     .newBuilder()
                     .setGoogleChatSpace(spaceId.getValue())
                     .setInitialized(true)
-                    .setId(SPINE_ORGANIZATION)
+                    .setOrganization(SPINE_ORGANIZATION)
                     .vBuild();
             context().assertState(SPINE_ORGANIZATION, OrganizationInit.class)
                      .isEqualTo(expectedState);

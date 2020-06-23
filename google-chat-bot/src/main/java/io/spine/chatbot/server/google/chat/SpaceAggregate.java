@@ -47,13 +47,13 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
         var space = e.getEvent()
                      .getSpace();
         var displayName = space.getDisplayName();
-        var spaceId = e.getSpaceId();
+        var spaceId = e.getSpace();
         _info().log("Registering space `%s` (`%s`).", displayName, spaceId.getValue());
         return SpaceRegistered
                 .newBuilder()
+                .setSpace(spaceId)
                 .setDisplayName(displayName)
                 .setThreaded(isThreaded(space))
-                .setId(spaceId)
                 .vBuild();
     }
 
@@ -62,11 +62,11 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
      */
     @Assign
     SpaceRegistered handle(RegisterSpace c) {
-        var spaceId = c.getId();
-        _info().log("Registering space `%s`.", spaceId.getValue());
+        var space = c.getSpace();
+        _info().log("Registering space `%s`.", space.getValue());
         var result = SpaceRegistered
                 .newBuilder()
-                .setId(spaceId)
+                .setSpace(space)
                 .setSingleUserBotDm(c.getSingleUserBotDm())
                 .setThreaded(c.getThreaded())
                 .setDisplayName(c.getDisplayName())

@@ -47,16 +47,16 @@ final class ThreadAggregate extends Aggregate<ThreadId, Thread, Thread.Builder> 
         _info().log("A new thread `%s` created.", idAsString());
         return ThreadInitialized
                 .newBuilder()
-                .setId(e.getId())
                 .setThread(e.getThread())
-                .setSpaceId(e.getSpaceId())
+                .setResource(e.getResource())
+                .setSpace(e.getSpace())
                 .vBuild();
     }
 
     @Apply
     private void on(ThreadInitialized e) {
-        builder().setThread(e.getThread())
-                 .setSpaceId(e.getSpaceId());
+        builder().setResource(e.getResource())
+                 .setSpace(e.getSpace());
     }
 
     /**
@@ -64,18 +64,19 @@ final class ThreadAggregate extends Aggregate<ThreadId, Thread, Thread.Builder> 
      */
     @React
     MessageAdded on(MessageCreated e) {
-        var messageId = e.getId();
+        var message = e.getMessage();
+        var thread = e.getThread();
         _info().log("A new message `%s` added to the thread `%s`.",
-                    messageId.getValue(), idAsString());
+                    message.getValue(), thread.getValue());
         return MessageAdded
                 .newBuilder()
-                .setId(messageId)
-                .setThreadId(e.getThreadId())
+                .setMessage(message)
+                .setThread(thread)
                 .vBuild();
     }
 
     @Apply
     private void on(MessageAdded e) {
-        builder().addMessages(e.getId());
+        builder().addMessages(e.getMessage());
     }
 }

@@ -50,7 +50,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
         var botAddedToSpace = BotAddedToSpace
                 .newBuilder()
                 .setEvent(chatEvent)
-                .setSpaceId(spaceId)
+                .setSpace(spaceId)
                 .vBuild();
         // when
         context().receivesExternalEvent(chatEvent);
@@ -66,7 +66,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
         var botRemovedFromSpace = BotRemovedFromSpace
                 .newBuilder()
                 .setEvent(chatEvent)
-                .setSpaceId(spaceId)
+                .setSpace(spaceId)
                 .vBuild();
         // when
         context().receivesExternalEvent(chatEvent);
@@ -82,7 +82,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
         var messageReceived = MessageReceived
                 .newBuilder()
                 .setEvent(chatEvent)
-                .setMessageId(messageId)
+                .setMessage(messageId)
                 .vBuild();
         // when
         context().receivesExternalEvent(chatEvent);

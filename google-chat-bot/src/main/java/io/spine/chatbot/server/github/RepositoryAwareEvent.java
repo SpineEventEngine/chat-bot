@@ -35,13 +35,4 @@ import static io.spine.server.route.EventRoute.withId;
 @GeneratedMixin
 @Immutable
 public interface RepositoryAwareEvent extends RepositoryAware, EventMessage {
-
-    /**
-     * Returns target repository ID as a singleton set.
-     *
-     * @apiNote This is a convenience method to be used within the event routing schemas.
-     */
-    default Set<RepositoryId> repository() {
-        return withId(getId());
-    }
 }

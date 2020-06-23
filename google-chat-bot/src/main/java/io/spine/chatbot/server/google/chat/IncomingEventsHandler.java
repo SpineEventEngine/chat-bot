@@ -88,7 +88,7 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
         return BotRemovedFromSpace
                 .newBuilder()
                 .setEvent(chatEvent)
-                .setSpaceId(space(space.getName()))
+                .setSpace(space(space.getName()))
                 .vBuild();
     }
 
@@ -97,7 +97,7 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
         return BotAddedToSpace
                 .newBuilder()
                 .setEvent(chatEvent)
-                .setSpaceId(space(space.getName()))
+                .setSpace(space(space.getName()))
                 .vBuild();
     }
 
@@ -106,7 +106,7 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
         return MessageReceived
                 .newBuilder()
                 .setEvent(chatEvent)
-                .setMessageId(message(message.getName()))
+                .setMessage(message(message.getName()))
                 .vBuild();
     }
 }

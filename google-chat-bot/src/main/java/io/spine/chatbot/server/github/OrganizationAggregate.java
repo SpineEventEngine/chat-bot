@@ -47,7 +47,7 @@ final class OrganizationAggregate
         _info().log("Registering organization `%s`.", idAsString());
         return OrganizationRegistered
                 .newBuilder()
-                .setId(c.getId())
+                .setOrganization(c.getOrganization())
                 .setGithubUrl(c.getGithubUrl())
                 .setName(c.getName())
                 .setTravisCiUrl(c.getTravisCiUrl())

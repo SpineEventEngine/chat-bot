@@ -30,5 +30,14 @@ public interface RepositoryAware {
     /**
      * Obtains the repository ID.
      */
-    RepositoryId getId();
+    default RepositoryId repository() {
+        return getRepository();
+    }
+
+    /**
+     * Obtains the repository ID.
+     *
+     * @implNote this is the Protobuf-level accessor.
+     */
+    RepositoryId getRepository();
 }

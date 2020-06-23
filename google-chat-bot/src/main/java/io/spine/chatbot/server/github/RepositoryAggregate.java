@@ -43,10 +43,11 @@ final class RepositoryAggregate
      */
     @Assign
     RepositoryRegistered handle(RegisterRepository c) {
-        _info().log("Registering repository `%s`.", idAsString());
+        var repository = c.getRepository();
+        _info().log("Registering repository `%s`.", repository.getValue());
         var result = RepositoryRegistered
                 .newBuilder()
-                .setId(c.getId())
+                .setRepository(repository)
                 .setName(c.getName())
                 .setGithubUrl(c.getGithubUrl())
                 .setTravisCiUrl(c.getTravisCiUrl())

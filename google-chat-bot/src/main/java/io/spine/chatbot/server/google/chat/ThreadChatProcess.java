@@ -43,7 +43,7 @@ import java.util.Optional;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
-import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
+import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
 
 /**
  * A process of notifying thread members about the changes in the watched resouces.
@@ -61,10 +61,10 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
     Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildFailed e) {
         var change = e.getChange();
         var buildState = change.getNewValue();
-        var repositoryId = e.getId();
-        _info().log("Build for repository `%s` failed.", repositoryId.getValue());
+        var repository = e.getRepository();
+        _info().log("Build for repository `%s` failed.", repository.getValue());
 
-        return processBuildStateUpdate(buildState, repositoryId);
+        return processBuildStateUpdate(buildState, repository);
     }
 
     /**
@@ -77,36 +77,36 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
     Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildRecovered e) {
         var change = e.getChange();
         var buildState = change.getNewValue();
-        var repositoryId = e.getId();
-        _info().log("Build for repository `%s` recovered.", repositoryId.getValue());
+        var repository = e.getRepository();
+        _info().log("Build for repository `%s` recovered.", repository.getValue());
 
-        return processBuildStateUpdate(buildState, repositoryId);
+        return processBuildStateUpdate(buildState, repository);
     }
 
     private Pair<MessageCreated, Optional<ThreadCreated>>
-    processBuildStateUpdate(BuildState buildState, RepositoryId repositoryId) {
-        var sentMessage = client.sendBuildStateUpdate(buildState, state().getThread());
-        var messageId = message(sentMessage.getName());
-        var threadId = thread(repositoryId.getValue());
-        var spaceId = space(buildState.getGoogleChatSpace());
+    processBuildStateUpdate(BuildState buildState, RepositoryId repository) {
+        var sentMessage = client.sendBuildStateUpdate(buildState, state().getResource());
+        var message = message(sentMessage.getName());
+        var thread = thread(repository.getValue());
+        var space = space(buildState.getGoogleChatSpace());
         var messageCreated = MessageCreated
                 .newBuilder()
-                .setId(messageId)
-                .setSpaceId(spaceId)
-                .setThreadId(threadId)
+                .setMessage(message)
+                .setSpace(space)
+                .setThread(thread)
                 .vBuild();
         if (shouldCreateThread()) {
-            var newThread = threadResourceOf(sentMessage.getThread()
-                                                        .getName());
+            var resource = threadResource(sentMessage.getThread()
+                                                     .getName());
             _debug().log("New thread `%s` created for repository `%s`.",
-                         newThread.getName(), repositoryId.getValue());
-            builder().setThread(newThread)
-                     .setSpaceId(spaceId);
+                         resource.getName(), repository.getValue());
+            builder().setResource(resource)
+                     .setSpace(space);
             var threadCreated = ThreadCreated
                     .newBuilder()
-                    .setId(threadId)
-                    .setThread(newThread)
-                    .setSpaceId(spaceId)
+                    .setThread(thread)
+                    .setResource(resource)
+                    .setSpace(space)
                     .vBuild();
             return Pair.withNullable(messageCreated, threadCreated);
         }
@@ -114,7 +114,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
     }
 
     private boolean shouldCreateThread() {
-        return Messages.isDefault(state().getThread());
+        return Messages.isDefault(state().getResource());
     }
 
     void setClient(GoogleChatClient client) {

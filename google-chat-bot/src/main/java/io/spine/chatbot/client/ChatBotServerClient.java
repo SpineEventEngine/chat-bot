@@ -111,7 +111,7 @@ public final class ChatBotServerClient {
                            .select(Organization.class)
                            .run()
                            .stream()
-                           .map(Organization::getId)
+                           .map(Organization::getOrganization)
                            .collect(toImmutableList());
         var orgRepos = client.asGuest()
                              .select(OrganizationRepositories.class)

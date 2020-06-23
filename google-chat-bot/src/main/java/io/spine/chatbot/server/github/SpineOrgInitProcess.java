@@ -79,18 +79,18 @@ final class SpineOrgInitProcess
             _info().log("Spine organization is already initialized. Skipping the process.");
             return ImmutableSet.of();
         }
-        var spaceId = e.getId();
-        _info().log("Starting Spine organization initialization process in space `%s`.",
-                    spaceId.getValue());
+        var space = e.getSpace()
+                     .getValue();
+        _info().log("Starting Spine organization initialization process in space `%s`.", space);
         var commands = ImmutableSet.<CommandMessage>builder();
-        commands.add(registerOrgCommand(SPINE_ORGANIZATION, spaceId.getValue()));
+        commands.add(registerOrgCommand(SPINE_ORGANIZATION, space));
         travisClient.execute(ReposQuery.forOwner(SPINE_ORG))
                     .getRepositoriesList()
                     .stream()
                     .filter(repository -> WATCHED_REPOS.contains(repository.getName()))
                     .map(repository -> registerRepoCommand(repository, SPINE_ORGANIZATION))
                     .forEach(commands::add);
-        builder().setGoogleChatSpace(spaceId.getValue())
+        builder().setGoogleChatSpace(space)
                  .setInitialized(true);
         return commands.build();
     }
@@ -100,9 +100,9 @@ final class SpineOrgInitProcess
         _info().log("Registering `%s` repository.", slug);
         return RegisterRepository
                 .newBuilder()
+                .setRepository(repository(slug))
                 .setOrganization(orgId)
                 .setGithubUrl(githubUrlFor(slug))
-                .setId(repository(slug))
                 .setName(repo.getName())
                 .setTravisCiUrl(travisUrlFor(slug))
                 .vBuild();
@@ -112,11 +112,11 @@ final class SpineOrgInitProcess
         _info().log("Registering `%s` organization.", SPINE_ORG);
         return RegisterOrganization
                 .newBuilder()
+                .setOrganization(spineOrgId)
                 .setName("Spine Event Engine")
                 .setWebsiteUrl(urlOfSpec("https://spine.io/"))
                 .setTravisCiUrl(travisUrlFor(SPINE_ORG))
                 .setGithubUrl(githubUrlFor(SPINE_ORG))
-                .setId(spineOrgId)
                 .setGoogleChatSpace(spaceName)
                 .vBuild();
     }
