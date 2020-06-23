@@ -17,7 +17,7 @@ import "spine/chatbot/google/chat/incoming/incoming_chat_messages.proto";
 message BotAddedToSpace {
 
     // The ID of the Space to which the ChatBot is added.
-    SpaceId space_id = 1 [(required) = true];
+    SpaceId space = 1 [(required) = true];
 
     // The actual chat event message.
     ChatEvent event = 2;
@@ -27,7 +27,7 @@ message BotAddedToSpace {
 message BotRemovedFromSpace {
 
     // The ID of the Space from which the ChatBot is removed.
-    SpaceId space_id = 1 [(required) = true];
+    SpaceId space = 1 [(required) = true];
 
     // The actual chat event message.
     ChatEvent event = 2;
@@ -37,7 +37,7 @@ message BotRemovedFromSpace {
 message MessageReceived {
 
     // The ID of the new message.
-    MessageId message_id = 1 [(required) = true];
+    MessageId message = 1 [(required) = true];
 
     // The actual chat event message.
     ChatEvent event = 2;
