@@ -48,8 +48,8 @@ message ThreadInitialized {
 // A message added to the thead.
 message MessageAdded {
 
-    MessageId id = 1 [(required) = true];
+    MessageId message = 1 [(required) = true];
 
     // ID of the thread to which the message is added.
-    ThreadId thread_id = 2 [(required) = true];
+    ThreadId thread = 2 [(required) = true];
 }
