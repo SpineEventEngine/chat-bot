@@ -39,7 +39,7 @@ import static io.spine.chatbot.api.google.chat.ChatWidgets.textParagraph;
 import static io.spine.validate.Validate.checkValid;
 
 /**
- * A Google Chat utility class that creates {@link BuildState} update messages.
+ * A utility class that creates {@link BuildState} update messages.
  */
 final class BuildStateUpdates {
 
