@@ -31,7 +31,7 @@ import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf4;
 
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.spaceIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
 /**
  * Google Chat incoming events reactor.
@@ -60,7 +60,7 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
             case MESSAGE:
                 _info().log("New user message received.");
                 var message = chatEvent.getMessage();
-                var messageId = GoogleChatIdentifier.messageIdOf(message.getName());
+                var messageId = GoogleChatIdentifier.message(message.getName());
                 var messageReceived = MessageReceived
                         .newBuilder()
                         .setEvent(chatEvent)
@@ -74,7 +74,7 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
                 var addedToSpace = BotAddedToSpace
                         .newBuilder()
                         .setEvent(chatEvent)
-                        .setSpaceId(spaceIdOf(toSpace.getName()))
+                        .setSpaceId(space(toSpace.getName()))
                         .vBuild();
                 return EitherOf4.withA(addedToSpace);
             case REMOVED_FROM_SPACE:
@@ -84,7 +84,7 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
                 var removedFromSpace = BotRemovedFromSpace
                         .newBuilder()
                         .setEvent(chatEvent)
-                        .setSpaceId(spaceIdOf(fromSpace.getName()))
+                        .setSpaceId(space(fromSpace.getName()))
                         .vBuild();
                 return EitherOf4.withB(removedFromSpace);
 

@@ -34,12 +34,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.spaceIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
 @DisplayName("SpaceAggregate should")
 final class SpaceAggregateTest extends GoogleChatContextAwareTest {
 
-    private static final SpaceId spaceId = spaceIdOf("spaces/poqwdpQ21");
+    private static final SpaceId spaceId = space("spaces/poqwdpQ21");
     private static final String displayName = "Spine Developers";
 
     @Nested

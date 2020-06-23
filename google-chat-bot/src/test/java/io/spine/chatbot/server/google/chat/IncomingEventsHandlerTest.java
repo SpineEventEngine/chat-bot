@@ -33,14 +33,14 @@ import io.spine.chatbot.google.chat.incoming.event.MessageReceived;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.messageIdOf;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.spaceIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
 @DisplayName("IncomingEventsHandler should")
 final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
 
-    private static final SpaceId spaceId = spaceIdOf("spaces/fqeq325661a");
-    private static final MessageId messageId = messageIdOf("spaces/fqeq325661a/messages/422");
+    private static final SpaceId spaceId = space("spaces/fqeq325661a");
+    private static final MessageId messageId = message("spaces/fqeq325661a/messages/422");
 
     @Test
     @DisplayName("add bot to a space")

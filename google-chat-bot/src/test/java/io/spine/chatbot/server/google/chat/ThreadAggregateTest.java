@@ -34,9 +34,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.messageIdOf;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.spaceIdOf;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.threadIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
 
 @DisplayName("ThreadAggregate should")
@@ -46,8 +46,8 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
     @DisplayName("initialize a thread")
     final class InitThread {
 
-        private final ThreadId threadId = threadIdOf("SpineEventEngine/base");
-        private final SpaceId spaceId = spaceIdOf("spaces/qpojdwpiq1241");
+        private final ThreadId threadId = thread("SpineEventEngine/base");
+        private final SpaceId spaceId = space("spaces/qpojdwpiq1241");
         private final ThreadResource threadResource =
                 threadResourceOf("spaces/qpojdwpiq1241/threads/qwdojp12");
 
@@ -92,10 +92,10 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
     @DisplayName("add created message")
     final class AddMessage {
 
-        private final ThreadId threadId = threadIdOf("SpineEventEngine/base");
-        private final SpaceId spaceId = spaceIdOf("spaces/qpojdwpiq1241");
+        private final ThreadId threadId = thread("SpineEventEngine/base");
+        private final SpaceId spaceId = space("spaces/qpojdwpiq1241");
         private final MessageId messageId =
-                messageIdOf("spaces/qpojdwpiq1241/messages/dqpwjpop12");
+                message("spaces/qpojdwpiq1241/messages/dqpwjpop12");
         private final ThreadResource threadResource =
                 threadResourceOf("spaces/qpojdwpiq1241/threads/qwdojp12");
 

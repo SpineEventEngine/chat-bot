@@ -40,7 +40,7 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
     @DisplayName("perform initialization of watched spine resources")
     final class Init {
 
-        private final SpaceId spaceId = GoogleChatIdentifier.spaceIdOf("spaces/qjwrp1441");
+        private final SpaceId spaceId = GoogleChatIdentifier.space("spaces/qjwrp1441");
         private final Repository repository = Repository
                 .newBuilder()
                 .setId(123312L)

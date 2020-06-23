@@ -31,8 +31,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.GitHubIdentifier.organizationIdOf;
-import static io.spine.chatbot.server.github.GitHubIdentifier.repositoryIdOf;
+import static io.spine.chatbot.server.github.GitHubIdentifier.organization;
+import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
 import static io.spine.net.Urls.urlOfSpec;
 
 @DisplayName("RepositoryAggregate should")
@@ -42,8 +42,8 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
     @DisplayName("register a repository")
     final class Register {
 
-        private final RepositoryId repositoryId = repositoryIdOf("SpineEventEngine/base");
-        private final OrganizationId organizationId = organizationIdOf("SpineEventEngine");
+        private final RepositoryId repositoryId = repository("SpineEventEngine/base");
+        private final OrganizationId organizationId = organization("SpineEventEngine");
 
         private final Url githubUrl = urlOfSpec("https://github.com/SpineEventEngine/base");
         private final Url travisCiUrl =

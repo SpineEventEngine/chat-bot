@@ -37,7 +37,7 @@ public final class GitHubIdentifier {
     /**
      * Creates a new {@link OrganizationId} out of the specified {@code name}.
      */
-    public static OrganizationId organizationIdOf(String name) {
+    public static OrganizationId organization(String name) {
         return OrganizationId
                 .newBuilder()
                 .setValue(name)
@@ -47,7 +47,7 @@ public final class GitHubIdentifier {
     /**
      * Creates a new {@link RepositoryId} out of the specified {@code slug}.
      */
-    public static RepositoryId repositoryIdOf(String slug) {
+    public static RepositoryId repository(String slug) {
         return RepositoryId
                 .newBuilder()
                 .setValue(slug)

@@ -38,10 +38,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.GitHubIdentifier.repositoryIdOf;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.messageIdOf;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.spaceIdOf;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.threadIdOf;
+import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
 
 @DisplayName("ThreadChatProcess should")
@@ -81,10 +81,10 @@ final class ThreadChatProcessTest {
 
     private abstract static class BuildStateChanged extends GoogleChatContextAwareTest {
 
-        private final RepositoryId repositoryId = repositoryIdOf("SpineEventEngine/money");
-        private final ThreadId threadId = threadIdOf(repositoryId.getValue());
+        private final RepositoryId repositoryId = repository("SpineEventEngine/money");
+        private final ThreadId threadId = thread(repositoryId.getValue());
         private final String googleChatSpace = "spaces/1241pjwqe";
-        private final SpaceId spaceId = spaceIdOf(googleChatSpace);
+        private final SpaceId spaceId = space(googleChatSpace);
         private final String buildNumber = "551";
         private final Thread newThread = new Thread().setName("spaces/1241pjwqe/threads/k12d1o2r1");
         private final Message sentMessage = new Message()
@@ -115,7 +115,7 @@ final class ThreadChatProcessTest {
         void producingEvents() {
             var messageCreated = MessageCreated
                     .newBuilder()
-                    .setId(messageIdOf(sentMessage.getName()))
+                    .setId(message(sentMessage.getName()))
                     .setThreadId(threadId)
                     .setSpaceId(spaceId)
                     .vBuild();

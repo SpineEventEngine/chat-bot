@@ -34,7 +34,7 @@ import io.spine.server.route.EventRouting;
 
 import java.util.Set;
 
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.threadIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
 import static io.spine.server.route.EventRoute.withId;
 
 /**
@@ -68,7 +68,7 @@ final class ThreadChatRepository extends ProcessManagerRepository<ThreadId, Thre
         @Override
         public Set<ThreadId> apply(M event, EventContext context) {
             var repositoryId = event.getId();
-            return withId(threadIdOf(repositoryId.getValue()));
+            return withId(thread(repositoryId.getValue()));
         }
     }
 }

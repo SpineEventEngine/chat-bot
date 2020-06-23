@@ -39,15 +39,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.GitHubIdentifier.organizationIdOf;
-import static io.spine.chatbot.server.github.GitHubIdentifier.repositoryIdOf;
+import static io.spine.chatbot.server.github.GitHubIdentifier.organization;
+import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
 import static io.spine.chatbot.server.github.RepoBuildProcess.buildStateFrom;
 
 @DisplayName("RepoBuildProcess should")
 final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
-    private static final OrganizationId orgId = organizationIdOf("SpineEventEngine");
-    private static final RepositoryId repositoryId = repositoryIdOf("SpineEventEngine/web");
+    private static final OrganizationId orgId = organization("SpineEventEngine");
+    private static final RepositoryId repositoryId = repository("SpineEventEngine/web");
     private static final String chatSpace = "spaces/1245wrq";
 
     @Test

@@ -40,9 +40,9 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.util.Optional;
 
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.messageIdOf;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.spaceIdOf;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.threadIdOf;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResourceOf;
 
 /**
@@ -86,9 +86,9 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
     private Pair<MessageCreated, Optional<ThreadCreated>>
     processBuildStateUpdate(BuildState buildState, RepositoryId repositoryId) {
         var sentMessage = googleChatClient.sendBuildStateUpdate(buildState, state().getThread());
-        var messageId = messageIdOf(sentMessage.getName());
-        var threadId = threadIdOf(repositoryId.getValue());
-        var spaceId = spaceIdOf(buildState.getGoogleChatSpace());
+        var messageId = message(sentMessage.getName());
+        var threadId = thread(repositoryId.getValue());
+        var spaceId = space(buildState.getGoogleChatSpace());
         var messageCreated = MessageCreated
                 .newBuilder()
                 .setId(messageId)

@@ -40,7 +40,7 @@ public final class GoogleChatIdentifier {
     /**
      * Creates a new {@link ThreadId} out of the specified {@code value}.
      */
-    public static ThreadId threadIdOf(String value) {
+    public static ThreadId thread(String value) {
         checkNotNull(value);
         return ThreadId
                 .newBuilder()
@@ -51,7 +51,7 @@ public final class GoogleChatIdentifier {
     /**
      * Creates a new {@link SpaceId} out of the specified {@code value}.
      */
-    public static SpaceId spaceIdOf(String value) {
+    public static SpaceId space(String value) {
         checkNotNull(value);
         return SpaceId
                 .newBuilder()
@@ -62,7 +62,7 @@ public final class GoogleChatIdentifier {
     /**
      * Creates a new {@link MessageId} out of the specified {@code value}.
      */
-    public static MessageId messageIdOf(String value) {
+    public static MessageId message(String value) {
         checkNotNull(value);
         return MessageId
                 .newBuilder()
