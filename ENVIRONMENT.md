@@ -71,3 +71,14 @@ a Pub/Sub message with an empty payload to the `repository-checks` topic. We con
 to run every hour using the following unix-cron format expression: `0 * * * *`.
 
 [scheduler]: https://cloud.google.com/scheduler
+
+## Cloud Run
+
+We use Cloud Run as our main compute platform for the ChatBot application. Cloud Run is a managed 
+serverless solution that works with Docker.
+
+//TODO:2020-06-23:ysergiichuk: describe Cloud run usage.
+
+//TODO:2020-06-23:ysergiichuk: add IAM section.
+
+//TODO:2020-06-23:ysergiichuk: add Cloud Build section.
