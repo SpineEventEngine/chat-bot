@@ -40,8 +40,8 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import static io.spine.chatbot.server.github.GitHubIdentifier.organization;
 import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
-import static io.spine.net.Urls.githubRepoUrlFor;
-import static io.spine.net.Urls.travisRepoUrlFor;
+import static io.spine.net.Urls.githubUrlFor;
+import static io.spine.net.Urls.travisUrlFor;
 import static io.spine.net.Urls.urlOfSpec;
 
 /**
@@ -101,21 +101,22 @@ final class SpineOrgInitProcess
         return RegisterRepository
                 .newBuilder()
                 .setOrganization(orgId)
-                .setGithubUrl(githubRepoUrlFor(slug))
+                .setGithubUrl(githubUrlFor(slug))
                 .setId(repository(slug))
                 .setName(repo.getName())
-                .setTravisCiUrl(travisRepoUrlFor(slug))
+                .setTravisCiUrl(travisUrlFor(slug))
                 .vBuild();
     }
 
     private RegisterOrganization registerOrgCommand(OrganizationId spineOrgId, String spaceName) {
-        _info().log("Registering `Spine Event Engine` organization.");
+        var orgSlug = spineOrgId.getValue();
+        _info().log("Registering `%s` organization.", orgSlug);
         return RegisterOrganization
                 .newBuilder()
                 .setName("Spine Event Engine")
                 .setWebsiteUrl(urlOfSpec("https://spine.io/"))
-                .setTravisCiUrl(urlOfSpec("https://travis-ci.com/github/SpineEventEngine"))
-                .setGithubUrl(urlOfSpec("https://github.com/SpineEventEngine"))
+                .setTravisCiUrl(travisUrlFor(orgSlug))
+                .setGithubUrl(githubUrlFor(orgSlug))
                 .setId(spineOrgId)
                 .setGoogleChatSpace(spaceName)
                 .vBuild();

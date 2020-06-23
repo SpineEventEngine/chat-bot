@@ -51,27 +51,25 @@ public final class Urls {
      */
     public static Url travisBuildUrlFor(String repoSlug, long buildId) {
         checkNotNull(repoSlug);
-        var spec = format("%s/%s/builds/%d",
-                          TRAVIS_GITHUB_ENDPOINT, repoSlug, buildId);
+        var spec = format("%s/%s/builds/%d", TRAVIS_GITHUB_ENDPOINT, repoSlug, buildId);
         return urlOfSpec(spec);
     }
 
     /**
-     * Creates a new Travis CI repository URL.
+     * Creates a new Travis CI URL.
      */
-    public static Url travisRepoUrlFor(String repoSlug) {
-        checkNotNull(repoSlug);
-        var spec = format("%s/%s",
-                          TRAVIS_GITHUB_ENDPOINT, repoSlug);
+    public static Url travisUrlFor(String slug) {
+        checkNotNull(slug);
+        var spec = format("%s/%s", TRAVIS_GITHUB_ENDPOINT, slug);
         return urlOfSpec(spec);
     }
 
     /**
-     * Creates a new GitHub repository URL.
+     * Creates a new GitHub URL.
      */
-    public static Url githubRepoUrlFor(String repoSlug) {
-        checkNotNull(repoSlug);
-        var spec = format("%s/%s", GITHUB, repoSlug);
+    public static Url githubUrlFor(String slug) {
+        checkNotNull(slug);
+        var spec = format("%s/%s", GITHUB, slug);
         return urlOfSpec(spec);
     }
 }

@@ -26,9 +26,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.net.Urls.githubRepoUrlFor;
+import static io.spine.net.Urls.githubUrlFor;
 import static io.spine.net.Urls.travisBuildUrlFor;
-import static io.spine.net.Urls.travisRepoUrlFor;
+import static io.spine.net.Urls.travisUrlFor;
 import static io.spine.net.Urls.urlOfSpec;
 
 @DisplayName("Urls should")
@@ -48,7 +48,7 @@ final class UrlsTest extends UtilityClassTest<Urls> {
         @DisplayName("Travis CI repository page")
         @Test
         void travisRepo() {
-            assertThat(travisRepoUrlFor(REPO_SLUG)).isEqualTo(urlOfSpec(
+            assertThat(travisUrlFor(REPO_SLUG)).isEqualTo(urlOfSpec(
                     "https://travis-ci.com/github/SpineEventEngine/chat-bot"
             ));
         }
@@ -64,7 +64,7 @@ final class UrlsTest extends UtilityClassTest<Urls> {
         @DisplayName("GitHub repository page")
         @Test
         void githubRepo() {
-            assertThat(githubRepoUrlFor(REPO_SLUG)).isEqualTo(urlOfSpec(
+            assertThat(githubUrlFor(REPO_SLUG)).isEqualTo(urlOfSpec(
                     "https://github.com/SpineEventEngine/chat-bot"
             ));
         }
