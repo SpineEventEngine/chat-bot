@@ -30,14 +30,14 @@ option java_outer_classname = "IdentifiersProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-// Hangouts Chat Space identifier.
+// Chat Space identifier.
 message SpaceId {
 
     // Resource name of the space, in the form `spaces/<space_id>`.
     string value = 1 [(required) = true, (pattern).regex = "spaces/.+"];
 }
 
-// Hangouts Chat Room Thread identifier.
+// Chat Room Thread identifier.
 message ThreadId {
 
     // The thread identifier is linked to the topic discussed in the thread.
@@ -48,7 +48,7 @@ message ThreadId {
     string value = 1 [(required) = true];
 }
 
-// Hangouts Chat Message identifier.
+// Chat Message identifier.
 message MessageId {
 
     // Resource name of the message, in the form `spaces/<space_id>/messages/<message_id>`.

@@ -59,7 +59,7 @@ message Repository {
     string slug = 3;
 }
 
-// The branch of a GitHub repository.
+// The branch of a repository.
 message Branch {
 
     // Name of the git branch.
@@ -119,7 +119,7 @@ message Build {
     // State of the previous build.
     string previous_state = 6;
 
-    // GitHub repository the build is associated with.
+    // The repository the build is associated with.
     Repository repository = 7;
 
     // The branch the build is associated with.

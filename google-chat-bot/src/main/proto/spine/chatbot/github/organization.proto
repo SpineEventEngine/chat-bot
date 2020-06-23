@@ -39,7 +39,7 @@ message Organization {
     option (entity).kind = AGGREGATE;
     option (entity).visibility = FULL;
 
-    OrganizationId id = 1;
+    OrganizationId organization = 1;
 
     // Name of the GitHub organization.
     string name = 2;

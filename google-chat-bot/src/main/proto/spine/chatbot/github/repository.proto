@@ -39,7 +39,7 @@ message Repository {
     option (entity).kind = AGGREGATE;
     option (entity).visibility = FULL;
 
-    RepositoryId id = 1;
+    RepositoryId repository = 1;
 
     // Name of the repository.
     string name = 2;

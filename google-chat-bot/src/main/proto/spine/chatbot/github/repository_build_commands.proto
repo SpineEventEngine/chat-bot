@@ -36,7 +36,7 @@ import "spine/chatbot/github/identifiers.proto";
 message CheckRepositoryBuild {
 
     // ID of the repository to perform a check for.
-    RepositoryId id = 1 [(required) = true];
+    RepositoryId repository = 1 [(required) = true];
 
     // ID of the organization the repository belongs to.
     OrganizationId organization = 2 [(required) = true];

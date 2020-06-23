@@ -37,7 +37,7 @@ import "spine/chatbot/github/identifiers.proto";
 // A repository is registered.
 message RepositoryRegistered {
 
-    RepositoryId id = 1 [(required) = true];
+    RepositoryId repository = 1 [(required) = true];
 
     // Name of the repository.
     string name = 2 [(required) = true];

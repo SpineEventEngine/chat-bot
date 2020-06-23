@@ -32,24 +32,24 @@ option java_generate_equals_and_hash = true;
 
 import "spine/chatbot/google/chat/identifiers.proto";
 
-// A thread in Google Chat room.
+// A thread in a Chat room.
 message Thread {
     option (entity).kind = AGGREGATE;
     option (entity).visibility = FULL;
 
-    ThreadId id = 1;
+    ThreadId thread = 1;
 
     // Resource name of the thread.
-    ThreadResource thread = 2;
+    ThreadResource resource = 2;
 
     // ID of the space within with the thread is available.
-    SpaceId space_id = 3;
+    SpaceId space = 3;
 
     // IDs of the messages posted by the bot to the thread.
     repeated MessageId messages = 4;
 }
 
-// Google Chat Thread resource.
+// Chat Thread resource.
 message ThreadResource {
 
     // Resource name of the thread, in the form `spaces/<space_id>/threads/<thread_id>`.

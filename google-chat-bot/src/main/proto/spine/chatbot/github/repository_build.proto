@@ -42,7 +42,7 @@ message RepositoryBuild {
     option (entity).kind = PROCESS_MANAGER;
     option (entity).visibility = FULL;
 
-    RepositoryId id = 1;
+    RepositoryId repository = 1;
 
     // Time of the last status check.
     google.protobuf.Timestamp last_status_check = 2;

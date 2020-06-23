@@ -33,16 +33,16 @@ option java_generate_equals_and_hash = true;
 import "spine/chatbot/google/chat/identifiers.proto";
 import "spine/chatbot/google/chat/thread.proto";
 
-// A Google Chat thread initialized.
+// A Chat thread initialized.
 message ThreadInitialized {
 
-    ThreadId id = 1 [(required) = true];
+    ThreadId thread = 1 [(required) = true];
 
-    // Google Chat thread.
-    ThreadResource thread = 2 [(required) = true];
+    // Chat thread.
+    ThreadResource resource = 2 [(required) = true];
 
     // ID of the space within which the thread is available.
-    SpaceId space_id = 3 [(required) = true];
+    SpaceId space = 3 [(required) = true];
 }
 
 // A message added to the thead.

@@ -13,7 +13,7 @@ option java_generate_equals_and_hash = true;
 import "spine/chatbot/google/chat/identifiers.proto";
 import "spine/chatbot/google/chat/incoming/incoming_chat_messages.proto";
 
-// The ChatBot is added to a Google Chat space.
+// The ChatBot is added to a Chat space.
 message BotAddedToSpace {
 
     // The ID of the Space to which the ChatBot is added.
@@ -23,7 +23,7 @@ message BotAddedToSpace {
     ChatEvent event = 2;
 }
 
-// The ChatBot is removed from the Google Chat space.
+// The ChatBot is removed from the Chat space.
 message BotRemovedFromSpace {
 
     // The ID of the Space from which the ChatBot is removed.
@@ -33,7 +33,7 @@ message BotRemovedFromSpace {
     ChatEvent event = 2;
 }
 
-// The ChatBot received a new incoming Google Chat message.
+// The ChatBot received a new incoming Chat message.
 message MessageReceived {
 
     // The ID of the new message.

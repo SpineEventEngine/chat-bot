@@ -41,11 +41,11 @@ message ThreadChat {
     option (entity).kind = PROCESS_MANAGER;
     option (entity).visibility = FULL;
 
-    ThreadId id = 1;
+    ThreadId thread = 1;
 
-    // Google Chat thread.
-    ThreadResource thread = 2;
+    // Chat thread.
+    ThreadResource resource = 2;
 
     // ID of the space within with the thread is available.
-    SpaceId space_id = 3;
+    SpaceId space = 3;
 }

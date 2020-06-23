@@ -36,5 +36,5 @@ import "spine/chatbot/github/identifiers.proto";
 // No CI builds found for the repository.
 message NoBuildsFound {
 
-    RepositoryId id = 1 [(required) = true];
+    RepositoryId repository = 1 [(required) = true];
 }

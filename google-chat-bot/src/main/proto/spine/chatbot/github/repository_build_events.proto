@@ -38,7 +38,7 @@ import "spine/chatbot/github/repository_build.proto";
 // The build has failed for a repository.
 message BuildFailed {
 
-    RepositoryId id = 1 [(required) = true];
+    RepositoryId repository = 1 [(required) = true];
 
     // The change of the build state.
     BuildStateChange change = 2;
@@ -47,7 +47,7 @@ message BuildFailed {
 // The build has recovered from the failed state.
 message BuildRecovered {
 
-    RepositoryId id = 1 [(required) = true];
+    RepositoryId repository = 1 [(required) = true];
 
     // The change of the build state.
     BuildStateChange change = 2;
@@ -56,7 +56,7 @@ message BuildRecovered {
 // The build is stable and passing.
 message BuildStable {
 
-    RepositoryId id = 1 [(required) = true];
+    RepositoryId repository = 1 [(required) = true];
 
     // The change of the build state.
     BuildStateChange change = 2;
@@ -65,5 +65,5 @@ message BuildStable {
 // The build is stable and passing.
 message BuildInProgress {
 
-    RepositoryId id = 1 [(required) = true];
+    RepositoryId repository = 1 [(required) = true];
 }
