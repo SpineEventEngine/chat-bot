@@ -32,7 +32,6 @@ option java_generate_equals_and_hash = true;
 
 option (every_is).java_type = "io.spine.chatbot.server.github.RepositoryAwareEvent";
 
-
 import "spine/chatbot/github/identifiers.proto";
 import "spine/chatbot/github/repository_build.proto";
 
