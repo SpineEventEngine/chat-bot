@@ -19,7 +19,8 @@
  */
 
 /**
- * This contains package Spine's Google Chat Bot application and environment configurations.
+ * This contains package the application {@link io.spine.chatbot.Application entry point}
+ * and the {@link io.spine.chatbot.ChatBotServerEnvironment environment} configurations.
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault
