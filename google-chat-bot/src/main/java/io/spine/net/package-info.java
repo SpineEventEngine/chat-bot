@@ -19,7 +19,7 @@
  */
 
 /**
- * This package Spine .net utilities.
+ * This package contains utilities for working with network-related messages.
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault
