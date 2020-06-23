@@ -109,14 +109,13 @@ final class SpineOrgInitProcess
     }
 
     private RegisterOrganization registerOrgCommand(OrganizationId spineOrgId, String spaceName) {
-        var orgSlug = spineOrgId.getValue();
-        _info().log("Registering `%s` organization.", orgSlug);
+        _info().log("Registering `%s` organization.", SPINE_ORG);
         return RegisterOrganization
                 .newBuilder()
                 .setName("Spine Event Engine")
                 .setWebsiteUrl(urlOfSpec("https://spine.io/"))
-                .setTravisCiUrl(travisUrlFor(orgSlug))
-                .setGithubUrl(githubUrlFor(orgSlug))
+                .setTravisCiUrl(travisUrlFor(SPINE_ORG))
+                .setGithubUrl(githubUrlFor(SPINE_ORG))
                 .setId(spineOrgId)
                 .setGoogleChatSpace(spaceName)
                 .vBuild();
