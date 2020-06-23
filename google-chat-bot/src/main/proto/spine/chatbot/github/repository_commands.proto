@@ -48,6 +48,6 @@ message RegisterRepository {
     // Travis CI URL of the repository.
     spine.net.Url travis_ci_url = 4 [(required) = true];
 
-    // ID of the organization the repository is related to if any.
+    // ID of the organization the repository is related to, if any.
     OrganizationId organization = 5;
 }
