@@ -74,7 +74,7 @@ final class RepoBuildProcess
         implements Logging {
 
     @LazyInit
-    private @MonotonicNonNull TravisClient travisClient;
+    private @MonotonicNonNull TravisClient client;
 
     /**
      * Checks the repository build state and propagates the respective events.
@@ -87,7 +87,7 @@ final class RepoBuildProcess
             throws NoBuildsFound {
         var repositoryId = c.getId();
         _info().log("Checking build status for repository `%s`.", repositoryId.getValue());
-        var branchBuild = travisClient.execute(BuildsQuery.forRepo(repositoryId.getValue()));
+        var branchBuild = client.execute(BuildsQuery.forRepo(repositoryId.getValue()));
         if (isDefault(branchBuild.getLastBuild())) {
             _warn().log("No builds found for the repository `%s`.", repositoryId.getValue());
             throw NoBuildsFound
@@ -200,7 +200,7 @@ final class RepoBuildProcess
                 .vBuild();
     }
 
-    void setTravisClient(TravisClient travisClient) {
-        this.travisClient = travisClient;
+    void setClient(TravisClient client) {
+        this.client = client;
     }
 }

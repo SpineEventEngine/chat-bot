@@ -40,6 +40,6 @@ final class RepoBuildRepository
     @Override
     protected void configure(RepoBuildProcess processManager) {
         super.configure(processManager);
-        processManager.setTravisClient(travisClient);
+        processManager.setClient(travisClient);
     }
 }

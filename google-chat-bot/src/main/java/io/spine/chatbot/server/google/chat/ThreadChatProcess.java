@@ -52,7 +52,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         implements Logging {
 
     @LazyInit
-    private @MonotonicNonNull GoogleChatClient googleChatClient;
+    private @MonotonicNonNull GoogleChatClient client;
 
     /**
      * Notifies thread members about a failed CI build.
@@ -85,7 +85,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
 
     private Pair<MessageCreated, Optional<ThreadCreated>>
     processBuildStateUpdate(BuildState buildState, RepositoryId repositoryId) {
-        var sentMessage = googleChatClient.sendBuildStateUpdate(buildState, state().getThread());
+        var sentMessage = client.sendBuildStateUpdate(buildState, state().getThread());
         var messageId = message(sentMessage.getName());
         var threadId = thread(repositoryId.getValue());
         var spaceId = space(buildState.getGoogleChatSpace());
@@ -117,7 +117,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         return Messages.isDefault(state().getThread());
     }
 
-    void setGoogleChatClient(GoogleChatClient googleChatClient) {
-        this.googleChatClient = googleChatClient;
+    void setClient(GoogleChatClient client) {
+        this.client = client;
     }
 }

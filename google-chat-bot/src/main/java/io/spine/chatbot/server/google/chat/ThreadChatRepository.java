@@ -40,7 +40,8 @@ import static io.spine.server.route.EventRoute.withId;
 /**
  * The repository for {@link ThreadChatProcess}es.
  */
-final class ThreadChatRepository extends ProcessManagerRepository<ThreadId, ThreadChatProcess, ThreadChat> {
+final class ThreadChatRepository
+        extends ProcessManagerRepository<ThreadId, ThreadChatProcess, ThreadChat> {
 
     private final GoogleChatClient googleChatClient;
 
@@ -58,12 +59,13 @@ final class ThreadChatRepository extends ProcessManagerRepository<ThreadId, Thre
 
     @Override
     protected void configure(ThreadChatProcess processManager) {
-        processManager.setGoogleChatClient(googleChatClient);
+        processManager.setClient(googleChatClient);
     }
 
-    private static class RepositoryEventRoute<M extends RepositoryAwareEvent> implements EventRoute<ThreadId, M> {
+    private static class RepositoryEventRoute<M extends RepositoryAwareEvent>
+            implements EventRoute<ThreadId, M> {
 
-        private static final long serialVersionUID = 5147803958347083018L;
+        private static final long serialVersionUID = 0L;
 
         @Override
         public Set<ThreadId> apply(M event, EventContext context) {
