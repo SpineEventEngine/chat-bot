@@ -32,7 +32,7 @@ option java_generate_equals_and_hash = true;
 
 import "spine/chatbot/google/chat/identifiers.proto";
 
-// A thread in a Chat room.
+// A thread in a room.
 message Thread {
     option (entity).kind = AGGREGATE;
     option (entity).visibility = FULL;
