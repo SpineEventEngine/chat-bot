@@ -51,6 +51,11 @@ import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
  */
 final class IncomingEventsHandler extends AbstractEventReactor implements Logging {
 
+    /**
+     * Processes incoming external {@link ChatEvent}.
+     *
+     * <p>If the event type is not supported, returns {@link #nothing() nothing}.
+     */
     @React
     EitherOf4<BotAddedToSpace, BotRemovedFromSpace, MessageReceived, Nothing>
     on(@External ChatEvent chatEvent) {
