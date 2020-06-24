@@ -116,11 +116,10 @@ public final class Client implements AutoCloseable {
     private <E extends EventMessage> void
     post(CommandMessage command, Class<E> expectedOutcome, int expectedEvents) {
         var latch = new CountDownLatch(expectedEvents);
-        var subscriptions = client
-                .asGuest()
-                .command(command)
-                .observe(expectedOutcome, event -> latch.countDown())
-                .post();
+        var subscriptions = client.asGuest()
+                                  .command(command)
+                                  .observe(expectedOutcome, event -> latch.countDown())
+                                  .post();
         try {
             latch.await();
         } catch (InterruptedException e) {
