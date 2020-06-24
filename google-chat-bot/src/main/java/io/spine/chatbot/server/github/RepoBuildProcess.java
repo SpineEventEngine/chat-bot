@@ -85,14 +85,14 @@ final class RepoBuildProcess
     @Assign
     EitherOf3<BuildFailed, BuildRecovered, BuildStable> handle(CheckRepositoryBuild c)
             throws NoBuildsFound {
-        var repositoryId = c.getRepository();
-        _info().log("Checking build status for repository `%s`.", repositoryId.getValue());
-        var branchBuild = client.execute(BuildsQuery.forRepo(repositoryId.getValue()));
+        var repository = c.getRepository();
+        _info().log("Checking build status for repository `%s`.", repository.getValue());
+        var branchBuild = client.execute(BuildsQuery.forRepo(repository.getValue()));
         if (isDefault(branchBuild.getLastBuild())) {
-            _warn().log("No builds found for the repository `%s`.", repositoryId.getValue());
+            _warn().log("No builds found for the repository `%s`.", repository.getValue());
             throw NoBuildsFound
                     .newBuilder()
-                    .setRepository(repositoryId)
+                    .setRepository(repository)
                     .build();
         }
         var buildState = buildStateFrom(branchBuild, c.getGoogleChatSpace());
@@ -104,7 +104,7 @@ final class RepoBuildProcess
                 .setPreviousValue(state().getBuildState())
                 .setNewValue(buildState)
                 .vBuild();
-        var result = determineOutcome(repositoryId, stateChange);
+        var result = determineOutcome(repository, stateChange);
         return result;
     }
 
