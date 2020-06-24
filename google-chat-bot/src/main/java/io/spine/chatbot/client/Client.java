@@ -34,6 +34,7 @@ import io.spine.client.Subscription;
 
 import java.util.concurrent.CountDownLatch;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
 /**
@@ -53,6 +54,7 @@ public final class Client implements AutoCloseable {
      * Creates a new in-process client configured for the specified server.
      */
     public static Client inProcessClient(String serverName) {
+        checkNotNull(serverName);
         io.spine.client.Client client = io.spine.client.Client
                 .inProcess(serverName)
                 .build();
@@ -74,6 +76,7 @@ public final class Client implements AutoCloseable {
      */
     @CanIgnoreReturnValue
     public boolean cancelSubscription(Subscription subscription) {
+        checkNotNull(subscription);
         return client.subscriptions()
                      .cancel(subscription);
     }
@@ -91,6 +94,7 @@ public final class Client implements AutoCloseable {
      * Returns list of all registered repositories for the {@code organization}.
      */
     public ImmutableList<RepositoryId> listOrgRepos(OrganizationId organization) {
+        checkNotNull(organization);
         var orgRepos = client.asGuest()
                              .select(OrganizationRepositories.class)
                              .byId(organization)
@@ -104,6 +108,8 @@ public final class Client implements AutoCloseable {
      * Posts a command and waits synchronously till the expected outcome event is published.
      */
     public <E extends EventMessage> void post(CommandMessage command, Class<E> expectedOutcome) {
+        checkNotNull(command);
+        checkNotNull(expectedOutcome);
         post(command, expectedOutcome, 1);
     }
 
