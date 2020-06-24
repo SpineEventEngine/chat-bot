@@ -85,7 +85,7 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
         void settingState() {
             var expectedState = Repository
                     .newBuilder()
-                    .setRepository(repository)
+                    .setId(repository)
                     .setGithubUrl(githubUrl)
                     .setTravisCiUrl(travisCiUrl)
                     .setName(REPO_NAME)

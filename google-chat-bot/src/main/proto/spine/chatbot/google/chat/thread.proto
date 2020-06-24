@@ -37,15 +37,15 @@ message Thread {
     option (entity).kind = AGGREGATE;
     option (entity).visibility = FULL;
 
-    ThreadId thread = 1;
+    ThreadId id = 1;
 
     // Resource name of the thread.
     ThreadResource resource = 2;
 
-    // ID of the space within with the thread is available.
+    // The space within with the thread is available.
     SpaceId space = 3;
 
-    // IDs of the messages posted by the bot to the thread.
+    // Messages posted by the bot to the thread.
     repeated MessageId messages = 4;
 }
 

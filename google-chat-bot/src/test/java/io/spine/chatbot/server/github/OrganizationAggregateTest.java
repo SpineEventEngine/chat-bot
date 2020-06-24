@@ -53,7 +53,7 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
         void setUp() {
             var registerOrganization = RegisterOrganization
                     .newBuilder()
-                    .setOrganization(organization)
+                    .setId(organization)
                     .setGithubUrl(githubUrl)
                     .setTravisCiUrl(travisCiUrl)
                     .setWebsiteUrl(websiteUrl)
@@ -83,7 +83,7 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
         void settingState() {
             var expectedState = Organization
                     .newBuilder()
-                    .setOrganization(organization)
+                    .setId(organization)
                     .setGithubUrl(githubUrl)
                     .setTravisCiUrl(travisCiUrl)
                     .setWebsiteUrl(websiteUrl)

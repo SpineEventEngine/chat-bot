@@ -46,7 +46,7 @@ final class RepositoriesController implements Logging {
         var botClient = ChatBotServerClient.inProcessClient(SERVER_NAME);
         var organizations = botClient.listOrganizations();
         for (var organization : organizations) {
-            var repos = botClient.listOrgRepos(organization.getOrganization());
+            var repos = botClient.listOrgRepos(organization.getId());
             repos.forEach(repo -> checkBuildStatus(botClient, repo, organization));
         }
         return "success";
@@ -77,7 +77,7 @@ final class RepositoriesController implements Logging {
         return CheckRepositoryBuild
                 .newBuilder()
                 .setRepository(repository)
-                .setOrganization(organization.getOrganization())
+                .setOrganization(organization.getId())
                 .setGoogleChatSpace(organization.getGoogleChatSpace())
                 .vBuild();
     }

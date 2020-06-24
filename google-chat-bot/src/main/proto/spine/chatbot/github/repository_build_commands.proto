@@ -35,10 +35,10 @@ import "spine/chatbot/github/identifiers.proto";
 // Check repository CI build state command.
 message CheckRepositoryBuild {
 
-    // ID of the repository to perform a check for.
+    // The repository to perform a check for.
     RepositoryId repository = 1 [(required) = true];
 
-    // ID of the organization the repository belongs to.
+    // The organization the repository belongs to.
     OrganizationId organization = 2 [(required) = true];
 
     // Name of the Google Chat space associated with the organization in form `spaces/<space_id>`.

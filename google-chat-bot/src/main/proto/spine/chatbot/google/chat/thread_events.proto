@@ -41,7 +41,7 @@ message ThreadInitialized {
     // Chat thread.
     ThreadResource resource = 2 [(required) = true];
 
-    // ID of the space within which the thread is available.
+    // Space within which the thread is available.
     SpaceId space = 3 [(required) = true];
 }
 
@@ -50,6 +50,6 @@ message MessageAdded {
 
     MessageId message = 1 [(required) = true];
 
-    // ID of the thread to which the message is added.
+    // Thread to which the message is added.
     ThreadId thread = 2 [(required) = true];
 }

@@ -39,7 +39,7 @@ message Repository {
     option (entity).kind = AGGREGATE;
     option (entity).visibility = FULL;
 
-    RepositoryId repository = 1;
+    RepositoryId id = 1;
 
     // Name of the repository.
     string name = 2;
@@ -50,6 +50,6 @@ message Repository {
     // Travis CI URL of the repository.
     spine.net.Url travis_ci_url = 4;
 
-    // ID of the organization repository is related to if any.
+    // The organization repository is related to, if any.
     OrganizationId organization = 5;
 }

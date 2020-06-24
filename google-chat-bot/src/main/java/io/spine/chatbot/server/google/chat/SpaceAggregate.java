@@ -62,7 +62,7 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
      */
     @Assign
     SpaceRegistered handle(RegisterSpace c) {
-        var space = c.getSpace();
+        var space = c.getId();
         _info().log("Registering space `%s`.", space.getValue());
         var result = SpaceRegistered
                 .newBuilder()

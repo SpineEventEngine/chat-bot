@@ -41,7 +41,7 @@ message OrganizationInit {
     option (entity).kind = PROCESS_MANAGER;
     option (entity).visibility = FULL;
 
-    // The ID of the organization for which the initialization is performed.
+    // The organization for which the initialization is performed.
     OrganizationId organization = 1;
 
     // Name of the Google Chat space associated with the organization in form `spaces/<space_id>`.
