@@ -86,7 +86,9 @@ public final class GoogleChat implements GoogleChatClient, Logging {
                     .create(space, message)
                     .execute();
         } catch (IOException e) {
-            _error().log("Unable to send message to space `%s`.", space, e);
+            logger().atSevere()
+                    .withCause(e)
+                    .log("Unable to send message to space `%s`.", space);
             throw new RuntimeException("Unable to send message to space " + space, e);
         }
     }
@@ -107,7 +109,8 @@ public final class GoogleChat implements GoogleChatClient, Logging {
             String message = "Unable to create Hangouts Chat client.";
             Logging.loggerFor(GoogleChat.class)
                    .atSevere()
-                   .log(message, e);
+                   .withCause(e)
+                   .log(message);
             throw new RuntimeException(message, e);
         }
     }
