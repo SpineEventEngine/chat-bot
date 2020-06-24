@@ -36,10 +36,10 @@ import java.text.ParseException;
 
 @MicronautTest
 @DisplayName("PubsubPushNotificationDeserializer should")
-class PubsubPushNotificationDeserializerTest {
+final class PubsubPushNotificationDeserializerTest {
 
     @Inject
-    ObjectMapperFactory mapperFactory;
+    private ObjectMapperFactory mapperFactory;
 
     @Test
     @DisplayName("deserialize Pubsub message")
