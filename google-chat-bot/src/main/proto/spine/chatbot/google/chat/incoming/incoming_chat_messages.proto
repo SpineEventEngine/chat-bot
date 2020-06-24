@@ -133,6 +133,8 @@ message Message {
 // A room or DM in Chat.
 message Space {
 
+    option (is).java_type = "io.spine.chatbot.server.google.chat.incoming.SpaceMixin";
+
     // Resource name of the space, in the form "spaces/*".
     string name = 1 [(required) = true, (pattern).regex = "spaces/.+"];
 
