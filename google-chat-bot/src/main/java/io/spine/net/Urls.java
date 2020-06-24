@@ -41,6 +41,7 @@ public final class Urls {
      * Creates a new {@link Url} out of supplied spec.
      */
     public static Url urlOfSpec(String spec) {
+        checkNotNull(spec);
         return Url.newBuilder()
                   .setSpec(spec)
                   .vBuild();
