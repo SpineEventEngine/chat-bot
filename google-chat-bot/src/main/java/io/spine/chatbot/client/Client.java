@@ -28,38 +28,35 @@ import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.OrganizationRepositories;
-import io.spine.client.Client;
 import io.spine.client.ClientRequest;
 import io.spine.client.CommandRequest;
 import io.spine.client.Subscription;
 
-import java.util.Collection;
 import java.util.concurrent.CountDownLatch;
 
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.collect.ImmutableList.toImmutableList;
 
 /**
  * A ChatBot application's Spine client.
  *
- * <p>Abstracts working with Spine's {@link Client client}.
+ * <p>Abstracts working with Spine's {@link io.spine.client.Client client}.
  */
-public final class ChatBotServerClient {
+public final class Client implements AutoCloseable {
 
-    private final Client client;
+    private final io.spine.client.Client client;
 
-    private ChatBotServerClient(Client client) {
+    private Client(io.spine.client.Client client) {
         this.client = client;
     }
 
     /**
      * Creates a new in-process client configured for the specified server.
      */
-    public static ChatBotServerClient inProcessClient(String serverName) {
-        Client client = Client
+    public static Client inProcessClient(String serverName) {
+        io.spine.client.Client client = io.spine.client.Client
                 .inProcess(serverName)
                 .build();
-        return new ChatBotServerClient(client);
+        return new Client(client);
     }
 
     /**
@@ -104,27 +101,6 @@ public final class ChatBotServerClient {
     }
 
     /**
-     * Returns IDs for all registered repositories.
-     */
-    public ImmutableList<RepositoryId> listRepositories() {
-        var orgIds = client.asGuest()
-                           .select(Organization.class)
-                           .run()
-                           .stream()
-                           .map(Organization::getId)
-                           .collect(toImmutableList());
-        var orgRepos = client.asGuest()
-                             .select(OrganizationRepositories.class)
-                             .byId(orgIds)
-                             .run();
-        var result = orgRepos.stream()
-                             .map(OrganizationRepositories::getRepositoriesList)
-                             .flatMap(Collection::stream)
-                             .collect(toImmutableList());
-        return result;
-    }
-
-    /**
      * Posts a command and waits synchronously till the expected outcome event is published.
      */
     public <E extends EventMessage> void post(CommandMessage command, Class<E> expectedOutcome) {
@@ -145,5 +121,10 @@ public final class ChatBotServerClient {
             throw new RuntimeException("Processing of command failed. Command: " + command, e);
         }
         subscriptions.forEach(this::cancelSubscription);
+    }
+
+    @Override
+    public void close() {
+        this.client.close();
     }
 }
