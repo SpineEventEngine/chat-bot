@@ -28,7 +28,6 @@ import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.OrganizationRepositories;
-import io.spine.client.ClientRequest;
 import io.spine.client.CommandRequest;
 import io.spine.client.Subscription;
 
@@ -36,6 +35,7 @@ import java.util.concurrent.CountDownLatch;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * A ChatBot application's Spine client.
@@ -62,26 +62,6 @@ public final class Client implements AutoCloseable {
     }
 
     /**
-     * Returns Spine client guest request.
-     */
-    public ClientRequest asGuest() {
-        return client.asGuest();
-    }
-
-    /**
-     * Cancels the passed subscription.
-     *
-     * @see io.spine.client.Subscriptions#cancel(Subscription)
-     * @see CommandRequest#post()
-     */
-    @CanIgnoreReturnValue
-    public boolean cancelSubscription(Subscription subscription) {
-        checkNotNull(subscription);
-        return client.subscriptions()
-                     .cancel(subscription);
-    }
-
-    /**
      * Retrieves all registered organizations.
      */
     public ImmutableList<Organization> listOrganizations() {
@@ -104,6 +84,11 @@ public final class Client implements AutoCloseable {
                                             .getRepositoriesList());
     }
 
+    @Override
+    public void close() {
+        this.client.close();
+    }
+
     /**
      * Posts a command and waits synchronously till the expected outcome event is published.
      */
@@ -113,11 +98,26 @@ public final class Client implements AutoCloseable {
         post(command, expectedOutcome, 1);
     }
 
+    /**
+     * Posts a command asynchronously.
+     *
+     * @see #post(CommandMessage, Class)
+     */
+    public void post(CommandMessage command) {
+        checkNotNull(command);
+        var subscriptions = client.asGuest()
+                                  .command(command)
+                                  .onStreamingError(Client::throwProcessingError)
+                                  .post();
+        subscriptions.forEach(this::cancelSubscription);
+    }
+
     private <E extends EventMessage> void
     post(CommandMessage command, Class<E> expectedOutcome, int expectedEvents) {
         var latch = new CountDownLatch(expectedEvents);
         var subscriptions = client.asGuest()
                                   .command(command)
+                                  .onStreamingError(Client::throwProcessingError)
                                   .observe(expectedOutcome, event -> latch.countDown())
                                   .post();
         try {
@@ -128,8 +128,22 @@ public final class Client implements AutoCloseable {
         subscriptions.forEach(this::cancelSubscription);
     }
 
-    @Override
-    public void close() {
-        this.client.close();
+    /**
+     * Cancels the passed subscription.
+     *
+     * @see io.spine.client.Subscriptions#cancel(Subscription)
+     * @see CommandRequest#post()
+     */
+    @CanIgnoreReturnValue
+    private boolean cancelSubscription(Subscription subscription) {
+        checkNotNull(subscription);
+        return client.subscriptions()
+                     .cancel(subscription);
+    }
+
+    private static void throwProcessingError(Throwable throwable) {
+        throw newIllegalStateException(
+                throwable, "An error while processing the command."
+        );
     }
 }

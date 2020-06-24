@@ -29,7 +29,6 @@ import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.logging.Logging;
 
 import static io.spine.chatbot.Application.SERVER_NAME;
-import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * A REST controller handling Repository commands.
@@ -59,18 +58,7 @@ final class RepositoriesController implements Logging {
         _info().log("Sending `CheckRepositoryBuild` command for repository `%s`",
                     repository.getValue());
         var checkRepositoryBuild = checkRepoBuildCommand(repository, organization);
-        var subscriptions = botClient
-                .asGuest()
-                .command(checkRepositoryBuild)
-                .onStreamingError(RepositoriesController::throwProcessingError)
-                .post();
-        subscriptions.forEach(botClient::cancelSubscription);
-    }
-
-    private static void throwProcessingError(Throwable throwable) {
-        throw newIllegalStateException(
-                throwable, "An error while processing the command."
-        );
+        botClient.post(checkRepositoryBuild);
     }
 
     private static CheckRepositoryBuild
