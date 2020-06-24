@@ -55,9 +55,10 @@ dependencies {
         exclude("org.apache.logging.log4j:log4j-core")
     }
 
-    implementation("io.spine.gcloud:spine-datastore:${Deps.versions.spineGcloud}")
+    implementation(Deps.build.spine.datastore)
+    implementation(Deps.build.spine.pubsub)
+
     implementation(Deps.build.google.secretManager)
-    implementation(Deps.build.google.pubsubProto)
 
     implementation(Deps.build.google.chat)
     implementation(Deps.build.google.auth)
