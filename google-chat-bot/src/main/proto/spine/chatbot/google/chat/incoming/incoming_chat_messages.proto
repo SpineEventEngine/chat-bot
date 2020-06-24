@@ -38,7 +38,11 @@ option java_outer_classname = "IncomingChatMessagesProto";
 option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
-// A Chat incoming event.
+// An incoming Chat event.
+//
+// The definition conforms to the JSON representation defined in the
+// <a href="https://developers.google.com/hangouts/chat/reference/rest/v1/Event"reference<a/>.
+//
 message ChatEvent {
 
     option (is).java_type = "io.spine.base.EventMessage";
@@ -71,6 +75,10 @@ message ChatEvent {
 }
 
 // A message in Chat.
+//
+// See <a href="https://developers.google.com/hangouts/chat/reference/rest/v1/spaces.messages#Message">
+// reference</a> declaration for more details.
+//
 message Message {
 
     // Resource name, in the form "spaces/*/messages/*".
@@ -131,6 +139,10 @@ message Message {
 }
 
 // A room or DM in Chat.
+//
+// See <a href="https://developers.google.com/hangouts/chat/reference/rest/v1/spaces#Space">
+// reference</a> declaration for more details.
+//
 message Space {
 
     option (is).java_type = "io.spine.chatbot.server.google.chat.incoming.SpaceMixin";
@@ -146,6 +158,10 @@ message Space {
 }
 
 // A user in Chat.
+//
+// See <a href="https://developers.google.com/hangouts/chat/reference/rest/v1/User">reference</a>
+// declaration for more details.
+//
 message User {
 
     // Resource name, in the format "users/*".
@@ -177,6 +193,10 @@ enum SpaceType {
 }
 
 // The type of the event the bot is receiving.
+//
+// See <a href="https://developers.google.com/hangouts/chat/reference/rest/v1/EventType">reference</a>
+// declaration for more details.
+//
 enum EventType {
 
     ET_UNKNOWN = 0;
