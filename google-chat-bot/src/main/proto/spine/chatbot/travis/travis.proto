@@ -20,6 +20,13 @@
 
 syntax = "proto3";
 
+// This file contains the proto definitions that conforms to the
+// <a href="https://developer.travis-ci.com/">Travis CI API v3</a> data types.
+//
+// We use the defined protos instead of hand-crafting the dedicated classes and managing
+// the JSON conversion manually.
+//
+
 package spine.chatbot.travis;
 
 import "spine/options.proto";

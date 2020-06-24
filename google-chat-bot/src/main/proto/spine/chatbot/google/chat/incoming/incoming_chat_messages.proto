@@ -20,6 +20,14 @@
 
 syntax = "proto3";
 
+// This file contains the proto definitions that conforms to the
+// <a href="https://developers.google.com/hangouts/chat/reference/message-formats/events">
+// event formats</a> of the <a href="https://developers.google.com/hangouts/chat">Hangouts Chat</a>.
+//
+// We use the defined protos instead of hand-crafting the dedicated classes and managing
+// the JSON conversion manually.
+//
+
 package spine.chatbot.google.chat.incoming;
 
 import "spine/options.proto";
