@@ -20,11 +20,13 @@
 
 package io.spine.chatbot.server.google.chat.incoming;
 
+import io.spine.annotation.GeneratedMixin;
 import io.spine.chatbot.google.chat.incoming.SpaceType;
 
 /**
  * Provides utility helpers for the {@link io.spine.chatbot.google.chat.incoming.Space Space} type.
  */
+@GeneratedMixin
 public interface SpaceMixin {
 
     /**
