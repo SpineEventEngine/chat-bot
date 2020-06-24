@@ -19,7 +19,7 @@
  */
 
 /**
- * This package contains Spine's Google Chat Bot signals delivery configurations.
+ * This package contains the ChatBot signals delivery configurations.
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault

@@ -40,10 +40,10 @@ import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
  * <p>Processes incoming {@link ChatEvent} message and emits one of the following domain events:
  *
  * <ul>
- *     <li>{@link BotAddedToSpace} — the ChatBot is added to a Google Chat space;
- *     <li>{@link BotRemovedFromSpace} — the ChatBot is removed from the Google Chat space;
+ *     <li>{@link BotAddedToSpace} — the ChatBot is added to a space;
+ *     <li>{@link BotRemovedFromSpace} — the ChatBot is removed from the space;
  *     <li>{@link MessageReceived} — the ChatBot received a new incoming message from a user
- *     within a Google Chat space.
+ *     within a space.
  * </ul>
  *
  * <p>If the bot receives a chat event with a not supported currently event type,

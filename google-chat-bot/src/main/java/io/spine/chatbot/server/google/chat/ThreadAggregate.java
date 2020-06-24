@@ -32,7 +32,7 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.event.React;
 
 /**
- * A thread in the Google Chat room.
+ * A thread in the chat room.
  *
  * <p>A new thread is initialized as early as a new conversation is started in the room.
  * It is being initialized with the creation of the first message of the conversation.
