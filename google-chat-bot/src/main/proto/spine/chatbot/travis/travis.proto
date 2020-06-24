@@ -40,6 +40,8 @@ option java_generate_equals_and_hash = true;
 // The owner of a resource.
 //
 // This will be either a user or an organization.
+// See <a href="https://developer.travis-ci.com/resource/owner#Owner">reference</a> declaration
+// for more details.
 //
 message Owner {
 
@@ -51,6 +53,10 @@ message Owner {
 }
 
 // An individual repository.
+//
+// See <a href="https://developer.travis-ci.com/resource/repository#Repository">reference</a>
+// declaration for more details.
+//
 message Repository {
 
     // Value uniquely identifying the repository.
@@ -67,6 +73,10 @@ message Repository {
 }
 
 // The branch of a repository.
+//
+// See <a href="https://developer.travis-ci.com/resource/branch#Branch">reference</a> declaration
+// for more details.
+//
 message Branch {
 
     // Name of the git branch.
@@ -74,6 +84,10 @@ message Branch {
 }
 
 // Commit information is obtained by requesting a build.
+//
+// See <a href="https://developer.travis-ci.com/resource/commit#Commit">reference</a> declaration
+// for more details.
+//
 message Commit {
 
     // Value uniquely identifying the commit.
@@ -106,6 +120,10 @@ message Commit {
 }
 
 // Minimal Travis CI build representation.
+//
+// See <a href="https://developer.travis-ci.com/resource/build#Build">reference</a> declaration
+// for more details.
+//
 message Build {
 
     // Value uniquely identifying the build.
@@ -143,6 +161,10 @@ message Build {
 }
 
 // A Travis `branch` API endpoint response.
+//
+// See API <a href="https://developer.travis-ci.com/resource/branch#find">reference</a> for more
+// details.
+//
 message RepoBranchBuildResponse {
 
     option (is).java_type = "TravisResponse";
@@ -164,6 +186,10 @@ message RepoBranchBuildResponse {
 }
 
 // A Travis `repos` API endpoint response.
+//
+// See API <a href="https://developer.travis-ci.com/resource/repositories#for_owner">reference</a>
+// for more details.
+//
 message RepositoriesResponse {
 
     option (is).java_type = "TravisResponse";
