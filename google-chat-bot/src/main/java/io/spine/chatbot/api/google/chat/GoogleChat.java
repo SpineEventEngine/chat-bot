@@ -27,11 +27,15 @@ import com.google.api.services.chat.v1.model.Message;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import io.spine.chatbot.api.google.secret.Secrets;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 import io.spine.logging.Logging;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 
 import static io.spine.chatbot.api.google.chat.BuildStateUpdates.buildStateMessage;
@@ -95,7 +99,8 @@ public final class GoogleChat implements GoogleChatClient, Logging {
 
     private static HangoutsChat hangoutsChat() {
         try {
-            var credentials = GoogleCredentials.getApplicationDefault()
+            var serviceAccount = Secrets.chatServiceAccount();
+            var credentials = GoogleCredentials.fromStream(streamFrom(serviceAccount))
                                                .createScoped(CHAT_BOT_SCOPE);
             var credentialsAdapter = new HttpCredentialsAdapter(credentials);
             var chat = new HangoutsChat.Builder(
@@ -113,5 +118,9 @@ public final class GoogleChat implements GoogleChatClient, Logging {
                    .log(message);
             throw new RuntimeException(message, e);
         }
+    }
+
+    private static InputStream streamFrom(String data) {
+        return new ByteArrayInputStream(data.getBytes(Charset.defaultCharset()));
     }
 }

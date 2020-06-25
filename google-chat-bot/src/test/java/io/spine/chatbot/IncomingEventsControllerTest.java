@@ -27,6 +27,7 @@ import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.annotation.MicronautTest;
+import io.spine.chatbot.api.google.chat.InMemoryGoogleChatClient;
 import io.spine.chatbot.api.travis.InMemoryTravisClient;
 import io.spine.chatbot.server.github.GitHubContext;
 import io.spine.chatbot.server.google.chat.GoogleChatContext;
@@ -57,6 +58,7 @@ final class IncomingEventsControllerTest {
     static void setupServer() {
         var chatContext = GoogleChatContext
                 .newBuilder()
+                .setGoogleChatClient(InMemoryGoogleChatClient.lenientClient())
                 .build();
         var gitHubContext = GitHubContext
                 .newBuilder()
