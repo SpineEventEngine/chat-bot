@@ -111,4 +111,18 @@ to run every hour using the following unix-cron format expression: `0 * * * *`.
 
 [scheduler]: https://cloud.google.com/scheduler
 
+## Secret Manager
+
+To be able to use API tokens and service accounts securely in the application, 
+we use [Secret Manager][secret-manager] service that allows managing and rotate secrets with ease.
+
+We [manage][managing-secrets] secrets using the Secret Manager Web UI, but in order to be able 
+to [read][reading-secrets] the secrets, developers and service accounts should have the
+`roles/secretmanager.viewer` role that is not available by default (see [IAM](#iam) section 
+for details).
+
+[secret-manager]: https://cloud.google.com/secret-manager
+[managing-secrets]: https://cloud.google.com/secret-manager/docs/managing-secrets
+[reading-secrets]: https://cloud.google.com/secret-manager/docs/managing-secret-versions#get
+
 //TODO:2020-06-23:ysergiichuk: add IAM section.
