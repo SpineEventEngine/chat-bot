@@ -19,11 +19,11 @@
  */
 
 /**
- * This package contains the ChatBot signals delivery configurations.
+ * This package contains entities related to the Google Chat incoming events handling.
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault
-package io.spine.chatbot.delivery;
+package io.spine.chatbot.server.google.chat.incoming;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

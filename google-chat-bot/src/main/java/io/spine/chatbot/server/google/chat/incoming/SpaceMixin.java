@@ -18,13 +18,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.chatbot.server.google.chat.incoming;
+
+import io.spine.annotation.GeneratedMixin;
+import io.spine.chatbot.google.chat.incoming.SpaceType;
+
 /**
- * This package contains the ChatBot signals delivery configurations.
+ * Provides utility helpers for the {@link io.spine.chatbot.google.chat.incoming.Space Space} type.
  */
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.chatbot.delivery;
+@GeneratedMixin
+public interface SpaceMixin {
 
-import com.google.errorprone.annotations.CheckReturnValue;
+    /**
+     * Determines whether a space is threaded.
+     *
+     * @return `true` if the space is threaded, `false otherwise
+     */
+    default boolean isThreaded() {
+        return getType() == SpaceType.ROOM;
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    /**
+     * Returns space type.
+     */
+    SpaceType getType();
+}

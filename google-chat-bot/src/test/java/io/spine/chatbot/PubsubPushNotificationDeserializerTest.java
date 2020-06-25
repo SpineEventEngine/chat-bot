@@ -25,9 +25,9 @@ import com.google.common.truth.extensions.proto.ProtoTruth;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.util.Timestamps;
 import com.google.pubsub.v1.PubsubMessage;
-import com.google.pubsub.v1.PubsubPushNotification;
 import io.micronaut.jackson.ObjectMapperFactory;
 import io.micronaut.test.annotation.MicronautTest;
+import io.spine.pubsub.PubsubPushRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -36,10 +36,10 @@ import java.text.ParseException;
 
 @MicronautTest
 @DisplayName("PubsubPushNotificationDeserializer should")
-class PubsubPushNotificationDeserializerTest {
+final class PubsubPushNotificationDeserializerTest {
 
     @Inject
-    ObjectMapperFactory mapperFactory;
+    private ObjectMapperFactory mapperFactory;
 
     @Test
     @DisplayName("deserialize Pubsub message")
@@ -51,7 +51,7 @@ class PubsubPushNotificationDeserializerTest {
                 .setPublishTime(Timestamps.parse("2020-06-21T20:48:25.908Z"))
                 .setData(ByteString.copyFromUtf8("{\"key\":\"value\"}"))
                 .buildPartial();
-        var expectedResult = PubsubPushNotification
+        var expectedResult = PubsubPushRequest
                 .newBuilder()
                 .setSubscription("projects/test-project/subscriptions/test-subscription")
                 .setMessage(pubsubMessage)
@@ -60,7 +60,7 @@ class PubsubPushNotificationDeserializerTest {
         var mapper = mapperFactory.objectMapper(null, null);
 
         var pushNotification = mapper.readValue(PUSH_NOTIFICATION_JSON,
-                                                PubsubPushNotification.class);
+                                                PubsubPushRequest.class);
         ProtoTruth.assertThat(pushNotification)
                   .isEqualTo(expectedResult);
     }

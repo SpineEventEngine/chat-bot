@@ -46,6 +46,6 @@ message ThreadChat {
     // Chat thread.
     ThreadResource resource = 2;
 
-    // ID of the space within with the thread is available.
+    // Space within with the thread is available.
     SpaceId space = 3;
 }

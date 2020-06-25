@@ -23,7 +23,7 @@ package io.spine.chatbot.api.travis;
 /**
  * Travis CI branch builds API query.
  *
- * @see <a href="https://developer.travis-ci.com/resource/branch#find">Find branch build.</a>
+ * @see <a href="https://developer.travis-ci.com/resource/branch#find">Find branch build</a>
  */
 public final class BuildsQuery extends Query<RepoBranchBuildResponse> {
 

@@ -22,14 +22,13 @@ package io.spine.chatbot;
 
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
-import io.spine.chatbot.client.ChatBotServerClient;
+import io.spine.chatbot.client.Client;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.logging.Logging;
 
 import static io.spine.chatbot.Application.SERVER_NAME;
-import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * A REST controller handling Repository commands.
@@ -43,33 +42,23 @@ final class RepositoriesController implements Logging {
     @Post("/builds/check")
     String checkBuildStatuses() {
         _debug().log("Checking repositories build statues.");
-        var botClient = ChatBotServerClient.inProcessClient(SERVER_NAME);
-        var organizations = botClient.listOrganizations();
-        for (var organization : organizations) {
-            var repos = botClient.listOrgRepos(organization.getOrganization());
-            repos.forEach(repo -> checkBuildStatus(botClient, repo, organization));
+        try (var client = Client.inProcessClient(SERVER_NAME)) {
+            var organizations = client.listOrganizations();
+            for (var organization : organizations) {
+                var repos = client.listOrgRepos(organization.getId());
+                repos.forEach(repo -> checkBuildStatus(client, repo, organization));
+            }
+            return "success";
         }
-        return "success";
     }
 
-    private void checkBuildStatus(ChatBotServerClient botClient,
+    private void checkBuildStatus(Client botClient,
                                   RepositoryId repository,
                                   Organization organization) {
         _info().log("Sending `CheckRepositoryBuild` command for repository `%s`",
                     repository.getValue());
         var checkRepositoryBuild = checkRepoBuildCommand(repository, organization);
-        var subscriptions = botClient
-                .asGuest()
-                .command(checkRepositoryBuild)
-                .onStreamingError(RepositoriesController::throwProcessingError)
-                .post();
-        subscriptions.forEach(botClient::cancelSubscription);
-    }
-
-    private static void throwProcessingError(Throwable throwable) {
-        throw newIllegalStateException(
-                throwable, "An error while processing the command."
-        );
+        botClient.post(checkRepositoryBuild);
     }
 
     private static CheckRepositoryBuild
@@ -77,7 +66,7 @@ final class RepositoriesController implements Logging {
         return CheckRepositoryBuild
                 .newBuilder()
                 .setRepository(repository)
-                .setOrganization(organization.getOrganization())
+                .setOrganization(organization.getId())
                 .setGoogleChatSpace(organization.getGoogleChatSpace())
                 .vBuild();
     }

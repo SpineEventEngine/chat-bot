@@ -112,7 +112,7 @@ final class SpineOrgInitProcess
         _info().log("Registering `%s` organization.", SPINE_ORG);
         return RegisterOrganization
                 .newBuilder()
-                .setOrganization(spineOrgId)
+                .setId(spineOrgId)
                 .setName("Spine Event Engine")
                 .setWebsiteUrl(urlOfSpec("https://spine.io/"))
                 .setTravisCiUrl(travisUrlFor(SPINE_ORG))

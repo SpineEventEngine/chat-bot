@@ -74,6 +74,9 @@ public final class GitHubContext {
 
         private TravisClient travisClient;
 
+        /**
+         * Prevents direct instantiation.
+         */
         private Builder() {
         }
 

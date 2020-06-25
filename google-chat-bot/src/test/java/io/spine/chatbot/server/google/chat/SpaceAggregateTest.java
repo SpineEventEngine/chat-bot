@@ -50,7 +50,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         void setUp() {
             var registerSpace = RegisterSpace
                     .newBuilder()
-                    .setSpace(SPACE)
+                    .setId(SPACE)
                     .setThreaded(true)
                     .setDisplayName(DISPLAY_NAME)
                     .vBuild();
@@ -74,7 +74,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         void settingState() {
             var expectedState = Space
                     .newBuilder()
-                    .setSpace(SPACE)
+                    .setId(SPACE)
                     .setThreaded(true)
                     .setDisplayName(DISPLAY_NAME)
                     .vBuild();
@@ -122,7 +122,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         void settingState() {
             var expectedState = Space
                     .newBuilder()
-                    .setSpace(SPACE)
+                    .setId(SPACE)
                     .setThreaded(true)
                     .setDisplayName(DISPLAY_NAME)
                     .vBuild();

@@ -79,7 +79,7 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
         void settingState() {
             var state = Thread
                     .newBuilder()
-                    .setThread(thread)
+                    .setId(thread)
                     .setSpace(space)
                     .setResource(resource)
                     .vBuild();
@@ -132,7 +132,7 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
         void settingState() {
             var state = Thread
                     .newBuilder()
-                    .setThread(thread)
+                    .setId(thread)
                     .setSpace(space)
                     .setResource(threadResource)
                     .addMessages(message)

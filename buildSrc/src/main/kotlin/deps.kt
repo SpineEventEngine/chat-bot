@@ -22,17 +22,16 @@ object Versions {
     const val checkerFramework = "3.4.1"
     const val errorProne = "2.4.0"
     const val pmd = "6.24.0"
-    const val checkstyle = "8.29"
+    const val checkstyle = "8.33"
     const val findBugs = "3.0.2"
     const val guava = "29.0-jre"
     const val flogger = "0.5.1"
     const val junit5 = "5.6.2"
     const val truth = "1.0.1"
-    const val micronaut = "2.0.0.RC1"
-    const val spineGcloud = "1.5.0"
-    const val googleSecretManager = "1.0.1"
-    const val googlePubsubProto = "1.89.0"
-    const val googleChat = "v1-rev20200502-1.30.9"
+    const val micronaut = "2.0.0.RC2"
+    const val spineGcloud = "1.5.22"
+    const val googleSecretManager = "1.1.0"
+    const val googleChat = "v1-rev20200617-1.30.9"
     const val googleAuth = "0.20.0"
     const val log4j2 = "2.13.3"
 }
@@ -57,6 +56,12 @@ object Build {
     val micronaut = Micronaut
     val google = Google
     val log4j2 = Log4j2
+    var spine = Spine
+}
+
+object Spine {
+    const val datastore = "io.spine.gcloud:spine-datastore:${Versions.spineGcloud}"
+    const val pubsub = "io.spine.gcloud:spine-pubsub:${Versions.spineGcloud}"
 }
 
 object Log4j2 {
@@ -67,7 +72,6 @@ object Log4j2 {
 
 object Google {
     const val secretManager = "com.google.cloud:google-cloud-secretmanager:${Versions.googleSecretManager}"
-    const val pubsubProto = "com.google.api.grpc:proto-google-cloud-pubsub-v1:${Versions.googlePubsubProto}"
     const val chat = "com.google.apis:google-api-services-chat:${Versions.googleChat}"
     const val auth = "com.google.auth:google-auth-library-oauth2-http:${Versions.googleAuth}"
 }

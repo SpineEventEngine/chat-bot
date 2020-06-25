@@ -20,7 +20,6 @@
 
 package io.spine.chatbot;
 
-import com.google.pubsub.v1.PubsubPushNotification;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
@@ -29,6 +28,7 @@ import io.spine.chatbot.google.chat.incoming.User;
 import io.spine.core.UserId;
 import io.spine.json.Json;
 import io.spine.logging.Logging;
+import io.spine.pubsub.PubsubPushRequest;
 import io.spine.server.integration.ThirdPartyContext;
 
 import static io.micronaut.http.MediaType.APPLICATION_JSON;
@@ -48,7 +48,7 @@ final class IncomingEventsController implements Logging {
      * <p>Dispatches the event using {@link ThirdPartyContext}.
      */
     @Post(value = "/incoming/event", consumes = APPLICATION_JSON)
-    String on(@Body PubsubPushNotification pushNotification) {
+    String on(@Body PubsubPushRequest pushNotification) {
         var message = pushNotification.getMessage();
         var chatEventJson = message.getData()
                                    .toStringUtf8();

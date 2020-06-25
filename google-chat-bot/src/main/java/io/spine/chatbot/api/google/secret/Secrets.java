@@ -24,7 +24,8 @@ import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * Utility for accessing application secrets stored in Google Secret Manager.
@@ -34,6 +35,7 @@ public final class Secrets {
     @SuppressWarnings("CallToSystemGetenv")
     private static final String PROJECT_ID = System.getenv("GCP_PROJECT_ID");
     private static final String TRAVIS_API_TOKEN = "TravisApiToken";
+    private static final String CHAT_SERVICE_ACCOUNT = "ChatServiceAccount";
 
     /**
      * Prevents direct instantiation of the utility class.
@@ -42,18 +44,31 @@ public final class Secrets {
     }
 
     /**
-     * Returns Travis CI API access token.
+     * Retrieves the Travis CI API access token.
      */
     public static String travisToken() {
+        var result = retrieveSecret(TRAVIS_API_TOKEN);
+        return result;
+    }
+
+    /**
+     * Retrieves the Google Chat API service account.
+     */
+    public static String chatServiceAccount() {
+        var result = retrieveSecret(CHAT_SERVICE_ACCOUNT);
+        return result;
+    }
+
+    private static String retrieveSecret(String secretName) {
         try (SecretManagerServiceClient client = SecretManagerServiceClient.create()) {
-            var secretVersion = SecretVersionName.of(PROJECT_ID, TRAVIS_API_TOKEN, "latest");
+            var secretVersion = SecretVersionName.of(PROJECT_ID, secretName, "latest");
             var secret = client.accessSecretVersion(secretVersion)
                                .getPayload()
                                .getData()
-                               .toString(Charset.defaultCharset());
+                               .toStringUtf8();
             return secret;
         } catch (IOException e) {
-            throw new RuntimeException("Unable to retrieve Travis API key.", e);
+            throw newIllegalStateException(e, "Unable to retrieve secret `%s`.", secretName);
         }
     }
 }

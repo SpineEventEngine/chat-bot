@@ -24,7 +24,6 @@ import io.spine.chatbot.google.chat.Space;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.command.RegisterSpace;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
-import io.spine.chatbot.google.chat.incoming.SpaceType;
 import io.spine.chatbot.google.chat.incoming.event.BotAddedToSpace;
 import io.spine.logging.Logging;
 import io.spine.server.aggregate.Aggregate;
@@ -53,7 +52,7 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
                 .newBuilder()
                 .setSpace(spaceId)
                 .setDisplayName(displayName)
-                .setThreaded(isThreaded(space))
+                .setThreaded(space.isThreaded())
                 .vBuild();
     }
 
@@ -62,7 +61,7 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
      */
     @Assign
     SpaceRegistered handle(RegisterSpace c) {
-        var space = c.getSpace();
+        var space = c.getId();
         _info().log("Registering space `%s`.", space.getValue());
         var result = SpaceRegistered
                 .newBuilder()
@@ -79,9 +78,5 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
         builder().setDisplayName(e.getDisplayName())
                  .setSingleUserBotDm(e.getSingleUserBotDm())
                  .setThreaded(e.getThreaded());
-    }
-
-    private static boolean isThreaded(io.spine.chatbot.google.chat.incoming.Space space) {
-        return space.getType() == SpaceType.ROOM;
     }
 }

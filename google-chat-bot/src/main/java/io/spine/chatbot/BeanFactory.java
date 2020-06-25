@@ -26,10 +26,10 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.pubsub.v1.PubsubMessage;
-import com.google.pubsub.v1.PubsubPushNotification;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.spine.json.Json;
+import io.spine.pubsub.PubsubPushRequest;
 
 import javax.inject.Singleton;
 import java.io.IOException;
@@ -41,7 +41,7 @@ import java.io.IOException;
 final class BeanFactory {
 
     /**
-     * Registers {@link PubsubPushNotification push notification} Jackson deserializer.
+     * Registers {@link PubsubPushRequest push request} Jackson deserializer.
      */
     @Singleton
     @Bean
@@ -50,17 +50,17 @@ final class BeanFactory {
     }
 
     /**
-     * Spine-based {@link PubsubPushNotification} Jackson deserializer.
+     * Spine-based {@link PubsubPushRequest} Jackson deserializer.
      *
      * @see <a href="https://github.com/FasterXML/jackson-databind/wiki/Deserialization-Features">
      *         Jackson Deserialization</a>
      */
     @VisibleForTesting
     static final class PubsubPushNotificationDeserializer
-            extends JsonDeserializer<PubsubPushNotification> {
+            extends JsonDeserializer<PubsubPushRequest> {
 
         /**
-         * Deserializes {@link PubsubPushNotification} JSON string into a Protobuf message.
+         * Deserializes {@link PubsubPushRequest} JSON string into a Protobuf message.
          *
          * <p>While Protobuf JSON parser is not able to handle same fields that are set using
          * {@code lowerCamelCase} and {@code snake_case} notations, we manually drop duplicate
@@ -71,7 +71,7 @@ final class BeanFactory {
          *         fields</a>
          */
         @Override
-        public PubsubPushNotification deserialize(JsonParser parser, DeserializationContext ctxt) {
+        public PubsubPushRequest deserialize(JsonParser parser, DeserializationContext ctxt) {
             try {
                 var jsonNode = ctxt.readTree(parser);
                 var messageNode = (ObjectNode) jsonNode.get("message");
@@ -80,7 +80,7 @@ final class BeanFactory {
                 var pubsubMessage = Json.fromJson(messageNode.toString(), PubsubMessage.class);
                 var subscription = jsonNode.get("subscription")
                                            .asText();
-                var result = PubsubPushNotification
+                var result = PubsubPushRequest
                         .newBuilder()
                         .setMessage(pubsubMessage)
                         .setSubscription(subscription)

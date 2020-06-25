@@ -22,16 +22,17 @@ package io.spine.chatbot;
 
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubMessage;
-import com.google.pubsub.v1.PubsubPushNotification;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.annotation.MicronautTest;
+import io.spine.chatbot.api.google.chat.InMemoryGoogleChatClient;
 import io.spine.chatbot.api.travis.InMemoryTravisClient;
 import io.spine.chatbot.server.github.GitHubContext;
 import io.spine.chatbot.server.google.chat.GoogleChatContext;
 import io.spine.json.Json;
+import io.spine.pubsub.PubsubPushRequest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,6 +58,7 @@ final class IncomingEventsControllerTest {
     static void setupServer() {
         var chatContext = GoogleChatContext
                 .newBuilder()
+                .setGoogleChatClient(InMemoryGoogleChatClient.lenientClient())
                 .build();
         var gitHubContext = GitHubContext
                 .newBuilder()
@@ -73,7 +75,7 @@ final class IncomingEventsControllerTest {
                 .setMessageId("129y418y4houfhiuehwr")
                 .setData(ByteString.copyFromUtf8(CHAT_MESSAGE_EVENT))
                 .build();
-        var pushNotification = PubsubPushNotification
+        var pushNotification = PubsubPushRequest
                 .newBuilder()
                 .setMessage(pubsubMessage)
                 .setSubscription("projects/test-project/subscriptions/test-subscription")
