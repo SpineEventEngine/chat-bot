@@ -11,7 +11,7 @@ Cloud Run is a managed serverless solution that works with Docker images and cou
 the load when needed.
 
 In Cloud Run we configure a `chat-bot-server` service with the 
-`gcr.io/<project-name>/chat-bot-server` container image. The image is built automatically using
+`gcr.io/<projectName>/chat-bot-server` container image. The image is built automatically using
 `jib` Gradle plugin and deployed to the [Container Registry][container-registry] for our needs 
 as part of the build process.
 
