@@ -135,17 +135,44 @@ roles:
 
 1. `chat-api-push@system.gserviceaccount.com` — a special Chat API service account used by the
     Chat to publish messages to the Pub/Sub topic.
-2. `spine-chat-bot-actor@<projectName>.iam.gserviceaccount.com` —  the custom service account we're 
-    using as the credentials for the Chat API used by the bot. The Hangouts Chat API works only
-    with dedicate service account keys and could not be used with default credentials.
+    
+    We [must][grant-publish-rights] assign the [`Pub/Sub Publisher`][publisher-role] role 
+    to the service account in order to grant the Chat permission to publish user messages 
+    to the defined topic.
+    
+2. `spine-chat-bot-actor@<projectName>.iam.gserviceaccount.com` — a custom service account we're 
+    using as the credentials for the Chat API used by the bot. 
+    
+    The Hangouts Chat API works only with dedicated service account keys and 
+    [could not][chat-api-with-default-sa] be used with default credentials. The API itself does
+    not require any specific AIM role, but during the authentication the 
+    [`chat.bot`][applying-chatbot-credentials] scope should be set.
+    
 3. `<projectId>-compute@developer.gserviceaccount.com` — default compute service account used by 
     Cloud Run.
-4. `<projectId>@cloudbuild.gserviceaccount.com` — Cloud Build service account used by the 
-    Cloud Build service to build and deploy the application.
+    
+    While we are relying on the default compute service account, virtually any service account 
+    should work. In order to use the [Secret Manager](#secret-manager) API the service account 
+    should have the secret `Secret Manager Viewer` role applied.
+    
+4. `<projectId>@cloudbuild.gserviceaccount.com` — [Cloud Build](#cloud-build) service account 
+    used by the Cloud Build service to build and deploy the application.
+    
+    The Cloud Build service account is configured to act as a `Service Account User` and should
+    have the `Cloud Run Admin` role in order to be able to [deploy][cloud-build-deploy-cloud-run] 
+    the application.
+    
 5. `cloud-run-pubsub-invoker@<projectName>.iam.gserviceaccount.com` — a custom service account we're
-    using to call the Cloud Run service from the Pub/Sub subscriptions. The Cloud Run 
-    is not accepting unauthenticated calls by default and is not exposed to the internet.
-
-//TODO:2020-06-25:ysergiichuk: add roles/descriptions for service accounts
+    using to call the Cloud Run service from the [Pub/Sub](#pubsub) subscriptions.
+    
+    The Cloud Run is not accepting unauthenticated calls by default and is not exposed 
+    to the internet. In order to be able to call the service, one 
+    [must][cloud-run-service-to-service-auth] have the `Cloud Run Invoker` role.
 
 [iam]: https://cloud.google.com/iam
+[grant-publish-rights]: https://developers.google.com/hangouts/chat/how-tos/pub-sub#grant_publish_rights_on_your_topic
+[publisher-role]: https://cloud.google.com/pubsub/docs/access-control#roles
+[chat-api-with-default-sa]: https://stackoverflow.com/questions/62571412/hangout-chat-api-authentication-fails-with-default-service-account
+[applying-chatbot-credentials]: https://developers.google.com/hangouts/chat/how-tos/service-accounts#step_2_applying_credentials_to_http_request_headers
+[cloud-build-deploy-cloud-run]: https://cloud.google.com/cloud-build/docs/deploying-builds/deploy-cloud-run
+[cloud-run-service-to-service-auth]: https://cloud.google.com/run/docs/authenticating/service-to-service
