@@ -4,6 +4,42 @@ Cloud Environment setup
 The ChatBot application is working in the cloud environment on the Google Cloud Platform (GCP) and
 this document provides an overview of the currently configured environment.
 
+## Cloud Run
+
+We use [Cloud Run][cloud-run] as our main compute platform for the ChatBot application. 
+Cloud Run is a managed serverless solution that works with Docker images and could scale 
+the load when needed.
+
+In Cloud Run we configure a `chat-bot-server` service with the 
+`gcr.io/<project-name>/chat-bot-server` container image. The image is built automatically using
+`jib` Gradle plugin and deployed to the [Container Registry][container-registry] for our needs 
+as part of the build process.
+
+Upon pushes to the `master` branch, the Cloud Build performs the automatic deployment of the 
+new Cloud Run revision. (see [Cloud Build](#cloud-build) section for details).
+
+[cloud-run]: https://cloud.google.com/run
+[jib]: https://github.com/GoogleContainerTools/jib
+[container-registry]: https://cloud.google.com/container-registry
+
+## Cloud Build
+
+We use [Cloud Build] CI/CD solution to continuously build and deploy our application.
+
+The Cloud Build configuration is available as [`cloudbuild.yaml`](./cloudbuild.yaml) and does
+the following:
+
+1. Starts the Gradle build for the project.
+2. Deploys the new revision of the Cloud Run service.
+
+In addition to the configuration, we create a Cloud Build trigger to automatically start build
+and deploy process upon commits to the `master` branch.
+
+The Cloud Build itself uses GCP service accounts in order to access the APIs and should be 
+configured to allow the Cloud Run deployment. See the [IAM](#iam) section for details.
+
+[cloud-build]: https://cloud.google.com/cloud-build
+[cloud-build-trigger]: https://cloud.google.com/cloud-build/docs/automating-builds/create-manage-triggers#console
 
 ## Hangouts Chat API
 
@@ -36,8 +72,9 @@ At the moment of writing, the app requires the following Pub/Sub topics to be co
    topic.
    
    For the topic we configure the `incoming-bot-messages-cloud-run` push subscription that 
-   delivers messages to the `/chat/incoming/event` endpoint. The subscription is configured
-   with a backoff retry policy and the acknowledgement deadline of 600 seconds.
+   delivers messages to the `/chat/incoming/event` endpoint of the Cloud Run [service](#cloud-run). 
+   We configure The subscription with a backoff retry policy and the acknowledgement 
+   deadline of 600 seconds.
    
    Also, the `dead lettering` is configured for the subscription, so all the undelivered
    messages are sent to our next topic — `dead-incoming-bot-messages`.
@@ -54,8 +91,9 @@ At the moment of writing, the app requires the following Pub/Sub topics to be co
    build state (see [Cloud Scheduler](#cloud-scheduler) section for details)
    
    For the topic we configure the `repository-checks-cloud-run` subscription that delivers messages
-   to the `/repositories/builds/check`. The subscription uses the same `cloud-run-pubsub-invoker` 
-   service account as the `incoming-bot-messages-cloud-run` (see [IAM](#iam) section for details).
+   to the `/repositories/builds/check` endpoint of the Cloud Run [service](#cloud-run). 
+   The subscription uses the same `cloud-run-pubsub-invoker` service account as the 
+   `incoming-bot-messages-cloud-run` (see [IAM](#iam) section for details).
 
 [pubsub]: https://cloud.google.com/pubsub
 
@@ -72,13 +110,4 @@ to run every hour using the following unix-cron format expression: `0 * * * *`.
 
 [scheduler]: https://cloud.google.com/scheduler
 
-## Cloud Run
-
-We use Cloud Run as our main compute platform for the ChatBot application. Cloud Run is a managed 
-serverless solution that works with Docker.
-
-//TODO:2020-06-23:ysergiichuk: describe Cloud run usage.
-
 //TODO:2020-06-23:ysergiichuk: add IAM section.
-
-//TODO:2020-06-23:ysergiichuk: add Cloud Build section.
