@@ -50,14 +50,15 @@ The bot configuration could be done only via the web UI console as of the writin
 in accordance to the publishing [guide][publishing-guide] where the essential configurations are: 
 
 1. `Functionality` — check `Bot works in rooms`. We do not expect the bot to work in direct messages.
-2. `Connection settings` — choose `Cloud Pub/Sub` and enter a Pub/Sub topic name that'd be used 
-    to deliver messages from users to the bot. (for the Pub/Sub details see 
+2. `Connection settings` — choose [`Cloud Pub/Sub`][pubsub-bot] and enter a Pub/Sub topic name 
+    that'd be used to deliver messages from users to the bot. (for the Pub/Sub details see 
     [Pub/Sub](#pubsub) section)
 3. `Permissions` — choose `Specific people and groups in your domain` and list individuals or
 groups in the domain who'd be able to install the bot.
 
 [chat-api]: https://developers.google.com/hangouts/chat
 [publishing-guide]: https://developers.google.com/hangouts/chat/how-tos/bots-publish
+[pubsub-bot]: https://developers.google.com/hangouts/chat/how-tos/pub-sub
 
 ## Pub/Sub
 
