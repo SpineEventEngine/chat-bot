@@ -121,6 +121,17 @@ to [read][reading-secrets] the secrets, developers and service accounts should h
 `roles/secretmanager.viewer` role that is not available by default (see [IAM](#iam) section 
 for details).
 
+For the application we configure the following secrets:
+
+1. `ChatServiceAccount` — the private key of the chatbot actor that is used by the 
+   [Hangouts Chat API](#hangouts-chat-api).
+   
+   The key is stored in JSON format as string value.
+   
+2. `TravisApiToken` — the Travis CI API token.
+   
+   The API token is used to authenticate calls to the Travis CI v3 API.
+
 [secret-manager]: https://cloud.google.com/secret-manager
 [managing-secrets]: https://cloud.google.com/secret-manager/docs/managing-secrets
 [reading-secrets]: https://cloud.google.com/secret-manager/docs/managing-secret-versions#get
