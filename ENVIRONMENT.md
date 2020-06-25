@@ -125,4 +125,27 @@ for details).
 [managing-secrets]: https://cloud.google.com/secret-manager/docs/managing-secrets
 [reading-secrets]: https://cloud.google.com/secret-manager/docs/managing-secret-versions#get
 
-//TODO:2020-06-23:ysergiichuk: add IAM section.
+## IAM
+
+Google [Cloud Identity and Access Management][iam] (IAM) lets us to fine-tune the authorization and 
+access management for the application.
+
+In order to run the application we configure the following service account and their respective
+roles:
+
+1. `chat-api-push@system.gserviceaccount.com` — a special Chat API service account used by the
+    Chat to publish messages to the Pub/Sub topic.
+2. `spine-chat-bot-actor@<projectName>.iam.gserviceaccount.com` —  the custom service account we're 
+    using as the credentials for the Chat API used by the bot. The Hangouts Chat API works only
+    with dedicate service account keys and could not be used with default credentials.
+3. `<projectId>-compute@developer.gserviceaccount.com` — default compute service account used by 
+    Cloud Run.
+4. `<projectId>@cloudbuild.gserviceaccount.com` — Cloud Build service account used by the 
+    Cloud Build service to build and deploy the application.
+5. `cloud-run-pubsub-invoker@<projectName>.iam.gserviceaccount.com` — a custom service account we're
+    using to call the Cloud Run service from the Pub/Sub subscriptions. The Cloud Run 
+    is not accepting unauthenticated calls by default and is not exposed to the internet.
+
+//TODO:2020-06-25:ysergiichuk: add roles/descriptions for service accounts
+
+[iam]: https://cloud.google.com/iam
