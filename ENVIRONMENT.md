@@ -33,13 +33,17 @@ the following:
 2. Deploys the new revision of the Cloud Run service.
 
 In addition to the configuration, the Cloud Build trigger is configured to automatically start build
-and deploy process upon commits to the `master` branch.
+and deploy process upon commits to the `master` branch. In order to allow Cloud Build to 
+fetch code from the GitHub, the Cloud Build GitHub [application][cloud-build-github-app] 
+is [configured][run-builds-on-github] for the organization.
 
 The Cloud Build itself uses GCP service accounts in order to access the APIs and should be 
 configured to allow the Cloud Run deployment (see the [IAM](#iam) section for details).
 
 [cloud-build]: https://cloud.google.com/cloud-build
 [cloud-build-trigger]: https://cloud.google.com/cloud-build/docs/automating-builds/create-manage-triggers#console
+[cloud-build-github-app]: https://github.com/marketplace/google-cloud-build
+[run-builds-on-github]: https://cloud.google.com/cloud-build/docs/automating-builds/run-builds-on-github
 
 ## Hangouts Chat API
 
