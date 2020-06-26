@@ -29,7 +29,6 @@ import com.google.api.services.chat.v1.model.WidgetMarkup;
 import com.google.common.collect.ImmutableList;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
-import io.spine.chatbot.server.github.BuildStates;
 import io.spine.protobuf.Messages;
 
 import static io.spine.chatbot.api.google.chat.ChatWidgets.cardWith;
@@ -62,7 +61,7 @@ final class BuildStateUpdates {
      */
     static Message buildStateMessage(BuildState buildState, ThreadResource thread) {
         checkValid(buildState);
-        var headerIcon = BuildStates.isFailed(buildState) ? FAILURE_ICON : SUCCESS_ICON;
+        var headerIcon = buildState.failed() ? FAILURE_ICON : SUCCESS_ICON;
         var cardHeader = new CardHeader()
                 .setTitle(buildState.getRepositorySlug())
                 .setImageUrl(headerIcon);

@@ -30,7 +30,6 @@ import io.spine.chatbot.api.travis.TravisClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
-import io.spine.chatbot.github.repository.build.BuildStateStatusChange;
 import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
@@ -44,11 +43,6 @@ import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.EitherOf3;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
-import static io.spine.chatbot.github.repository.build.BuildState.State.PASSED;
-import static io.spine.chatbot.github.repository.build.BuildState.State.S_UNKNOWN;
-import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.FAILED;
-import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.RECOVERED;
-import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.STABLE;
 import static io.spine.net.Urls.travisBuildUrlFor;
 import static io.spine.protobuf.Messages.isDefault;
 import static io.spine.util.Exceptions.newIllegalStateException;
@@ -112,7 +106,7 @@ final class RepoBuildProcess
     determineOutcome(RepositoryId repository, BuildStateChange stateChange) {
         var newBuildState = stateChange.getNewValue();
         var previousBuildState = stateChange.getPreviousValue();
-        var stateStatusChange = stateStatusChangeOf(newBuildState, previousBuildState);
+        var stateStatusChange = newBuildState.stateChangeFrom(previousBuildState);
         switch (stateStatusChange) {
             case FAILED:
                 _info().log("Build for repository `%s` failed with status `%s`.",
@@ -148,25 +142,6 @@ final class RepoBuildProcess
         }
     }
 
-    private static BuildStateStatusChange stateStatusChangeOf(BuildState newBuildState,
-                                                              BuildState previousBuildState) {
-        var currentState = newBuildState.getState();
-        var previousState = previousBuildState.getState();
-        if (BuildStates.isFailed(currentState)) {
-            return FAILED;
-        }
-        if (currentState == PASSED && BuildStates.isFailed(previousState)) {
-            return RECOVERED;
-        }
-        if (currentState == PASSED && (previousState == PASSED || previousState == S_UNKNOWN)) {
-            return STABLE;
-        }
-        throw newIllegalStateException(
-                "Build is in an unpredictable state. Current state `%s`. Previous state `%s`.",
-                currentState.name(), previousState.name()
-        );
-    }
-
     @VisibleForTesting
     static BuildState buildStateFrom(RepoBranchBuildResponse branchBuild, String space) {
         var branchBuildName = branchBuild.getName();
@@ -177,8 +152,8 @@ final class RepoBuildProcess
                 .newBuilder()
                 .setNumber(build.getNumber())
                 .setGoogleChatSpace(space)
-                .setState(BuildStates.buildStateFrom(build.getState()))
-                .setPreviousState(BuildStates.buildStateFrom(build.getPreviousState()))
+                .setState(BuildStateMixin.buildStateFrom(build.getState()))
+                .setPreviousState(BuildStateMixin.buildStateFrom(build.getPreviousState()))
                 .setBranch(branchBuildName)
                 .setLastCommit(from(build.getCommit()))
                 .setCreatedBy(build.getCreatedBy()

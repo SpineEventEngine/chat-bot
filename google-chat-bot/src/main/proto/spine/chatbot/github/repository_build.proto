@@ -75,6 +75,8 @@ enum BuildStateStatusChange {
 // State of the build for a repository branch.
 message BuildState {
 
+    option (is).java_type = "io.spine.chatbot.server.github.BuildStateMixin";
+
     // Incremental number for a repository's builds.
     string number = 1;
 

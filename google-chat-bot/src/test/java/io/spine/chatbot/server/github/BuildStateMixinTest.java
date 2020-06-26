@@ -20,18 +20,20 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.testing.UtilityClassTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.BuildStates.buildStateFrom;
+import static io.spine.chatbot.server.github.BuildStateMixin.buildStateFrom;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("BuildStates should")
-final class BuildStatesTest extends UtilityClassTest<BuildStates> {
+@DisplayName("BuildStateMixin should")
+final class BuildStateMixinTest {
 
-    BuildStatesTest() {
-        super(BuildStates.class);
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @Test
+    @DisplayName("not accept `null` build states")
+    void notAcceptNull() {
+        assertThrows(NullPointerException.class, () -> buildStateFrom(null));
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
