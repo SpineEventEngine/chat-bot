@@ -78,8 +78,8 @@ The bot requires the following Pub/Sub topics to be configured:
    bot configuration. The Hangouts Chat system takes care of propagating user messages to this
    topic.
    
-   For the topic the `incoming-bot-messages-cloud-run` push subscription is created with 
-   a backoff retry policy and the acknowledgement deadline of 600 seconds. 
+   For the topic the `incoming-bot-messages-cloud-run` [push subscription][push-subscription] 
+   is created with a backoff retry policy and the acknowledgement deadline of 600 seconds. 
    The subscription delivers messages to the `/chat/incoming/event` endpoint of 
    the Cloud Run [service](#cloud-run). 
    
@@ -91,8 +91,8 @@ The bot requires the following Pub/Sub topics to be configured:
 
 2. `dead-incoming-bot-messages` — the topic that holds undelivered incoming messages.
    
-   For the topic, the `dead-incoming-bot-messages` pull subscription that never expires 
-   is configured.
+   For the topic, the `dead-incoming-bot-messages` [pull subscription][pull-subscription] 
+   that never expires is configured.
    In case of an undelivered message, it could be pulled from the subscription.
 
 3. `repository-checks` — the topic that delivers scheduled tasks to check the build state of 
@@ -105,6 +105,8 @@ The bot requires the following Pub/Sub topics to be configured:
    `incoming-bot-messages-cloud-run` (see [IAM](#iam) section for details).
 
 [pubsub]: https://cloud.google.com/pubsub
+[push-subscription]: https://cloud.google.com/pubsub/docs/push
+[pull-subscription]: https://cloud.google.com/pubsub/docs/pull
 
 ## Cloud Scheduler
 
