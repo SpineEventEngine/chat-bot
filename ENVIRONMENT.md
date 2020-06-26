@@ -54,12 +54,13 @@ to have a single bot per the GCP project.
 The bot configuration is only available via the web UI console. The bot is published in accordance 
 to the publishing [guide][publishing-guide] where the essential configurations are: 
 
-1. `Functionality` — check `Bot works in rooms`. The bot is not expected to work in direct messages.
-2. `Connection settings` — choose [`Cloud Pub/Sub`][pubsub-bot] and enter a Pub/Sub topic name 
-    that'd be used to deliver messages from users to the bot (for the Pub/Sub details see 
-    [Pub/Sub](#pubsub) section).
-3. `Permissions` — choose `Specific people and groups in your domain` and list individuals or
-groups in the domain who'd be able to install the bot.
+1. `Functionality` — `Bot works in rooms` is checked. The bot is not expected to work 
+    in direct messages.
+2. `Connection settings` — [`Cloud Pub/Sub`][pubsub-bot] is choosen and a Pub/Sub topic name 
+    that is used to deliver messages from users to the bot is configured (for the Pub/Sub details 
+    see [Pub/Sub](#pubsub) section).
+3. `Permissions` — a list of individuals in the domain who are able to install the bot 
+    is configured in the `Specific people and groups in your domain` field.
 
 [chat-api]: https://developers.google.com/hangouts/chat
 [publishing-guide]: https://developers.google.com/hangouts/chat/how-tos/bots-publish
@@ -73,7 +74,7 @@ async messaging service to receive the incoming messages and then stream them in
 
 The bot requires the following Pub/Sub topics to be configured:
 
-1. `incoming-bot-messages` — that is the topic that is used in the `Connection settings` of the
+1. `incoming-bot-messages` — the topic that is used in the `Connection settings` of the
    bot configuration. The Hangouts Chat system takes care of propagating user messages to this
    topic.
    
@@ -83,7 +84,7 @@ The bot requires the following Pub/Sub topics to be configured:
    the Cloud Run [service](#cloud-run). 
    
    Also, the `dead lettering` is configured for the subscription, so all the undelivered
-   messages are sent to `dead-incoming-bot-messages` topic.
+   messages are sent to the `dead-incoming-bot-messages` topic.
    
    The subscription uses `cloud-run-pubsub-invoker` service account to implement service2service
    authentication (see [IAM](#iam) section for details).
@@ -92,7 +93,7 @@ The bot requires the following Pub/Sub topics to be configured:
    
    For the topic, the `dead-incoming-bot-messages` pull subscription that never expires 
    is configured.
-   In case of an undelivered message, one could go and pull it from the subscription.
+   In case of an undelivered message, it could be pulled from the subscription.
 
 3. `repository-checks` — the topic that delivers scheduled tasks to check the build state of 
    the watched resources (see [Cloud Scheduler](#cloud-scheduler) section for details).
@@ -111,7 +112,7 @@ The [Cloud Scheduler][scheduler] service allows configuring multiple scheduled t
 the payload to a particular target (HTTP endpoint, Pub/Sub topic or AppEngine endpoint).
 
 The CRON task `repositories-check-trigger` is configured for the bot. The task emits a Pub/Sub 
-message with an empty payload to the `repository-checks` topic. It is 
+message with an empty payload to the `repository-checks` topic and is 
 [configured][configure-schedules] to run every hour using the following unix-cron format 
 expression: `0 * * * *`.
 
@@ -123,7 +124,7 @@ expression: `0 * * * *`.
 The [Secret Manager][secret-manager] service is used to supply application secrets like API tokens
 and service accounts securely.
 
-The secreats are [managed][managing-secrets] the Secret Manager Web UI, but in order to be able 
+The secrets are [managed][managing-secrets] in the Secret Manager Web UI, but in order to be able 
 to [read][reading-secrets] the secrets, developers and service accounts should have the
 `roles/secretmanager.viewer` role that is not configured by default (see [IAM](#iam) section 
 for details).
@@ -148,7 +149,7 @@ The following secrets are configured for the bot:
 The [Cloud Identity and Access Management][iam] (IAM) service is used to fine-tune the authorization 
 and access management for the application.
 
-In order to run the application following service accounts, and their respective roles 
+In order to run the application, the following service accounts, and their respective roles 
 are configured:
 
 1. `chat-api-push@system.gserviceaccount.com` — a special Chat API service account used by the
@@ -179,11 +180,11 @@ are configured:
     have the `Cloud Run Admin` role in order to be able to [deploy][cloud-build-deploy-cloud-run] 
     the application.
     
-5. `cloud-run-pubsub-invoker@<projectName>.iam.gserviceaccount.com` — a custom service account we're
-    using to call the Cloud Run service from the [Pub/Sub](#pubsub) subscriptions.
+5. `cloud-run-pubsub-invoker@<projectName>.iam.gserviceaccount.com` — a custom service account
+    used to call the Cloud Run service from the [Pub/Sub](#pubsub) subscriptions.
     
     The Cloud Run is not accepting unauthenticated calls by default and is not exposed 
-    to the internet. In order to be able to call the service, one 
+    to the internet. In order to be able to call the service, the caller  
     [must][cloud-run-service-to-service-auth] have the `Cloud Run Invoker` role.
 
 [iam]: https://cloud.google.com/iam
