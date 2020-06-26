@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 
 import static io.micronaut.http.HttpRequest.POST;
-import static io.spine.chatbot.Application.startSpineServer;
+import static io.spine.chatbot.Application.startServer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("IncomingEventsController should")
@@ -54,6 +54,7 @@ final class IncomingEventsControllerTest {
     @Client("/")
     HttpClient client;
 
+    @SuppressWarnings("ResultOfMethodCallIgnored") // we're not interested in GRPC server here
     @BeforeAll
     static void setupServer() {
         var chatContext = GoogleChatContext
@@ -64,7 +65,7 @@ final class IncomingEventsControllerTest {
                 .newBuilder()
                 .setTravis(InMemoryTravisClient.lenientClient())
                 .build();
-        startSpineServer(gitHubContext, chatContext);
+        startServer(gitHubContext, chatContext);
     }
 
     @Test

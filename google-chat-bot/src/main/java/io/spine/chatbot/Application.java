@@ -21,12 +21,15 @@
 package io.spine.chatbot;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.flogger.FluentLogger;
+import com.google.errorprone.annotations.concurrent.LazyInit;
+import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.runtime.Micronaut;
+import io.micronaut.runtime.event.annotation.EventListener;
 import io.spine.chatbot.server.github.GitHubContext;
 import io.spine.chatbot.server.google.chat.GoogleChatContext;
 import io.spine.logging.Logging;
 import io.spine.server.Server;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.io.IOException;
 
@@ -45,7 +48,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  * @see IncomingEventsController
  * @see RepositoriesController
  **/
-public final class Application {
+public final class Application implements Logging {
 
     static {
         System.setProperty(
@@ -54,10 +57,11 @@ public final class Application {
         );
     }
 
-    private static final FluentLogger LOGGER = Logging.loggerFor(Application.class);
-
     /** Name of the GRPC {@link Server}. **/
     static final String SERVER_NAME = "ChatBotServer";
+
+    @LazyInit
+    private @MonotonicNonNull Server server;
 
     /**
      * Prevents direct instantiation.
@@ -72,35 +76,49 @@ public final class Application {
      * the {@link Micronaut}.
      */
     public static void main(String[] args) {
-        LOGGER.atFine()
-              .log("Starting Spine ChatBot application.");
-        initializeSpine();
-        Micronaut.run(Application.class, args);
+        var application = new Application();
+        application.start(args);
     }
 
     /**
-     * Initializes Spine server environment and starts Spine {@link Server}.
+     * Starts the application.
+     *
+     * <p>Performs bounded contexts initialization, starts GRPC {@link Server} and runs
+     * the {@link Micronaut}.
      */
-    private static void initializeSpine() {
-        LOGGER.atConfig()
-              .log("Initializing server environment.");
+    private void start(String[] args) {
+        _config().log("Initializing server environment.");
         ChatBotServerEnvironment.init();
+        _config().log("Setting up bounded contexts.");
         var gitHubContext = GitHubContext
                 .newBuilder()
                 .build();
         var googleChatContext = GoogleChatContext
                 .newBuilder()
                 .build();
-        startSpineServer(gitHubContext, googleChatContext);
+        _config().log("Starting GRPC server.");
+        server = startServer(gitHubContext, googleChatContext);
+        _config().log("Starting Micronaut application.");
+        Micronaut.run(Application.class, args);
     }
 
     /**
-     * Starts Spine in-process server.
+     * Gracefully stops the {@link #server}.
+     */
+    @SuppressWarnings("TestOnlyProblems") // we do want to be sure that the GRPC server is shut down
+    @EventListener
+    void on(ShutdownEvent event) {
+        _info().log("Shutting down the application.");
+        if (server != null) {
+            server.shutdownAndWait();
+        }
+    }
+
+    /**
+     * Starts in-process GRPC server.
      */
     @VisibleForTesting
-    static void startSpineServer(GitHubContext gitHubContext, GoogleChatContext googleChatContext) {
-        LOGGER.atConfig()
-              .log("Starting server.");
+    static Server startServer(GitHubContext gitHubContext, GoogleChatContext googleChatContext) {
         Server server = Server
                 .inProcess(SERVER_NAME)
                 .add(gitHubContext.contextBuilder())
@@ -113,5 +131,6 @@ public final class Application {
                     e, "Unable to start Spine GRPC server `%s`.", SERVER_NAME
             );
         }
+        return server;
     }
 }
