@@ -49,7 +49,7 @@ configured to allow the Cloud Run deployment (see the [IAM](#iam) section for de
 ## Hangouts Chat API
 
 The bot uses [Hangout Chat API][chat-api] and is linked to the GCP project. It is only possible 
-to have a single bot per the GCP project.
+to have a single bot per GCP project.
 
 The bot configuration is only available via the web UI console. The bot is published in accordance 
 to the publishing [guide][publishing-guide] where the essential configurations are: 
