@@ -24,7 +24,8 @@ new Cloud Run revision (see [Cloud Build](#cloud-build) section for details).
 
 ## Cloud Build
 
-The [Cloud Build] CI/CD solution is used to continuously build and deploy the application.
+The [Cloud Build][cloud-build] CI/CD solution is used to continuously build and deploy 
+the application.
 
 The Cloud Build configuration is available as [`cloudbuild.yaml`](./cloudbuild.yaml) and does
 the following:
