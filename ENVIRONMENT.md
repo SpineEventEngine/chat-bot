@@ -30,8 +30,8 @@ the application.
 The Cloud Build configuration is available as [`cloudbuild.yaml`](./cloudbuild.yaml) and does
 the following:
 
-1. Starts the Gradle build for the project.
-2. Deploys the new revision of the Cloud Run service.
+1. Starts Gradle build for the project.
+2. Deploys a new revision of the Cloud Run service.
 
 In addition to the configuration, the Cloud Build trigger is configured to automatically start build
 and deploy process upon commits to the `master` branch. In order to allow Cloud Build to 
