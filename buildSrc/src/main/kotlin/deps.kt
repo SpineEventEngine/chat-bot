@@ -28,7 +28,7 @@ object Versions {
     const val flogger = "0.5.1"
     const val junit5 = "5.6.2"
     const val truth = "1.0.1"
-    const val micronaut = "2.0.0.RC2"
+    const val micronaut = "2.0.0"
     const val spineGcloud = "1.5.22"
     const val googleSecretManager = "1.1.0"
     const val googleChat = "v1-rev20200617-1.30.9"
