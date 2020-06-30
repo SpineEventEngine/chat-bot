@@ -47,7 +47,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
     final class Register {
 
         @BeforeEach
-        void setUp() {
+        void registerSpace() {
             var registerSpace = RegisterSpace
                     .newBuilder()
                     .setId(SPACE)

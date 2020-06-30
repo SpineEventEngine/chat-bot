@@ -52,7 +52,7 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
         private final Url websiteUrl = urlOfSpec("https://test-organization.com");
 
         @BeforeEach
-        void setUp() {
+        void registerOrganization() {
             var registerOrganization = RegisterOrganization
                     .newBuilder()
                     .setId(organization)

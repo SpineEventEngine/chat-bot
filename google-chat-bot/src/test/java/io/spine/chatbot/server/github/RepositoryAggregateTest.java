@@ -54,7 +54,7 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
         private final Url travisCiUrl = travisUrlFor(REPO_SLUG);
 
         @BeforeEach
-        void setUp() {
+        void registerRepository() {
             var registerRepository = RegisterRepository
                     .newBuilder()
                     .setRepository(repository)

@@ -80,7 +80,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         private final BuildState buildState = buildStateFrom(branchBuild, chatSpace);
 
         @BeforeEach
-        void setUp() {
+        void sendCheckCommand() {
             travisClient().setBuildsFor(repository.getValue(), branchBuild);
             var checkRepoBuild = CheckRepositoryBuild
                     .newBuilder()
@@ -135,7 +135,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         private final BuildState newBuildState = buildStateFrom(newBranchBuild, chatSpace);
 
         @BeforeEach
-        void setUp() {
+        void sendCheckCommands() {
             travisClient().setBuildsFor(repository.getValue(), previousBranchBuild);
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
@@ -201,7 +201,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         private final BuildState newBuildState = buildStateFrom(newBranchBuild, chatSpace);
 
         @BeforeEach
-        void setUp() {
+        void sendCheckCommands() {
             travisClient().setBuildsFor(repository.getValue(), branchBuildOf(initialFailedBuild));
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()

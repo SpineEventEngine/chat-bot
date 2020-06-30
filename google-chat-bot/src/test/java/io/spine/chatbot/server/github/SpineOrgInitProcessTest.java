@@ -25,13 +25,13 @@ import io.spine.chatbot.api.travis.Repository;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
-import io.spine.chatbot.server.google.chat.GoogleChatIdentifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.server.github.SpineOrgInitProcess.SPINE_ORGANIZATION;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
 @DisplayName("SpineOrgInitProcess should")
 final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
@@ -40,7 +40,7 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
     @DisplayName("perform initialization of watched spine resources")
     final class Init {
 
-        private final SpaceId spaceId = GoogleChatIdentifier.space("spaces/qjwrp1441");
+        private final SpaceId spaceId = space("spaces/qjwrp1441");
         private final Repository repository = Repository
                 .newBuilder()
                 .setId(123312L)
@@ -49,7 +49,7 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
                 .vBuild();
 
         @BeforeEach
-        void setUp() {
+        void registerSpace() {
             var repositoriesResponse = RepositoriesResponse
                     .newBuilder()
                     .addRepositories(repository)

@@ -94,7 +94,7 @@ final class ThreadChatProcessTest {
                 .setThread(newThread);
 
         @BeforeEach
-        void setUp() {
+        void receiveBuildStateChange() {
             googleChatClient().setMessageForBuildStatusUpdate(buildNumber, sentMessage);
             var newBuildState = BuildState
                     .newBuilder()
