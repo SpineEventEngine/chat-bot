@@ -41,19 +41,19 @@ import java.security.GeneralSecurityException;
 import static io.spine.chatbot.api.google.chat.BuildStateUpdates.buildStateMessage;
 
 /**
- * Google Chat Hangouts API client.
+ * Google Chat API client.
  *
- * @see <a href="https://developers.google.com/hangouts/chat/concepts">Hangouts Chat API</a>
+ * @see <a href="https://developers.google.com/hangouts/chat/concepts">Google Chat API</a>
  */
 public final class GoogleChat implements GoogleChatClient, Logging {
 
     private static final String BOT_NAME = "Spine Chat Bot";
     private static final String CHAT_BOT_SCOPE = "https://www.googleapis.com/auth/chat.bot";
 
-    private final HangoutsChat hangoutsChat;
+    private final HangoutsChat chat;
 
     private GoogleChat(HangoutsChat chat) {
-        hangoutsChat = chat;
+        this.chat = chat;
     }
 
     /**
@@ -84,14 +84,13 @@ public final class GoogleChat implements GoogleChatClient, Logging {
     @CanIgnoreReturnValue
     private Message sendMessage(String space, Message message) {
         try {
-            return hangoutsChat
+            return chat
                     .spaces()
                     .messages()
                     .create(space, message)
                     .execute();
         } catch (IOException e) {
-            logger().atSevere()
-                    .withCause(e)
+            _error().withCause(e)
                     .log("Unable to send message to space `%s`.", space);
             throw new RuntimeException("Unable to send message to space " + space, e);
         }
