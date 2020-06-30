@@ -52,13 +52,13 @@ final class RepositoriesController implements Logging {
         }
     }
 
-    private void checkBuildStatus(Client botClient,
+    private void checkBuildStatus(Client client,
                                   RepositoryId repository,
                                   Organization organization) {
-        _info().log("Sending `CheckRepositoryBuild` command for repository `%s`",
+        _info().log("Sending `CheckRepositoryBuild` command for the repository `%s`.",
                     repository.getValue());
         var checkRepositoryBuild = checkRepoBuildCommand(repository, organization);
-        botClient.post(checkRepositoryBuild);
+        client.post(checkRepositoryBuild);
     }
 
     private static CheckRepositoryBuild
