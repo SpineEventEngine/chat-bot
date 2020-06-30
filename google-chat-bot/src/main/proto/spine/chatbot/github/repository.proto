@@ -36,8 +36,7 @@ import "spine/chatbot/github/identifiers.proto";
 
 // A GitHub repository.
 message Repository {
-    option (entity).kind = AGGREGATE;
-    option (entity).visibility = FULL;
+    option (entity) = {kind: AGGREGATE visibility: FULL};
 
     RepositoryId id = 1;
 

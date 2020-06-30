@@ -34,8 +34,7 @@ import "spine/chatbot/github/identifiers.proto";
 
 // Organization repositories.
 message OrganizationRepositories {
-    option (entity).kind = PROJECTION;
-    option (entity).visibility = FULL;
+    option (entity) = {kind: PROJECTION visibility: FULL};
 
     OrganizationId organization = 1;
 

@@ -39,8 +39,7 @@ import "spine/chatbot/github/identifiers.proto";
 
 // A GitHub repository build process.
 message RepositoryBuild {
-    option (entity).kind = PROCESS_MANAGER;
-    option (entity).visibility = FULL;
+    option (entity) = {kind: PROCESS_MANAGER visibility: FULL};
 
     RepositoryId repository = 1;
 

@@ -36,8 +36,7 @@ import "spine/chatbot/github/identifiers.proto";
 
 // A GitHub organization.
 message Organization {
-    option (entity).kind = AGGREGATE;
-    option (entity).visibility = FULL;
+    option (entity) = {kind: AGGREGATE visibility: FULL};
 
     OrganizationId id = 1;
 

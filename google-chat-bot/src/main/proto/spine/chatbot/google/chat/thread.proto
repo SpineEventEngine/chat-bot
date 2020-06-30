@@ -34,8 +34,7 @@ import "spine/chatbot/google/chat/identifiers.proto";
 
 // A thread in a room.
 message Thread {
-    option (entity).kind = AGGREGATE;
-    option (entity).visibility = FULL;
+    option (entity) = {kind: AGGREGATE visibility: FULL};
 
     ThreadId id = 1;
 

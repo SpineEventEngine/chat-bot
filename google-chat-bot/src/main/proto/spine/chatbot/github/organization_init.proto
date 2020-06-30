@@ -38,8 +38,7 @@ import "spine/chatbot/github/identifiers.proto";
 // for a particular Chat Space.
 //
 message OrganizationInit {
-    option (entity).kind = PROCESS_MANAGER;
-    option (entity).visibility = FULL;
+    option (entity) = {kind: PROCESS_MANAGER visibility: FULL};
 
     // The organization for which the initialization is performed.
     OrganizationId organization = 1;
