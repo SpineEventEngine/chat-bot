@@ -41,7 +41,7 @@ final class RepositoriesController implements Logging {
      */
     @Post("/builds/check")
     String checkBuildStatuses() {
-        _debug().log("Checking repositories build statues.");
+        _debug().log("Checking repositories build statuses.");
         try (var client = Client.inProcessClient(SERVER_NAME)) {
             var organizations = client.listOrganizations();
             for (var organization : organizations) {
