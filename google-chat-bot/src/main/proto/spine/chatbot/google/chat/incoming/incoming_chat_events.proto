@@ -20,7 +20,7 @@ message BotAddedToSpace {
     SpaceId space = 1 [(required) = true];
 
     // The actual chat event message.
-    ChatEvent event = 2;
+    ChatEvent event = 2 [(required) = true];
 }
 
 // The ChatBot is removed from the Chat space.
@@ -30,7 +30,7 @@ message BotRemovedFromSpace {
     SpaceId space = 1 [(required) = true];
 
     // The actual chat event message.
-    ChatEvent event = 2;
+    ChatEvent event = 2 [(required) = true];
 }
 
 // The ChatBot received a new incoming Chat message.
@@ -40,5 +40,5 @@ message MessageReceived {
     MessageId message = 1 [(required) = true];
 
     // The actual chat event message.
-    ChatEvent event = 2;
+    ChatEvent event = 2 [(required) = true];
 }
