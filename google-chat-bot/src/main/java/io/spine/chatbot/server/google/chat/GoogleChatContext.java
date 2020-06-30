@@ -35,29 +35,29 @@ public final class GoogleChatContext {
     /** The name of the Google Chat Context. **/
     static final String GOOGLE_CHAT_CONTEXT_NAME = "GoogleChat";
 
-    private final BoundedContextBuilder contextBuilder;
+    private final BoundedContextBuilder builder;
 
-    private GoogleChatContext(GoogleChatClient googleChatClient) {
-        this.contextBuilder = configureContextBuilder(googleChatClient);
+    private GoogleChatContext(GoogleChatClient client) {
+        this.builder = configureBuilder(client);
     }
 
     /**
      * Returns the context builder associated with the Google Chat context.
      */
-    public BoundedContextBuilder contextBuilder() {
-        return this.contextBuilder;
+    public BoundedContextBuilder builder() {
+        return this.builder;
     }
 
     /**
      * Creates a new instance of the Google Chat context builder.
      */
     private static BoundedContextBuilder
-    configureContextBuilder(GoogleChatClient googleChatClient) {
+    configureBuilder(GoogleChatClient client) {
         return BoundedContext
                 .singleTenant(GOOGLE_CHAT_CONTEXT_NAME)
                 .add(new SpaceRepository())
                 .add(new ThreadRepository())
-                .add(new ThreadChatRepository(googleChatClient))
+                .add(new ThreadChatRepository(client))
                 .addEventDispatcher(new IncomingEventsHandler());
     }
 
@@ -73,7 +73,7 @@ public final class GoogleChatContext {
      */
     public static final class Builder {
 
-        private GoogleChatClient googleChatClient;
+        private GoogleChatClient client;
 
         /**
          * Prevents direct instantiation.
@@ -84,9 +84,8 @@ public final class GoogleChatContext {
         /**
          * Sets Google Chat client to be used within the context.
          */
-        public Builder setGoogleChatClient(GoogleChatClient googleChatClient) {
-            checkNotNull(googleChatClient);
-            this.googleChatClient = googleChatClient;
+        public Builder setClient(GoogleChatClient client) {
+            this.client = checkNotNull(client);
             return this;
         }
 
@@ -94,10 +93,10 @@ public final class GoogleChatContext {
          * Finishes configuration of the context and builds a new instance.
          */
         public GoogleChatContext build() {
-            if (googleChatClient == null) {
-                googleChatClient = GoogleChat.newInstance();
+            if (client == null) {
+                client = GoogleChat.newInstance();
             }
-            return new GoogleChatContext(googleChatClient);
+            return new GoogleChatContext(client);
         }
     }
 }

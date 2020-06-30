@@ -37,27 +37,27 @@ public final class GitHubContext {
      */
     static final String GIT_HUB_CONTEXT_NAME = "GitHub";
 
-    private final BoundedContextBuilder contextBuilder;
+    private final BoundedContextBuilder builder;
 
-    private GitHubContext(TravisClient travisClient) {
-        this.contextBuilder = configureContextBuilder(travisClient);
+    private GitHubContext(TravisClient client) {
+        this.builder = configureBuilder(client);
     }
 
     /**
      * Returns the context builder associated with the GitHub context.
      */
-    public BoundedContextBuilder contextBuilder() {
-        return this.contextBuilder;
+    public BoundedContextBuilder builder() {
+        return this.builder;
     }
 
-    private static BoundedContextBuilder configureContextBuilder(TravisClient travisClient) {
+    private static BoundedContextBuilder configureBuilder(TravisClient client) {
         return BoundedContext
                 .singleTenant(GIT_HUB_CONTEXT_NAME)
                 .add(OrganizationAggregate.class)
                 .add(RepositoryAggregate.class)
                 .add(new OrgReposRepository())
-                .add(new SpineOrgInitRepository(travisClient))
-                .add(new RepoBuildRepository(travisClient));
+                .add(new SpineOrgInitRepository(client))
+                .add(new RepoBuildRepository(client));
     }
 
     /**
@@ -72,7 +72,7 @@ public final class GitHubContext {
      */
     public static final class Builder {
 
-        private TravisClient travisClient;
+        private TravisClient client;
 
         /**
          * Prevents direct instantiation.
@@ -83,23 +83,22 @@ public final class GitHubContext {
         /**
          * Sets Travis CI client to be used within the context.
          */
-        public Builder setTravis(TravisClient travisClient) {
-            checkNotNull(travisClient);
-            this.travisClient = travisClient;
+        public Builder setTravis(TravisClient client) {
+            this.client = checkNotNull(client);
             return this;
         }
 
         /**
          * Finishes configuration of the context and builds a new instance.
          *
-         * <p>If the {@link #travisClient} was not explicitly configured, uses the
+         * <p>If the {@link #client} was not explicitly configured, uses the
          * {@link Travis#newInstance() default} client.
          */
         public GitHubContext build() {
-            if (travisClient == null) {
-                travisClient = Travis.newInstance();
+            if (client == null) {
+                client = Travis.newInstance();
             }
-            return new GitHubContext(travisClient);
+            return new GitHubContext(client);
         }
     }
 }

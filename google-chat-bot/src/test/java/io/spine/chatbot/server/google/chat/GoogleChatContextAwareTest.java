@@ -37,9 +37,9 @@ abstract class GoogleChatContextAwareTest extends ContextAwareTest {
     protected final BoundedContextBuilder contextBuilder() {
         return GoogleChatContext
                 .newBuilder()
-                .setGoogleChatClient(googleChatClient)
+                .setClient(googleChatClient)
                 .build()
-                .contextBuilder();
+                .builder();
     }
 
     @AfterEach

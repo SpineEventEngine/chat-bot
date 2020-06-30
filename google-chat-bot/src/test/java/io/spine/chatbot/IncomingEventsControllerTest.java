@@ -59,7 +59,7 @@ final class IncomingEventsControllerTest {
     static void setupServer() {
         var chatContext = GoogleChatContext
                 .newBuilder()
-                .setGoogleChatClient(InMemoryGoogleChatClient.lenientClient())
+                .setClient(InMemoryGoogleChatClient.lenientClient())
                 .build();
         var gitHubContext = GitHubContext
                 .newBuilder()

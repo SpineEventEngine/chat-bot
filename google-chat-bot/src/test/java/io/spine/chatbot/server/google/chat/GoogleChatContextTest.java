@@ -36,7 +36,7 @@ final class GoogleChatContextTest {
         assertDoesNotThrow(
                 () -> GoogleChatContext
                         .newBuilder()
-                        .setGoogleChatClient(InMemoryGoogleChatClient.lenientClient())
+                        .setClient(InMemoryGoogleChatClient.lenientClient())
                         .build()
         );
     }
@@ -47,7 +47,7 @@ final class GoogleChatContextTest {
     void notAllowNullTravisClients() {
         assertThrows(
                 NullPointerException.class, () -> GoogleChatContext.newBuilder()
-                                                                   .setGoogleChatClient(null)
+                                                                   .setClient(null)
         );
     }
 }

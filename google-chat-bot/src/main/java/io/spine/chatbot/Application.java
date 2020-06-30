@@ -111,8 +111,8 @@ public final class Application implements Logging {
     static Server startServer(GitHubContext gitHubContext, GoogleChatContext googleChatContext) {
         Server server = Server
                 .inProcess(SERVER_NAME)
-                .add(gitHubContext.contextBuilder())
-                .add(googleChatContext.contextBuilder())
+                .add(gitHubContext.builder())
+                .add(googleChatContext.builder())
                 .build();
         try {
             server.start();

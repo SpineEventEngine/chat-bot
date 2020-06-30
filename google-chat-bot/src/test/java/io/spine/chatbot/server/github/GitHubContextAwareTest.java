@@ -39,7 +39,7 @@ abstract class GitHubContextAwareTest extends ContextAwareTest {
                 .newBuilder()
                 .setTravis(travisClient)
                 .build()
-                .contextBuilder();
+                .builder();
     }
 
     @AfterEach
