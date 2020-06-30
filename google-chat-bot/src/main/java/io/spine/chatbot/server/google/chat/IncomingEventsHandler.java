@@ -32,9 +32,6 @@ import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf4;
 
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
-
 /**
  * Google Chat incoming events reactor.
  *
@@ -64,17 +61,17 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
         switch (chatEvent.getType()) {
             case MESSAGE:
                 _info().log("New user message received.");
-                return EitherOf4.withC(messageReceived(chatEvent));
+                return EitherOf4.withC(ChatEvents.toMessageReceived(chatEvent));
             case ADDED_TO_SPACE:
                 var toSpace = chatEvent.getSpace();
                 _info().log("ChatBot added to space `%s` (%s).",
                             toSpace.getDisplayName(), toSpace.getName());
-                return EitherOf4.withA(botAddedToSpace(chatEvent));
+                return EitherOf4.withA(ChatEvents.toBotAddedToSpace(chatEvent));
             case REMOVED_FROM_SPACE:
                 var fromSpace = chatEvent.getSpace();
                 _info().log("ChatBot removed from space `%s` (%s).",
                             fromSpace.getDisplayName(), fromSpace.getName());
-                return EitherOf4.withB(botRemovedFromSpace(chatEvent));
+                return EitherOf4.withB(ChatEvents.toBotRemovedFromSpace(chatEvent));
 
             case CARD_CLICKED:
                 _debug().log("Skipping card clicks.");
@@ -85,32 +82,5 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
                 _error().log("Unsupported chat event type received: %s", chatEvent.getType());
                 return EitherOf4.withD(nothing());
         }
-    }
-
-    private static BotRemovedFromSpace botRemovedFromSpace(ChatEvent chatEvent) {
-        var space = chatEvent.getSpace();
-        return BotRemovedFromSpace
-                .newBuilder()
-                .setEvent(chatEvent)
-                .setSpace(space(space.getName()))
-                .vBuild();
-    }
-
-    private static BotAddedToSpace botAddedToSpace(ChatEvent chatEvent) {
-        var space = chatEvent.getSpace();
-        return BotAddedToSpace
-                .newBuilder()
-                .setEvent(chatEvent)
-                .setSpace(space(space.getName()))
-                .vBuild();
-    }
-
-    private static MessageReceived messageReceived(ChatEvent chatEvent) {
-        var message = chatEvent.getMessage();
-        return MessageReceived
-                .newBuilder()
-                .setEvent(chatEvent)
-                .setMessage(message(message.getName()))
-                .vBuild();
     }
 }
