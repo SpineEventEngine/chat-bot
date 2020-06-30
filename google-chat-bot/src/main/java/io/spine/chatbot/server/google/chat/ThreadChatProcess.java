@@ -63,7 +63,6 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var buildState = change.getNewValue();
         var repository = e.getRepository();
         _info().log("Build for repository `%s` failed.", repository.getValue());
-
         return processBuildStateUpdate(buildState, repository);
     }
 
@@ -79,7 +78,6 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var buildState = change.getNewValue();
         var repository = e.getRepository();
         _info().log("Build for repository `%s` recovered.", repository.getValue());
-
         return processBuildStateUpdate(buildState, repository);
     }
 
@@ -117,6 +115,12 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         return Messages.isDefault(state().getResource());
     }
 
+    /**
+     * Sets {@link #client} to be used during handling of signals.
+     *
+     * @implNote the method is intended to be used as part of the entity configuration
+     *         done through the repository
+     */
     void setClient(GoogleChatClient client) {
         this.client = client;
     }
