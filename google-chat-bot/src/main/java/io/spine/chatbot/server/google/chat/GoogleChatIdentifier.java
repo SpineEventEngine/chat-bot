@@ -24,7 +24,7 @@ import io.spine.chatbot.google.chat.MessageId;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.ThreadId;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
  * A utility for working with {@link GoogleChatContext} identifiers.
@@ -41,7 +41,7 @@ public final class GoogleChatIdentifier {
      * Creates a new {@link ThreadId} out of the specified {@code value}.
      */
     public static ThreadId thread(String value) {
-        checkNotNull(value);
+        checkNotEmptyOrBlank(value);
         return ThreadId
                 .newBuilder()
                 .setValue(value)
@@ -52,7 +52,7 @@ public final class GoogleChatIdentifier {
      * Creates a new {@link SpaceId} out of the specified {@code value}.
      */
     public static SpaceId space(String value) {
-        checkNotNull(value);
+        checkNotEmptyOrBlank(value);
         return SpaceId
                 .newBuilder()
                 .setValue(value)
@@ -63,7 +63,7 @@ public final class GoogleChatIdentifier {
      * Creates a new {@link MessageId} out of the specified {@code value}.
      */
     public static MessageId message(String value) {
-        checkNotNull(value);
+        checkNotEmptyOrBlank(value);
         return MessageId
                 .newBuilder()
                 .setValue(value)

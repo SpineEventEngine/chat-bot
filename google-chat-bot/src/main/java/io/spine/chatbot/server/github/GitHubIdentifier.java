@@ -23,7 +23,7 @@ package io.spine.chatbot.server.github;
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
  * A utility for working with {@link GitHubContext} identifiers.
@@ -40,7 +40,7 @@ public final class GitHubIdentifier {
      * Creates a new {@link OrganizationId} out of the specified {@code name}.
      */
     public static OrganizationId organization(String name) {
-        checkNotNull(name);
+        checkNotEmptyOrBlank(name);
         return OrganizationId
                 .newBuilder()
                 .setValue(name)
@@ -51,7 +51,7 @@ public final class GitHubIdentifier {
      * Creates a new {@link RepositoryId} out of the specified {@code slug}.
      */
     public static RepositoryId repository(String slug) {
-        checkNotNull(slug);
+        checkNotEmptyOrBlank(slug);
         return RepositoryId
                 .newBuilder()
                 .setValue(slug)
