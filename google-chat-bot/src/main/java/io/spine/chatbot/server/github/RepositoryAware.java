@@ -20,11 +20,13 @@
 
 package io.spine.chatbot.server.github;
 
+import io.spine.annotation.GeneratedMixin;
 import io.spine.chatbot.github.RepositoryId;
 
 /**
  * Common interface for messages aware of the {@link RepositoryId repository}.
  */
+@GeneratedMixin
 public interface RepositoryAware {
 
     /**
@@ -37,7 +39,7 @@ public interface RepositoryAware {
     /**
      * Obtains the repository ID.
      *
-     * @implNote this is the Protobuf-level accessor.
+     * @implNote This method is implemented in the deriving Protobuf messages.
      */
     RepositoryId getRepository();
 }
