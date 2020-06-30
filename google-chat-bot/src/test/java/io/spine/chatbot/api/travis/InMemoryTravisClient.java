@@ -20,7 +20,7 @@
 
 package io.spine.chatbot.api.travis;
 
-import io.spine.chatbot.api.FailFastClient;
+import io.spine.chatbot.api.FailFastAwareClient;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,7 +31,7 @@ import static io.spine.protobuf.Messages.defaultInstance;
 /**
  * An in-memory test-only implementation of the Travis CI API client.
  */
-public final class InMemoryTravisClient extends FailFastClient implements TravisClient {
+public final class InMemoryTravisClient extends FailFastAwareClient implements TravisClient {
 
     private final Map<Query<?>, TravisResponse> responses = new ConcurrentHashMap<>();
 

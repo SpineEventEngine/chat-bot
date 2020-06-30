@@ -29,7 +29,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 /**
  * An abstract API client that exposes the {@code fail-fast} concept to the actual test clients.
  */
-public abstract class FailFastClient implements Logging {
+public abstract class FailFastAwareClient implements Logging {
 
     /** Determines whether the client should fail if a particular response is not preconfigured. **/
     private final boolean failFast;
@@ -37,7 +37,7 @@ public abstract class FailFastClient implements Logging {
     /**
      * Creates a new client with the specified {@code failFast} behavior.
      */
-    protected FailFastClient(boolean failFast) {
+    protected FailFastAwareClient(boolean failFast) {
         this.failFast = failFast;
     }
 
