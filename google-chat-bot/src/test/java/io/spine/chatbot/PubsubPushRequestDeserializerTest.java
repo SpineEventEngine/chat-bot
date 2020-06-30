@@ -21,6 +21,7 @@
 package io.spine.chatbot;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.io.Resources;
 import com.google.common.truth.extensions.proto.ProtoTruth;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.util.Timestamps;
@@ -32,7 +33,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
+
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 @MicronautTest
 @DisplayName("`PubsubPushRequestDeserializer` should")
@@ -59,21 +64,17 @@ final class PubsubPushRequestDeserializerTest {
 
         var mapper = mapperFactory.objectMapper(null, null);
 
-        var pushNotification = mapper.readValue(PUSH_NOTIFICATION_JSON,
-                                                PubsubPushRequest.class);
+        var pushNotification = mapper.readValue(pushRequestJson(), PubsubPushRequest.class);
         ProtoTruth.assertThat(pushNotification)
                   .isEqualTo(expectedResult);
     }
 
-    private static final String PUSH_NOTIFICATION_JSON = "" +
-            "{\n" +
-            "  \"message\": {\n" +
-            "    \"data\": \"eyJrZXkiOiJ2YWx1ZSJ9\",\n" +
-            "    \"messageId\": \"450292511223766\",\n" +
-            "    \"message_id\": \"450292511223766\",\n" +
-            "    \"publishTime\": \"2020-06-21T20:48:25.908Z\",\n" +
-            "    \"publish_time\": \"2020-06-21T20:48:25.908Z\"\n" +
-            "  },\n" +
-            "  \"subscription\": \"projects/test-project/subscriptions/test-subscription\"\n" +
-            "}";
+    private static String pushRequestJson() {
+        try {
+            var resource = Resources.getResource("pubsub_push_request.json");
+            return Resources.toString(resource, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw newIllegalStateException(e, "Unable to load ChatEvent message JSON definition.");
+        }
+    }
 }
