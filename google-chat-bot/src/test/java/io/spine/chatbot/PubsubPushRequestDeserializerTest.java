@@ -74,7 +74,9 @@ final class PubsubPushRequestDeserializerTest {
             var resource = Resources.getResource("pubsub_push_request.json");
             return Resources.toString(resource, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw newIllegalStateException(e, "Unable to load ChatEvent message JSON definition.");
+            throw newIllegalStateException(
+                    e, "Unable to load PubsubPushRequest message JSON definition."
+            );
         }
     }
 }
