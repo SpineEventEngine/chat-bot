@@ -24,7 +24,7 @@ import com.google.api.services.chat.v1.model.Message;
 import com.google.api.services.chat.v1.model.Thread;
 import io.spine.base.EventMessage;
 import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
@@ -81,12 +81,11 @@ final class ThreadChatProcessTest {
 
     private abstract static class BuildStateChanged extends GoogleChatContextAwareTest {
 
-        private static final String googleChatSpace = "spaces/1241pjwqe";
         private static final String buildNumber = "551";
 
         private final RepositoryId repository = repository("SpineEventEngine/money");
         private final ThreadId thread = thread(repository.getValue());
-        private final SpaceId space = space(googleChatSpace);
+        private final SpaceId space = space("spaces/1241pjwqe");
 
         private final Thread newThread = new Thread().setName("spaces/1241pjwqe/threads/k12d1o2r1");
         private final Message sentMessage = new Message()
@@ -96,9 +95,9 @@ final class ThreadChatProcessTest {
         @BeforeEach
         void receiveBuildStateChange() {
             googleChatClient().setMessageForBuildStatusUpdate(buildNumber, sentMessage);
-            var newBuildState = BuildState
+            var newBuildState = Build
                     .newBuilder()
-                    .setGoogleChatSpace(googleChatSpace)
+                    .setSpace(space)
                     .setNumber(buildNumber)
                     .vBuild();
             var buildStateChange = BuildStateChange

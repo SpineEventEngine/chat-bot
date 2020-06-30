@@ -45,9 +45,7 @@ option java_generate_equals_and_hash = true;
 //
 message ChatEvent {
 
-    option (is).java_type = "io.spine.base.EventMessage";
-
-    // type of the event
+    // The type of the event
     EventType type = 1 [(required) = true];
 
     // The timestamp indicating when the event was dispatched.
@@ -81,7 +79,7 @@ message ChatEvent {
 //
 message Message {
 
-    // Resource name, in the form "spaces/*/messages/*".
+    // The resource name, in the form "spaces/*/messages/*".
     string name = 1 [(required) = true, (pattern).regex = "spaces/.+/messages/.+"];
 
     // The user who created the message.
@@ -90,11 +88,11 @@ message Message {
     // The time at which the message was created in Hangouts Chat server.
     string create_time = 3;
 
-    // Plain-text body of the message.
+    // The plain-text body of the message.
     string text = 4;
 
-    // Plain-text body of the message with all bot mentions stripped out.
-    string argumentText = 5;
+    // The plain-text body of the message with all bot mentions stripped out.
+    string argument_text = 5;
 
     // The thread the message belongs to.
     Thread thread = 6;
@@ -112,10 +110,10 @@ message Message {
     // Annotation metadata of the message
     message Annotation {
 
-        // Length of the substring in the plain-text message body this annotation corresponds to.
+        // The length of the substring in the plain-text message body this annotation corresponds to.
         uint32 length = 1;
 
-        // Start index (0-based, inclusive) in the plain-text message body this annotation
+        // The start index (0-based, inclusive) in the plain-text message body this annotation
         // corresponds to.
         //
         uint32 start_index = 2;
@@ -133,7 +131,7 @@ message Message {
             User user = 2;
         }
 
-        // The type of this annotation.
+        // The type of the annotation.
         string type = 4;
     }
 }
@@ -147,7 +145,7 @@ message Space {
 
     option (is).java_type = "io.spine.chatbot.server.google.chat.incoming.SpaceMixin";
 
-    // Resource name of the space, in the form "spaces/*".
+    // The resource name of the space, in the form "spaces/*".
     string name = 1 [(required) = true, (pattern).regex = "spaces/.+"];
 
     // The display name (only if the space is a room).
@@ -164,7 +162,7 @@ message Space {
 //
 message User {
 
-    // Resource name, in the format "users/*".
+    // The resource name, in the format "users/*".
     string name = 1 [(required) = true, (pattern).regex = "users/.+"];
 
     // The user's display name.

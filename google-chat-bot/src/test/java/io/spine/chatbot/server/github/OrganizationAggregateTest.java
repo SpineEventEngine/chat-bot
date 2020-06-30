@@ -25,6 +25,7 @@ import io.spine.chatbot.github.organization.OrgHeader;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.event.OrganizationRegistered;
+import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.net.Url;
 import io.spine.net.Urls;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.server.github.GitHubIdentifier.organization;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 import static io.spine.chatbot.url.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.url.MoreUrls.travisUrlFor;
 
@@ -44,20 +46,21 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
     final class Register {
 
         private static final String orgName = "Test Organization";
-        private static final String googleChatSpace = "spaces/qwdp123ttQ";
 
+        private final SpaceId googleChatSpace = space("spaces/qwdp123ttQ");
         private final OrganizationId organization = organization("TestOrganization");
 
         private final Url githubUrl = githubUrlFor(organization.getValue());
         private final Url travisCiUrl = travisUrlFor(organization.getValue());
         private final Url websiteUrl = Urls.create("https://test-organization.com");
+
         private final OrgHeader header = OrgHeader
                 .newBuilder()
                 .setGithubProfile(githubUrl)
                 .setTravisProfile(travisCiUrl)
                 .setWebsite(websiteUrl)
                 .setName(orgName)
-                .setGoogleChatSpace(googleChatSpace)
+                .setSpace(googleChatSpace)
                 .vBuild();
 
         @BeforeEach

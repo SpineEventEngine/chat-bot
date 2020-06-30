@@ -27,6 +27,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.runtime.event.annotation.EventListener;
 import io.spine.chatbot.google.chat.incoming.ChatEvent;
 import io.spine.chatbot.google.chat.incoming.User;
+import io.spine.chatbot.google.chat.incoming.event.ChatEventReceived;
 import io.spine.core.UserId;
 import io.spine.json.Json;
 import io.spine.logging.Logging;
@@ -57,7 +58,11 @@ final class IncomingEventsController implements Logging {
         _debug().log("Received a new chat event: %s", chatEventJson);
         ChatEvent chatEvent = Json.fromJson(chatEventJson, ChatEvent.class);
         var actor = eventActor(chatEvent.getUser());
-        INCOMING_EVENTS.emittedEvent(chatEvent, actor);
+        var chatEventReceived = ChatEventReceived
+                .newBuilder()
+                .setEvent(chatEvent)
+                .vBuild();
+        INCOMING_EVENTS.emittedEvent(chatEventReceived, actor);
         return "OK";
     }
 

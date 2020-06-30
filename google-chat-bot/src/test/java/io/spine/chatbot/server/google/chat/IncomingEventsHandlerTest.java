@@ -29,6 +29,7 @@ import io.spine.chatbot.google.chat.incoming.SpaceType;
 import io.spine.chatbot.google.chat.incoming.User;
 import io.spine.chatbot.google.chat.incoming.event.BotAddedToSpace;
 import io.spine.chatbot.google.chat.incoming.event.BotRemovedFromSpace;
+import io.spine.chatbot.google.chat.incoming.event.ChatEventReceived;
 import io.spine.chatbot.google.chat.incoming.event.MessageReceived;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,14 +50,14 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
     @DisplayName("add bot to a space")
     void addBot() {
         // given
-        var chatEvent = chatEventOfType(ADDED_TO_SPACE);
+        var chatEventReceived = chatEventReceived(ADDED_TO_SPACE);
         var botAddedToSpace = BotAddedToSpace
                 .newBuilder()
-                .setEvent(chatEvent)
+                .setEvent(chatEventReceived.getEvent())
                 .setSpace(spaceId)
                 .vBuild();
         // when
-        context().receivesExternalEvent(chatEvent);
+        context().receivesExternalEvent(chatEventReceived);
         // then
         context().assertEvent(botAddedToSpace);
     }
@@ -65,14 +66,14 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
     @DisplayName("remove bot from the space")
     void removeBot() {
         // given
-        var chatEvent = chatEventOfType(REMOVED_FROM_SPACE);
+        var chatEventReceived = chatEventReceived(REMOVED_FROM_SPACE);
         var botRemovedFromSpace = BotRemovedFromSpace
                 .newBuilder()
-                .setEvent(chatEvent)
+                .setEvent(chatEventReceived.getEvent())
                 .setSpace(spaceId)
                 .vBuild();
         // when
-        context().receivesExternalEvent(chatEvent);
+        context().receivesExternalEvent(chatEventReceived);
         // then
         context().assertEvent(botRemovedFromSpace);
     }
@@ -81,16 +82,23 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
     @DisplayName("receive incoming message")
     void receiveIncomingMessage() {
         // given
-        var chatEvent = chatEventOfType(MESSAGE);
+        var chatEventReceived = chatEventReceived(MESSAGE);
         var messageReceived = MessageReceived
                 .newBuilder()
-                .setEvent(chatEvent)
+                .setEvent(chatEventReceived.getEvent())
                 .setMessage(messageId)
                 .vBuild();
         // when
-        context().receivesExternalEvent(chatEvent);
+        context().receivesExternalEvent(chatEventReceived);
         // then
         context().assertEvent(messageReceived);
+    }
+
+    private static ChatEventReceived chatEventReceived(EventType type) {
+        return ChatEventReceived
+                .newBuilder()
+                .setEvent(chatEventOfType(type))
+                .vBuild();
     }
 
     private static ChatEvent chatEventOfType(EventType type) {

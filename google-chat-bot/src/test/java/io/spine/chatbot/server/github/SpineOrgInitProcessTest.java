@@ -69,7 +69,7 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
         void settingState() {
             var expectedState = OrganizationInit
                     .newBuilder()
-                    .setGoogleChatSpace(spaceId.getValue())
+                    .setSpace(spaceId)
                     .setInitialized(true)
                     .setOrganization(ORGANIZATION)
                     .vBuild();

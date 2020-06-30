@@ -23,6 +23,7 @@ package io.spine.chatbot.server.google.chat;
 import io.spine.chatbot.google.chat.incoming.ChatEvent;
 import io.spine.chatbot.google.chat.incoming.event.BotAddedToSpace;
 import io.spine.chatbot.google.chat.incoming.event.BotRemovedFromSpace;
+import io.spine.chatbot.google.chat.incoming.event.ChatEventReceived;
 import io.spine.chatbot.google.chat.incoming.event.MessageReceived;
 import io.spine.core.External;
 import io.spine.logging.Logging;
@@ -58,7 +59,8 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
      */
     @React
     EitherOf4<BotAddedToSpace, BotRemovedFromSpace, MessageReceived, Nothing>
-    on(@External ChatEvent chatEvent) {
+    on(@External ChatEventReceived e) {
+        var chatEvent = e.getEvent();
         switch (chatEvent.getType()) {
             case MESSAGE:
                 _info().log("New user message received.");
