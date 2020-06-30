@@ -21,7 +21,7 @@
 package io.spine.chatbot.api.travis;
 
 /**
- * Travis CI branch builds API query.
+ * Travis CI API query for finding repo branch builds.
  *
  * @see <a href="https://developer.travis-ci.com/resource/branch#find">Find branch build</a>
  */
@@ -32,9 +32,9 @@ public final class BuildsQuery extends Query<RepoBranchBuildResponse> {
     }
 
     /**
-     * Creates a repository branch builds query for a repository with the specified {@code slug}.
+     * Creates a query for a repository with the specified {@code slug}.
      *
-     * <p>Requests only a single build from the {@code master} branch
+     * <p>Requests the latest build from the {@code master} branch.
      */
     public static BuildsQuery forRepo(String repoSlug) {
         var encodedSlug = encode(repoSlug);

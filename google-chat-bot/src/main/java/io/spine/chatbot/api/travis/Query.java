@@ -29,7 +29,7 @@ import java.nio.charset.StandardCharsets;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * A Travis CI API query.
+ * A query to the Travis CI API.
  *
  * @param <T>
  *         type of the expected query execution response
@@ -48,7 +48,7 @@ public abstract class Query<T extends TravisResponse> {
     }
 
     /**
-     * Returns query REST request URL.
+     * Returns the request URL to the REST endpoint.
      */
     String request() {
         return request;
@@ -62,7 +62,7 @@ public abstract class Query<T extends TravisResponse> {
     }
 
     /**
-     * Encodes passed value using {@link URLEncoder} and standard
+     * Encodes passed value using {@link URLEncoder} and
      * {@link StandardCharsets#UTF_8 UTF_8} charset.
      */
     static String encode(String value) {
