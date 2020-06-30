@@ -29,7 +29,7 @@ import org.junit.jupiter.api.AfterEach;
 /**
  * An abstract test-base for GitHub context-based tests.
  */
-class GitHubContextAwareTest extends ContextAwareTest {
+abstract class GitHubContextAwareTest extends ContextAwareTest {
 
     private final InMemoryTravisClient travisClient = InMemoryTravisClient.strictClient();
 

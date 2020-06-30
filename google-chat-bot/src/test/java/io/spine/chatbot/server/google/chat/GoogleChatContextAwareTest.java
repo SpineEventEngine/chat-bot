@@ -29,7 +29,7 @@ import org.junit.jupiter.api.AfterEach;
 /**
  * An abstract test-base for Google Chat context-based tests.
  */
-class GoogleChatContextAwareTest extends ContextAwareTest {
+abstract class GoogleChatContextAwareTest extends ContextAwareTest {
 
     private final InMemoryGoogleChatClient googleChatClient = InMemoryGoogleChatClient.strictClient();
 
