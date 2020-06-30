@@ -18,40 +18,42 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.chatbot.server.google.chat;
 
-package spine.chatbot.google.chat;
+import io.spine.annotation.GeneratedMixin;
+import io.spine.chatbot.google.chat.SpaceHeader;
 
-import "spine/options.proto";
+/**
+ * Common interface for messages aware of the {@link SpaceHeader}.
+ */
+@GeneratedMixin
+public interface SpaceHeaderAware {
 
-option (type_url_prefix) = "type.spine.io.chatbot";
-option java_package = "io.spine.chatbot.google.chat";
-option java_outer_classname = "SpaceProto";
-option java_multiple_files = true;
-option java_generate_equals_and_hash = true;
+    /**
+     * Returns the space header.
+     *
+     * @implNote This method is implemented in the deriving Protobuf messages.
+     */
+    SpaceHeader getHeader();
 
-import "spine/chatbot/google/chat/identifiers.proto";
+    /**
+     * Determines whether a space is a Direct Message (DM) between a bot and a human.
+     */
+    default boolean directMessage() {
+        return getHeader().getSingleUserBotDm();
+    }
 
-// A room or DM in Chat.
-message Space {
-    option (entity) = {kind: AGGREGATE visibility: FULL};
-    option (is).java_type = "io.spine.chatbot.server.google.chat.SpaceHeaderAware";
+    /**
+     * Determines whether the messages are threaded in the space.
+     */
+    default boolean isThreaded() {
+        return getHeader().getThreaded();
+    }
 
-    SpaceId id = 1;
-
-    // The space header.
-    SpaceHeader header = 2;
-}
-
-// The Chat space header.
-message SpaceHeader {
-
-    // Whether the space is a DM between a bot and a single human.
-    bool single_user_bot_dm = 1;
-
-    // Whether the messages are threaded in this space.
-    bool threaded = 2;
-
-    // The display name (only if the space is a room).
-    string display_name = 3;
+    /**
+     * Returns the display name of the space.
+     */
+    default String displayName() {
+        return getHeader().getDisplayName();
+    }
 }

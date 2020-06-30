@@ -21,6 +21,7 @@
 package io.spine.chatbot.server.google.chat;
 
 import io.spine.chatbot.google.chat.Space;
+import io.spine.chatbot.google.chat.SpaceHeader;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.command.RegisterSpace;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
@@ -48,11 +49,15 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
         var displayName = space.getDisplayName();
         var spaceId = e.getSpace();
         _info().log("Registering space `%s` (`%s`).", displayName, spaceId.getValue());
+        var header = SpaceHeader
+                .newBuilder()
+                .setDisplayName(displayName)
+                .setThreaded(space.isThreaded())
+                .vBuild();
         return SpaceRegistered
                 .newBuilder()
                 .setSpace(spaceId)
-                .setDisplayName(displayName)
-                .setThreaded(space.isThreaded())
+                .setHeader(header)
                 .vBuild();
     }
 
@@ -66,17 +71,13 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
         var result = SpaceRegistered
                 .newBuilder()
                 .setSpace(space)
-                .setSingleUserBotDm(c.getSingleUserBotDm())
-                .setThreaded(c.getThreaded())
-                .setDisplayName(c.getDisplayName())
+                .setHeader(c.getHeader())
                 .vBuild();
         return result;
     }
 
     @Apply
     private void on(SpaceRegistered e) {
-        builder().setDisplayName(e.getDisplayName())
-                 .setSingleUserBotDm(e.getSingleUserBotDm())
-                 .setThreaded(e.getThreaded());
+        builder().setHeader(e.getHeader());
     }
 }

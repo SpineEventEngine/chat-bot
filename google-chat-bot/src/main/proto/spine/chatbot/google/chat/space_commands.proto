@@ -31,18 +31,14 @@ option java_multiple_files = true;
 option java_generate_equals_and_hash = true;
 
 import "spine/chatbot/google/chat/identifiers.proto";
+import "spine/chatbot/google/chat/space.proto";
 
 // Register Chat space command.
 message RegisterSpace {
+    option (is).java_type = "io.spine.chatbot.server.google.chat.SpaceHeaderAware";
 
     SpaceId id = 1 [(required) = true];
 
-    // Whether the space is a DM between a bot and a single human.
-    bool single_user_bot_dm = 3;
-
-    // Whether the messages are threaded in this space.
-    bool threaded = 4;
-
-    // The display name (only if the space is a room).
-    string display_name = 5;
+    // The space header.
+    SpaceHeader header = 2 [(required) = true];
 }

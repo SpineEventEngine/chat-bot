@@ -23,6 +23,7 @@ package io.spine.chatbot.server.github;
 import io.spine.chatbot.api.travis.RepositoriesResponse;
 import io.spine.chatbot.api.travis.Repository;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
+import io.spine.chatbot.google.chat.SpaceHeader;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,12 +41,17 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
     @DisplayName("perform initialization of watched spine resources")
     final class Init {
 
-        private final SpaceId spaceId = space("spaces/qjwrp1441");
+        private final SpaceId space = space("spaces/qjwrp1441");
         private final Repository repository = Repository
                 .newBuilder()
                 .setId(123312L)
                 .setName("time")
                 .setSlug("SpineEventEngine/time")
+                .vBuild();
+        private final SpaceHeader header = SpaceHeader
+                .newBuilder()
+                .setThreaded(true)
+                .setDisplayName("Test Space")
                 .vBuild();
 
         @BeforeEach
@@ -57,9 +63,8 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
             travisClient().setRepositoriesFor(ORGANIZATION.getValue(), repositoriesResponse);
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
-                    .setSpace(spaceId)
-                    .setDisplayName("Test space")
-                    .setThreaded(true)
+                    .setSpace(space)
+                    .setHeader(header)
                     .vBuild();
             context().receivesExternalEvent(spaceRegistered);
         }
@@ -69,7 +74,7 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
         void settingState() {
             var expectedState = OrganizationInit
                     .newBuilder()
-                    .setSpace(spaceId)
+                    .setSpace(space)
                     .setInitialized(true)
                     .setOrganization(ORGANIZATION)
                     .vBuild();

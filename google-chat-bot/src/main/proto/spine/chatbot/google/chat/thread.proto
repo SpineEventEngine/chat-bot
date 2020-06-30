@@ -38,7 +38,7 @@ message Thread {
 
     ThreadId id = 1;
 
-    // Resource name of the thread.
+    // The resource name of the thread.
     ThreadResource resource = 2;
 
     // The space within with the thread is available.
@@ -51,6 +51,6 @@ message Thread {
 // Chat Thread resource.
 message ThreadResource {
 
-    // Resource name of the thread, in the form `spaces/<space_id>/threads/<thread_id>`.
+    // The resource name of the thread, in the form `spaces/<space_id>/threads/<thread_id>`.
     string name = 1 [(required) = true, (pattern).regex = "spaces/.+/threads/.+"];
 }

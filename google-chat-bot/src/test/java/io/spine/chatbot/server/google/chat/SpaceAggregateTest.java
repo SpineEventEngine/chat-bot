@@ -21,6 +21,7 @@
 package io.spine.chatbot.server.google.chat;
 
 import io.spine.chatbot.google.chat.Space;
+import io.spine.chatbot.google.chat.SpaceHeader;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.command.RegisterSpace;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
@@ -40,7 +41,11 @@ import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 final class SpaceAggregateTest extends GoogleChatContextAwareTest {
 
     private static final SpaceId SPACE = space("spaces/poqwdpQ21");
-    private static final String DISPLAY_NAME = "Spine Developers";
+    private final SpaceHeader HEADER = SpaceHeader
+            .newBuilder()
+            .setThreaded(true)
+            .setDisplayName("Spine Developers")
+            .vBuild();
 
     @Nested
     @DisplayName("register a space")
@@ -51,8 +56,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
             var registerSpace = RegisterSpace
                     .newBuilder()
                     .setId(SPACE)
-                    .setThreaded(true)
-                    .setDisplayName(DISPLAY_NAME)
+                    .setHeader(HEADER)
                     .vBuild();
             context().receivesCommand(registerSpace);
         }
@@ -63,8 +67,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
                     .setSpace(SPACE)
-                    .setDisplayName(DISPLAY_NAME)
-                    .setThreaded(true)
+                    .setHeader(HEADER)
                     .vBuild();
             context().assertEvent(spaceRegistered);
         }
@@ -75,8 +78,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
             var expectedState = Space
                     .newBuilder()
                     .setId(SPACE)
-                    .setThreaded(true)
-                    .setDisplayName(DISPLAY_NAME)
+                    .setHeader(HEADER)
                     .vBuild();
             context().assertState(SPACE, Space.class)
                      .isEqualTo(expectedState);
@@ -111,8 +113,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
                     .setSpace(SPACE)
-                    .setDisplayName(DISPLAY_NAME)
-                    .setThreaded(true)
+                    .setHeader(HEADER)
                     .vBuild();
             context().assertEvent(spaceRegistered);
         }
@@ -123,8 +124,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
             var expectedState = Space
                     .newBuilder()
                     .setId(SPACE)
-                    .setThreaded(true)
-                    .setDisplayName(DISPLAY_NAME)
+                    .setHeader(HEADER)
                     .vBuild();
             context().assertState(SPACE, Space.class)
                      .isEqualTo(expectedState);
@@ -134,7 +134,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
             return io.spine.chatbot.google.chat.incoming.Space
                     .newBuilder()
                     .setName(SPACE.getValue())
-                    .setDisplayName(DISPLAY_NAME)
+                    .setDisplayName(HEADER.getDisplayName())
                     .setType(ROOM)
                     .vBuild();
         }
