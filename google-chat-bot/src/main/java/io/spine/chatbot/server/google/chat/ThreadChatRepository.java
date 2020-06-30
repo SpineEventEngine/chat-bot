@@ -43,10 +43,10 @@ import static io.spine.server.route.EventRoute.withId;
 final class ThreadChatRepository
         extends ProcessManagerRepository<ThreadId, ThreadChatProcess, ThreadChat> {
 
-    private final GoogleChatClient googleChatClient;
+    private final GoogleChatClient client;
 
-    ThreadChatRepository(GoogleChatClient googleChatClient) {
-        this.googleChatClient = googleChatClient;
+    ThreadChatRepository(GoogleChatClient client) {
+        this.client = client;
     }
 
     @OverridingMethodsMustInvokeSuper
@@ -59,7 +59,7 @@ final class ThreadChatRepository
 
     @Override
     protected void configure(ThreadChatProcess processManager) {
-        processManager.setClient(googleChatClient);
+        processManager.setClient(client);
     }
 
     private static class RepositoryEventRoute<M extends RepositoryAwareEvent>
