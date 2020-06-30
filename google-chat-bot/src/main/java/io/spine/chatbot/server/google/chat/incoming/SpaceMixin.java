@@ -21,25 +21,21 @@
 package io.spine.chatbot.server.google.chat.incoming;
 
 import io.spine.annotation.GeneratedMixin;
+import io.spine.chatbot.google.chat.incoming.SpaceOrBuilder;
 import io.spine.chatbot.google.chat.incoming.SpaceType;
 
 /**
  * Provides utility helpers for the {@link io.spine.chatbot.google.chat.incoming.Space Space} type.
  */
 @GeneratedMixin
-public interface SpaceMixin {
+public interface SpaceMixin extends SpaceOrBuilder {
 
     /**
-     * Determines whether a space is threaded.
+     * Determines whether the space is threaded.
      *
-     * @return `true` if the space is threaded, `false otherwise
+     * @return {@code true} if the space is threaded, {@code false} otherwise
      */
     default boolean isThreaded() {
         return getType() == SpaceType.ROOM;
     }
-
-    /**
-     * Returns space type.
-     */
-    SpaceType getType();
 }
