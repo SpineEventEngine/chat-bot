@@ -22,7 +22,7 @@ package io.spine.chatbot.server.google.chat;
 
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
  * A utility for working with {@link ThreadResource}s.
@@ -36,10 +36,10 @@ public final class ThreadResources {
     }
 
     /**
-     * Creates a new {@link ThreadResource} with the specified {@code name}.
+     * Creates a new {@code ThreadResource} with the specified {@code name}.
      */
     public static ThreadResource threadResource(String name) {
-        checkNotNull(name);
+        checkNotEmptyOrBlank(name);
         return ThreadResource
                 .newBuilder()
                 .setName(name)
