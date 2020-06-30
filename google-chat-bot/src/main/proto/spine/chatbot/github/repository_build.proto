@@ -34,45 +34,27 @@ option java_generate_equals_and_hash = true;
 import "google/protobuf/timestamp.proto";
 
 import "spine/net/url.proto";
-
 import "spine/chatbot/github/identifiers.proto";
+import "spine/chatbot/google/chat/identifiers.proto";
 
-// A GitHub repository build process.
+// A build process of a GitHub repository.
 message RepositoryBuild {
     option (entity) = {kind: PROCESS_MANAGER visibility: FULL};
 
     RepositoryId repository = 1;
 
-    // Time of the last status check.
-    google.protobuf.Timestamp last_status_check = 2;
+    // The time of the last status check.
+    .google.protobuf.Timestamp last_status_check = 2;
 
-    // Current state of the build.
-    BuildState build_state = 3;
+    // The current state.
+    Build build = 3;
 
     // Current repository build state.
-    BuildState.State repository_build_state = 4 [(column) = true];
-}
-
-// The state change status of the build.
-enum BuildStateStatusChange {
-
-    BSC_UNKNOWN = 0;
-
-    // The build has failed.
-    //
-    // It could be either a build configuration failure or the actual code build issue.
-    //
-    FAILED = 1;
-
-    // The build has recovered from the failed state.
-    RECOVERED = 2;
-
-    // The build is stable.
-    STABLE = 3;
+    Build.State current_state = 4 [(column) = true];
 }
 
 // State of the build for a repository branch.
-message BuildState {
+message Build {
 
     option (is).java_type = "io.spine.chatbot.server.github.BuildStateMixin";
 
@@ -90,7 +72,7 @@ message BuildState {
 
     // The build state.
     enum State {
-        S_UNKNOWN = 0;
+        BS_UNKNOWN = 0;
 
         // The build is created.
         CREATED = 1;
@@ -151,16 +133,34 @@ message BuildState {
     // The repository slug the build is associated with.
     string repository_slug = 8;
 
-    // Name of the Google Chat space associated with the organization in form `spaces/<space_id>`.
-    string google_chat_space = 9 [(pattern).regex = "spaces/.+"];
+    // The Google Chat space associated with the organization.
+    spine.chatbot.google.chat.SpaceId space = 9 [(required) = true, (validate) = true];
 }
 
 // Definition of a change in a `build_state` field.
 message BuildStateChange {
 
     // The value of the field that's changing.
-    BuildState previous_value = 1;
+    Build previous_value = 1;
 
     // The new value of the field.
-    BuildState new_value = 2 [(required) = true];
+    Build new_value = 2 [(required) = true];
+
+    // The type of the build state change.
+    enum Type {
+
+        BSCT_UNKNOWN = 0;
+
+        // The build has failed.
+        //
+        // It could be either a build configuration failure or the actual code build issue.
+        //
+        FAILED = 1;
+
+        // The build has recovered from the failed state.
+        RECOVERED = 2;
+
+        // The build is stable.
+        STABLE = 3;
+    }
 }

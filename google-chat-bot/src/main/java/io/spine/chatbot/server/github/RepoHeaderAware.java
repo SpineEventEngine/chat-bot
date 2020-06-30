@@ -20,30 +20,49 @@
 
 package io.spine.chatbot.server.github;
 
-import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
+import io.spine.annotation.GeneratedMixin;
 import io.spine.chatbot.github.OrganizationId;
-import io.spine.chatbot.github.organization.OrganizationRepositories;
-import io.spine.chatbot.github.repository.event.RepositoryRegistered;
-import io.spine.server.projection.ProjectionRepository;
-import io.spine.server.route.EventRouting;
-
-import static io.spine.protobuf.Messages.isNotDefault;
-import static io.spine.server.route.EventRoute.noTargets;
-import static io.spine.server.route.EventRoute.withId;
+import io.spine.chatbot.github.repository.RepoHeader;
+import io.spine.net.Url;
 
 /**
- * The repository for {@link OrganizationRepositories}.
+ * Common interface for messages aware of the {@link RepoHeader}.
  */
-final class OrgReposRepository
-        extends ProjectionRepository<OrganizationId, OrgReposProjection, OrganizationRepositories> {
+@GeneratedMixin
+public interface RepoHeaderAware {
 
-    @OverridingMethodsMustInvokeSuper
-    @Override
-    protected void setupEventRouting(EventRouting<OrganizationId> routing) {
-        super.setupEventRouting(routing);
-        routing.route(RepositoryRegistered.class, (event, context) ->
-                isNotDefault(event.organization())
-                ? withId(event.organization())
-                : noTargets());
+    /**
+     * Returns the repository header.
+     *
+     * @implNote This method is implemented in the deriving Protobuf messages.
+     */
+    RepoHeader getHeader();
+
+    /**
+     * Returns the repository {@code name}.
+     */
+    default String name() {
+        return getHeader().getName();
+    }
+
+    /**
+     * Returns the repository {@code githubProfile}.
+     */
+    default Url githubProfile() {
+        return getHeader().getGithubProfile();
+    }
+
+    /**
+     * Returns the repository {@code travisProfile}.
+     */
+    default Url travisProfile() {
+        return getHeader().getTravisProfile();
+    }
+
+    /**
+     * Returns the organization associated with the repository.
+     */
+    default OrganizationId organization() {
+        return getHeader().getOrganization();
     }
 }

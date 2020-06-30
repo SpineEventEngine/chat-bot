@@ -29,7 +29,8 @@ import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.chatbot.api.google.secret.Secrets;
-import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.chatbot.github.repository.build.Build;
+import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 import io.spine.logging.Logging;
 
@@ -68,13 +69,13 @@ public final class GoogleChat implements GoogleChatClient, Logging {
     }
 
     @Override
-    public Message sendBuildStateUpdate(BuildState buildState, ThreadResource thread) {
+    public Message sendBuildStateUpdate(Build buildState, ThreadResource thread) {
         var repoSlug = buildState.getRepositorySlug();
         var debug = _debug();
         debug.log("Building state update message for repository `%s`.", repoSlug);
         var message = buildStateMessage(buildState, thread);
         debug.log("Sending state update message for repository `%s`.", repoSlug);
-        var result = sendMessage(buildState.getGoogleChatSpace(), message);
+        var result = sendMessage(buildState.getSpace(), message);
         debug.log(
                 "Build state update message with ID `%s` for repository `%s` sent to thread `%s`.",
                 result.getName(), repoSlug, result.getThread()
@@ -84,12 +85,12 @@ public final class GoogleChat implements GoogleChatClient, Logging {
     }
 
     @CanIgnoreReturnValue
-    private Message sendMessage(String space, Message message) {
+    private Message sendMessage(SpaceId space, Message message) {
         try {
             return chat
                     .spaces()
                     .messages()
-                    .create(space, message)
+                    .create(space.getValue(), message)
                     .execute();
         } catch (IOException e) {
             _error().withCause(e)

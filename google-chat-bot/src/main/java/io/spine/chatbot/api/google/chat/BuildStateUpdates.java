@@ -27,7 +27,7 @@ import com.google.api.services.chat.v1.model.Section;
 import com.google.api.services.chat.v1.model.Thread;
 import com.google.api.services.chat.v1.model.WidgetMarkup;
 import com.google.common.collect.ImmutableList;
-import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -39,7 +39,7 @@ import static io.spine.protobuf.Messages.isNotDefault;
 import static io.spine.validate.Validate.checkValid;
 
 /**
- * A utility class that creates {@link BuildState} update messages.
+ * A utility class that creates {@link Build} update messages.
  */
 final class BuildStateUpdates {
 
@@ -55,12 +55,12 @@ final class BuildStateUpdates {
     }
 
     /**
-     * Creates a new {@link BuildState} update message from the supplied state and thread.
+     * Creates a new {@link Build} update message from the supplied state and thread.
      *
      * <p>If the thread has no name set, assumes that the update message should be
      * sent to a new thread.
      */
-    static Message buildStateMessage(BuildState build, ThreadResource thread) {
+    static Message buildStateMessage(Build build, ThreadResource thread) {
         checkValid(build);
         checkNotNull(thread);
         var headerIcon = build.failed() ? FAILURE_ICON : SUCCESS_ICON;
@@ -79,7 +79,7 @@ final class BuildStateUpdates {
         return message;
     }
 
-    private static Section commitSection(BuildState build) {
+    private static Section commitSection(Build build) {
         var commit = build.getLastCommit();
         var commitInfo = String.format(
                 "Authored by <b>%s</b> at %s.", commit.getAuthoredBy(), commit.getCommittedAt()
@@ -93,7 +93,7 @@ final class BuildStateUpdates {
         return section;
     }
 
-    private static Section actions(BuildState build) {
+    private static Section actions(Build build) {
         var commit = build.getLastCommit();
         var actionButtons = new WidgetMarkup().setButtons(ImmutableList.of(
                 linkButton("Build", build.getTravisCiUrl()),
@@ -102,11 +102,11 @@ final class BuildStateUpdates {
         return sectionWithWidget(actionButtons);
     }
 
-    private static Section buildStateSection(BuildState build) {
+    private static Section buildStateSection(Build build) {
         return sectionWithWidget(buildStateWidget(build));
     }
 
-    private static WidgetMarkup buildStateWidget(BuildState build) {
+    private static WidgetMarkup buildStateWidget(Build build) {
         var keyValue = new KeyValue()
                 .setTopLabel("Build No.")
                 .setContent(build.getNumber())

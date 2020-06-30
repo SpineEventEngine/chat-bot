@@ -22,6 +22,7 @@ package io.spine.chatbot.server.github;
 
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
+import io.spine.chatbot.github.repository.RepoHeader;
 import io.spine.chatbot.github.repository.Repository;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
 import io.spine.chatbot.github.repository.event.RepositoryRegistered;
@@ -52,16 +53,20 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
 
         private final Url githubUrl = githubUrlFor(REPO_SLUG);
         private final Url travisCiUrl = travisUrlFor(REPO_SLUG);
+        private final RepoHeader header = RepoHeader
+                .newBuilder()
+                .setGithubProfile(githubUrl)
+                .setTravisProfile(travisCiUrl)
+                .setName(REPO_NAME)
+                .setOrganization(organization)
+                .vBuild();
 
         @BeforeEach
         void registerRepository() {
             var registerRepository = RegisterRepository
                     .newBuilder()
-                    .setRepository(repository)
-                    .setGithubUrl(githubUrl)
-                    .setTravisCiUrl(travisCiUrl)
-                    .setName(REPO_NAME)
-                    .setOrganization(organization)
+                    .setId(repository)
+                    .setHeader(header)
                     .vBuild();
             context().receivesCommand(registerRepository);
         }
@@ -72,10 +77,7 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
             var repositoryRegistered = RepositoryRegistered
                     .newBuilder()
                     .setRepository(repository)
-                    .setGithubUrl(githubUrl)
-                    .setTravisCiUrl(travisCiUrl)
-                    .setName(REPO_NAME)
-                    .setOrganization(organization)
+                    .setHeader(header)
                     .vBuild();
             context().assertEvent(repositoryRegistered);
         }
@@ -86,10 +88,7 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
             var expectedState = Repository
                     .newBuilder()
                     .setId(repository)
-                    .setGithubUrl(githubUrl)
-                    .setTravisCiUrl(travisCiUrl)
-                    .setName(REPO_NAME)
-                    .setOrganization(organization)
+                    .setHeader(header)
                     .vBuild();
             context().assertState(repository, Repository.class)
                      .isEqualTo(expectedState);

@@ -22,7 +22,7 @@ package io.spine.chatbot.api.google.chat;
 
 import com.google.api.services.chat.v1.model.Message;
 import io.spine.chatbot.api.FailFastAwareClient;
-import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
 import java.util.Map;
@@ -56,7 +56,7 @@ public final class InMemoryGoogleChatClient extends FailFastAwareClient implemen
     }
 
     @Override
-    public Message sendBuildStateUpdate(BuildState buildState, ThreadResource thread) {
+    public Message sendBuildStateUpdate(Build buildState, ThreadResource thread) {
         var stubbedValue = sentMessages.get(buildState.getNumber());
         var result = failOrDefault(stubbedValue, buildState.getNumber(), new Message());
         return result;

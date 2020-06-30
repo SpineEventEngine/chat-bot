@@ -31,7 +31,9 @@ import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.organization.OrgHeader;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
+import io.spine.chatbot.github.repository.RepoHeader;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
+import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
 import io.spine.core.External;
 import io.spine.logging.Logging;
@@ -78,8 +80,7 @@ final class SpineOrgInitProcess
             _info().log("Spine organization is already initialized. Skipping the process.");
             return ImmutableSet.of();
         }
-        var space = e.getSpace()
-                     .getValue();
+        var space = e.getSpace();
         _info().log("Starting Spine organization initialization process in space `%s`.", space);
         var commands = ImmutableSet.<CommandMessage>builder();
         commands.add(registerOrgCommand(ORGANIZATION, space));
@@ -89,25 +90,29 @@ final class SpineOrgInitProcess
               .filter(repository -> WATCHED_REPOS.contains(repository.getName()))
               .map(repository -> registerRepoCommand(repository, ORGANIZATION))
               .forEach(commands::add);
-        builder().setGoogleChatSpace(space)
+        builder().setSpace(space)
                  .setInitialized(true);
         return commands.build();
     }
 
-    private RegisterRepository registerRepoCommand(Repository repo, OrganizationId orgId) {
+    private RegisterRepository registerRepoCommand(Repository repo, OrganizationId org) {
         var slug = repo.getSlug();
         _info().log("Registering `%s` repository.", slug);
+        var header = RepoHeader
+                .newBuilder()
+                .setOrganization(org)
+                .setGithubProfile(githubUrlFor(slug))
+                .setName(repo.getName())
+                .setTravisProfile(travisUrlFor(slug))
+                .vBuild();
         return RegisterRepository
                 .newBuilder()
-                .setRepository(repository(slug))
-                .setOrganization(orgId)
-                .setGithubUrl(githubUrlFor(slug))
-                .setName(repo.getName())
-                .setTravisCiUrl(travisUrlFor(slug))
+                .setId(repository(slug))
+                .setHeader(header)
                 .vBuild();
     }
 
-    private RegisterOrganization registerOrgCommand(OrganizationId spineOrgId, String spaceName) {
+    private RegisterOrganization registerOrgCommand(OrganizationId spineOrg, SpaceId space) {
         _info().log("Registering `%s` organization.", ORGANIZATION.getValue());
         var header = OrgHeader
                 .newBuilder()
@@ -115,11 +120,11 @@ final class SpineOrgInitProcess
                 .setWebsite(Urls.create("https://spine.io/"))
                 .setTravisProfile(travisUrlFor(ORGANIZATION.getValue()))
                 .setGithubProfile(githubUrlFor(ORGANIZATION.getValue()))
-                .setGoogleChatSpace(spaceName)
+                .setSpace(space)
                 .vBuild();
         return RegisterOrganization
                 .newBuilder()
-                .setId(spineOrgId)
+                .setId(spineOrg)
                 .setHeader(header)
                 .vBuild();
     }

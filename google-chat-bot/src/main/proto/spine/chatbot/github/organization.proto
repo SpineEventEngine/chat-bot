@@ -33,6 +33,7 @@ option java_generate_equals_and_hash = true;
 import "spine/net/url.proto";
 
 import "spine/chatbot/github/identifiers.proto";
+import "spine/chatbot/google/chat/identifiers.proto";
 
 // A GitHub organization.
 message Organization {
@@ -60,6 +61,6 @@ message OrgHeader {
     // The URL of the organization Travis CI profile.
     spine.net.Url travis_profile = 4 [(required) = true];
 
-    // The name of the Google Chat space associated with the organization.
-    string google_chat_space = 5 [(required) = true, (pattern).regex = "spaces/.+"];
+    // The Google Chat space associated with the organization.
+    spine.chatbot.google.chat.SpaceId space = 5 [(required) = true, (validate) = true];
 }

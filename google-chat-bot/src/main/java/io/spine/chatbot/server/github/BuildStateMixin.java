@@ -21,39 +21,39 @@
 package io.spine.chatbot.server.github;
 
 import io.spine.annotation.GeneratedMixin;
-import io.spine.chatbot.github.repository.build.BuildState;
-import io.spine.chatbot.github.repository.build.BuildStateOrBuilder;
-import io.spine.chatbot.github.repository.build.BuildStateStatusChange;
+import io.spine.chatbot.github.repository.build.Build;
+import io.spine.chatbot.github.repository.build.BuildOrBuilder;
+import io.spine.chatbot.github.repository.build.BuildStateChange;
 
 import java.util.EnumSet;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.chatbot.github.repository.build.BuildState.State.PASSED;
-import static io.spine.chatbot.github.repository.build.BuildState.State.S_UNKNOWN;
-import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.FAILED;
-import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.RECOVERED;
-import static io.spine.chatbot.github.repository.build.BuildStateStatusChange.STABLE;
+import static io.spine.chatbot.github.repository.build.Build.State.BS_UNKNOWN;
+import static io.spine.chatbot.github.repository.build.Build.State.PASSED;
+import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.FAILED;
+import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.RECOVERED;
+import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.STABLE;
 import static io.spine.util.Exceptions.newIllegalArgumentException;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
- * Augments {@link BuildState} with useful methods.
+ * Augments {@link Build} with useful methods.
  */
 @GeneratedMixin
-public interface BuildStateMixin extends BuildStateOrBuilder {
+public interface BuildStateMixin extends BuildOrBuilder {
 
     /**
      * Determines whether the build is failed.
      *
      * @return `true` if the build is failed, `false` otherwise
-     * @see #failed(BuildState.State)
+     * @see #failed(Build.State)
      */
     default boolean failed() {
         return failed(getState());
     }
 
     /**
-     * Returns a capitalized label of the {@link BuildState.State build state}.
+     * Returns a capitalized label of the {@link Build.State build state}.
      */
     default String stateLabel() {
         var state = getState();
@@ -63,12 +63,12 @@ public interface BuildStateMixin extends BuildStateOrBuilder {
     }
 
     /**
-     * Creates an instance of the {@link BuildState.State build state} of out its
+     * Creates an instance of the {@link Build.State build state} of out its
      * string representation.
      */
-    static BuildState.State buildStateFrom(String state) {
+    static Build.State buildStateFrom(String state) {
         checkNotNull(state);
-        for (BuildState.State buildState : BuildState.State.values()) {
+        for (Build.State buildState : Build.State.values()) {
             if (state.equalsIgnoreCase(buildState.name())) {
                 return buildState;
             }
@@ -79,17 +79,17 @@ public interface BuildStateMixin extends BuildStateOrBuilder {
     }
 
     /**
-     * Determines the {@link BuildStateStatusChange status chage} of the build comparing to the
+     * Determines the {@link BuildStateChange state chage} of the build comparing to the
      * {@code previousState}.
      *
-     * @see #statusChange(BuildStateMixin, BuildStateMixin)
+     * @see #stateChange(BuildStateMixin, BuildStateMixin)
      */
-    default BuildStateStatusChange stateChangeFrom(BuildStateMixin previousState) {
-        return statusChange(this, previousState);
+    default BuildStateChange.Type stateChangeFrom(BuildStateMixin previousState) {
+        return stateChange(this, previousState);
     }
 
     /**
-     * Determines the {@link BuildStateStatusChange status chage} between build states.
+     * Determines the {@link BuildStateChange state chage} between build states.
      *
      * <p>The status is considered:
      *
@@ -101,8 +101,8 @@ public interface BuildStateMixin extends BuildStateOrBuilder {
      *     {@code unknown} meaning that there were no previous states or {@code passed} as well.
      * </ul>
      */
-    private static BuildStateStatusChange statusChange(BuildStateMixin newBuildState,
-                                                       BuildStateMixin previousBuildState) {
+    private static BuildStateChange.Type stateChange(BuildStateMixin newBuildState,
+                                                     BuildStateMixin previousBuildState) {
         var currentState = newBuildState.getState();
         var previousState = previousBuildState.getState();
         if (newBuildState.failed()) {
@@ -111,7 +111,7 @@ public interface BuildStateMixin extends BuildStateOrBuilder {
         if (currentState == PASSED && previousBuildState.failed()) {
             return RECOVERED;
         }
-        if (currentState == PASSED && (previousState == PASSED || previousState == S_UNKNOWN)) {
+        if (currentState == PASSED && (previousState == PASSED || previousState == BS_UNKNOWN)) {
             return STABLE;
         }
         throw newIllegalStateException(
@@ -128,9 +128,9 @@ public interface BuildStateMixin extends BuildStateOrBuilder {
      *
      * @return {@code true} if the build status is failed, {@code false} otherwise
      */
-    private static boolean failed(BuildState.State state) {
+    private static boolean failed(Build.State state) {
         var failedStatuses = EnumSet.of(
-                BuildState.State.CANCELLED, BuildState.State.FAILED, BuildState.State.ERRORED
+                Build.State.CANCELLED, Build.State.FAILED, Build.State.ERRORED
         );
         return failedStatuses.contains(state);
     }

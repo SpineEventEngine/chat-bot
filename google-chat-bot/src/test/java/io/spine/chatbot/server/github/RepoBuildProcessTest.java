@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.server.github.GitHubIdentifier.organization;
 import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
-import static io.spine.chatbot.server.github.RepoBuildProcess.buildStateFrom;
+import static io.spine.chatbot.server.github.RepoBuildProcess.buildFrom;
 
 @DisplayName("RepoBuildProcess should")
 final class RepoBuildProcessTest extends GitHubContextAwareTest {
@@ -77,7 +77,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         private final Build build = failedBuild();
         private final RepoBranchBuildResponse branchBuild = branchBuildOf(build);
-        private final BuildState buildState = buildStateFrom(branchBuild, chatSpace);
+        private final BuildState buildState = buildFrom(branchBuild, chatSpace);
 
         @BeforeEach
         void sendCheckCommand() {
@@ -127,12 +127,12 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         private final Build previousBuild = failedBuild();
         private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
-        private final BuildState previousBuildState = buildStateFrom(previousBranchBuild,
-                                                                     chatSpace);
+        private final BuildState previousBuildState = buildFrom(previousBranchBuild,
+                                                                chatSpace);
 
         private final Build newBuild = passingBuild();
         private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
-        private final BuildState newBuildState = buildStateFrom(newBranchBuild, chatSpace);
+        private final BuildState newBuildState = buildFrom(newBranchBuild, chatSpace);
 
         @BeforeEach
         void sendCheckCommands() {
@@ -193,12 +193,12 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         private final Build previousBuild = passingBuild();
         private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
-        private final BuildState previousBuildState = buildStateFrom(previousBranchBuild,
-                                                                     chatSpace);
+        private final BuildState previousBuildState = buildFrom(previousBranchBuild,
+                                                                chatSpace);
 
         private final Build newBuild = nextPassingBuild();
         private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
-        private final BuildState newBuildState = buildStateFrom(newBranchBuild, chatSpace);
+        private final BuildState newBuildState = buildFrom(newBranchBuild, chatSpace);
 
         @BeforeEach
         void sendCheckCommands() {

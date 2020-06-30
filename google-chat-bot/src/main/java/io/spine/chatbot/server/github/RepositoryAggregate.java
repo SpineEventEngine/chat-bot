@@ -34,8 +34,7 @@ import io.spine.server.command.Assign;
  *
  * <p>The ChatBot watches for the repository build status.
  */
-final class RepositoryAggregate
-        extends Aggregate<RepositoryId, Repository, Repository.Builder>
+final class RepositoryAggregate extends Aggregate<RepositoryId, Repository, Repository.Builder>
         implements Logging {
 
     /**
@@ -43,24 +42,18 @@ final class RepositoryAggregate
      */
     @Assign
     RepositoryRegistered handle(RegisterRepository c) {
-        var repository = c.getRepository();
+        var repository = c.getId();
         _info().log("Registering repository `%s`.", repository.getValue());
         var result = RepositoryRegistered
                 .newBuilder()
                 .setRepository(repository)
-                .setName(c.getName())
-                .setGithubUrl(c.getGithubUrl())
-                .setTravisCiUrl(c.getTravisCiUrl())
-                .setOrganization(c.getOrganization())
+                .setHeader(c.getHeader())
                 .vBuild();
         return result;
     }
 
     @Apply
     private void on(RepositoryRegistered e) {
-        builder().setName(e.getName())
-                 .setGithubUrl(e.getGithubUrl())
-                 .setTravisCiUrl(e.getTravisCiUrl())
-                 .setOrganization(e.getOrganization());
+        builder().setHeader(e.getHeader());
     }
 }

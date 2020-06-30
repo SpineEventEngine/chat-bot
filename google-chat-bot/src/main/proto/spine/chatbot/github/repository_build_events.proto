@@ -41,7 +41,7 @@ message BuildFailed {
     RepositoryId repository = 1 [(required) = true];
 
     // The change of the build state.
-    BuildStateChange change = 2;
+    BuildStateChange change = 2 [(required) = true];
 }
 
 // The build has recovered from the failed state.
@@ -50,7 +50,7 @@ message BuildRecovered {
     RepositoryId repository = 1 [(required) = true];
 
     // The change of the build state.
-    BuildStateChange change = 2;
+    BuildStateChange change = 2 [(required) = true];
 }
 
 // The build is stable and passing.
@@ -59,7 +59,7 @@ message BuildSucceededAgain {
     RepositoryId repository = 1 [(required) = true];
 
     // The change of the build state.
-    BuildStateChange change = 2;
+    BuildStateChange change = 2 [(required) = true];
 }
 
 // The build is stable and passing.

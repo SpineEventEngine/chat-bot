@@ -22,6 +22,7 @@ package io.spine.chatbot.server.github;
 
 import io.spine.annotation.GeneratedMixin;
 import io.spine.chatbot.github.organization.OrgHeader;
+import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.net.Url;
 
 /**
@@ -66,9 +67,9 @@ public interface OrgHeaderAware {
     }
 
     /**
-     * Returns the {@code googleChatSpace} associated with the organization.
+     * Returns the {@code space} associated with the organization.
      */
-    default String googleChatSpace() {
-        return getHeader().getGoogleChatSpace();
+    default SpaceId space() {
+        return getHeader().getSpace();
     }
 }

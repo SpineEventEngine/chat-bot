@@ -67,7 +67,7 @@ final class RepositoriesController implements Logging {
                 .newBuilder()
                 .setRepository(repository)
                 .setOrganization(organization.getId())
-                .setGoogleChatSpace(organization.googleChatSpace())
+                .setSpace(organization.space())
                 .vBuild();
     }
 }

@@ -21,7 +21,7 @@
 package io.spine.chatbot.api.google.chat;
 
 import com.google.api.services.chat.v1.model.Message;
-import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
 /**
@@ -33,11 +33,11 @@ import io.spine.chatbot.google.chat.thread.ThreadResource;
 public interface GoogleChatClient {
 
     /**
-     * Sends {@link BuildState} status message to a related space and thread.
+     * Sends {@link Build} status message to a related space and thread.
      *
      * <p>If the {@code thread} has no name specified the message is sent to a new thread.
      *
      * @return a sent message
      */
-    Message sendBuildStateUpdate(BuildState buildState, ThreadResource thread);
+    Message sendBuildStateUpdate(Build buildState, ThreadResource thread);
 }

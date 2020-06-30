@@ -28,7 +28,7 @@ import io.spine.chatbot.api.travis.Commit;
 import io.spine.chatbot.api.travis.RepoBranchBuildResponse;
 import io.spine.chatbot.api.travis.TravisClient;
 import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.build.BuildState;
+import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
 import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
@@ -36,6 +36,7 @@ import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.github.repository.build.event.BuildSucceededAgain;
 import io.spine.chatbot.github.repository.build.rejection.NoBuildsFound;
+import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.logging.Logging;
 import io.spine.net.Urls;
 import io.spine.server.command.Assign;
@@ -89,14 +90,14 @@ final class RepoBuildProcess
                     .setRepository(repository)
                     .build();
         }
-        var buildState = buildStateFrom(branchBuild, c.getGoogleChatSpace());
+        var build = buildFrom(branchBuild, c.getSpace());
         builder().setLastStatusCheck(Time.currentTime())
-                 .setRepositoryBuildState(buildState.getState())
-                 .setBuildState(buildState);
+                 .setBuild(build)
+                 .setCurrentState(build.getState());
         var stateChange = BuildStateChange
                 .newBuilder()
-                .setPreviousValue(state().getBuildState())
-                .setNewValue(buildState)
+                .setPreviousValue(state().getBuild())
+                .setNewValue(build)
                 .vBuild();
         var result = determineOutcome(repository, stateChange);
         return result;
@@ -114,7 +115,7 @@ final class RepoBuildProcess
                 return onRecovered(repository, stateChange);
             case STABLE:
                 return onStable(repository, stateChange);
-            case BSC_UNKNOWN:
+            case BSCT_UNKNOWN:
             case UNRECOGNIZED:
             default:
                 throw newIllegalStateException(
@@ -159,15 +160,15 @@ final class RepoBuildProcess
     }
 
     @VisibleForTesting
-    static BuildState buildStateFrom(RepoBranchBuildResponse branchBuild, String space) {
+    static Build buildFrom(RepoBranchBuildResponse branchBuild, SpaceId space) {
         var branchBuildName = branchBuild.getName();
         var slug = branchBuild.getRepository()
                               .getSlug();
         var build = branchBuild.getLastBuild();
-        return BuildState
+        return Build
                 .newBuilder()
                 .setNumber(build.getNumber())
-                .setGoogleChatSpace(space)
+                .setSpace(space)
                 .setState(BuildStateMixin.buildStateFrom(build.getState()))
                 .setPreviousState(BuildStateMixin.buildStateFrom(build.getPreviousState()))
                 .setBranch(branchBuildName)
@@ -179,8 +180,8 @@ final class RepoBuildProcess
                 .vBuild();
     }
 
-    private static BuildState.Commit from(Commit commit) {
-        return BuildState.Commit
+    private static Build.Commit from(Commit commit) {
+        return Build.Commit
                 .newBuilder()
                 .setSha(commit.getSha())
                 .setMessage(commit.getMessage())
