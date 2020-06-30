@@ -34,7 +34,7 @@ import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
-import io.spine.chatbot.github.repository.build.event.BuildStable;
+import io.spine.chatbot.github.repository.build.event.BuildSucceededAgain;
 import io.spine.chatbot.github.repository.build.rejection.NoBuildsFound;
 import io.spine.logging.Logging;
 import io.spine.net.Urls;
@@ -57,7 +57,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  *     <li>{@link BuildFailed} — whenever the build is failed;
  *     <li>{@link BuildRecovered} — whenever the build state changes from {@code failed}
  *     to {@code passing};
- *     <li>{@link BuildStable} — whenever the build state is {@code passing} and was
+ *     <li>{@link BuildSucceededAgain} — whenever the build state is {@code passing} and was
  *     {@code passing} previously.
  * </ul>
  *
@@ -77,7 +77,7 @@ final class RepoBuildProcess
      * throws {@link NoBuildsFound} rejection.
      */
     @Assign
-    EitherOf3<BuildFailed, BuildRecovered, BuildStable> handle(CheckRepositoryBuild c)
+    EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain> handle(CheckRepositoryBuild c)
             throws NoBuildsFound {
         var repository = c.getRepository();
         _info().log("Checking build status for the repository `%s`.", repository.getValue());
@@ -102,7 +102,7 @@ final class RepoBuildProcess
         return result;
     }
 
-    private EitherOf3<BuildFailed, BuildRecovered, BuildStable>
+    private EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain>
     determineOutcome(RepositoryId repository, BuildStateChange stateChange) {
         var newBuildState = stateChange.getNewValue();
         var previousBuildState = stateChange.getPreviousValue();
@@ -123,18 +123,18 @@ final class RepoBuildProcess
         }
     }
 
-    private EitherOf3<BuildFailed, BuildRecovered, BuildStable>
+    private EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain>
     onStable(RepositoryId repository, BuildStateChange stateChange) {
         _info().log("Build for the repository `%s` is stable.", repository.getValue());
-        var buildStable = BuildStable
+        var buildSucceededAgain = BuildSucceededAgain
                 .newBuilder()
                 .setRepository(repository)
                 .setChange(stateChange)
                 .vBuild();
-        return EitherOf3.withC(buildStable);
+        return EitherOf3.withC(buildSucceededAgain);
     }
 
-    private EitherOf3<BuildFailed, BuildRecovered, BuildStable>
+    private EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain>
     onRecovered(RepositoryId repository, BuildStateChange stateChange) {
         _info().log("Build for the repository `%s` is recovered.", repository.getValue());
         var buildRecovered = BuildRecovered
@@ -145,7 +145,7 @@ final class RepoBuildProcess
         return EitherOf3.withB(buildRecovered);
     }
 
-    private EitherOf3<BuildFailed, BuildRecovered, BuildStable>
+    private EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain>
     onFailed(RepositoryId repository, BuildStateChange stateChange) {
         var newBuildState = stateChange.getNewValue();
         _info().log("Build for the repository `%s` failed with status `%s`.",

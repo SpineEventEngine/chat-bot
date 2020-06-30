@@ -54,7 +54,7 @@ message BuildRecovered {
 }
 
 // The build is stable and passing.
-message BuildStable {
+message BuildSucceededAgain {
 
     RepositoryId repository = 1 [(required) = true];
 

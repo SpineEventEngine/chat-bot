@@ -32,7 +32,7 @@ import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
-import io.spine.chatbot.github.repository.build.event.BuildStable;
+import io.spine.chatbot.github.repository.build.event.BuildSucceededAgain;
 import io.spine.chatbot.github.repository.build.rejection.RepositoryBuildRejections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -236,12 +236,12 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setPreviousValue(previousBuildState)
                     .setNewValue(newBuildState)
                     .vBuild();
-            var buildFailed = BuildStable
+            var buildSucceededAgain = BuildSucceededAgain
                     .newBuilder()
                     .setRepository(repository)
                     .setChange(stateChange)
                     .vBuild();
-            context().assertEvent(buildFailed);
+            context().assertEvent(buildSucceededAgain);
         }
 
         @Test
