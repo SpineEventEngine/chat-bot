@@ -37,7 +37,7 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * A utility class that provides helper methods for creating Google Chat rich messages.
+ * Provides building blocks to empower the rich messages sent to Google Chat.
  */
 final class ChatWidgets {
 
@@ -64,7 +64,7 @@ final class ChatWidgets {
     }
 
     /**
-     * Creates a singleton cards list with a new {@link Card} with a specified {@code header}
+     * Creates a singleton card list with a new {@link Card} with a specified {@code header}
      * and {@code sections}.
      */
     static ImmutableList<Card> cardWith(CardHeader header, List<Section> sections) {
