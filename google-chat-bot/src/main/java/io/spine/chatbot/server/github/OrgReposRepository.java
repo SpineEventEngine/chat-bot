@@ -35,9 +35,7 @@ import static io.spine.server.route.EventRoute.withId;
  * The repository for {@link OrganizationRepositories}.
  */
 final class OrgReposRepository
-        extends ProjectionRepository<OrganizationId,
-        OrgReposProjection,
-        OrganizationRepositories> {
+        extends ProjectionRepository<OrganizationId, OrgReposProjection, OrganizationRepositories> {
 
     @OverridingMethodsMustInvokeSuper
     @Override
