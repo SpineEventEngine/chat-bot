@@ -40,10 +40,6 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.util.Optional;
 
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
-import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
-
 /**
  * A process of notifying thread members about the changes in the watched resouces.
  */
@@ -82,19 +78,17 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
 
     private Pair<MessageCreated, Optional<ThreadCreated>>
     processBuildStateUpdate(Build build, RepositoryId repository) {
-        var sentMessage = client.sendBuildStateUpdate(build, state().getResource());
-        var message = message(sentMessage.getName());
-        var thread = thread(repository.getValue());
-        var space = build.getSpace();
+        var sentUpdate = client.sendBuildStateUpdate(build, state().getResource());
+        var space = sentUpdate.getSpace();
+        var thread = sentUpdate.getThread();
         var messageCreated = MessageCreated
                 .newBuilder()
-                .setMessage(message)
+                .setMessage(sentUpdate.getMessage())
                 .setSpace(space)
                 .setThread(thread)
                 .vBuild();
         if (shouldCreateThread()) {
-            var resource = threadResource(sentMessage.getThread()
-                                                     .getName());
+            var resource = sentUpdate.getResource();
             _debug().log("New thread `%s` created for repository `%s`.",
                          resource.getName(), repository.getValue());
             builder().setResource(resource)

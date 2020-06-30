@@ -20,14 +20,13 @@
 
 package io.spine.chatbot.server.google.chat;
 
-import com.google.api.services.chat.v1.model.Message;
-import com.google.api.services.chat.v1.model.Thread;
 import io.spine.base.EventMessage;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
+import io.spine.chatbot.google.chat.BuildStateUpdate;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.ThreadId;
 import io.spine.chatbot.google.chat.event.MessageCreated;
@@ -87,14 +86,17 @@ final class ThreadChatProcessTest {
         private final ThreadId thread = thread(repository.getValue());
         private final SpaceId space = space("spaces/1241pjwqe");
 
-        private final Thread newThread = new Thread().setName("spaces/1241pjwqe/threads/k12d1o2r1");
-        private final Message sentMessage = new Message()
-                .setName("spaces/1241pjwqe/messages/12154363643624")
-                .setThread(newThread);
+        private final BuildStateUpdate stateUpdate = BuildStateUpdate
+                .newBuilder()
+                .setSpace(space)
+                .setMessage(message("spaces/1241pjwqe/messages/12154363643624"))
+                .setThread(thread)
+                .setResource(threadResource("spaces/1241pjwqe/threads/k12d1o2r1"))
+                .vBuild();
 
         @BeforeEach
         void receiveBuildStateChange() {
-            googleChatClient().setMessageForBuildStatusUpdate(buildNumber, sentMessage);
+            googleChatClient().setBuildStateUpdate(buildNumber, stateUpdate);
             var newBuildState = Build
                     .newBuilder()
                     .setSpace(space)
@@ -116,14 +118,14 @@ final class ThreadChatProcessTest {
         void producingEvents() {
             var messageCreated = MessageCreated
                     .newBuilder()
-                    .setMessage(message(sentMessage.getName()))
+                    .setMessage(stateUpdate.getMessage())
                     .setThread(thread)
                     .setSpace(space)
                     .vBuild();
             var threadCreated = ThreadCreated
                     .newBuilder()
                     .setThread(thread)
-                    .setResource(threadResource(newThread.getName()))
+                    .setResource(stateUpdate.getResource())
                     .setSpace(space)
                     .vBuild();
             context().assertEvent(messageCreated);
@@ -137,7 +139,7 @@ final class ThreadChatProcessTest {
                     .newBuilder()
                     .setThread(thread)
                     .setSpace(space)
-                    .setResource(threadResource(newThread.getName()))
+                    .setResource(stateUpdate.getResource())
                     .vBuild();
             context().assertState(thread, ThreadChat.class)
                      .isEqualTo(expectedState);

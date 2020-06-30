@@ -20,9 +20,9 @@
 
 package io.spine.chatbot.api.google.chat;
 
-import com.google.api.services.chat.v1.model.Message;
 import io.spine.chatbot.api.FailFastAwareClient;
 import io.spine.chatbot.github.repository.build.Build;
+import io.spine.chatbot.google.chat.BuildStateUpdate;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
 import java.util.Map;
@@ -35,7 +35,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class InMemoryGoogleChatClient extends FailFastAwareClient implements GoogleChatClient {
 
-    private final Map<String, Message> sentMessages = new ConcurrentHashMap<>();
+    private final Map<String, BuildStateUpdate> sentMessages = new ConcurrentHashMap<>();
 
     private InMemoryGoogleChatClient(boolean failFast) {
         super(failFast);
@@ -56,20 +56,21 @@ public final class InMemoryGoogleChatClient extends FailFastAwareClient implemen
     }
 
     @Override
-    public Message sendBuildStateUpdate(Build buildState, ThreadResource thread) {
+    public BuildStateUpdate sendBuildStateUpdate(Build buildState, ThreadResource thread) {
         var stubbedValue = sentMessages.get(buildState.getNumber());
-        var result = failOrDefault(stubbedValue, buildState.getNumber(), new Message());
+        var result = failOrDefault(stubbedValue,
+                                   buildState.getNumber(),
+                                   BuildStateUpdate.getDefaultInstance());
         return result;
     }
 
     /**
-     * Sets up a stub {@code message} for a build state update with the specified
-     * {@code buildNumber}.
+     * Sets up a stub {@code update} for a build state with the specified {@code buildNumber}.
      */
-    public void setMessageForBuildStatusUpdate(String buildNumber, Message message) {
+    public void setBuildStateUpdate(String buildNumber, BuildStateUpdate update) {
         checkNotNull(buildNumber);
-        checkNotNull(message);
-        sentMessages.put(buildNumber, message);
+        checkNotNull(update);
+        sentMessages.put(buildNumber, update);
     }
 
     /**

@@ -30,6 +30,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.chatbot.api.google.secret.Secrets;
 import io.spine.chatbot.github.repository.build.Build;
+import io.spine.chatbot.google.chat.BuildStateUpdate;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 import io.spine.logging.Logging;
@@ -41,6 +42,9 @@ import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 
 import static io.spine.chatbot.api.google.chat.BuildStateUpdates.buildStateMessage;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
+import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
@@ -69,19 +73,26 @@ public final class GoogleChat implements GoogleChatClient, Logging {
     }
 
     @Override
-    public Message sendBuildStateUpdate(Build buildState, ThreadResource thread) {
-        var repoSlug = buildState.getRepositorySlug();
+    public BuildStateUpdate sendBuildStateUpdate(Build build, ThreadResource thread) {
+        var repoSlug = build.getRepositorySlug();
         var debug = _debug();
         debug.log("Building state update message for repository `%s`.", repoSlug);
-        var message = buildStateMessage(buildState, thread);
+        var message = buildStateMessage(build, thread);
         debug.log("Sending state update message for repository `%s`.", repoSlug);
-        var result = sendMessage(buildState.getSpace(), message);
+        var sentMessage = sendMessage(build.getSpace(), message);
         debug.log(
                 "Build state update message with ID `%s` for repository `%s` sent to thread `%s`.",
-                result.getName(), repoSlug, result.getThread()
-                                                  .getName()
+                sentMessage.getName(), repoSlug, sentMessage.getThread()
+                                                            .getName()
         );
-        return result;
+        return BuildStateUpdate
+                .newBuilder()
+                .setMessage(message(message.getName()))
+                .setResource(threadResource(message.getThread()
+                                                   .getName()))
+                .setSpace(build.getSpace())
+                .setThread(thread(build.getRepositorySlug()))
+                .vBuild();
     }
 
     @CanIgnoreReturnValue

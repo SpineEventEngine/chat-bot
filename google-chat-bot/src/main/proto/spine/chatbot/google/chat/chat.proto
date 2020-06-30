@@ -18,26 +18,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.google.chat;
+syntax = "proto3";
 
-import io.spine.chatbot.github.repository.build.Build;
-import io.spine.chatbot.google.chat.BuildStateUpdate;
-import io.spine.chatbot.google.chat.thread.ThreadResource;
+package spine.chatbot.google.chat;
 
-/**
- * Google Chat API client abstraction.
- *
- * <p>Abstracts out usage of the chat API by exposing only ready-to-use ChatBot-specific
- * methods.
- */
-public interface GoogleChatClient {
+import "spine/options.proto";
 
-    /**
-     * Sends {@link Build} status message to a related space and thread.
-     *
-     * <p>If the {@code thread} has no name specified the message is sent to a new thread.
-     *
-     * @return a sent build state update
-     */
-    BuildStateUpdate sendBuildStateUpdate(Build buildState, ThreadResource thread);
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.google.chat";
+option java_outer_classname = "ChatProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/chatbot/google/chat/identifiers.proto";
+import "spine/chatbot/google/chat/thread.proto";
+
+// A build state update message that was sent to the Chat.
+message BuildStateUpdate {
+
+    // The message that was sent to the chat.
+    MessageId message = 1 [(required) = true];
+
+    // The space to which the message was sent.
+    SpaceId space = 2 [(required) = true];
+
+    // The thread to which the message was sent.
+    ThreadId thread = 3 [(required) = true];
+
+    // The resource name of the thread.
+    ThreadResource resource = 4 [(required) = true];
 }
