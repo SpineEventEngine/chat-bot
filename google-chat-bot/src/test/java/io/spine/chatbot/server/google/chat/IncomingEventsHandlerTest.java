@@ -33,6 +33,9 @@ import io.spine.chatbot.google.chat.incoming.event.MessageReceived;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.chatbot.google.chat.incoming.EventType.ADDED_TO_SPACE;
+import static io.spine.chatbot.google.chat.incoming.EventType.MESSAGE;
+import static io.spine.chatbot.google.chat.incoming.EventType.REMOVED_FROM_SPACE;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
@@ -46,7 +49,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
     @DisplayName("add bot to a space")
     void addBot() {
         // given
-        var chatEvent = chatEventOfType(EventType.ADDED_TO_SPACE);
+        var chatEvent = chatEventOfType(ADDED_TO_SPACE);
         var botAddedToSpace = BotAddedToSpace
                 .newBuilder()
                 .setEvent(chatEvent)
@@ -62,7 +65,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
     @DisplayName("remove bot from the space")
     void removeBot() {
         // given
-        var chatEvent = chatEventOfType(EventType.REMOVED_FROM_SPACE);
+        var chatEvent = chatEventOfType(REMOVED_FROM_SPACE);
         var botRemovedFromSpace = BotRemovedFromSpace
                 .newBuilder()
                 .setEvent(chatEvent)
@@ -78,7 +81,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
     @DisplayName("receive incoming message")
     void receiveIncomingMessage() {
         // given
-        var chatEvent = chatEventOfType(EventType.MESSAGE);
+        var chatEvent = chatEventOfType(MESSAGE);
         var messageReceived = MessageReceived
                 .newBuilder()
                 .setEvent(chatEvent)

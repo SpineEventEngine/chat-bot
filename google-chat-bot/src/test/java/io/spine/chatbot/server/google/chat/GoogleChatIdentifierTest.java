@@ -24,7 +24,6 @@ import io.spine.chatbot.google.chat.MessageId;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.testing.UtilityClassTest;
 import io.spine.validate.ValidationException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -37,6 +36,7 @@ import java.util.stream.Stream;
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @DisplayName("GoogleChatIdentifier should")
@@ -57,14 +57,14 @@ final class GoogleChatIdentifierTest extends UtilityClassTest<GoogleChatIdentifi
         @MethodSource("spaceIdsSource")
         @DisplayName("space IDs")
         void spaceIds(String value) {
-            Assertions.assertThrows(ValidationException.class, () -> space(value));
+            assertThrows(ValidationException.class, () -> space(value));
         }
 
         @ParameterizedTest
         @MethodSource("messageIdsSource")
         @DisplayName("space IDs")
         void messageIds(String value) {
-            Assertions.assertThrows(ValidationException.class, () -> message(value));
+            assertThrows(ValidationException.class, () -> message(value));
         }
 
         @SuppressWarnings("unused") // method is used as parameterized test source
@@ -82,17 +82,23 @@ final class GoogleChatIdentifierTest extends UtilityClassTest<GoogleChatIdentifi
     @DisplayName("create space ID")
     void createSpaceId() {
         var spaceId = "spaces/qew21466";
-        assertThat(space(spaceId)).isEqualTo(SpaceId.newBuilder()
-                                                    .setValue(spaceId)
-                                                    .buildPartial());
+        var expectedSpace = SpaceId
+                .newBuilder()
+                .setValue(spaceId)
+                .buildPartial();
+        assertThat(space(spaceId))
+                .isEqualTo(expectedSpace);
     }
 
     @Test
     @DisplayName("create message ID")
     void createMessageId() {
         var messageId = "spaces/qew21466/messages/123112111";
-        assertThat(message(messageId)).isEqualTo(MessageId.newBuilder()
-                                                          .setValue(messageId)
-                                                          .buildPartial());
+        var expectedMessage = MessageId
+                .newBuilder()
+                .setValue(messageId)
+                .buildPartial();
+        assertThat(message(messageId))
+                .isEqualTo(expectedMessage);
     }
 }
