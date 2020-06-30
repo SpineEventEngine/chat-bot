@@ -20,9 +20,11 @@
 
 package io.spine.chatbot;
 
+import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.runtime.event.annotation.EventListener;
 import io.spine.chatbot.google.chat.incoming.ChatEvent;
 import io.spine.chatbot.google.chat.incoming.User;
 import io.spine.core.UserId;
@@ -32,7 +34,6 @@ import io.spine.pubsub.PubsubPushRequest;
 import io.spine.server.integration.ThirdPartyContext;
 
 import static io.micronaut.http.MediaType.APPLICATION_JSON;
-import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * A REST controller for handling incoming events from Google Chat.
@@ -40,7 +41,8 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 @Controller("/chat")
 final class IncomingEventsController implements Logging {
 
-    private static final String CONTEXT_NAME = "IncomingChatEvents";
+    private static final ThirdPartyContext INCOMING_EVENTS =
+            ThirdPartyContext.singleTenant("IncomingChatEvents");
 
     /**
      * Processes an incoming Google Chat event.
@@ -55,11 +57,7 @@ final class IncomingEventsController implements Logging {
         _debug().log("Received a new chat event: %s", chatEventJson);
         ChatEvent chatEvent = Json.fromJson(chatEventJson, ChatEvent.class);
         var actor = eventActor(chatEvent.getUser());
-        try (ThirdPartyContext incomingEvents = ThirdPartyContext.singleTenant(CONTEXT_NAME)) {
-            incomingEvents.emittedEvent(chatEvent, actor);
-        } catch (Exception e) {
-            throw newIllegalStateException(e, "Unable to handle incoming Google Chat event.");
-        }
+        INCOMING_EVENTS.emittedEvent(chatEvent, actor);
         return "OK";
     }
 
@@ -68,5 +66,19 @@ final class IncomingEventsController implements Logging {
                 .newBuilder()
                 .setValue(user.getName())
                 .vBuild();
+    }
+
+    /**
+     * Cleans up resources of the {@link #INCOMING_EVENTS context}.
+     */
+    @EventListener
+    void on(ShutdownEvent event) {
+        _info().log("Closing IncomingChatEvents third-party context.");
+        try {
+            INCOMING_EVENTS.close();
+        } catch (Exception e) {
+            _error().withCause(e)
+                    .log("Unable to gracefully close IncomingChatEvents context.");
+        }
     }
 }
