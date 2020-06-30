@@ -54,7 +54,7 @@ final class JsonProtoBodyHandler<T extends Message> implements HttpResponse.Body
     }
 
     @Override
-    public HttpResponse.BodySubscriber<T> apply(ResponseInfo responseInfo) {
+    public HttpResponse.BodySubscriber<T> apply(ResponseInfo response) {
         return BodySubscribers.mapping(BodySubscribers.ofString(StandardCharsets.UTF_8),
                                        this::parseJson);
     }
