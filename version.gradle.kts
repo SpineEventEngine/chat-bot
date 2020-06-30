@@ -22,4 +22,4 @@
  * The version of the application.
  */
 
-val botVersion: String by extra("0.0.1")
+val botVersion: String by extra("0.9.0")
