@@ -22,9 +22,9 @@ package io.spine.chatbot;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.errorprone.annotations.concurrent.LazyInit;
+import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.runtime.Micronaut;
-import io.micronaut.runtime.event.annotation.EventListener;
 import io.spine.chatbot.server.github.GitHubContext;
 import io.spine.chatbot.server.google.chat.GoogleChatContext;
 import io.spine.logging.Logging;
@@ -33,6 +33,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.io.IOException;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
@@ -99,19 +100,8 @@ public final class Application implements Logging {
         _config().log("Starting GRPC server.");
         server = startServer(gitHubContext, googleChatContext);
         _config().log("Starting Micronaut application.");
-        Micronaut.run(Application.class, args);
-    }
-
-    /**
-     * Gracefully stops the {@link #server}.
-     */
-    @SuppressWarnings("TestOnlyProblems") // we do want to be sure that the GRPC server is shut down
-    @EventListener
-    void on(ShutdownEvent event) {
-        _info().log("Shutting down the application.");
-        if (server != null) {
-            server.shutdownAndWait();
-        }
+        var applicationContext = Micronaut.run(Application.class, args);
+        applicationContext.registerSingleton(new Stopper(server));
     }
 
     /**
@@ -132,5 +122,25 @@ public final class Application implements Logging {
             );
         }
         return server;
+    }
+
+    /**
+     * Gracefully stops the {@link #server}.
+     */
+    private static final class Stopper implements ApplicationEventListener<ShutdownEvent>, Logging {
+
+        private final Server server;
+
+        private Stopper(Server server) {
+            this.server = checkNotNull(server);
+        }
+
+        @Override
+        public void onApplicationEvent(ShutdownEvent event) {
+            _info().log("Shutting down the application.");
+            if (server != null) {
+                server.shutdownAndWait();
+            }
+        }
     }
 }
