@@ -56,10 +56,10 @@ public final class InMemoryGoogleChatClient extends FailFastAwareClient implemen
     }
 
     @Override
-    public BuildStateUpdate sendBuildStateUpdate(Build buildState, ThreadResource thread) {
-        var stubbedValue = sentMessages.get(buildState.getNumber());
+    public BuildStateUpdate sendBuildStateUpdate(Build build, ThreadResource thread) {
+        var stubbedValue = sentMessages.get(build.getNumber());
         var result = failOrDefault(stubbedValue,
-                                   buildState.getNumber(),
+                                   build.getNumber(),
                                    BuildStateUpdate.getDefaultInstance());
         return result;
     }

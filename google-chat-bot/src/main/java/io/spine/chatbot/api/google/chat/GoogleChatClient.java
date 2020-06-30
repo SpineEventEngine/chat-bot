@@ -33,11 +33,11 @@ import io.spine.chatbot.google.chat.thread.ThreadResource;
 public interface GoogleChatClient {
 
     /**
-     * Sends {@link Build} status message to a related space and thread.
+     * Sends {@link Build} state update message to the related space and thread.
      *
      * <p>If the {@code thread} has no name specified the message is sent to a new thread.
      *
-     * @return a sent build state update
+     * @return a sent build state update message
      */
-    BuildStateUpdate sendBuildStateUpdate(Build buildState, ThreadResource thread);
+    BuildStateUpdate sendBuildStateUpdate(Build build, ThreadResource thread);
 }
