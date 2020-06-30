@@ -33,8 +33,8 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.server.github.GitHubIdentifier.organization;
 import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
-import static io.spine.net.Urls.githubUrlFor;
-import static io.spine.net.Urls.travisUrlFor;
+import static io.spine.net.MoreUrls.githubUrlFor;
+import static io.spine.net.MoreUrls.travisUrlFor;
 
 @DisplayName("RepositoryAggregate should")
 final class RepositoryAggregateTest extends GitHubContextAwareTest {

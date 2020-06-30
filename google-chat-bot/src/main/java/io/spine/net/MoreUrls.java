@@ -21,12 +21,14 @@
 package io.spine.net;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
+import static io.spine.util.Preconditions2.checkPositive;
 import static java.lang.String.format;
 
 /**
- * An utility for working with {@link Url}.
+ * Static factories for creating project-specific {@link Url}s.
  */
-public final class Urls {
+public final class MoreUrls {
 
     private static final String TRAVIS_GITHUB_ENDPOINT = "https://travis-ci.com/github";
     private static final String GITHUB = "https://github.com";
@@ -34,26 +36,18 @@ public final class Urls {
     /**
      * Prevents instantiation of this utility class.
      */
-    private Urls() {
+    private MoreUrls() {
     }
 
     /**
-     * Creates a new {@link Url} out of supplied spec.
+     * Creates a new Travis CI build URL for a build with the specified {@code buildId} of
+     * the repository with the specified {@code slug}.
      */
-    public static Url urlOfSpec(String spec) {
-        checkNotNull(spec);
-        return Url.newBuilder()
-                  .setSpec(spec)
-                  .vBuild();
-    }
-
-    /**
-     * Creates a new Travis CI build URL.
-     */
-    public static Url travisBuildUrlFor(String repoSlug, long buildId) {
-        checkNotNull(repoSlug);
-        var spec = format("%s/%s/builds/%d", TRAVIS_GITHUB_ENDPOINT, repoSlug, buildId);
-        return urlOfSpec(spec);
+    public static Url travisBuildUrlFor(String slug, long buildId) {
+        checkNotEmptyOrBlank(slug);
+        checkPositive(buildId);
+        var spec = format("%s/%s/builds/%d", TRAVIS_GITHUB_ENDPOINT, slug, buildId);
+        return Urls.create(spec);
     }
 
     /**
@@ -62,7 +56,7 @@ public final class Urls {
     public static Url travisUrlFor(String slug) {
         checkNotNull(slug);
         var spec = format("%s/%s", TRAVIS_GITHUB_ENDPOINT, slug);
-        return urlOfSpec(spec);
+        return Urls.create(spec);
     }
 
     /**
@@ -71,6 +65,6 @@ public final class Urls {
     public static Url githubUrlFor(String slug) {
         checkNotNull(slug);
         var spec = format("%s/%s", GITHUB, slug);
-        return urlOfSpec(spec);
+        return Urls.create(spec);
     }
 }

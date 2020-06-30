@@ -43,7 +43,7 @@ import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.EitherOf3;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
-import static io.spine.net.Urls.travisBuildUrlFor;
+import static io.spine.net.MoreUrls.travisBuildUrlFor;
 import static io.spine.protobuf.Messages.isDefault;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
@@ -187,7 +187,7 @@ final class RepoBuildProcess
                 .setCommittedAt(commit.getCommittedAt())
                 .setAuthoredBy(commit.getAuthor()
                                      .getName())
-                .setCompareUrl(Urls.urlOfSpec(commit.getCompareUrl()))
+                .setCompareUrl(Urls.create(commit.getCompareUrl()))
                 .vBuild();
     }
 

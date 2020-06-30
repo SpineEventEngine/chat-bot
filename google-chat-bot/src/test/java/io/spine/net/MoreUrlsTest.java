@@ -26,18 +26,17 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.net.Urls.githubUrlFor;
-import static io.spine.net.Urls.travisBuildUrlFor;
-import static io.spine.net.Urls.travisUrlFor;
-import static io.spine.net.Urls.urlOfSpec;
+import static io.spine.net.MoreUrls.githubUrlFor;
+import static io.spine.net.MoreUrls.travisBuildUrlFor;
+import static io.spine.net.MoreUrls.travisUrlFor;
 
-@DisplayName("Urls should")
-final class UrlsTest extends UtilityClassTest<Urls> {
+@DisplayName("MoreUrls should")
+final class MoreUrlsTest extends UtilityClassTest<MoreUrls> {
 
     private static final String REPO_SLUG = "SpineEventEngine/chat-bot";
 
-    UrlsTest() {
-        super(Urls.class);
+    MoreUrlsTest() {
+        super(MoreUrls.class);
     }
 
     @DisplayName("compose URL for")
@@ -48,7 +47,7 @@ final class UrlsTest extends UtilityClassTest<Urls> {
         @DisplayName("Travis CI repository page")
         @Test
         void travisRepo() {
-            assertThat(travisUrlFor(REPO_SLUG)).isEqualTo(urlOfSpec(
+            assertThat(travisUrlFor(REPO_SLUG)).isEqualTo(Urls.create(
                     "https://travis-ci.com/github/SpineEventEngine/chat-bot"
             ));
         }
@@ -56,7 +55,7 @@ final class UrlsTest extends UtilityClassTest<Urls> {
         @DisplayName("Travis CI repository build page")
         @Test
         void travisBuild() {
-            assertThat(travisBuildUrlFor(REPO_SLUG, 331)).isEqualTo(urlOfSpec(
+            assertThat(travisBuildUrlFor(REPO_SLUG, 331)).isEqualTo(Urls.create(
                     "https://travis-ci.com/github/SpineEventEngine/chat-bot/builds/331"
             ));
         }
@@ -64,7 +63,7 @@ final class UrlsTest extends UtilityClassTest<Urls> {
         @DisplayName("GitHub repository page")
         @Test
         void githubRepo() {
-            assertThat(githubUrlFor(REPO_SLUG)).isEqualTo(urlOfSpec(
+            assertThat(githubUrlFor(REPO_SLUG)).isEqualTo(Urls.create(
                     "https://github.com/SpineEventEngine/chat-bot"
             ));
         }

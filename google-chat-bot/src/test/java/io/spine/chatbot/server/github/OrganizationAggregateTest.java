@@ -25,15 +25,15 @@ import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.event.OrganizationRegistered;
 import io.spine.net.Url;
+import io.spine.net.Urls;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.server.github.GitHubIdentifier.organization;
-import static io.spine.net.Urls.githubUrlFor;
-import static io.spine.net.Urls.travisUrlFor;
-import static io.spine.net.Urls.urlOfSpec;
+import static io.spine.net.MoreUrls.githubUrlFor;
+import static io.spine.net.MoreUrls.travisUrlFor;
 
 @DisplayName("OrganizationAggregate should")
 final class OrganizationAggregateTest extends GitHubContextAwareTest {
@@ -49,7 +49,7 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
 
         private final Url githubUrl = githubUrlFor(organization.getValue());
         private final Url travisCiUrl = travisUrlFor(organization.getValue());
-        private final Url websiteUrl = urlOfSpec("https://test-organization.com");
+        private final Url websiteUrl = Urls.create("https://test-organization.com");
 
         @BeforeEach
         void registerOrganization() {

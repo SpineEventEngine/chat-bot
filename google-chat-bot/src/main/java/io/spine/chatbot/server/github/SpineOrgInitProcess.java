@@ -34,15 +34,15 @@ import io.spine.chatbot.github.repository.command.RegisterRepository;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
 import io.spine.core.External;
 import io.spine.logging.Logging;
+import io.spine.net.Urls;
 import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import static io.spine.chatbot.server.github.GitHubIdentifier.organization;
 import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
-import static io.spine.net.Urls.githubUrlFor;
-import static io.spine.net.Urls.travisUrlFor;
-import static io.spine.net.Urls.urlOfSpec;
+import static io.spine.net.MoreUrls.githubUrlFor;
+import static io.spine.net.MoreUrls.travisUrlFor;
 
 /**
  * Spine organization init process.
@@ -112,7 +112,7 @@ final class SpineOrgInitProcess
                 .newBuilder()
                 .setId(spineOrgId)
                 .setName("Spine Event Engine")
-                .setWebsiteUrl(urlOfSpec("https://spine.io/"))
+                .setWebsiteUrl(Urls.create("https://spine.io/"))
                 .setTravisCiUrl(travisUrlFor(ORGANIZATION.getValue()))
                 .setGithubUrl(githubUrlFor(ORGANIZATION.getValue()))
                 .setGoogleChatSpace(spaceName)
