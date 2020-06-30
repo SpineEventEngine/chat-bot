@@ -27,7 +27,12 @@ import io.spine.server.delivery.ShardIndex;
 import io.spine.server.delivery.ShardedRecord;
 
 /**
- * Delivery of messages from a particular shard.
+ * Performs the delivery of the messages from a particular shard.
+ *
+ * <p>Wraps the {@link io.spine.server.delivery.Delivery#deliverMessagesFrom(ShardIndex)
+ * Delivery#deliverMessagesFrom}
+ * with server environment-specific logging and provides helpers that unifies the usage of the
+ * delivery.
  */
 final class ShardDelivery implements Logging {
 
@@ -59,7 +64,8 @@ final class ShardDelivery implements Logging {
         var indexValue = shard.getIndex();
         _trace().log("Delivering messages from shard with index `%d`. NodeId=%s.",
                      indexValue, nodeId);
-        var stats = server.delivery().deliverMessagesFrom(shard);
+        var stats = server.delivery()
+                          .deliverMessagesFrom(shard);
         if (stats.isPresent()) {
             DeliveryStats deliveryStats = stats.get();
             _trace().log("`%d` messages delivered from shard with index `%s`. NodeId=%s.",

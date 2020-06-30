@@ -27,7 +27,7 @@ import io.spine.server.storage.datastore.DatastoreStorageFactory;
 import io.spine.server.storage.datastore.DsShardedWorkRegistry;
 
 /**
- * A distributed cloud environment {@link Delivery}.
+ * Delivers messages using Datastore as the underlying storage.
  *
  * <p>The delivery is based on the {@link DatastoreStorageFactory Datastore} and uses
  * {@link DsShardedWorkRegistry} as the {@link ShardedWorkRegistry work registry}.
@@ -46,7 +46,8 @@ final class DistributedDelivery {
     /**
      * Creates a new Datastore-based delivery using the supplied Datastore {@code storageFactory}.
      *
-     * <p>Uses uniformly sharded strategy and single-tenant inbox storage.
+     * <p>Assigns the targets uniformly across shards. Configures the inbox storage
+     * to be single-tenant.
      */
     public static Delivery instance(DatastoreStorageFactory storageFactory) {
         var workRegistry = new DsShardedWorkRegistry(storageFactory);

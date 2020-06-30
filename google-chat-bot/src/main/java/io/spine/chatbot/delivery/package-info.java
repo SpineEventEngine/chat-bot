@@ -19,7 +19,7 @@
  */
 
 /**
- * This package contains the ChatBot signals delivery configurations.
+ * This package is devoted to configuring the delivery mechanism for ChatBot signals.
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault
