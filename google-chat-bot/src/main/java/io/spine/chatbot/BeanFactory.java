@@ -50,7 +50,8 @@ final class BeanFactory {
     }
 
     /**
-     * Spine-based {@link PubsubPushRequest} Jackson deserializer.
+     * Deserializes JSON arriving with {@link PubsubPushRequest} into Spine-compatible
+     * data structures.
      *
      * @see <a href="https://github.com/FasterXML/jackson-databind/wiki/Deserialization-Features">
      *         Jackson Deserialization</a>
