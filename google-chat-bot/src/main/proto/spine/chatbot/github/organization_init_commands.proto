@@ -33,7 +33,10 @@ option java_generate_equals_and_hash = true;
 import "spine/chatbot/github/identifiers.proto";
 import "spine/chatbot/google/chat/identifiers.proto";
 
-// Initialize watched organization resources command.
+// A request to initialize watched organization resources.
+//
+// Registers the organization itself and the related repositories to be watched by the ChatBot.
+//
 message InitializeOrganization {
 
     // The organization to perform initialization for.

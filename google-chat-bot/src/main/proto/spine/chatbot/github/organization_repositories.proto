@@ -32,7 +32,7 @@ option java_generate_equals_and_hash = true;
 
 import "spine/chatbot/github/identifiers.proto";
 
-// Organization repositories.
+// Lists repositories of an organization.
 message OrganizationRepositories {
     option (entity) = {kind: PROJECTION visibility: FULL};
 
