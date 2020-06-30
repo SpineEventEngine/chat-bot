@@ -41,7 +41,7 @@ import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 final class SpaceAggregateTest extends GoogleChatContextAwareTest {
 
     private static final SpaceId SPACE = space("spaces/poqwdpQ21");
-    private final SpaceHeader HEADER = SpaceHeader
+    private static final SpaceHeader HEADER = SpaceHeader
             .newBuilder()
             .setThreaded(true)
             .setDisplayName("Spine Developers")

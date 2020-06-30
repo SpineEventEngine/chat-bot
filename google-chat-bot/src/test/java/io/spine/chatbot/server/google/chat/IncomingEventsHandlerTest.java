@@ -25,7 +25,6 @@ import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.incoming.ChatEvent;
 import io.spine.chatbot.google.chat.incoming.EventType;
 import io.spine.chatbot.google.chat.incoming.Message;
-import io.spine.chatbot.google.chat.incoming.SpaceType;
 import io.spine.chatbot.google.chat.incoming.User;
 import io.spine.chatbot.google.chat.incoming.event.BotAddedToSpace;
 import io.spine.chatbot.google.chat.incoming.event.BotRemovedFromSpace;
@@ -37,6 +36,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.chatbot.google.chat.incoming.EventType.ADDED_TO_SPACE;
 import static io.spine.chatbot.google.chat.incoming.EventType.MESSAGE;
 import static io.spine.chatbot.google.chat.incoming.EventType.REMOVED_FROM_SPACE;
+import static io.spine.chatbot.google.chat.incoming.SpaceType.ROOM;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
@@ -132,7 +132,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
         return io.spine.chatbot.google.chat.incoming.Space
                 .newBuilder()
                 .setName(spaceId.getValue())
-                .setType(SpaceType.ROOM)
+                .setType(ROOM)
                 .vBuild();
     }
 }
