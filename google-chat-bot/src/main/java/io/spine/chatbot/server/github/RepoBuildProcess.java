@@ -48,7 +48,7 @@ import static io.spine.protobuf.Messages.isDefault;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
- * A repository build process.
+ * Verifies a status of a build of a repository.
  *
  * <p>Performs repository build checks and acknowledges the state of the repository builds.
  * As a result, emits build status events such as:
@@ -56,7 +56,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  * <ul>
  *     <li>{@link BuildFailed} — whenever the build is failed;
  *     <li>{@link BuildRecovered} — whenever the build state changes from {@code failed}
- *     to {@code passing}.
+ *     to {@code passing};
  *     <li>{@link BuildStable} — whenever the build state is {@code passing} and was
  *     {@code passing} previously.
  * </ul>
@@ -80,7 +80,7 @@ final class RepoBuildProcess
     EitherOf3<BuildFailed, BuildRecovered, BuildStable> handle(CheckRepositoryBuild c)
             throws NoBuildsFound {
         var repository = c.getRepository();
-        _info().log("Checking build status for repository `%s`.", repository.getValue());
+        _info().log("Checking build status for the repository `%s`.", repository.getValue());
         var branchBuild = client.execute(BuildsQuery.forRepo(repository.getValue()));
         if (isDefault(branchBuild.getLastBuild())) {
             _warn().log("No builds found for the repository `%s`.", repository.getValue());
@@ -109,30 +109,11 @@ final class RepoBuildProcess
         var stateStatusChange = newBuildState.stateChangeFrom(previousBuildState);
         switch (stateStatusChange) {
             case FAILED:
-                _info().log("Build for repository `%s` failed with status `%s`.",
-                            repository.getValue(), newBuildState.getState());
-                var buildFailed = BuildFailed
-                        .newBuilder()
-                        .setRepository(repository)
-                        .setChange(stateChange)
-                        .vBuild();
-                return EitherOf3.withA(buildFailed);
+                return onFailed(repository, stateChange);
             case RECOVERED:
-                _info().log("Build for repository `%s` is recovered.", repository.getValue());
-                var buildRecovered = BuildRecovered
-                        .newBuilder()
-                        .setRepository(repository)
-                        .setChange(stateChange)
-                        .vBuild();
-                return EitherOf3.withB(buildRecovered);
+                return onRecovered(repository, stateChange);
             case STABLE:
-                _info().log("Build for repository `%s` is stable.", repository.getValue());
-                var buildStable = BuildStable
-                        .newBuilder()
-                        .setRepository(repository)
-                        .setChange(stateChange)
-                        .vBuild();
-                return EitherOf3.withC(buildStable);
+                return onStable(repository, stateChange);
             case BSC_UNKNOWN:
             case UNRECOGNIZED:
             default:
@@ -140,6 +121,41 @@ final class RepoBuildProcess
                         "Unexpected state status change `%s`.", stateStatusChange
                 );
         }
+    }
+
+    private EitherOf3<BuildFailed, BuildRecovered, BuildStable>
+    onStable(RepositoryId repository, BuildStateChange stateChange) {
+        _info().log("Build for the repository `%s` is stable.", repository.getValue());
+        var buildStable = BuildStable
+                .newBuilder()
+                .setRepository(repository)
+                .setChange(stateChange)
+                .vBuild();
+        return EitherOf3.withC(buildStable);
+    }
+
+    private EitherOf3<BuildFailed, BuildRecovered, BuildStable>
+    onRecovered(RepositoryId repository, BuildStateChange stateChange) {
+        _info().log("Build for the repository `%s` is recovered.", repository.getValue());
+        var buildRecovered = BuildRecovered
+                .newBuilder()
+                .setRepository(repository)
+                .setChange(stateChange)
+                .vBuild();
+        return EitherOf3.withB(buildRecovered);
+    }
+
+    private EitherOf3<BuildFailed, BuildRecovered, BuildStable>
+    onFailed(RepositoryId repository, BuildStateChange stateChange) {
+        var newBuildState = stateChange.getNewValue();
+        _info().log("Build for the repository `%s` failed with status `%s`.",
+                    repository.getValue(), newBuildState.getState());
+        var buildFailed = BuildFailed
+                .newBuilder()
+                .setRepository(repository)
+                .setChange(stateChange)
+                .vBuild();
+        return EitherOf3.withA(buildFailed);
     }
 
     @VisibleForTesting
