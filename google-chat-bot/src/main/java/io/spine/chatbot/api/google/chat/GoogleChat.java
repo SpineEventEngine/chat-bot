@@ -21,6 +21,7 @@
 package io.spine.chatbot.api.google.chat;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.chat.v1.HangoutsChat;
 import com.google.api.services.chat.v1.model.Message;
@@ -39,6 +40,7 @@ import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 
 import static io.spine.chatbot.api.google.chat.BuildStateUpdates.buildStateMessage;
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * Google Chat API client.
@@ -62,7 +64,7 @@ public final class GoogleChat implements GoogleChatClient, Logging {
      * <p>The client is backed by {@link HangoutsChat} API.
      */
     public static GoogleChatClient newInstance() {
-        return new GoogleChat(hangoutsChat());
+        return new GoogleChat(HangoutsChatProvider.newHangoutsChat());
     }
 
     @Override
@@ -96,30 +98,56 @@ public final class GoogleChat implements GoogleChatClient, Logging {
         }
     }
 
-    private static HangoutsChat hangoutsChat() {
-        try {
-            var serviceAccount = Secrets.chatServiceAccount();
-            var credentials = GoogleCredentials.fromStream(streamFrom(serviceAccount))
-                                               .createScoped(CHAT_BOT_SCOPE);
-            var credentialsAdapter = new HttpCredentialsAdapter(credentials);
-            var chat = new HangoutsChat.Builder(
-                    GoogleNetHttpTransport.newTrustedTransport(),
-                    JacksonFactory.getDefaultInstance(),
-                    credentialsAdapter)
+    /**
+     * Provides fully-configured {@link HangoutsChat chat} client.
+     */
+    private static class HangoutsChatProvider {
+
+        /**
+         * Prevents direct instantiation of the utility class.
+         */
+        private HangoutsChatProvider() {
+        }
+
+        /**
+         * Creates a new instance of the {@link HangoutsChat} client.
+         */
+        private static HangoutsChat newHangoutsChat() {
+            HttpCredentialsAdapter credentialsAdapter = newCredentialsHelper();
+            var chat = chatWithCredentials(credentialsAdapter)
                     .setApplicationName(BOT_NAME)
                     .build();
             return chat;
-        } catch (IOException | GeneralSecurityException e) {
-            String message = "Unable to create Hangouts Chat client.";
-            Logging.loggerFor(GoogleChat.class)
-                   .atSevere()
-                   .withCause(e)
-                   .log(message);
-            throw new RuntimeException(message, e);
         }
-    }
 
-    private static InputStream streamFrom(String data) {
-        return new ByteArrayInputStream(data.getBytes(Charset.defaultCharset()));
+        private static HttpCredentialsAdapter newCredentialsHelper() {
+            try {
+                var serviceAccount = Secrets.chatServiceAccount();
+                var credentials = GoogleCredentials.fromStream(streamFrom(serviceAccount))
+                                                   .createScoped(CHAT_BOT_SCOPE);
+                return new HttpCredentialsAdapter(credentials);
+            } catch (IOException e) {
+                throw newIllegalStateException(e, "Unable to read GoogleCredentials.");
+            }
+        }
+
+        private static HangoutsChat.Builder
+        chatWithCredentials(HttpCredentialsAdapter credentialsAdapter) {
+            var transport = newTrustedTransport();
+            var jacksonFactory = JacksonFactory.getDefaultInstance();
+            return new HangoutsChat.Builder(transport, jacksonFactory, credentialsAdapter);
+        }
+
+        private static HttpTransport newTrustedTransport() {
+            try {
+                return GoogleNetHttpTransport.newTrustedTransport();
+            } catch (GeneralSecurityException | IOException e) {
+                throw newIllegalStateException(e, "Unable to instantiate trusted transport.");
+            }
+        }
+
+        private static InputStream streamFrom(String data) {
+            return new ByteArrayInputStream(data.getBytes(Charset.defaultCharset()));
+        }
     }
 }
