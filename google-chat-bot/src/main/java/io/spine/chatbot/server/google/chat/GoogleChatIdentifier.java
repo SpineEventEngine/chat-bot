@@ -38,7 +38,7 @@ public final class GoogleChatIdentifier {
     }
 
     /**
-     * Creates a new {@link ThreadId} out of the specified {@code value}.
+     * Creates a new {@code ThreadId} out of the specified {@code value}.
      */
     public static ThreadId thread(String value) {
         checkNotEmptyOrBlank(value);
@@ -49,7 +49,7 @@ public final class GoogleChatIdentifier {
     }
 
     /**
-     * Creates a new {@link SpaceId} out of the specified {@code value}.
+     * Creates a new {@code SpaceId} out of the specified {@code value}.
      */
     public static SpaceId space(String value) {
         checkNotEmptyOrBlank(value);
@@ -60,7 +60,7 @@ public final class GoogleChatIdentifier {
     }
 
     /**
-     * Creates a new {@link MessageId} out of the specified {@code value}.
+     * Creates a new {@code MessageId} out of the specified {@code value}.
      */
     public static MessageId message(String value) {
         checkNotEmptyOrBlank(value);
