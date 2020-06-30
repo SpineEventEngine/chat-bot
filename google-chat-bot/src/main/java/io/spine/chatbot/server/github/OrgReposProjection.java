@@ -31,7 +31,9 @@ import io.spine.server.projection.Projection;
 /**
  * Organization repositories projection.
  *
- * <p>Holds IDs of all registered repositories in the organization.
+ * <p>Repositories are only referenced by their identifiers.
+ * See {@link io.spine.chatbot.github.repository.Repository Repository} for the details
+ * on each repository.
  */
 final class OrgReposProjection
         extends Projection<OrganizationId, OrganizationRepositories, OrganizationRepositories.Builder> {
