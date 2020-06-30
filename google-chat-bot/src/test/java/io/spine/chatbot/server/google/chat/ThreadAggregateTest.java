@@ -39,7 +39,7 @@ import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
 
-@DisplayName("ThreadAggregate should")
+@DisplayName("`ThreadAggregate` should")
 final class ThreadAggregateTest extends GoogleChatContextAwareTest {
 
     @Nested

@@ -23,7 +23,7 @@ package io.spine.chatbot.api.google.chat;
 import io.spine.testing.UtilityClassTest;
 import org.junit.jupiter.api.DisplayName;
 
-@DisplayName("ChatWidgets should")
+@DisplayName("`ChatWidgets` should")
 final class ChatWidgetsTest extends UtilityClassTest<ChatWidgets> {
 
     ChatWidgetsTest() {

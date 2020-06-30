@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("GitHubContext should")
+@DisplayName("`GitHubContext` should")
 final class GitHubContextTest {
 
     @Test

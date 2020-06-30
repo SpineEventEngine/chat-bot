@@ -44,7 +44,7 @@ import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
 
-@DisplayName("ThreadChatProcess should")
+@DisplayName("`ThreadChatProcess` should")
 final class ThreadChatProcessTest {
 
     @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes

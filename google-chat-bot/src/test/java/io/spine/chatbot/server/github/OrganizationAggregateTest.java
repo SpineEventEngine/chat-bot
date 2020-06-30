@@ -38,7 +38,7 @@ import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 import static io.spine.chatbot.url.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.url.MoreUrls.travisUrlFor;
 
-@DisplayName("OrganizationAggregate should")
+@DisplayName("`OrganizationAggregate` should")
 final class OrganizationAggregateTest extends GitHubContextAwareTest {
 
     @Nested

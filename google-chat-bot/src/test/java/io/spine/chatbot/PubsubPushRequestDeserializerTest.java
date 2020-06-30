@@ -35,14 +35,14 @@ import javax.inject.Inject;
 import java.text.ParseException;
 
 @MicronautTest
-@DisplayName("PubsubPushNotificationDeserializer should")
-final class PubsubPushNotificationDeserializerTest {
+@DisplayName("`PubsubPushRequestDeserializer` should")
+final class PubsubPushRequestDeserializerTest {
 
     @Inject
     private ObjectMapperFactory mapperFactory;
 
     @Test
-    @DisplayName("deserialize Pubsub message")
+    @DisplayName("deserialize Pub/Sub message")
     void deserializePubsubMessage() throws JsonProcessingException, ParseException {
 
         var pubsubMessage = PubsubMessage

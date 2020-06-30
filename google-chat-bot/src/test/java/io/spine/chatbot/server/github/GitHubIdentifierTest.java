@@ -24,7 +24,7 @@ import io.spine.chatbot.server.google.chat.GoogleChatIdentifier;
 import io.spine.testing.UtilityClassTest;
 import org.junit.jupiter.api.DisplayName;
 
-@DisplayName("GitHubIdentifier should")
+@DisplayName("`GitHubIdentifier` should")
 final class GitHubIdentifierTest extends UtilityClassTest<GoogleChatIdentifier> {
 
     GitHubIdentifierTest() {

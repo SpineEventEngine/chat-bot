@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("GoogleChatContext should")
+@DisplayName("`GoogleChatContext` should")
 final class GoogleChatContextTest {
 
     @Test

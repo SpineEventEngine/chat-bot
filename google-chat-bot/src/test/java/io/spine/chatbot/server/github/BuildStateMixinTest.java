@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.chatbot.server.github.BuildStateMixin.buildStateFrom;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("BuildStateMixin should")
+@DisplayName("`BuildStateMixin` should")
 final class BuildStateMixinTest {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

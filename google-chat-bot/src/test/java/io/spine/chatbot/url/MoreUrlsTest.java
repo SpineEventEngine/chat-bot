@@ -31,7 +31,7 @@ import static io.spine.chatbot.url.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.url.MoreUrls.travisBuildUrlFor;
 import static io.spine.chatbot.url.MoreUrls.travisUrlFor;
 
-@DisplayName("MoreUrls should")
+@DisplayName("`MoreUrls` should")
 final class MoreUrlsTest extends UtilityClassTest<MoreUrls> {
 
     private static final String REPO_SLUG = "SpineEventEngine/chat-bot";

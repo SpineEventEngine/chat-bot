@@ -37,7 +37,7 @@ import static io.spine.chatbot.google.chat.incoming.EventType.ADDED_TO_SPACE;
 import static io.spine.chatbot.google.chat.incoming.SpaceType.ROOM;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
-@DisplayName("SpaceAggregate should")
+@DisplayName("`SpaceAggregate` should")
 final class SpaceAggregateTest extends GoogleChatContextAwareTest {
 
     private static final SpaceId SPACE = space("spaces/poqwdpQ21");

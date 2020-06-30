@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import static io.spine.chatbot.server.github.SpineOrgInitProcess.ORGANIZATION;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
-@DisplayName("SpineOrgInitProcess should")
+@DisplayName("`SpineOrgInitProcess` should")
 final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
 
     @Nested

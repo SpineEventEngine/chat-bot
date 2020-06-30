@@ -40,7 +40,7 @@ import static io.spine.chatbot.google.chat.incoming.EventType.REMOVED_FROM_SPACE
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
-@DisplayName("IncomingEventsHandler should")
+@DisplayName("`IncomingEventsHandler` should")
 final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
 
     private static final SpaceId spaceId = space("spaces/fqeq325661a");

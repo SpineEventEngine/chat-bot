@@ -25,7 +25,6 @@ import com.google.pubsub.v1.PubsubMessage;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
-import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.test.annotation.MicronautTest;
 import io.spine.chatbot.api.google.chat.InMemoryGoogleChatClient;
 import io.spine.chatbot.api.travis.InMemoryTravisClient;
@@ -43,16 +42,13 @@ import static io.micronaut.http.HttpRequest.POST;
 import static io.spine.chatbot.Application.startServer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("IncomingEventsController should")
 @MicronautTest
+@DisplayName("`IncomingEventsController` should")
 final class IncomingEventsControllerTest {
 
     @Inject
-    EmbeddedServer server;
-
-    @Inject
     @Client("/")
-    HttpClient client;
+    private HttpClient client;
 
     @SuppressWarnings("ResultOfMethodCallIgnored") // we're not interested in GRPC server here
     @BeforeAll
@@ -69,7 +65,7 @@ final class IncomingEventsControllerTest {
     }
 
     @Test
-    @DisplayName("receive and decode a pubsub message with Google Chat event")
+    @DisplayName("receive and decode a Pub/Sub message with Google Chat event")
     void receiveAndDecode() {
         var pubsubMessage = PubsubMessage
                 .newBuilder()

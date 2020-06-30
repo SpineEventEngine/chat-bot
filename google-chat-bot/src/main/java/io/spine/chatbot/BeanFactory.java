@@ -45,8 +45,8 @@ final class BeanFactory {
      */
     @Singleton
     @Bean
-    PubsubPushNotificationDeserializer pubsubDeserializer() {
-        return new PubsubPushNotificationDeserializer();
+    PubsubPushRequestDeserializer pubsubDeserializer() {
+        return new PubsubPushRequestDeserializer();
     }
 
     /**
@@ -57,7 +57,7 @@ final class BeanFactory {
      *         Jackson Deserialization</a>
      */
     @VisibleForTesting
-    static final class PubsubPushNotificationDeserializer
+    static final class PubsubPushRequestDeserializer
             extends JsonDeserializer<PubsubPushRequest> {
 
         /**

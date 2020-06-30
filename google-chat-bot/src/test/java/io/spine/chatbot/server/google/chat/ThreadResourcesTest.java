@@ -23,7 +23,7 @@ package io.spine.chatbot.server.google.chat;
 import io.spine.testing.UtilityClassTest;
 import org.junit.jupiter.api.DisplayName;
 
-@DisplayName("ThreadResources should")
+@DisplayName("`ThreadResources` should")
 final class ThreadResourcesTest extends UtilityClassTest<ThreadResources> {
 
     ThreadResourcesTest() {

@@ -45,7 +45,7 @@ import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
 import static io.spine.chatbot.server.github.RepoBuildProcess.buildFrom;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
-@DisplayName("RepoBuildProcess should")
+@DisplayName("`RepoBuildProcess` should")
 final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
     private static final OrganizationId org = organization("SpineEventEngine");

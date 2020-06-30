@@ -37,7 +37,7 @@ import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
 import static io.spine.chatbot.url.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.url.MoreUrls.travisUrlFor;
 
-@DisplayName("RepositoryAggregate should")
+@DisplayName("`RepositoryAggregate` should")
 final class RepositoryAggregateTest extends GitHubContextAwareTest {
 
     @Nested
