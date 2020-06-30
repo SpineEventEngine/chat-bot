@@ -31,15 +31,15 @@ import io.spine.server.procman.ProcessManagerRepository;
 final class RepoBuildRepository
         extends ProcessManagerRepository<RepositoryId, RepoBuildProcess, RepositoryBuild> {
 
-    private final TravisClient travisClient;
+    private final TravisClient client;
 
     RepoBuildRepository(TravisClient client) {
-        travisClient = client;
+        this.client = client;
     }
 
     @Override
     protected void configure(RepoBuildProcess processManager) {
         super.configure(processManager);
-        processManager.setClient(travisClient);
+        processManager.setClient(client);
     }
 }
