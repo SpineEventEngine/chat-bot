@@ -1,0 +1,46 @@
+{
+  "type": "MESSAGE",
+  "eventTime": "2017-03-02T19:02:59.910959Z",
+  "space": {
+    "name": "spaces/AAAAAAAAAAA",
+    "displayName": "Chuck Norris Discussion Room",
+    "type": "ROOM"
+  },
+  "message": {
+    "name": "spaces/AAAAAAAAAAA/messages/CCCCCCCCCCC",
+    "sender": {
+      "name": "users/12345678901234567890",
+      "displayName": "Chuck Norris",
+      "avatarUrl": "https://lh3.googleusercontent.com/.../photo.jpg",
+      "email": "chuck@example.com"
+    },
+    "createTime": "2017-03-02T19:02:59.910959Z",
+    "text": "@TestBot Violence is my last option.",
+    "argumentText": " Violence is my last option.",
+    "thread": {
+      "name": "spaces/AAAAAAAAAAA/threads/BBBBBBBBBBB"
+    },
+    "annotations": [
+      {
+        "length": 8,
+        "startIndex": 0,
+        "userMention": {
+          "type": "MENTION",
+          "user": {
+            "avatarUrl": "https://.../avatar.png",
+            "displayName": "TestBot",
+            "name": "users/1234567890987654321",
+            "type": "BOT"
+          }
+        },
+        "type": "USER_MENTION"
+      }
+    ]
+  },
+  "user": {
+    "name": "users/12345678901234567890",
+    "displayName": "Chuck Norris",
+    "avatarUrl": "https://lh3.googleusercontent.com/.../photo.jpg",
+    "email": "chuck@example.com"
+  }
+}

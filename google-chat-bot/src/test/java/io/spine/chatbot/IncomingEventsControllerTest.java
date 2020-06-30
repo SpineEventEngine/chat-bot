@@ -20,6 +20,7 @@
 
 package io.spine.chatbot;
 
+import com.google.common.io.Resources;
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubMessage;
 import io.micronaut.http.MediaType;
@@ -37,9 +38,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static io.micronaut.http.HttpRequest.POST;
 import static io.spine.chatbot.Application.startServer;
+import static io.spine.util.Exceptions.newIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @MicronautTest
@@ -70,7 +74,7 @@ final class IncomingEventsControllerTest {
         var pubsubMessage = PubsubMessage
                 .newBuilder()
                 .setMessageId("129y418y4houfhiuehwr")
-                .setData(ByteString.copyFromUtf8(CHAT_MESSAGE_EVENT))
+                .setData(ByteString.copyFromUtf8(chatEventJson()))
                 .build();
         var pushNotification = PubsubPushRequest
                 .newBuilder()
@@ -84,51 +88,12 @@ final class IncomingEventsControllerTest {
         assertEquals("OK", actual);
     }
 
-    private static final String CHAT_MESSAGE_EVENT = "" +
-            "{\n" +
-            "  \"type\":\"MESSAGE\",\n" +
-            "  \"eventTime\":\"2017-03-02T19:02:59.910959Z\",\n" +
-            "  \"space\":{\n" +
-            "    \"name\":\"spaces/AAAAAAAAAAA\",\n" +
-            "    \"displayName\":\"Chuck Norris Discussion Room\",\n" +
-            "    \"type\":\"ROOM\"\n" +
-            "  },\n" +
-            "  \"message\":{\n" +
-            "    \"name\":\"spaces/AAAAAAAAAAA/messages/CCCCCCCCCCC\",\n" +
-            "    \"sender\":{\n" +
-            "      \"name\":\"users/12345678901234567890\",\n" +
-            "      \"displayName\":\"Chuck Norris\",\n" +
-            "      \"avatarUrl\":\"https://lh3.googleusercontent.com/.../photo.jpg\",\n" +
-            "      \"email\":\"chuck@example.com\"\n" +
-            "    },\n" +
-            "    \"createTime\":\"2017-03-02T19:02:59.910959Z\",\n" +
-            "    \"text\":\"@TestBot Violence is my last option.\",\n" +
-            "    \"argumentText\":\" Violence is my last option.\",\n" +
-            "    \"thread\":{\n" +
-            "      \"name\":\"spaces/AAAAAAAAAAA/threads/BBBBBBBBBBB\"\n" +
-            "    },\n" +
-            "    \"annotations\":[\n" +
-            "      {\n" +
-            "        \"length\":8,\n" +
-            "        \"startIndex\":0,\n" +
-            "        \"userMention\":{\n" +
-            "          \"type\":\"MENTION\",\n" +
-            "          \"user\":{\n" +
-            "            \"avatarUrl\":\"https://.../avatar.png\",\n" +
-            "            \"displayName\":\"TestBot\",\n" +
-            "            \"name\":\"users/1234567890987654321\",\n" +
-            "            \"type\":\"BOT\"\n" +
-            "          }\n" +
-            "        },\n" +
-            "        \"type\":\"USER_MENTION\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  },\n" +
-            "  \"user\":{\n" +
-            "    \"name\":\"users/12345678901234567890\",\n" +
-            "    \"displayName\":\"Chuck Norris\",\n" +
-            "    \"avatarUrl\":\"https://lh3.googleusercontent.com/.../photo.jpg\",\n" +
-            "    \"email\":\"chuck@example.com\"\n" +
-            "  }\n" +
-            "}";
+    private static String chatEventJson() {
+        try {
+            var resource = Resources.getResource("chat_event.json");
+            return Resources.toString(resource, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw newIllegalStateException(e, "Unable to load ChatEvent message JSON definition.");
+        }
+    }
 }
