@@ -30,7 +30,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.SpineOrgInitProcess.SPINE_ORGANIZATION;
+import static io.spine.chatbot.server.github.SpineOrgInitProcess.ORGANIZATION;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
 @DisplayName("SpineOrgInitProcess should")
@@ -54,7 +54,7 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
                     .newBuilder()
                     .addRepositories(repository)
                     .vBuild();
-            travisClient().setRepositoriesFor(SPINE_ORGANIZATION.getValue(), repositoriesResponse);
+            travisClient().setRepositoriesFor(ORGANIZATION.getValue(), repositoriesResponse);
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
                     .setSpace(spaceId)
@@ -71,9 +71,9 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
                     .newBuilder()
                     .setGoogleChatSpace(spaceId.getValue())
                     .setInitialized(true)
-                    .setOrganization(SPINE_ORGANIZATION)
+                    .setOrganization(ORGANIZATION)
                     .vBuild();
-            context().assertState(SPINE_ORGANIZATION, OrganizationInit.class)
+            context().assertState(ORGANIZATION, OrganizationInit.class)
                      .isEqualTo(expectedState);
         }
 

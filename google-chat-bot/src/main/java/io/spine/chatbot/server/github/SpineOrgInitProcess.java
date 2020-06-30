@@ -45,7 +45,7 @@ import static io.spine.net.Urls.travisUrlFor;
 import static io.spine.net.Urls.urlOfSpec;
 
 /**
- * Spine Event Engine organization initialization process.
+ * Spine organization init process.
  *
  * <p>Registers Spine organization and the watched {@link #WATCHED_REPOS repositories} upon adding
  * the ChatBot to the space.
@@ -54,20 +54,18 @@ final class SpineOrgInitProcess
         extends ProcessManager<OrganizationId, OrganizationInit, OrganizationInit.Builder>
         implements Logging {
 
-    private static final String SPINE_ORG = "SpineEventEngine";
-
     private static final ImmutableList<String> WATCHED_REPOS = ImmutableList.of(
             "base", "time", "core-java", "web", "gcloud-java", "bootstrap", "money", "jdbc-storage"
     );
 
     /** The initialization process ID. **/
-    static final OrganizationId SPINE_ORGANIZATION = organization(SPINE_ORG);
+    static final OrganizationId ORGANIZATION = organization("SpineEventEngine");
 
     @LazyInit
-    private @MonotonicNonNull TravisClient travisClient;
+    private @MonotonicNonNull TravisClient client;
 
     /**
-     * Registers {@link #SPINE_ORGANIZATION Spine} organization and watched resources that are
+     * Registers {@link #ORGANIZATION Spine} organization and watched resources that are
      * currently available in the Travis CI.
      *
      * <p>If a particular repository is not available in Travis, it is then skipped
@@ -83,13 +81,13 @@ final class SpineOrgInitProcess
                      .getValue();
         _info().log("Starting Spine organization initialization process in space `%s`.", space);
         var commands = ImmutableSet.<CommandMessage>builder();
-        commands.add(registerOrgCommand(SPINE_ORGANIZATION, space));
-        travisClient.execute(ReposQuery.forOwner(SPINE_ORG))
-                    .getRepositoriesList()
-                    .stream()
-                    .filter(repository -> WATCHED_REPOS.contains(repository.getName()))
-                    .map(repository -> registerRepoCommand(repository, SPINE_ORGANIZATION))
-                    .forEach(commands::add);
+        commands.add(registerOrgCommand(ORGANIZATION, space));
+        client.execute(ReposQuery.forOwner(ORGANIZATION.getValue()))
+              .getRepositoriesList()
+              .stream()
+              .filter(repository -> WATCHED_REPOS.contains(repository.getName()))
+              .map(repository -> registerRepoCommand(repository, ORGANIZATION))
+              .forEach(commands::add);
         builder().setGoogleChatSpace(space)
                  .setInitialized(true);
         return commands.build();
@@ -109,19 +107,25 @@ final class SpineOrgInitProcess
     }
 
     private RegisterOrganization registerOrgCommand(OrganizationId spineOrgId, String spaceName) {
-        _info().log("Registering `%s` organization.", SPINE_ORG);
+        _info().log("Registering `%s` organization.", ORGANIZATION.getValue());
         return RegisterOrganization
                 .newBuilder()
                 .setId(spineOrgId)
                 .setName("Spine Event Engine")
                 .setWebsiteUrl(urlOfSpec("https://spine.io/"))
-                .setTravisCiUrl(travisUrlFor(SPINE_ORG))
-                .setGithubUrl(githubUrlFor(SPINE_ORG))
+                .setTravisCiUrl(travisUrlFor(ORGANIZATION.getValue()))
+                .setGithubUrl(githubUrlFor(ORGANIZATION.getValue()))
                 .setGoogleChatSpace(spaceName)
                 .vBuild();
     }
 
-    void setTravisClient(TravisClient travisClient) {
-        this.travisClient = travisClient;
+    /**
+     * Sets {@link #client} to be used during handling of signals.
+     *
+     * @implNote the method is intended to be used as part of the entity configuration
+     *         done through the repository
+     */
+    void setClient(TravisClient client) {
+        this.client = client;
     }
 }

@@ -191,6 +191,12 @@ final class RepoBuildProcess
                 .vBuild();
     }
 
+    /**
+     * Sets {@link #client} to be used during handling of signals.
+     *
+     * @implNote the method is intended to be used as part of the entity configuration
+     *         done through the repository
+     */
     void setClient(TravisClient client) {
         this.client = client;
     }

@@ -28,7 +28,7 @@ import io.spine.chatbot.google.chat.event.SpaceRegistered;
 import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.server.route.EventRouting;
 
-import static io.spine.chatbot.server.github.SpineOrgInitProcess.SPINE_ORGANIZATION;
+import static io.spine.chatbot.server.github.SpineOrgInitProcess.ORGANIZATION;
 import static io.spine.server.route.EventRoute.withId;
 
 /**
@@ -47,11 +47,11 @@ final class SpineOrgInitRepository
     @Override
     protected void setupEventRouting(EventRouting<OrganizationId> routing) {
         super.setupEventRouting(routing);
-        routing.route(SpaceRegistered.class, (event, context) -> withId(SPINE_ORGANIZATION));
+        routing.route(SpaceRegistered.class, (event, context) -> withId(ORGANIZATION));
     }
 
     @Override
     protected void configure(SpineOrgInitProcess processManager) {
-        processManager.setTravisClient(travisClient);
+        processManager.setClient(travisClient);
     }
 }
