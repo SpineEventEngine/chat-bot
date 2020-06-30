@@ -20,12 +20,12 @@
 
 syntax = "proto3";
 
-// This file contains the proto definitions that conforms to the
+// This file contains the proto definitions that conform to the
 // <a href="https://developers.google.com/hangouts/chat/reference/message-formats/events">
 // event formats</a> of the <a href="https://developers.google.com/hangouts/chat">Hangouts Chat</a>.
 //
-// We use the defined protos instead of hand-crafting the dedicated classes and managing
-// the JSON conversion manually.
+// The layout of types and fields make them compatible with the Travis JSON output.
+// This way we don't have to create custom conversion.
 //
 
 package spine.chatbot.google.chat.incoming;
@@ -97,43 +97,43 @@ message Message {
     // The thread the message belongs to.
     Thread thread = 6;
 
-    // A thread in Chat.
-    message Thread {
-
-        // Resource name, in the form "spaces/*/threads/*".
-        string name = 1 [(required) = true, (pattern).regex = "spaces/.+/threads/.+"];
-    }
-
     // Annotations associated with the text in this message.
     repeated Annotation annotations = 7;
+}
 
-    // Annotation metadata of the message
-    message Annotation {
+// Annotation metadata of the message.
+message Annotation {
 
-        // The length of the substring in the plain-text message body this annotation corresponds to.
-        uint32 length = 1;
+    // The length of the substring in the plain-text message body this annotation corresponds to.
+    uint32 length = 1;
 
-        // The start index (0-based, inclusive) in the plain-text message body this annotation
-        // corresponds to.
-        //
-        uint32 start_index = 2;
+    // The start index (0-based, inclusive) in the plain-text message body this annotation
+    // corresponds to.
+    //
+    uint32 start_index = 2;
 
-        // The metadata of user mention.
-        UserMention user_mention = 3;
+    // The metadata of user mention.
+    UserMention user_mention = 3;
 
-        // Annotation metadata for user mentions (@).
-        message UserMention {
+    // The type of the annotation.
+    string type = 4;
+}
 
-            // The type of user mention.
-            string type = 1;
+// Annotation metadata for user mentions (@).
+message UserMention {
 
-            // The user mentioned.
-            User user = 2;
-        }
+    // The type of user mention.
+    string type = 1;
 
-        // The type of the annotation.
-        string type = 4;
-    }
+    // The user mentioned.
+    User user = 2;
+}
+
+// A thread in Chat.
+message Thread {
+
+    // Resource name, in the form "spaces/*/threads/*".
+    string name = 1 [(required) = true, (pattern).regex = "spaces/.+/threads/.+"];
 }
 
 // A room or DM in Chat.

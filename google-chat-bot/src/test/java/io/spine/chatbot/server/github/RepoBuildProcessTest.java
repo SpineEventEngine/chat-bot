@@ -20,6 +20,7 @@
 
 package io.spine.chatbot.server.github;
 
+import io.spine.chatbot.api.travis.Author;
 import io.spine.chatbot.api.travis.Commit;
 import io.spine.chatbot.api.travis.RepoBranchBuildResponse;
 import io.spine.chatbot.api.travis.Repository;
@@ -307,7 +308,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
     private static Commit stableCommit() {
         var compareUrl = "https://github.com/SpineEventEngine/web/compare/04694f26f24a...afc1b76bf93c";
-        var author = Commit.Author
+        var author = Author
                 .newBuilder()
                 .setName("God")
                 .buildPartial();
@@ -324,7 +325,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
     private static Commit luckyCommit() {
         var compareUrl = "https://github.com/SpineEventEngine/web/compare/6b4d32cadd9c...6b0a31d033a2";
-        var author = Commit.Author
+        var author = Author
                 .newBuilder()
                 .setName("God")
                 .buildPartial();
@@ -341,7 +342,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
     private static Commit fatefulCommit() {
         var compareUrl = "https://github.com/SpineEventEngine/web/compare/5cbfa7423708...8fcf5d98e50f";
-        var author = Commit.Author
+        var author = Author
                 .newBuilder()
                 .setName("Lucifer")
                 .buildPartial();

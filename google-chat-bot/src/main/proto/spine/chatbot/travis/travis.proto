@@ -20,11 +20,11 @@
 
 syntax = "proto3";
 
-// This file contains the proto definitions that conforms to the
+// This file contains the proto definitions that conform to the
 // <a href="https://developer.travis-ci.com/">Travis CI API v3</a> data types.
 //
-// We use the defined protos instead of hand-crafting the dedicated classes and managing
-// the JSON conversion manually.
+// The layout of types and fields make them compatible with the Travis JSON output.
+// This way we don't have to create custom conversion.
 //
 
 package spine.chatbot.travis;
@@ -110,13 +110,13 @@ message Commit {
 
     // Commit author.
     Author author = 7;
+}
 
-    // Git commit author information.
-    message Author {
+// Git commit author information.
+message Author {
 
-        // Git name of the commit author.
-        string name = 1;
-    }
+    // Git name of the commit author.
+    string name = 1;
 }
 
 // Minimal Travis CI build representation.
