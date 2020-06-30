@@ -20,9 +20,6 @@
 
 /**
  * This package contains server-side implementation of the Google Chat Context.
- *
- * <p>This package is annotated with {@code BoundedContext} annotation to mark
- * entities of this package (and sub-packages, if any) as parts of the context.
  */
 @BoundedContext(GoogleChatContext.GOOGLE_CHAT_CONTEXT_NAME)
 @CheckReturnValue
