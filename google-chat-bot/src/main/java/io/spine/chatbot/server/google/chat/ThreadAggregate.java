@@ -35,7 +35,7 @@ import io.spine.server.event.React;
  * A thread in the chat room.
  *
  * <p>A new thread is initialized as early as a new conversation is started in the room.
- * It is being initialized with the creation of the first message of the conversation.
+ * It happens once the first message is posted to the conversation.
  */
 final class ThreadAggregate extends Aggregate<ThreadId, Thread, Thread.Builder> implements Logging {
 
