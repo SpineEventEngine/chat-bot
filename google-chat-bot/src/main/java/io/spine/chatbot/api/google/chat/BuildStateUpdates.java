@@ -29,12 +29,13 @@ import com.google.api.services.chat.v1.model.WidgetMarkup;
 import com.google.common.collect.ImmutableList;
 import io.spine.chatbot.github.repository.build.BuildState;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
-import io.spine.protobuf.Messages;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.chatbot.api.google.chat.ChatWidgets.cardWith;
 import static io.spine.chatbot.api.google.chat.ChatWidgets.linkButton;
 import static io.spine.chatbot.api.google.chat.ChatWidgets.sectionWithWidget;
 import static io.spine.chatbot.api.google.chat.ChatWidgets.textParagraph;
+import static io.spine.protobuf.Messages.isNotDefault;
 import static io.spine.validate.Validate.checkValid;
 
 /**
@@ -61,6 +62,7 @@ final class BuildStateUpdates {
      */
     static Message buildStateMessage(BuildState buildState, ThreadResource thread) {
         checkValid(buildState);
+        checkNotNull(thread);
         var headerIcon = buildState.failed() ? FAILURE_ICON : SUCCESS_ICON;
         var cardHeader = new CardHeader()
                 .setTitle(buildState.getRepositorySlug())
@@ -71,7 +73,7 @@ final class BuildStateUpdates {
                 actions(buildState)
         );
         var message = new Message().setCards(cardWith(cardHeader, sections));
-        if (Messages.isNotDefault(thread)) {
+        if (isNotDefault(thread)) {
             message.setThread(new Thread().setName(thread.getName()));
         }
         return message;
