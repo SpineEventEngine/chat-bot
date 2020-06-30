@@ -69,12 +69,12 @@ final class GoogleChatIdentifierTest extends UtilityClassTest<GoogleChatIdentifi
 
         @SuppressWarnings("unused") // method is used as parameterized test source
         private Stream<String> spaceIdsSource() {
-            return Stream.of("spaces/", "spacs/12415", "", "   ");
+            return Stream.of("spaces/", "spacs/12415");
         }
 
         @SuppressWarnings("unused") // method is used as parameterized test source
         private Stream<String> messageIdsSource() {
-            return Stream.of("spaces/", "spaces/qwe124", "spaces/eqwt23/messages/", "", "   ");
+            return Stream.of("spaces/", "spaces/qwe124", "spaces/eqwt23/messages/");
         }
     }
 
