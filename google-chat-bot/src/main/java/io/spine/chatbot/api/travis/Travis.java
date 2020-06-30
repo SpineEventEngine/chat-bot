@@ -31,7 +31,7 @@ import static io.spine.chatbot.api.travis.JsonProtoBodyHandler.jsonBodyHandler;
 import static java.lang.String.format;
 
 /**
- * A Travis CI REST API client.
+ * A client to the Travis CI REST API.
  *
  * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
  */
@@ -53,7 +53,7 @@ public final class Travis implements TravisClient {
     }
 
     /**
-     * Creates a new Travis client with the default secure Travis token.
+     * Creates a new Travis client with the default Travis token.
      */
     public static TravisClient newInstance() {
         return new Travis(Secrets.travisToken());

@@ -58,8 +58,9 @@ public interface BuildStateMixin extends BuildOrBuilder {
     default String stateLabel() {
         var state = getState();
         var name = state.name();
-        return name.charAt(0) + name.substring(1)
-                                    .toLowerCase();
+        var result = name.charAt(0) + name.substring(1)
+                                          .toLowerCase();
+        return result;
     }
 
     /**

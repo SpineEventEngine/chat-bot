@@ -21,7 +21,7 @@
 package io.spine.chatbot.api.travis;
 
 /**
- * Travis CI repositories API query.
+ * A repositories query to the Travis CI API.
  *
  * @see <a href="https://developer.travis-ci.com/resource/repositories#for_owner">
  *         Repos for owner</a>

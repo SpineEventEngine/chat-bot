@@ -27,7 +27,7 @@ import io.spine.server.delivery.ShardIndex;
 import io.spine.server.delivery.ShardedRecord;
 
 /**
- * Performs the delivery of the messages from a particular shard.
+ * Delivers messages from a particular shard.
  *
  * <p>Wraps the {@link io.spine.server.delivery.Delivery#deliverMessagesFrom(ShardIndex)
  * Delivery#deliverMessagesFrom}
