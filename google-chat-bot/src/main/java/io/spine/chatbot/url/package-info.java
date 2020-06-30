@@ -19,11 +19,11 @@
  */
 
 /**
- * This package contains utilities for working with network-related messages.
+ * This package contains utilities for working with {@link io.spine.net.Url URL}s.
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault
-package io.spine.net;
+package io.spine.chatbot.url;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

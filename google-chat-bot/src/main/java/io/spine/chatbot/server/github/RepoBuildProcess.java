@@ -43,7 +43,7 @@ import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.EitherOf3;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
-import static io.spine.net.MoreUrls.travisBuildUrlFor;
+import static io.spine.chatbot.url.MoreUrls.travisBuildUrlFor;
 import static io.spine.protobuf.Messages.isDefault;
 import static io.spine.util.Exceptions.newIllegalStateException;
 

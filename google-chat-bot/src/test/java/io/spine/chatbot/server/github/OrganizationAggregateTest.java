@@ -32,8 +32,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.server.github.GitHubIdentifier.organization;
-import static io.spine.net.MoreUrls.githubUrlFor;
-import static io.spine.net.MoreUrls.travisUrlFor;
+import static io.spine.chatbot.url.MoreUrls.githubUrlFor;
+import static io.spine.chatbot.url.MoreUrls.travisUrlFor;
 
 @DisplayName("OrganizationAggregate should")
 final class OrganizationAggregateTest extends GitHubContextAwareTest {

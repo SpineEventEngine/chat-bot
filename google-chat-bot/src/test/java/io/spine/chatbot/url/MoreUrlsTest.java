@@ -18,17 +18,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.net;
+package io.spine.chatbot.url;
 
+import io.spine.net.Urls;
 import io.spine.testing.UtilityClassTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.net.MoreUrls.githubUrlFor;
-import static io.spine.net.MoreUrls.travisBuildUrlFor;
-import static io.spine.net.MoreUrls.travisUrlFor;
+import static io.spine.chatbot.url.MoreUrls.githubUrlFor;
+import static io.spine.chatbot.url.MoreUrls.travisBuildUrlFor;
+import static io.spine.chatbot.url.MoreUrls.travisUrlFor;
 
 @DisplayName("MoreUrls should")
 final class MoreUrlsTest extends UtilityClassTest<MoreUrls> {
