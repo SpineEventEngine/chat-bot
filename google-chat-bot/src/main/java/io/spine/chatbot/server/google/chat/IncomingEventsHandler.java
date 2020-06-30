@@ -77,10 +77,12 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
                 return EitherOf4.withB(botRemovedFromSpace(chatEvent));
 
             case CARD_CLICKED:
+                _debug().log("Skipping card clicks.");
+                return EitherOf4.withD(nothing());
             case UNRECOGNIZED:
             case ET_UNKNOWN:
             default:
-                _debug().log("Unsupported chat event type received: %s", chatEvent.getType());
+                _error().log("Unsupported chat event type received: %s", chatEvent.getType());
                 return EitherOf4.withD(nothing());
         }
     }
