@@ -33,14 +33,14 @@ option java_generate_equals_and_hash = true;
 // GitHub organization ID.
 message OrganizationId {
 
-    // Name of the GitHub organization.
+    // The name of the GitHub organization.
     string value = 1 [(required) = true];
 }
 
 // GitHub repository ID.
 message RepositoryId {
 
-    // Slug of the repository.
+    // The repository slug.
     //
     // E.g. `SpineEventEngine/base`. The slug is used as a human-friendly unique identifier.
     //

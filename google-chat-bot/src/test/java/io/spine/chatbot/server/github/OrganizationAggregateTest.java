@@ -21,6 +21,7 @@
 package io.spine.chatbot.server.github;
 
 import io.spine.chatbot.github.OrganizationId;
+import io.spine.chatbot.github.organization.OrgHeader;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.event.OrganizationRegistered;
@@ -50,17 +51,21 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
         private final Url githubUrl = githubUrlFor(organization.getValue());
         private final Url travisCiUrl = travisUrlFor(organization.getValue());
         private final Url websiteUrl = Urls.create("https://test-organization.com");
+        private final OrgHeader header = OrgHeader
+                .newBuilder()
+                .setGithubProfile(githubUrl)
+                .setTravisProfile(travisCiUrl)
+                .setWebsite(websiteUrl)
+                .setName(orgName)
+                .setGoogleChatSpace(googleChatSpace)
+                .vBuild();
 
         @BeforeEach
         void registerOrganization() {
             var registerOrganization = RegisterOrganization
                     .newBuilder()
                     .setId(organization)
-                    .setGithubUrl(githubUrl)
-                    .setTravisCiUrl(travisCiUrl)
-                    .setWebsiteUrl(websiteUrl)
-                    .setName(orgName)
-                    .setGoogleChatSpace(googleChatSpace)
+                    .setHeader(header)
                     .vBuild();
             context().receivesCommand(registerOrganization);
         }
@@ -71,11 +76,7 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
             var organizationRegistered = OrganizationRegistered
                     .newBuilder()
                     .setOrganization(organization)
-                    .setGithubUrl(githubUrl)
-                    .setTravisCiUrl(travisCiUrl)
-                    .setWebsiteUrl(websiteUrl)
-                    .setName(orgName)
-                    .setGoogleChatSpace(googleChatSpace)
+                    .setHeader(header)
                     .vBuild();
             context().assertEvent(organizationRegistered);
         }
@@ -86,11 +87,7 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
             var expectedState = Organization
                     .newBuilder()
                     .setId(organization)
-                    .setGithubUrl(githubUrl)
-                    .setTravisCiUrl(travisCiUrl)
-                    .setWebsiteUrl(websiteUrl)
-                    .setName(orgName)
-                    .setGoogleChatSpace(googleChatSpace)
+                    .setHeader(header)
                     .vBuild();
             context().assertState(organization, Organization.class)
                      .isEqualTo(expectedState);

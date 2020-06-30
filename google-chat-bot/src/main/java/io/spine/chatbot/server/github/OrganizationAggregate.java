@@ -48,20 +48,12 @@ final class OrganizationAggregate
         return OrganizationRegistered
                 .newBuilder()
                 .setOrganization(c.getId())
-                .setGithubUrl(c.getGithubUrl())
-                .setName(c.getName())
-                .setTravisCiUrl(c.getTravisCiUrl())
-                .setWebsiteUrl(c.getWebsiteUrl())
-                .setGoogleChatSpace(c.getGoogleChatSpace())
+                .setHeader(c.getHeader())
                 .vBuild();
     }
 
     @Apply
     private void on(OrganizationRegistered e) {
-        builder().setName(e.getName())
-                 .setGithubUrl(e.getGithubUrl())
-                 .setTravisCiUrl(e.getTravisCiUrl())
-                 .setWebsiteUrl(e.getWebsiteUrl())
-                 .setGoogleChatSpace(e.getGoogleChatSpace());
+        builder().setHeader(e.getHeader());
     }
 }

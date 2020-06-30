@@ -33,24 +33,14 @@ option java_generate_equals_and_hash = true;
 import "spine/net/url.proto";
 
 import "spine/chatbot/github/identifiers.proto";
+import "spine/chatbot/github/organization.proto";
 
-// An organization registration command.
+// A request to register an organization.
 message RegisterOrganization {
+    option (is).java_type = "io.spine.chatbot.server.github.OrgHeaderAware";
 
     OrganizationId id = 1 [(required) = true];
 
-    // Name of the GitHub organization.
-    string name = 2 [(required) = true];
-
-    // URL of the official organization-related website.
-    spine.net.Url website_url = 3;
-
-    // URL of the organization GitHub profile.
-    spine.net.Url github_url = 4 [(required) = true];
-
-    // URL of the organization Travis CI profile.
-    spine.net.Url travis_ci_url = 5 [(required) = true];
-
-    // Name of the Google Chat space associated with the organization in form `spaces/<space_id>`.
-    string google_chat_space = 6 [(required) = true, (pattern).regex = "spaces/.+"];
+    // The organization header.
+    OrgHeader header = 2;
 }

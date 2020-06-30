@@ -28,6 +28,7 @@ import io.spine.chatbot.api.travis.ReposQuery;
 import io.spine.chatbot.api.travis.Repository;
 import io.spine.chatbot.api.travis.TravisClient;
 import io.spine.chatbot.github.OrganizationId;
+import io.spine.chatbot.github.organization.OrgHeader;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
@@ -108,14 +109,18 @@ final class SpineOrgInitProcess
 
     private RegisterOrganization registerOrgCommand(OrganizationId spineOrgId, String spaceName) {
         _info().log("Registering `%s` organization.", ORGANIZATION.getValue());
+        var header = OrgHeader
+                .newBuilder()
+                .setName("Spine Event Engine")
+                .setWebsite(Urls.create("https://spine.io/"))
+                .setTravisProfile(travisUrlFor(ORGANIZATION.getValue()))
+                .setGithubProfile(githubUrlFor(ORGANIZATION.getValue()))
+                .setGoogleChatSpace(spaceName)
+                .vBuild();
         return RegisterOrganization
                 .newBuilder()
                 .setId(spineOrgId)
-                .setName("Spine Event Engine")
-                .setWebsiteUrl(Urls.create("https://spine.io/"))
-                .setTravisCiUrl(travisUrlFor(ORGANIZATION.getValue()))
-                .setGithubUrl(githubUrlFor(ORGANIZATION.getValue()))
-                .setGoogleChatSpace(spaceName)
+                .setHeader(header)
                 .vBuild();
     }
 
