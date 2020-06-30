@@ -73,11 +73,11 @@ public final class Client implements AutoCloseable {
     /**
      * Returns list of all registered repositories for the {@code organization}.
      */
-    public ImmutableList<RepositoryId> listOrgRepos(OrganizationId organization) {
-        checkNotNull(organization);
+    public ImmutableList<RepositoryId> listOrgRepos(OrganizationId org) {
+        checkNotNull(org);
         var orgRepos = client.asGuest()
                              .select(OrganizationRepositories.class)
-                             .byId(organization)
+                             .byId(org)
                              .run();
         checkState(orgRepos.size() == 1);
         return ImmutableList.copyOf(orgRepos.get(0)
