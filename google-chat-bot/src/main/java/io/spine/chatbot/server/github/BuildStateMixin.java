@@ -82,10 +82,10 @@ public interface BuildStateMixin extends BuildStateOrBuilder {
      * Determines the {@link BuildStateStatusChange status chage} of the build comparing to the
      * {@code previousState}.
      *
-     * @see #stateStatusChangeOf(BuildStateMixin, BuildStateMixin)
+     * @see #statusChange(BuildStateMixin, BuildStateMixin)
      */
     default BuildStateStatusChange stateChangeFrom(BuildStateMixin previousState) {
-        return stateStatusChangeOf(this, previousState);
+        return statusChange(this, previousState);
     }
 
     /**
@@ -101,8 +101,8 @@ public interface BuildStateMixin extends BuildStateOrBuilder {
      *     {@code unknown} meaning that there were no previous states or {@code passed} as well.
      * </ul>
      */
-    private static BuildStateStatusChange stateStatusChangeOf(BuildStateMixin newBuildState,
-                                                              BuildStateMixin previousBuildState) {
+    private static BuildStateStatusChange statusChange(BuildStateMixin newBuildState,
+                                                       BuildStateMixin previousBuildState) {
         var currentState = newBuildState.getState();
         var previousState = previousBuildState.getState();
         if (newBuildState.failed()) {
@@ -126,7 +126,7 @@ public interface BuildStateMixin extends BuildStateOrBuilder {
      * <p>The {@code cancelled}, {@code failed} and {@code errored} statuses are considered
      * failed statuses.
      *
-     * @return `true` if the build status is failed, `false` otherwise
+     * @return {@code true} if the build status is failed, {@code false} otherwise
      */
     private static boolean failed(BuildState.State state) {
         var failedStatuses = EnumSet.of(
