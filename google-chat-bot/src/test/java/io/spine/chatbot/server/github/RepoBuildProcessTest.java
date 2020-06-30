@@ -231,7 +231,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         }
 
         @Test
-        @DisplayName("producing BuildStable event")
+        @DisplayName("producing BuildSucceededAgain event")
         void producingEvent() {
             var stateChange = BuildStateChange
                     .newBuilder()
