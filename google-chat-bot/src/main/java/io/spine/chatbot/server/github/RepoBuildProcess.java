@@ -24,12 +24,12 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.Time;
 import io.spine.chatbot.api.travis.BuildsQuery;
-import io.spine.chatbot.api.travis.Commit;
 import io.spine.chatbot.api.travis.RepoBranchBuildResponse;
 import io.spine.chatbot.api.travis.TravisClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
+import io.spine.chatbot.github.repository.build.Commit;
 import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
@@ -180,8 +180,8 @@ final class RepoBuildProcess
                 .vBuild();
     }
 
-    private static Build.Commit from(Commit commit) {
-        return Build.Commit
+    private static Commit from(io.spine.chatbot.api.travis.Commit commit) {
+        return Commit
                 .newBuilder()
                 .setSha(commit.getSha())
                 .setMessage(commit.getMessage())

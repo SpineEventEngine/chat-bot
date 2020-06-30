@@ -46,16 +46,15 @@ message RepositoryBuild {
     // The time of the last status check.
     .google.protobuf.Timestamp last_status_check = 2;
 
-    // The current state.
+    // The current build.
     Build build = 3;
 
-    // Current repository build state.
+    // The current repository state.
     Build.State current_state = 4 [(column) = true];
 }
 
-// State of the build for a repository branch.
+// A repository branch build.
 message Build {
-
     option (is).java_type = "io.spine.chatbot.server.github.BuildStateMixin";
 
     // Incremental number for a repository's builds.
@@ -111,30 +110,30 @@ message Build {
     // The User or Organization that created the build.
     string created_by = 7;
 
-    // A git commit.
-    message Commit {
-
-        // Checksum the commit has in git and is identified by.
-        string sha = 1;
-
-        // Commit message.
-        string message = 2;
-
-        // URL to the commit's diff on GitHub.
-        spine.net.Url compare_url = 3;
-
-        // Commit date from git.
-        string committed_at = 4;
-
-        // Commit author from git.
-        string authored_by = 5;
-    }
-
     // The repository slug the build is associated with.
     string repository_slug = 8;
 
     // The Google Chat space associated with the organization.
     spine.chatbot.google.chat.SpaceId space = 9 [(required) = true, (validate) = true];
+}
+
+// A git commit.
+message Commit {
+
+    // Checksum the commit has in git and is identified by.
+    string sha = 1;
+
+    // Commit message.
+    string message = 2;
+
+    // URL to the commit's diff on GitHub.
+    spine.net.Url compare_url = 3;
+
+    // Commit date from git.
+    string committed_at = 4;
+
+    // Commit author from git.
+    string authored_by = 5;
 }
 
 // Definition of a change in a `build_state` field.
