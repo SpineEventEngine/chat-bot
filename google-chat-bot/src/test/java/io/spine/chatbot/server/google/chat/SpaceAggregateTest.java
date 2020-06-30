@@ -25,8 +25,6 @@ import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.command.RegisterSpace;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
 import io.spine.chatbot.google.chat.incoming.ChatEvent;
-import io.spine.chatbot.google.chat.incoming.EventType;
-import io.spine.chatbot.google.chat.incoming.SpaceType;
 import io.spine.chatbot.google.chat.incoming.User;
 import io.spine.chatbot.google.chat.incoming.event.BotAddedToSpace;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +32,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.chatbot.google.chat.incoming.EventType.ADDED_TO_SPACE;
+import static io.spine.chatbot.google.chat.incoming.SpaceType.ROOM;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
 @DisplayName("SpaceAggregate should")
@@ -94,7 +94,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
                     .setSpace(chatSpace())
                     .setUser(User.newBuilder()
                                  .setName("users/12e1ojep1"))
-                    .setType(EventType.ADDED_TO_SPACE)
+                    .setType(ADDED_TO_SPACE)
                     .setEventTime("2020-06-19T15:39:01Z")
                     .vBuild();
             var botAddedToSpace = BotAddedToSpace
@@ -135,7 +135,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
                     .newBuilder()
                     .setName(SPACE.getValue())
                     .setDisplayName(DISPLAY_NAME)
-                    .setType(SpaceType.ROOM)
+                    .setType(ROOM)
                     .vBuild();
         }
     }
