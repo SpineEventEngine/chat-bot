@@ -36,7 +36,7 @@ final class ThreadRepository extends AggregateRepository<ThreadId, ThreadAggrega
     @Override
     protected void setupEventRouting(EventRouting<ThreadId> routing) {
         super.setupEventRouting(routing);
-        routing.route(ThreadCreated.class, (event, context) -> withId(event.getThread()));
-        routing.route(MessageCreated.class, (event, context) -> withId(event.getThread()));
+        routing.route(ThreadCreated.class, (event, context) -> withId(event.getThread()))
+               .route(MessageCreated.class, (event, context) -> withId(event.getThread()));
     }
 }

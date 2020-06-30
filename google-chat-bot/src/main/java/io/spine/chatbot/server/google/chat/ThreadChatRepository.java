@@ -53,8 +53,8 @@ final class ThreadChatRepository
     @Override
     protected void setupEventRouting(EventRouting<ThreadId> routing) {
         super.setupEventRouting(routing);
-        routing.route(BuildFailed.class, new RepositoryEventRoute<>());
-        routing.route(BuildRecovered.class, new RepositoryEventRoute<>());
+        routing.route(BuildFailed.class, new RepositoryEventRoute<>())
+               .route(BuildRecovered.class, new RepositoryEventRoute<>());
     }
 
     @Override
