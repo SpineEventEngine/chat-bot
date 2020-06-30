@@ -48,8 +48,7 @@ public final class MoreUrls {
      */
     public static Url travisBuildUrlFor(String slug, long buildId) {
         checkNotEmptyOrBlank(slug);
-        checkPositive(buildId);
-        var spec = format("%s/%s/builds/%d", TRAVIS_GITHUB_ENDPOINT, slug, buildId);
+        var spec = format("%s/%s/builds/%d", TRAVIS_GITHUB_ENDPOINT, slug, checkPositive(buildId));
         return Urls.create(spec);
     }
 
