@@ -53,7 +53,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     private static final SpaceId chatSpace = space("spaces/1245wrq");
 
     @Test
-    @DisplayName("throw NoBuildsFound rejection when Travic API cannot return builds for a repo")
+    @DisplayName("throw NoBuildsFound rejection when Travis API cannot return builds for a repo")
     void throwNoBuildsFoundRejection() {
         travisClient().setBuildsFor(repository.getValue(),
                                     RepoBranchBuildResponse.getDefaultInstance());
