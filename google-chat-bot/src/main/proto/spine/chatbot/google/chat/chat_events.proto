@@ -38,10 +38,10 @@ message MessageCreated {
 
     MessageId message = 1 [(required) = true];
 
-    // ID of the space within which the message is created.
+    // The space within which the message is created.
     SpaceId space = 2 [(required) = true];
 
-    // ID of the thread within which the message is created if created in a threaded space.
+    // The thread within which the message is created, if created in a threaded space.
     ThreadId thread = 3;
 }
 
@@ -53,6 +53,6 @@ message ThreadCreated {
     // Chat thread.
     ThreadResource resource = 2 [(required) = true];
 
-    // ID of the space within with the thread is available.
+    // The space within with the thread is available.
     SpaceId space = 3 [(required) = true];
 }
