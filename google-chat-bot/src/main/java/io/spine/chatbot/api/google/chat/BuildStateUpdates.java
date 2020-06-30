@@ -60,17 +60,17 @@ final class BuildStateUpdates {
      * <p>If the thread has no name set, assumes that the update message should be
      * sent to a new thread.
      */
-    static Message buildStateMessage(BuildState buildState, ThreadResource thread) {
-        checkValid(buildState);
+    static Message buildStateMessage(BuildState build, ThreadResource thread) {
+        checkValid(build);
         checkNotNull(thread);
-        var headerIcon = buildState.failed() ? FAILURE_ICON : SUCCESS_ICON;
+        var headerIcon = build.failed() ? FAILURE_ICON : SUCCESS_ICON;
         var cardHeader = new CardHeader()
-                .setTitle(buildState.getRepositorySlug())
+                .setTitle(build.getRepositorySlug())
                 .setImageUrl(headerIcon);
         var sections = ImmutableList.of(
-                buildStateSection(buildState),
-                commitSection(buildState.getLastCommit()),
-                actions(buildState)
+                buildStateSection(build),
+                commitSection(build),
+                actions(build)
         );
         var message = new Message().setCards(cardWith(cardHeader, sections));
         if (isNotDefault(thread)) {
@@ -79,7 +79,8 @@ final class BuildStateUpdates {
         return message;
     }
 
-    private static Section commitSection(BuildState.Commit commit) {
+    private static Section commitSection(BuildState build) {
+        var commit = build.getLastCommit();
         var commitInfo = String.format(
                 "Authored by <b>%s</b> at %s.", commit.getAuthoredBy(), commit.getCommittedAt()
         );
@@ -92,30 +93,24 @@ final class BuildStateUpdates {
         return section;
     }
 
-    private static Section actions(BuildState buildState) {
-        BuildState.Commit commit = buildState.getLastCommit();
-        WidgetMarkup actionButtons = new WidgetMarkup().setButtons(ImmutableList.of(
-                linkButton("Build", buildState.getTravisCiUrl()),
+    private static Section actions(BuildState build) {
+        var commit = build.getLastCommit();
+        var actionButtons = new WidgetMarkup().setButtons(ImmutableList.of(
+                linkButton("Build", build.getTravisCiUrl()),
                 linkButton("Changeset", commit.getCompareUrl())
         ));
         return sectionWithWidget(actionButtons);
     }
 
-    private static Section buildStateSection(BuildState buildState) {
-        return sectionWithWidget(buildStateWidget(buildState));
+    private static Section buildStateSection(BuildState build) {
+        return sectionWithWidget(buildStateWidget(build));
     }
 
-    private static WidgetMarkup buildStateWidget(BuildState buildState) {
+    private static WidgetMarkup buildStateWidget(BuildState build) {
         var keyValue = new KeyValue()
                 .setTopLabel("Build No.")
-                .setContent(buildState.getNumber())
-                .setBottomLabel(capitalizeState(buildState.getState()));
+                .setContent(build.getNumber())
+                .setBottomLabel(build.stateLabel());
         return new WidgetMarkup().setKeyValue(keyValue);
-    }
-
-    private static String capitalizeState(BuildState.State state) {
-        var name = state.name();
-        return name.charAt(0) + name.substring(1)
-                                    .toLowerCase();
     }
 }

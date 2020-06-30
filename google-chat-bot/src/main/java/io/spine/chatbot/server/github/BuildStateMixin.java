@@ -53,6 +53,16 @@ public interface BuildStateMixin extends BuildStateOrBuilder {
     }
 
     /**
+     * Returns a capitalized label of the {@link BuildState.State build state}.
+     */
+    default String stateLabel() {
+        var state = getState();
+        var name = state.name();
+        return name.charAt(0) + name.substring(1)
+                                    .toLowerCase();
+    }
+
+    /**
      * Creates an instance of the {@link BuildState.State build state} of out its
      * string representation.
      */
