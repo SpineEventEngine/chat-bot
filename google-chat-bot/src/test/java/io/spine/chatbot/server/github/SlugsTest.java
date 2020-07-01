@@ -18,29 +18,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.travis;
+package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.github.Slug;
+import io.spine.testing.UtilityClassTest;
+import org.junit.jupiter.api.DisplayName;
 
-/**
- * A repositories query to the Travis CI API.
- *
- * @see <a href="https://developer.travis-ci.com/resource/repositories#for_owner">
- *         Repos for owner</a>
- */
-public final class ReposQuery extends Query<RepositoriesResponse> {
+@DisplayName("`Slugs` should")
+final class SlugsTest extends UtilityClassTest<Slugs> {
 
-    private ReposQuery(String request) {
-        super(request, RepositoriesResponse.class);
-    }
-
-    /**
-     * Creates a repository query for repositories of the specified {@code owner}
-     * (either a user or an organization).
-     */
-    public static ReposQuery forOwner(Slug owner) {
-        var encodedOwner = owner.encodedValue();
-        var request = "/owner/" + encodedOwner + "/repos";
-        return new ReposQuery(request);
+    SlugsTest() {
+        super(Slugs.class);
     }
 }

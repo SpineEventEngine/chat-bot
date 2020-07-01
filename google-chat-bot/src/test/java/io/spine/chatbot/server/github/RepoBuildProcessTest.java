@@ -55,7 +55,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     @Test
     @DisplayName("throw NoBuildsFound rejection when Travis API cannot return builds for a repo")
     void throwNoBuildsFoundRejection() {
-        travisClient().setBuildsFor(repository.getValue(),
+        travisClient().setBuildsFor(Slugs.forRepo(repository),
                                     RepoBranchBuildResponse.getDefaultInstance());
         var checkRepoBuild = CheckRepositoryBuild
                 .newBuilder()
@@ -83,7 +83,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         @BeforeEach
         void sendCheckCommand() {
-            travisClient().setBuildsFor(repository.getValue(), branchBuild);
+            travisClient().setBuildsFor(Slugs.forRepo(repository), branchBuild);
             var checkRepoBuild = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repository)
@@ -138,7 +138,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         @BeforeEach
         void sendCheckCommands() {
-            travisClient().setBuildsFor(repository.getValue(), previousBranchBuild);
+            travisClient().setBuildsFor(Slugs.forRepo(repository), previousBranchBuild);
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repository)
@@ -146,7 +146,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(repository.getValue(), newBranchBuild);
+            travisClient().setBuildsFor(Slugs.forRepo(repository), newBranchBuild);
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repository)
@@ -204,7 +204,8 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         @BeforeEach
         void sendCheckCommands() {
-            travisClient().setBuildsFor(repository.getValue(), branchBuildOf(initialFailedBuild));
+            travisClient().setBuildsFor(Slugs.forRepo(repository),
+                                        branchBuildOf(initialFailedBuild));
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repository)
@@ -212,7 +213,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(repository.getValue(), previousBranchBuild);
+            travisClient().setBuildsFor(Slugs.forRepo(repository), previousBranchBuild);
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repository)
@@ -220,7 +221,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoRecovery);
-            travisClient().setBuildsFor(repository.getValue(), newBranchBuild);
+            travisClient().setBuildsFor(Slugs.forRepo(repository), newBranchBuild);
             var checkRepoStable = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repository)

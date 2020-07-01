@@ -20,6 +20,8 @@
 
 package io.spine.chatbot.api.travis;
 
+import io.spine.chatbot.github.Slug;
+
 /**
  * A branch builds query to the Travis CI API.
  *
@@ -32,12 +34,12 @@ public final class BuildsQuery extends Query<RepoBranchBuildResponse> {
     }
 
     /**
-     * Creates a query for a repository with the specified {@code slug}.
+     * Creates a query for the {@code repository}.
      *
      * <p>Requests the latest build from the {@code master} branch.
      */
-    public static BuildsQuery forRepo(String slug) {
-        var encodedSlug = encode(slug);
+    public static BuildsQuery forRepo(Slug repository) {
+        var encodedSlug = repository.encodedValue();
         var request = "/repo/"
                 + encodedSlug
                 + "/branch/master?&include=build.commit,build.created_by";

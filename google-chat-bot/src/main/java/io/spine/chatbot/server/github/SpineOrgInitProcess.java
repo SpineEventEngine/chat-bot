@@ -84,7 +84,7 @@ final class SpineOrgInitProcess
         _info().log("Starting Spine organization initialization process in space `%s`.", space);
         var commands = ImmutableSet.<CommandMessage>builder();
         commands.add(registerOrgCommand(ORGANIZATION, space));
-        client.execute(ReposQuery.forOwner(ORGANIZATION.getValue()))
+        client.execute(ReposQuery.forOwner(Slugs.forOrg(ORGANIZATION)))
               .getRepositoriesList()
               .stream()
               .filter(repository -> WATCHED_REPOS.contains(repository.getName()))

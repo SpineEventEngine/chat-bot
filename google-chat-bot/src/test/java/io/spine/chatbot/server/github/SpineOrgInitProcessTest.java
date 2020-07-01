@@ -60,7 +60,7 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
                     .newBuilder()
                     .addRepositories(repository)
                     .vBuild();
-            travisClient().setRepositoriesFor(ORGANIZATION.getValue(), repositoriesResponse);
+            travisClient().setRepositoriesFor(Slugs.forOrg(ORGANIZATION), repositoriesResponse);
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
                     .setSpace(space)

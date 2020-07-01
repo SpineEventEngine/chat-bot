@@ -35,6 +35,7 @@ import "google/protobuf/timestamp.proto";
 
 import "spine/net/url.proto";
 import "spine/chatbot/github/identifiers.proto";
+import "spine/chatbot/github/slug.proto";
 import "spine/chatbot/google/chat/identifiers.proto";
 
 // A build process of a GitHub repository.
@@ -111,7 +112,7 @@ message Build {
     string created_by = 7;
 
     // The repository slug the build is associated with.
-    string repository_slug = 8;
+    Slug repository = 8;
 
     // The Google Chat space associated with the organization.
     spine.chatbot.google.chat.SpaceId space = 9 [(required) = true, (validate) = true];

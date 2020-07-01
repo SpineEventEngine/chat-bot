@@ -21,6 +21,7 @@
 package io.spine.chatbot.api.travis;
 
 import io.spine.chatbot.api.FailFastAwareClient;
+import io.spine.chatbot.github.Slug;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -63,18 +64,18 @@ public final class InMemoryTravisClient extends FailFastAwareClient implements T
     }
 
     /**
-     * Sets up a stub {@code branchBuild} response for a specified {@code repoSlug}.
+     * Sets up a stub {@code branchBuild} response for a specified {@code repository}.
      */
-    public void setBuildsFor(String repoSlug, RepoBranchBuildResponse branchBuild) {
-        checkNotNull(repoSlug);
+    public void setBuildsFor(Slug repository, RepoBranchBuildResponse branchBuild) {
+        checkNotNull(repository);
         checkNotNull(branchBuild);
-        responses.put(BuildsQuery.forRepo(repoSlug), branchBuild);
+        responses.put(BuildsQuery.forRepo(repository), branchBuild);
     }
 
     /**
      * Sets up a stub {@code repositories} response for a specified {@code owner}.
      */
-    public void setRepositoriesFor(String owner, RepositoriesResponse repositories) {
+    public void setRepositoriesFor(Slug owner, RepositoriesResponse repositories) {
         checkNotNull(owner);
         checkNotNull(repositories);
         responses.put(ReposQuery.forOwner(owner), repositories);

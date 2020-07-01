@@ -18,29 +18,49 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.travis;
+package io.spine.chatbot.server.github;
 
+import io.spine.chatbot.github.OrganizationId;
+import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.Slug;
 
-/**
- * A repositories query to the Travis CI API.
- *
- * @see <a href="https://developer.travis-ci.com/resource/repositories#for_owner">
- *         Repos for owner</a>
- */
-public final class ReposQuery extends Query<RepositoriesResponse> {
+import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
-    private ReposQuery(String request) {
-        super(request, RepositoriesResponse.class);
+/**
+ * A utility for working with {@link Slug}s.
+ */
+public final class Slugs {
+
+    /**
+     * Prevents instantiation of this utility class.
+     */
+    private Slugs() {
     }
 
     /**
-     * Creates a repository query for repositories of the specified {@code owner}
-     * (either a user or an organization).
+     * Creates a new {@code Slug} for the {@code repository}.
      */
-    public static ReposQuery forOwner(Slug owner) {
-        var encodedOwner = owner.encodedValue();
-        var request = "/owner/" + encodedOwner + "/repos";
-        return new ReposQuery(request);
+    public static Slug forRepo(RepositoryId repo) {
+        checkNotNull(repo);
+        return create(repo.getValue());
+    }
+
+    /**
+     * Creates a new {@code Slug} for the {@code organization}.
+     */
+    public static Slug forOrg(OrganizationId org) {
+        checkNotNull(org);
+        return create(org.getValue());
+    }
+
+    /**
+     * Creates a new {@code Slug} with the specified {@code value}.
+     */
+    public static Slug create(String value) {
+        checkNotEmptyOrBlank(value);
+        return Slug.newBuilder()
+                   .setValue(value)
+                   .vBuild();
     }
 }

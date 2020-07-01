@@ -18,29 +18,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.travis;
+package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.github.Slug;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-/**
- * A repositories query to the Travis CI API.
- *
- * @see <a href="https://developer.travis-ci.com/resource/repositories#for_owner">
- *         Repos for owner</a>
- */
-public final class ReposQuery extends Query<RepositoriesResponse> {
+@DisplayName("`SlugMixin` should")
+final class SlugMixinTest {
 
-    private ReposQuery(String request) {
-        super(request, RepositoriesResponse.class);
-    }
-
-    /**
-     * Creates a repository query for repositories of the specified {@code owner}
-     * (either a user or an organization).
-     */
-    public static ReposQuery forOwner(Slug owner) {
-        var encodedOwner = owner.encodedValue();
-        var request = "/owner/" + encodedOwner + "/repos";
-        return new ReposQuery(request);
+    @Test
+    @DisplayName("encode slug value")
+    void encodeSlugValue() {
+        var slug = Slugs.create("TestOrganization/test-repository");
+        Assertions.assertEquals("TestOrganization%2Ftest-repository", slug.encodedValue());
     }
 }

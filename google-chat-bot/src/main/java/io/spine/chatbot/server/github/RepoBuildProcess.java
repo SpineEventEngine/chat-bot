@@ -82,7 +82,7 @@ final class RepoBuildProcess
             throws NoBuildsFound {
         var repository = c.getRepository();
         _info().log("Checking build status for the repository `%s`.", repository.getValue());
-        var branchBuild = client.execute(BuildsQuery.forRepo(repository.getValue()));
+        var branchBuild = client.execute(BuildsQuery.forRepo(Slugs.forRepo(repository)));
         if (isDefault(branchBuild.getLastBuild())) {
             _warn().log("No builds found for the repository `%s`.", repository.getValue());
             throw NoBuildsFound
@@ -175,7 +175,7 @@ final class RepoBuildProcess
                 .setLastCommit(from(build.getCommit()))
                 .setCreatedBy(build.getCreatedBy()
                                    .getLogin())
-                .setRepositorySlug(slug)
+                .setRepository(Slugs.create(slug))
                 .setTravisCiUrl(travisBuildUrlFor(slug, build.getId()))
                 .vBuild();
     }

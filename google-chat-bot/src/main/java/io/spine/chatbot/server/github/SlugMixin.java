@@ -18,29 +18,40 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.travis;
+package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.github.Slug;
+import io.spine.annotation.GeneratedMixin;
+import io.spine.chatbot.github.SlugOrBuilder;
+import io.spine.chatbot.github.repository.build.Build;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 /**
- * A repositories query to the Travis CI API.
- *
- * @see <a href="https://developer.travis-ci.com/resource/repositories#for_owner">
- *         Repos for owner</a>
+ * Augments {@link Build} with useful methods.
  */
-public final class ReposQuery extends Query<RepositoriesResponse> {
+@GeneratedMixin
+public interface SlugMixin extends SlugOrBuilder {
 
-    private ReposQuery(String request) {
-        super(request, RepositoriesResponse.class);
+    /**
+     * Returns the slug {@code value}.
+     */
+    default String value() {
+        return getValue();
     }
 
     /**
-     * Creates a repository query for repositories of the specified {@code owner}
-     * (either a user or an organization).
+     * Returns URL-encoded slug {@code value}.
      */
-    public static ReposQuery forOwner(Slug owner) {
-        var encodedOwner = owner.encodedValue();
-        var request = "/owner/" + encodedOwner + "/repos";
-        return new ReposQuery(request);
+    default String encodedValue() {
+        return encode(getValue());
+    }
+
+    /**
+     * Encodes passed value using {@link URLEncoder} and
+     * {@link StandardCharsets#UTF_8 UTF_8} charset.
+     */
+    private static String encode(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 }

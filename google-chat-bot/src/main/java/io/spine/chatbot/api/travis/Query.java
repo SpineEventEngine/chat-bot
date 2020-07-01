@@ -23,9 +23,6 @@ package io.spine.chatbot.api.travis;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -59,14 +56,6 @@ public abstract class Query<T extends TravisResponse> {
      */
     Class<T> responseType() {
         return responseType;
-    }
-
-    /**
-     * Encodes passed value using {@link URLEncoder} and
-     * {@link StandardCharsets#UTF_8 UTF_8} charset.
-     */
-    static String encode(String value) {
-        return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 
     @Override
