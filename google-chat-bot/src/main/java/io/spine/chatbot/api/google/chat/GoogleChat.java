@@ -20,32 +20,22 @@
 
 package io.spine.chatbot.api.google.chat;
 
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.chat.v1.HangoutsChat;
 import com.google.api.services.chat.v1.model.Message;
-import com.google.auth.http.HttpCredentialsAdapter;
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import io.spine.chatbot.api.google.secret.Secrets;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.BuildStateUpdate;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 import io.spine.logging.Logging;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
 
 import static io.spine.chatbot.api.google.chat.BuildStateUpdates.buildStateMessage;
+import static io.spine.chatbot.api.google.chat.HangoutsChatProvider.newHangoutsChat;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
-import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * Google Chat API client.
@@ -53,9 +43,6 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  * @see <a href="https://developers.google.com/hangouts/chat/concepts">Google Chat API</a>
  */
 public final class GoogleChat implements GoogleChatClient, Logging {
-
-    private static final String BOT_NAME = "Spine Chat Bot";
-    private static final String CHAT_BOT_SCOPE = "https://www.googleapis.com/auth/chat.bot";
 
     private final HangoutsChat chat;
 
@@ -69,7 +56,7 @@ public final class GoogleChat implements GoogleChatClient, Logging {
      * <p>The client is backed by {@link HangoutsChat} API.
      */
     public static GoogleChatClient newInstance() {
-        return new GoogleChat(HangoutsChatProvider.newHangoutsChat());
+        return new GoogleChat(newHangoutsChat());
     }
 
     @Override
@@ -107,59 +94,6 @@ public final class GoogleChat implements GoogleChatClient, Logging {
             _error().withCause(e)
                     .log("Unable to send message to space `%s`.", space);
             throw new RuntimeException("Unable to send message to space " + space, e);
-        }
-    }
-
-    /**
-     * Provides fully-configured {@link HangoutsChat chat} client.
-     */
-    private static class HangoutsChatProvider {
-
-        /**
-         * Prevents direct instantiation of the utility class.
-         */
-        private HangoutsChatProvider() {
-        }
-
-        /**
-         * Creates a new instance of the {@link HangoutsChat} client.
-         */
-        private static HangoutsChat newHangoutsChat() {
-            HttpCredentialsAdapter credentialsAdapter = newCredentialsHelper();
-            var chat = chatWithCredentials(credentialsAdapter)
-                    .setApplicationName(BOT_NAME)
-                    .build();
-            return chat;
-        }
-
-        private static HttpCredentialsAdapter newCredentialsHelper() {
-            try {
-                var serviceAccount = Secrets.chatServiceAccount();
-                var credentials = GoogleCredentials.fromStream(streamFrom(serviceAccount))
-                                                   .createScoped(CHAT_BOT_SCOPE);
-                return new HttpCredentialsAdapter(credentials);
-            } catch (IOException e) {
-                throw newIllegalStateException(e, "Unable to read GoogleCredentials.");
-            }
-        }
-
-        private static HangoutsChat.Builder
-        chatWithCredentials(HttpCredentialsAdapter credentialsAdapter) {
-            var transport = newTrustedTransport();
-            var jacksonFactory = JacksonFactory.getDefaultInstance();
-            return new HangoutsChat.Builder(transport, jacksonFactory, credentialsAdapter);
-        }
-
-        private static HttpTransport newTrustedTransport() {
-            try {
-                return GoogleNetHttpTransport.newTrustedTransport();
-            } catch (GeneralSecurityException | IOException e) {
-                throw newIllegalStateException(e, "Unable to instantiate trusted transport.");
-            }
-        }
-
-        private static InputStream streamFrom(String data) {
-            return new ByteArrayInputStream(data.getBytes(Charset.defaultCharset()));
         }
     }
 }

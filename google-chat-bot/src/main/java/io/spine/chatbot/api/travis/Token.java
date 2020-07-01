@@ -20,14 +20,14 @@
 
 package io.spine.chatbot.api.travis;
 
-import io.spine.chatbot.api.google.secret.Secrets;
+import io.spine.chatbot.api.google.secret.Secret;
 
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
- * A secret Travis CI API token.
+ * A Travis CI API access token.
  */
-final class Token extends Secrets {
+final class Token extends Secret {
 
     private static final String TRAVIS_API_TOKEN = "TravisApiToken";
 
@@ -47,7 +47,7 @@ final class Token extends Secrets {
     /**
      * Creates the Travis CI API access token.
      */
-    static Token secretToken() {
+    static Token privateToken() {
         var value = checkNotEmptyOrBlank(retrieveSecret(TRAVIS_API_TOKEN));
         return new Token(value);
     }

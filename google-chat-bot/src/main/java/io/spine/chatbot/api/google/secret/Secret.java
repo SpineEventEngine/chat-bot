@@ -28,23 +28,14 @@ import java.io.IOException;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
- * Utility for accessing application secrets stored in Google Secret Manager.
+ * A utility for accessing application secrets stored in Google Secret Manager.
  */
-public abstract class Secrets {
+public abstract class Secret {
 
     @SuppressWarnings("CallToSystemGetenv")
     private static final String PROJECT_ID = System.getenv("GCP_PROJECT_ID");
-    private static final String CHAT_SERVICE_ACCOUNT = "ChatServiceAccount";
 
-    protected Secrets() {
-    }
-
-    /**
-     * Retrieves the Google Chat API service account.
-     */
-    public static String chatServiceAccount() {
-        var result = retrieveSecret(CHAT_SERVICE_ACCOUNT);
-        return result;
+    protected Secret() {
     }
 
     /**
