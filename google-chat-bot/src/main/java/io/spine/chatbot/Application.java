@@ -21,7 +21,6 @@
 package io.spine.chatbot;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.runtime.Micronaut;
@@ -29,7 +28,6 @@ import io.spine.chatbot.server.github.GitHubContext;
 import io.spine.chatbot.server.google.chat.GoogleChatContext;
 import io.spine.logging.Logging;
 import io.spine.server.Server;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.io.IOException;
 
@@ -60,9 +58,6 @@ public final class Application implements Logging {
 
     /** Name of the GRPC {@link Server}. **/
     static final String SERVER_NAME = "ChatBotServer";
-
-    @LazyInit
-    private @MonotonicNonNull Server server;
 
     /**
      * Prevents direct instantiation.
@@ -98,10 +93,10 @@ public final class Application implements Logging {
                 .newBuilder()
                 .build();
         _config().log("Starting GRPC server.");
-        server = startServer(gitHubContext, googleChatContext);
+        var server = startServer(gitHubContext, googleChatContext);
         _config().log("Starting Micronaut application.");
         var applicationContext = Micronaut.run(Application.class, args);
-        applicationContext.registerSingleton(new Stopper(server));
+        applicationContext.registerSingleton(new ShutdownHook(server));
     }
 
     /**
@@ -127,11 +122,12 @@ public final class Application implements Logging {
     /**
      * Gracefully stops the {@link #server}.
      */
-    private static final class Stopper implements ApplicationEventListener<ShutdownEvent>, Logging {
+    private static final class ShutdownHook
+            implements ApplicationEventListener<ShutdownEvent>, Logging {
 
         private final Server server;
 
-        private Stopper(Server server) {
+        private ShutdownHook(Server server) {
             this.server = checkNotNull(server);
         }
 
