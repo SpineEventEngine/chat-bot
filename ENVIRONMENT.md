@@ -93,7 +93,8 @@ The bot requires the following Pub/Sub topics to be configured:
    
    For the topic, the `dead-incoming-bot-messages` [pull subscription][pull-subscription] 
    that never expires is configured.
-   In case of an undelivered message, it could be pulled from the subscription.
+   In case of an undelivered message, it can be pulled from the subscription for the further
+   analysis and investigation.
 
 3. `repository-checks` — the topic that delivers scheduled tasks to check the build state of 
    the watched resources (see [Cloud Scheduler](#cloud-scheduler) section for details).
