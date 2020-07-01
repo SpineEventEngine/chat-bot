@@ -22,13 +22,12 @@ package io.spine.chatbot.server.github;
 
 import io.spine.annotation.GeneratedMixin;
 import io.spine.chatbot.github.SlugOrBuilder;
-import io.spine.chatbot.github.repository.build.Build;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Augments {@link Build} with useful methods.
+ * Augments {@link io.spine.chatbot.github.Slug Slug} with useful methods.
  */
 @GeneratedMixin
 public interface SlugMixin extends SlugOrBuilder {
