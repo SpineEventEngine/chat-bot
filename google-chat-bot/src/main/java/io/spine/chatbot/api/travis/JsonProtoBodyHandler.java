@@ -31,8 +31,8 @@ import java.nio.charset.StandardCharsets;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * The handler converts input JSON strings into the Protobuf messages relying on the
- * Spine {@link Json} conversion functionality.
+ * Converts the incoming JSON strings into Protobuf messages relying on the Spine
+ * {@link Json conversion functionality}.
  *
  * @param <T>
  *         the Protobuf message supplied in the response body
@@ -49,8 +49,7 @@ final class JsonProtoBodyHandler<T extends Message> implements HttpResponse.Body
      * Creates a body handler for a specified Protobuf message.
      */
     static <T extends Message> JsonProtoBodyHandler<T> jsonBodyHandler(Class<T> type) {
-        checkNotNull(type);
-        return new JsonProtoBodyHandler<>(type);
+        return new JsonProtoBodyHandler<>(checkNotNull(type));
     }
 
     @Override
