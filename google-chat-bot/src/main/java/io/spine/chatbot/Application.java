@@ -37,7 +37,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
- * The entry point to the Google Chat Bot application.
+ * The entry point to the Spine ChatBot application.
  *
  * <p>The application itself exposes a number of REST endpoints accessible for the clients such as:
  *
