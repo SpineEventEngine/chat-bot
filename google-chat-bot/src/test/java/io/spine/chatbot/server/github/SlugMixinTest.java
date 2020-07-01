@@ -20,9 +20,10 @@
 
 package io.spine.chatbot.server.github;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("`SlugMixin` should")
 final class SlugMixinTest {
@@ -31,6 +32,6 @@ final class SlugMixinTest {
     @DisplayName("encode slug value")
     void encodeSlugValue() {
         var slug = Slugs.create("TestOrganization/test-repository");
-        Assertions.assertEquals("TestOrganization%2Ftest-repository", slug.encodedValue());
+        assertEquals("TestOrganization%2Ftest-repository", slug.encodedValue());
     }
 }
