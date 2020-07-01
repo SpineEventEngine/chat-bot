@@ -33,7 +33,7 @@ option java_generate_equals_and_hash = true;
 import "spine/chatbot/google/chat/identifiers.proto";
 import "spine/chatbot/google/chat/space.proto";
 
-// Register Chat space command.
+// A request to register a Chat space.
 message RegisterSpace {
     option (is).java_type = "io.spine.chatbot.server.google.chat.SpaceHeaderAware";
 
