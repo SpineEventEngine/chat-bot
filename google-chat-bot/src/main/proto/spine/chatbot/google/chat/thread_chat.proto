@@ -38,8 +38,7 @@ import "spine/chatbot/google/chat/thread.proto";
 // Acknowledges incoming events and publishes messages to a respective thread if needed.
 //
 message ThreadChat {
-    option (entity).kind = PROCESS_MANAGER;
-    option (entity).visibility = FULL;
+    option (entity) = {kind: PROCESS_MANAGER  visibility: FULL};
 
     ThreadId thread = 1;
 
