@@ -64,3 +64,8 @@ For detailed Application Default Credentials (ADC) guide for Docker see example
 Cloud Run [guide][cloud-run-local-guide].
 
 [cloud-run-local-guide]: https://cloud.google.com/run/docs/testing/local#running_locally_using_docker_with_access_to_services
+
+## Running in the Cloud
+
+The application is deployed in the Google Cloud Platform cloud, and the overview of the 
+cloud deployment is available in a separate [document](ENVIRONMENT.md).
