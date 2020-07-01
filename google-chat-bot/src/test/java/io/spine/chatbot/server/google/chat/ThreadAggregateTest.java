@@ -99,7 +99,7 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
                 threadResource("spaces/qpojdwpiq1241/threads/qwdojp12");
 
         @BeforeEach
-        void setUp() {
+        void createThreadAndMessage() {
             var threadCreated = ThreadCreated
                     .newBuilder()
                     .setThread(thread)

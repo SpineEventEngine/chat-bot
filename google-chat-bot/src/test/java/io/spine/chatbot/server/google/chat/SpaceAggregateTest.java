@@ -90,7 +90,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
     final class RegisterOnAddedBot {
 
         @BeforeEach
-        void setUp() {
+        void addBotToSpace() {
             var chatEvent = ChatEvent
                     .newBuilder()
                     .setSpace(chatSpace())
