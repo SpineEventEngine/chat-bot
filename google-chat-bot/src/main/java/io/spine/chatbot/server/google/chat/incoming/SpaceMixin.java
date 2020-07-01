@@ -21,8 +21,11 @@
 package io.spine.chatbot.server.google.chat.incoming;
 
 import io.spine.annotation.GeneratedMixin;
+import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.incoming.SpaceOrBuilder;
 import io.spine.chatbot.google.chat.incoming.SpaceType;
+
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
 /**
  * Provides utility helpers for the {@link io.spine.chatbot.google.chat.incoming.Space Space} type.
@@ -37,5 +40,12 @@ public interface SpaceMixin extends SpaceOrBuilder {
      */
     default boolean isThreaded() {
         return getType() == SpaceType.ROOM;
+    }
+
+    /**
+     * Returns the space ID.
+     */
+    default SpaceId id() {
+        return space(getName());
     }
 }

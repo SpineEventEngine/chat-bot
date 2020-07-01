@@ -27,7 +27,6 @@ import io.spine.chatbot.google.chat.incoming.event.MessageReceived;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
 
 /**
  * A utility for working with {@link ChatEvent}s.
@@ -49,7 +48,7 @@ final class ChatEvents {
         return BotRemovedFromSpace
                 .newBuilder()
                 .setEvent(event)
-                .setSpace(space(space.getName()))
+                .setSpace(space.id())
                 .vBuild();
     }
 
@@ -62,7 +61,7 @@ final class ChatEvents {
         return BotAddedToSpace
                 .newBuilder()
                 .setEvent(event)
-                .setSpace(space(space.getName()))
+                .setSpace(space.id())
                 .vBuild();
     }
 
