@@ -66,7 +66,7 @@ final class BuildStateUpdates {
         var headerIcon = build.failed() ? FAILURE_ICON : SUCCESS_ICON;
         var cardHeader = new CardHeader()
                 .setTitle(build.getRepository()
-                               .getValue())
+                               .value())
                 .setImageUrl(headerIcon);
         var sections = ImmutableList.of(
                 buildStateSection(build),

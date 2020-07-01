@@ -74,16 +74,16 @@ public final class GoogleChat implements GoogleChatClient, Logging {
 
     @Override
     public BuildStateUpdate sendBuildStateUpdate(Build build, ThreadResource thread) {
-        var repoSlug = build.getRepository();
+        var repo = build.getRepository();
         var debug = _debug();
-        debug.log("Building state update message for repository `%s`.", repoSlug);
+        debug.log("Building state update message for repository `%s`.", repo);
         var message = buildStateMessage(build, thread);
-        debug.log("Sending state update message for repository `%s`.", repoSlug);
+        debug.log("Sending state update message for repository `%s`.", repo);
         var sentMessage = sendMessage(build.getSpace(), message);
         debug.log(
                 "Build state update message with ID `%s` for repository `%s` sent to thread `%s`.",
-                sentMessage.getName(), repoSlug, sentMessage.getThread()
-                                                            .getName()
+                sentMessage.getName(), repo, sentMessage.getThread()
+                                                        .getName()
         );
         return BuildStateUpdate
                 .newBuilder()
@@ -91,7 +91,7 @@ public final class GoogleChat implements GoogleChatClient, Logging {
                 .setResource(threadResource(message.getThread()
                                                    .getName()))
                 .setSpace(build.getSpace())
-                .setThread(thread(repoSlug.getValue()))
+                .setThread(thread(repo.value()))
                 .vBuild();
     }
 
