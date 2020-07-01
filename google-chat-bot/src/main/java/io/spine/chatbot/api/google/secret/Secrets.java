@@ -30,25 +30,13 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 /**
  * Utility for accessing application secrets stored in Google Secret Manager.
  */
-public final class Secrets {
+public abstract class Secrets {
 
     @SuppressWarnings("CallToSystemGetenv")
     private static final String PROJECT_ID = System.getenv("GCP_PROJECT_ID");
-    private static final String TRAVIS_API_TOKEN = "TravisApiToken";
     private static final String CHAT_SERVICE_ACCOUNT = "ChatServiceAccount";
 
-    /**
-     * Prevents direct instantiation of the utility class.
-     */
-    private Secrets() {
-    }
-
-    /**
-     * Retrieves the Travis CI API access token.
-     */
-    public static String travisToken() {
-        var result = retrieveSecret(TRAVIS_API_TOKEN);
-        return result;
+    protected Secrets() {
     }
 
     /**
@@ -59,16 +47,22 @@ public final class Secrets {
         return result;
     }
 
-    private static String retrieveSecret(String secretName) {
+    /**
+     * Retrieves the secret with the specified {@code name}.
+     *
+     * <p>The latest version of the secret available in the current {@link #PROJECT_ID project}
+     * is retrieved.
+     */
+    protected static String retrieveSecret(String name) {
         try (SecretManagerServiceClient client = SecretManagerServiceClient.create()) {
-            var secretVersion = SecretVersionName.of(PROJECT_ID, secretName, "latest");
+            var secretVersion = SecretVersionName.of(PROJECT_ID, name, "latest");
             var secret = client.accessSecretVersion(secretVersion)
                                .getPayload()
                                .getData()
                                .toStringUtf8();
             return secret;
         } catch (IOException e) {
-            throw newIllegalStateException(e, "Unable to retrieve secret `%s`.", secretName);
+            throw newIllegalStateException(e, "Unable to retrieve secret `%s`.", name);
         }
     }
 }

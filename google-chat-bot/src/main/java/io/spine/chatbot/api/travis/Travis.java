@@ -20,14 +20,14 @@
 
 package io.spine.chatbot.api.travis;
 
-import io.spine.chatbot.api.google.secret.Secrets;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 
+import static com.google.api.client.util.Preconditions.checkNotNull;
 import static io.spine.chatbot.api.travis.JsonProtoBodyHandler.jsonBodyHandler;
+import static io.spine.chatbot.api.travis.Token.secretToken;
 import static java.lang.String.format;
 
 /**
@@ -43,20 +43,20 @@ public final class Travis implements TravisClient {
     private static final String API_VERSION = "3";
     private static final String AUTH_HEADER = "Authorization";
 
-    private final String apiToken;
+    private final Token apiToken;
 
     /**
      * Creates a new Travis client with the specified API token.
      */
-    private Travis(String token) {
-        apiToken = token;
+    private Travis(Token apiToken) {
+        this.apiToken = checkNotNull(apiToken);
     }
 
     /**
      * Creates a new Travis client with the default Travis token.
      */
     public static TravisClient newInstance() {
-        return new Travis(Secrets.travisToken());
+        return new Travis(secretToken());
     }
 
     @Override
@@ -78,17 +78,17 @@ public final class Travis implements TravisClient {
         }
     }
 
-    private static HttpRequest apiRequest(String request, String token) {
+    private static HttpRequest apiRequest(String request, Token token) {
         return authorizedApiRequest(token)
                 .uri(URI.create(BASE_URL + request))
                 .build();
     }
 
-    private static HttpRequest.Builder authorizedApiRequest(String token) {
+    private static HttpRequest.Builder authorizedApiRequest(Token token) {
         return HttpRequest
                 .newBuilder()
                 .GET()
                 .header(API_HEADER, API_VERSION)
-                .header(AUTH_HEADER, "token " + token);
+                .header(AUTH_HEADER, "token " + token.value());
     }
 }
