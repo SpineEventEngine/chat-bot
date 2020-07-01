@@ -69,8 +69,10 @@ to the publishing [guide][publishing-guide] where the essential configurations a
 ## Pub/Sub
 
 The application is built with resilience in mind and even though it exposes some REST APIs, 
-it is not intended to handle to load directly. Instead, it relies on the Google [Pub/Sub][pubsub] 
-async messaging service to receive the incoming messages and then stream them into the app.
+it is not intended to handle to load directly due to the security and performance considerations. 
+Instead, it relies on the Google [Pub/Sub][pubsub] async messaging service to receive 
+the incoming messages and then stream them into the app. The Pub/Sub uses dedicated IAM 
+configuration and is able to handle ultimate load at any pace.
 
 The bot requires the following Pub/Sub topics to be configured:
 
