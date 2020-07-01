@@ -57,8 +57,7 @@ final class BeanFactory {
      *         Jackson Deserialization</a>
      */
     @VisibleForTesting
-    static final class PubsubPushRequestDeserializer
-            extends JsonDeserializer<PubsubPushRequest> {
+    static final class PubsubPushRequestDeserializer extends JsonDeserializer<PubsubPushRequest> {
 
         /**
          * Deserializes {@link PubsubPushRequest} JSON string into a Protobuf message.
