@@ -20,7 +20,6 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.api.travis.Travis;
 import io.spine.chatbot.api.travis.TravisClient;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
@@ -92,11 +91,11 @@ public final class GitHubContext {
          * Finishes configuration of the context and builds a new instance.
          *
          * <p>If the {@link #client} was not explicitly configured, uses the
-         * {@link Travis#newInstance() default} client.
+         * {@link TravisClient#newInstance() default} client.
          */
         public GitHubContext build() {
             if (client == null) {
-                client = Travis.newInstance();
+                client = TravisClient.newInstance();
             }
             return new GitHubContext(client);
         }

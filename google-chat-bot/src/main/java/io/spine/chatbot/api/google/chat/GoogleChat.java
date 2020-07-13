@@ -32,7 +32,6 @@ import io.spine.logging.Logging;
 import java.io.IOException;
 
 import static io.spine.chatbot.api.google.chat.BuildStateUpdates.buildStateMessage;
-import static io.spine.chatbot.api.google.chat.HangoutsChatProvider.newHangoutsChat;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
@@ -43,21 +42,12 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  *
  * @see <a href="https://developers.google.com/hangouts/chat/concepts">Google Chat API</a>
  */
-public final class GoogleChat implements GoogleChatClient, Logging {
+final class GoogleChat implements GoogleChatClient, Logging {
 
     private final HangoutsChat chat;
 
-    private GoogleChat(HangoutsChat chat) {
+    GoogleChat(HangoutsChat chat) {
         this.chat = chat;
-    }
-
-    /**
-     * Creates a new Google Chat client.
-     *
-     * <p>The client is backed by {@link HangoutsChat} API.
-     */
-    public static GoogleChatClient newInstance() {
-        return new GoogleChat(newHangoutsChat());
     }
 
     @Override

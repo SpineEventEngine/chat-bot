@@ -20,7 +20,6 @@
 
 package io.spine.chatbot.server.google.chat;
 
-import io.spine.chatbot.api.google.chat.GoogleChat;
 import io.spine.chatbot.api.google.chat.GoogleChatClient;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
@@ -94,7 +93,7 @@ public final class GoogleChatContext {
          */
         public GoogleChatContext build() {
             if (client == null) {
-                client = GoogleChat.newInstance();
+                client = GoogleChatClient.newInstance();
             }
             return new GoogleChatContext(client);
         }

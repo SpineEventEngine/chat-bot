@@ -20,6 +20,8 @@
 
 package io.spine.chatbot.api.travis;
 
+import static io.spine.chatbot.api.travis.Token.privateToken;
+
 /**
  * A Travis CI API client.
  *
@@ -37,4 +39,11 @@ public interface TravisClient {
      * @return query execution result
      */
     <T extends TravisResponse> T execute(Query<T> query);
+
+    /**
+     * Creates a new Travis client with the default Travis token.
+     */
+    static TravisClient newInstance() {
+        return new Travis(privateToken());
+    }
 }

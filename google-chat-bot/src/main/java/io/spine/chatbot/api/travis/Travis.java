@@ -27,7 +27,6 @@ import java.net.http.HttpRequest;
 
 import static com.google.api.client.util.Preconditions.checkNotNull;
 import static io.spine.chatbot.api.travis.JsonProtoBodyHandler.jsonBodyHandler;
-import static io.spine.chatbot.api.travis.Token.privateToken;
 import static java.lang.String.format;
 
 /**
@@ -35,7 +34,7 @@ import static java.lang.String.format;
  *
  * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
  */
-public final class Travis implements TravisClient {
+final class Travis implements TravisClient {
 
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
     private static final String BASE_URL = "https://api.travis-ci.com";
@@ -48,15 +47,8 @@ public final class Travis implements TravisClient {
     /**
      * Creates a new Travis client with the specified API token.
      */
-    private Travis(Token apiToken) {
+    Travis(Token apiToken) {
         this.apiToken = checkNotNull(apiToken);
-    }
-
-    /**
-     * Creates a new Travis client with the default Travis token.
-     */
-    public static TravisClient newInstance() {
-        return new Travis(privateToken());
     }
 
     @Override

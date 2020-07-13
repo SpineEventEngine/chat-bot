@@ -20,9 +20,12 @@
 
 package io.spine.chatbot.api.google.chat;
 
+import com.google.api.services.chat.v1.HangoutsChat;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.BuildStateUpdate;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
+
+import static io.spine.chatbot.api.google.chat.HangoutsChatProvider.newHangoutsChat;
 
 /**
  * Google Chat API client abstraction.
@@ -40,4 +43,13 @@ public interface GoogleChatClient {
      * @return a sent build state update message
      */
     BuildStateUpdate sendBuildStateUpdate(Build build, ThreadResource thread);
+
+    /**
+     * Creates a new Google Chat client.
+     *
+     * <p>The client is backed by {@link HangoutsChat} API.
+     */
+    static GoogleChatClient newInstance() {
+        return new GoogleChat(newHangoutsChat());
+    }
 }
