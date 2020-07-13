@@ -81,7 +81,7 @@ final class SpineOrgInitProcess
             return ImmutableSet.of();
         }
         var space = e.getSpace();
-        _info().log("Starting Spine organization initialization process in space `%s`.", space);
+        _info().log("Starting Spine organization initialization process in the space `%s`.", space);
         var commands = ImmutableSet.<CommandMessage>builder();
         commands.add(registerOrgCommand(ORGANIZATION, space));
         client.execute(ReposQuery.forOwner(Slugs.forOrg(ORGANIZATION)))
