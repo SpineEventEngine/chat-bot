@@ -39,5 +39,5 @@ message OrganizationRepositories {
     OrganizationId organization = 1;
 
     // Linked organization repositories.
-    repeated RepositoryId repositories = 2;
+    repeated RepositoryId repository = 2;
 }

@@ -81,7 +81,7 @@ public final class Client implements AutoCloseable {
                              .run();
         checkState(orgRepos.size() == 1);
         return ImmutableList.copyOf(orgRepos.get(0)
-                                            .getRepositoriesList());
+                                            .getRepositoryList());
     }
 
     @Override

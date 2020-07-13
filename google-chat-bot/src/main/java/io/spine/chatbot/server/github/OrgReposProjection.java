@@ -51,9 +51,9 @@ final class OrgReposProjection
      */
     @Subscribe
     void on(RepositoryRegistered e) {
-        var repositories = Sets.newHashSet(builder().getRepositoriesList());
+        var repositories = Sets.newHashSet(builder().getRepositoryList());
         repositories.add(e.getRepository());
-        builder().clearRepositories()
-                 .addAllRepositories(repositories);
+        builder().clearRepository()
+                 .addAllRepository(repositories);
     }
 }
