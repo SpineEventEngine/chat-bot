@@ -119,14 +119,15 @@ final class RepoBuildProcess
             case UNRECOGNIZED:
             default:
                 throw newIllegalStateException(
-                        "Unexpected state status change `%s`.", stateStatusChange
+                        "Unexpected state status change `%s` for the repository `%s`.",
+                        stateStatusChange, repository.getValue()
                 );
         }
     }
 
     private EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain>
     onStable(RepositoryId repository, BuildStateChange stateChange) {
-        _info().log("Build for the repository `%s` is stable.", repository.getValue());
+        _info().log("The build for the repository `%s` is stable.", repository.getValue());
         var buildSucceededAgain = BuildSucceededAgain
                 .newBuilder()
                 .setRepository(repository)
@@ -137,7 +138,7 @@ final class RepoBuildProcess
 
     private EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain>
     onRecovered(RepositoryId repository, BuildStateChange stateChange) {
-        _info().log("Build for the repository `%s` is recovered.", repository.getValue());
+        _info().log("The build for the repository `%s` is recovered.", repository.getValue());
         var buildRecovered = BuildRecovered
                 .newBuilder()
                 .setRepository(repository)
@@ -149,7 +150,7 @@ final class RepoBuildProcess
     private EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain>
     onFailed(RepositoryId repository, BuildStateChange stateChange) {
         var newBuildState = stateChange.getNewValue();
-        _info().log("Build for the repository `%s` failed with status `%s`.",
+        _info().log("A build for the repository `%s` failed with the status `%s`.",
                     repository.getValue(), newBuildState.getState());
         var buildFailed = BuildFailed
                 .newBuilder()
