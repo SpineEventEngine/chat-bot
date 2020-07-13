@@ -123,7 +123,7 @@ public final class Client implements AutoCloseable {
         try {
             latch.await();
         } catch (InterruptedException e) {
-            throw new RuntimeException("Processing of command failed. Command: " + command, e);
+            newIllegalStateException(e, "Processing of command interrupted: %s.", command);
         }
         subscriptions.forEach(this::cancelSubscription);
     }
