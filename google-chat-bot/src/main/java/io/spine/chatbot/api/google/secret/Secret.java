@@ -28,7 +28,7 @@ import java.io.IOException;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
- * A utility for accessing application secrets stored in Google Secret Manager.
+ * The abstract base for utilities that access application secrets stored in Google Secret Manager.
  */
 public abstract class Secret {
 
