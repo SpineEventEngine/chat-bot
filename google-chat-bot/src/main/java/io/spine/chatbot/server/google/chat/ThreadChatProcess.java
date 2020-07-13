@@ -57,7 +57,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var change = e.getChange();
         var build = change.getNewValue();
         var repository = e.getRepository();
-        _info().log("Build for repository `%s` failed.", repository.getValue());
+        _info().log("A build for the repository `%s` failed.", repository.getValue());
         return processBuildStateUpdate(build, repository);
     }
 
@@ -72,7 +72,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var change = e.getChange();
         var build = change.getNewValue();
         var repository = e.getRepository();
-        _info().log("Build for repository `%s` recovered.", repository.getValue());
+        _info().log("A build for the repository `%s` recovered.", repository.getValue());
         return processBuildStateUpdate(build, repository);
     }
 
@@ -89,7 +89,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
                 .vBuild();
         if (shouldCreateThread()) {
             var resource = sentUpdate.getResource();
-            _debug().log("New thread `%s` created for repository `%s`.",
+            _debug().log("A new thread `%s` created for the repository `%s`.",
                          resource.getName(), repository.getValue());
             builder().setResource(resource)
                      .setSpace(space);
