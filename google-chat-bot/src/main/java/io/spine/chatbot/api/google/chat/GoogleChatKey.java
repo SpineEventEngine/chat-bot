@@ -62,7 +62,7 @@ final class GoogleChatKey extends Secret {
                     .fromStream(streamFrom(value))
                     .createScoped(CHAT_BOT_SCOPE);
         } catch (IOException e) {
-            throw newIllegalStateException(e, "Unable to read GoogleCredentials.");
+            throw newIllegalStateException(e, "Unable to read `GoogleCredentials`.");
         }
     }
 
