@@ -32,6 +32,10 @@ import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
 import io.spine.server.tuple.EitherOf4;
 
+import static io.spine.chatbot.server.google.chat.ChatEvents.toBotAddedToSpace;
+import static io.spine.chatbot.server.google.chat.ChatEvents.toBotRemovedFromSpace;
+import static io.spine.chatbot.server.google.chat.ChatEvents.toMessageReceived;
+
 /**
  * Google Chat incoming events reactor.
  *
@@ -58,28 +62,27 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
     EitherOf4<BotAddedToSpace, BotRemovedFromSpace, MessageReceived, Nothing>
     on(@External ChatEventReceived e) {
         var chatEvent = e.getEvent();
+        var space = chatEvent.getSpace();
         switch (chatEvent.getType()) {
             case MESSAGE:
-                _info().log("New user message received.");
-                return EitherOf4.withC(ChatEvents.toMessageReceived(chatEvent));
+                _info().log("A new user message received in the space `%s` (%s).",
+                            space.getDisplayName(), space.getName());
+                return EitherOf4.withC(toMessageReceived(chatEvent));
             case ADDED_TO_SPACE:
-                var toSpace = chatEvent.getSpace();
-                _info().log("ChatBot added to space `%s` (%s).",
-                            toSpace.getDisplayName(), toSpace.getName());
-                return EitherOf4.withA(ChatEvents.toBotAddedToSpace(chatEvent));
+                _info().log("ChatBot added to the space `%s` (%s).",
+                            space.getDisplayName(), space.getName());
+                return EitherOf4.withA(toBotAddedToSpace(chatEvent));
             case REMOVED_FROM_SPACE:
-                var fromSpace = chatEvent.getSpace();
-                _info().log("ChatBot removed from space `%s` (%s).",
-                            fromSpace.getDisplayName(), fromSpace.getName());
-                return EitherOf4.withB(ChatEvents.toBotRemovedFromSpace(chatEvent));
-
+                _info().log("ChatBot removed from the space `%s` (%s).",
+                            space.getDisplayName(), space.getName());
+                return EitherOf4.withB(toBotRemovedFromSpace(chatEvent));
             case CARD_CLICKED:
                 _debug().log("Skipping card clicks.");
                 return EitherOf4.withD(nothing());
             case UNRECOGNIZED:
             case ET_UNKNOWN:
             default:
-                _error().log("Unsupported chat event type received: %s", chatEvent.getType());
+                _error().log("Unsupported chat event type received: `%s`.", chatEvent.getType());
                 return EitherOf4.withD(nothing());
         }
     }
