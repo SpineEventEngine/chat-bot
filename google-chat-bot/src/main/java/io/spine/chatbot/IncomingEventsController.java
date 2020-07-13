@@ -42,8 +42,9 @@ import static io.micronaut.http.MediaType.APPLICATION_JSON;
 @Controller("/chat")
 final class IncomingEventsController implements Logging {
 
+    private static final String INCOMING_EVENTS_CONTEXT_NAME = "IncomingChatEvents";
     private static final ThirdPartyContext INCOMING_EVENTS =
-            ThirdPartyContext.singleTenant("IncomingChatEvents");
+            ThirdPartyContext.singleTenant(INCOMING_EVENTS_CONTEXT_NAME);
 
     /**
      * Processes an incoming Google Chat event.
@@ -78,12 +79,12 @@ final class IncomingEventsController implements Logging {
      */
     @EventListener
     void on(ShutdownEvent event) {
-        _info().log("Closing IncomingChatEvents third-party context.");
+        _info().log("Closing `%s` third-party context.", INCOMING_EVENTS_CONTEXT_NAME);
         try {
             INCOMING_EVENTS.close();
         } catch (Exception e) {
             _error().withCause(e)
-                    .log("Unable to gracefully close IncomingChatEvents context.");
+                    .log("Unable to gracefully close `%s` context.", INCOMING_EVENTS_CONTEXT_NAME);
         }
     }
 }
