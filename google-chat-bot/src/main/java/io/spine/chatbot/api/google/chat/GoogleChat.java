@@ -36,6 +36,7 @@ import static io.spine.chatbot.api.google.chat.HangoutsChatProvider.newHangoutsC
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * Google Chat API client.
@@ -91,9 +92,7 @@ public final class GoogleChat implements GoogleChatClient, Logging {
                     .create(space.getValue(), message)
                     .execute();
         } catch (IOException e) {
-            _error().withCause(e)
-                    .log("Unable to send message to space `%s`.", space);
-            throw new RuntimeException("Unable to send message to space " + space, e);
+            throw newIllegalStateException(e, "Unable to send message to the space `%s`.", space);
         }
     }
 }
