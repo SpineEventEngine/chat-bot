@@ -48,7 +48,8 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
                      .getSpace();
         var displayName = space.getDisplayName();
         var spaceId = e.getSpace();
-        _info().log("Registering space `%s` (`%s`).", displayName, spaceId.getValue());
+        _info().log("Registering the space `%s` (`%s`) because the bot is added the space.",
+                    displayName, spaceId.getValue());
         var header = SpaceHeader
                 .newBuilder()
                 .setDisplayName(displayName)
@@ -66,12 +67,14 @@ final class SpaceAggregate extends Aggregate<SpaceId, Space, Space.Builder> impl
      */
     @Assign
     SpaceRegistered handle(RegisterSpace c) {
+        var header = c.getHeader();
         var space = c.getId();
-        _info().log("Registering space `%s`.", space.getValue());
+        _info().log("Registering the space `%s` (`%s`) on direct registration request.",
+                    header.getDisplayName(), space.getValue());
         var result = SpaceRegistered
                 .newBuilder()
                 .setSpace(space)
-                .setHeader(c.getHeader())
+                .setHeader(header)
                 .vBuild();
         return result;
     }
