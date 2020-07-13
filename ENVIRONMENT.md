@@ -4,7 +4,7 @@ Cloud Environment setup
 The ChatBot application is working in the cloud environment on the Google Cloud Platform (GCP) and
 this document provides an overview of the currently configured environment.
 
-## Cloud Run
+# Cloud Run
 
 The [Cloud Run][cloud-run] is used as the main compute platform for the ChatBot application. 
 Cloud Run is a managed serverless solution that works with Docker images and is able to scale
@@ -22,7 +22,7 @@ new Cloud Run revision (see [Cloud Build](#cloud-build) section for details).
 [jib]: https://github.com/GoogleContainerTools/jib
 [container-registry]: https://cloud.google.com/container-registry
 
-## Cloud Build
+# Cloud Build
 
 The [Cloud Build][cloud-build] CI/CD solution is used to continuously build and deploy 
 the application.
@@ -46,7 +46,7 @@ configured to allow the Cloud Run deployment (see the [IAM](#iam) section for de
 [cloud-build-github-app]: https://github.com/marketplace/google-cloud-build
 [run-builds-on-github]: https://cloud.google.com/cloud-build/docs/automating-builds/run-builds-on-github
 
-## Hangouts Chat API
+# Hangouts Chat API
 
 The bot uses [Hangout Chat API][chat-api] and is linked to the GCP project. It is only possible 
 to have a single bot per GCP project.
@@ -66,7 +66,7 @@ to the publishing [guide][publishing-guide] where the essential configurations a
 [publishing-guide]: https://developers.google.com/hangouts/chat/how-tos/bots-publish
 [pubsub-bot]: https://developers.google.com/hangouts/chat/how-tos/pub-sub
 
-## Pub/Sub
+# Pub/Sub
 
 The application is built with resilience in mind and even though it exposes some REST APIs, 
 it is not intended to handle to load directly due to the security and performance considerations. 
@@ -111,7 +111,7 @@ The bot requires the following Pub/Sub topics to be configured:
 [push-subscription]: https://cloud.google.com/pubsub/docs/push
 [pull-subscription]: https://cloud.google.com/pubsub/docs/pull
 
-## Cloud Scheduler
+# Cloud Scheduler
 
 The [Cloud Scheduler][scheduler] service allows configuring multiple scheduled tasks that deliver 
 the payload to a particular target (HTTP endpoint, Pub/Sub topic or AppEngine endpoint).
@@ -124,7 +124,7 @@ expression: `0 * * * *`.
 [scheduler]: https://cloud.google.com/scheduler
 [configure-schedules]: https://cloud.google.com/scheduler/docs/configuring/cron-job-schedules
 
-## Secret Manager
+# Secret Manager
 
 The [Secret Manager][secret-manager] service is used to supply application secrets like API tokens
 and service accounts securely.
@@ -149,7 +149,7 @@ The following secrets are configured for the bot:
 [managing-secrets]: https://cloud.google.com/secret-manager/docs/managing-secrets
 [reading-secrets]: https://cloud.google.com/secret-manager/docs/managing-secret-versions#get
 
-## IAM
+# IAM
 
 The [Cloud Identity and Access Management][iam] (IAM) service is used to fine-tune the authorization 
 and access management for the application.

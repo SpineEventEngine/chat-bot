@@ -8,7 +8,7 @@ via the [Google Chat][google-chat].
 [chatbot-concepts]: https://developers.google.com/hangouts/chat/concepts/bots
 [google-chat]: https://chat.google.com/
 
-## Prerequisites
+# Prerequisites
 
 * [JDK 11][jdk11] or newer.
 * [Docker SE][docker] v19.03 or newer.
@@ -16,7 +16,7 @@ via the [Google Chat][google-chat].
 [docker]: https://docs.docker.com/get-docker/
 [jdk11]: https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/downloads-list.html
 
-## Build
+# Build
 
 In order to build the application, run:
 
@@ -32,7 +32,7 @@ Also, it is possible to build a Docker image using [`jib`][jib]:
 
 [jib]: https://github.com/GoogleContainerTools/jib
 
-## Running locally 
+# Running locally 
 
 It is possible to run the application as a docker image locally. In order to do that, please make
 sure you have saved the appropriate GCP credentials at `.credentials/gcp-adc.json`.
@@ -65,7 +65,7 @@ Cloud Run [guide][cloud-run-local-guide].
 
 [cloud-run-local-guide]: https://cloud.google.com/run/docs/testing/local#running_locally_using_docker_with_access_to_services
 
-## Running in the Cloud
+# Running in the Cloud
 
 The application is deployed in the Google Cloud Platform cloud, and the overview of the 
 cloud deployment is available in a separate [document](ENVIRONMENT.md).
