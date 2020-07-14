@@ -27,7 +27,7 @@ import io.spine.chatbot.google.chat.thread.ThreadResource;
 import static io.spine.chatbot.google.chat.HangoutsChatProvider.newHangoutsChat;
 
 /**
- * Google Chat API client abstraction.
+ * A client to the Google Chat server.
  *
  * <p>Abstracts out usage of the chat API by exposing only ready-to-use ChatBot-specific
  * methods.
