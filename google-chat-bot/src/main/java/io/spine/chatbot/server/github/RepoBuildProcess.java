@@ -91,7 +91,7 @@ final class RepoBuildProcess
                     .build();
         }
         var build = buildFrom(branchBuild, c.getSpace());
-        builder().setLastStatusCheck(Time.currentTime())
+        builder().setWhenLastChecked(Time.currentTime())
                  .setBuild(build)
                  .setCurrentState(build.getState());
         var stateChange = BuildStateChange
