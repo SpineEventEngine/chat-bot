@@ -47,14 +47,14 @@ abstract class Query<T extends TravisResponse> {
     /**
      * Returns the request URL to the REST endpoint.
      */
-    String request() {
+    final String request() {
         return request;
     }
 
     /**
      * Returns query response type.
      */
-    Class<T> responseType() {
+    final Class<T> responseType() {
         return responseType;
     }
 
