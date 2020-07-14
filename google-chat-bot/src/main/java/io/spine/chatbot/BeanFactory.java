@@ -34,6 +34,8 @@ import io.spine.pubsub.PubsubPushRequest;
 import javax.inject.Singleton;
 import java.io.IOException;
 
+import static io.spine.util.Exceptions.newIllegalArgumentException;
+
 /**
  * Creates Micronaut context bean definitions.
  */
@@ -87,7 +89,9 @@ final class BeanFactory {
                         .vBuild();
                 return result;
             } catch (IOException e) {
-                throw new RuntimeException("Unable to deserialize PubsubPushNotification json.", e);
+                throw newIllegalArgumentException(
+                        e, "Unable to deserialize `PubsubPushRequest` json."
+                );
             }
         }
     }
