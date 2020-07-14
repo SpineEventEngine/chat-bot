@@ -27,9 +27,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
- * An abstract API client that exposes the {@code fail-fast} concept to the actual test clients.
+ * An abstract API that exposes the {@code fail-fast} concept.
  */
-public abstract class FailFastAwareClient implements Logging {
+public abstract class CanFailFast implements Logging {
 
     /** Determines whether the client should fail if a particular response is not preconfigured. **/
     private final boolean failFast;
@@ -37,7 +37,7 @@ public abstract class FailFastAwareClient implements Logging {
     /**
      * Creates a new client with the specified {@code failFast} behavior.
      */
-    protected FailFastAwareClient(boolean failFast) {
+    protected CanFailFast(boolean failFast) {
         this.failFast = failFast;
     }
 

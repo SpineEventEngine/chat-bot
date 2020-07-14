@@ -20,7 +20,7 @@
 
 package io.spine.chatbot.google.chat;
 
-import io.spine.chatbot.FailFastAwareClient;
+import io.spine.chatbot.CanFailFast;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
@@ -32,7 +32,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * An in-memory test-only implementation of the Google Chat client.
  */
-public final class InMemoryGoogleChatClient extends FailFastAwareClient implements GoogleChatClient {
+public final class InMemoryGoogleChatClient extends CanFailFast implements GoogleChatClient {
 
     private final Map<String, BuildStateUpdate> sentMessages = new ConcurrentHashMap<>();
 
@@ -41,7 +41,7 @@ public final class InMemoryGoogleChatClient extends FailFastAwareClient implemen
     }
 
     /**
-     * Creates a {@link #FailFastAwareClient#failFast failFast} in-memory Google Chat client.
+     * Creates a {@link #CanFailFast#failFast failFast} in-memory Google Chat client.
      */
     public static InMemoryGoogleChatClient strictClient() {
         return new InMemoryGoogleChatClient(true);
