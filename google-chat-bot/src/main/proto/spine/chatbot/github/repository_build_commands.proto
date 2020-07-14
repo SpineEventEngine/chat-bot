@@ -43,5 +43,5 @@ message CheckRepositoryBuild {
     OrganizationId organization = 2 [(required) = true];
 
     // The Google Chat space associated with the organization.
-    spine.chatbot.google.chat.SpaceId space = 3 [(required) = true, (validate) = true];
+    google.chat.SpaceId space = 3 [(required) = true, (validate) = true];
 }

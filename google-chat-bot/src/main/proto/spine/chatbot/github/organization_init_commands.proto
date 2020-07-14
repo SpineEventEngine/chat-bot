@@ -43,5 +43,5 @@ message InitializeOrganization {
     OrganizationId organization = 1 [(required) = true];
 
     // The Google Chat space associated with the organization.
-    spine.chatbot.google.chat.SpaceId space = 2 [(required) = true, (validate) = true];
+    google.chat.SpaceId space = 2 [(required) = true, (validate) = true];
 }

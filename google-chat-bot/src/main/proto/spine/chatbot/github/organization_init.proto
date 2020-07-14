@@ -45,7 +45,7 @@ message OrganizationInit {
     OrganizationId organization = 1;
 
     // The Google Chat space associated with the organization.
-    spine.chatbot.google.chat.SpaceId space = 2;
+    google.chat.SpaceId space = 2;
 
     // Determines whether the organization resources are already initialized.
     bool initialized = 3;

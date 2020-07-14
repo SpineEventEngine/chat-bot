@@ -62,5 +62,5 @@ message OrgHeader {
     spine.net.Url travis_profile = 4 [(required) = true];
 
     // The Google Chat space associated with the organization.
-    spine.chatbot.google.chat.SpaceId space = 5 [(required) = true, (validate) = true];
+    google.chat.SpaceId space = 5 [(required) = true, (validate) = true];
 }
