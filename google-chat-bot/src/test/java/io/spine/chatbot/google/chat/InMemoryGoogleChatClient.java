@@ -24,17 +24,18 @@ import io.spine.chatbot.CanFailFast;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Collections.synchronizedMap;
 
 /**
  * An in-memory test-only implementation of the Google Chat client.
  */
 public final class InMemoryGoogleChatClient extends CanFailFast implements GoogleChatClient {
 
-    private final Map<String, BuildStateUpdate> sentMessages = new ConcurrentHashMap<>();
+    private final Map<String, BuildStateUpdate> sentMessages = synchronizedMap(new HashMap<>());
 
     private InMemoryGoogleChatClient(boolean failFast) {
         super(failFast);

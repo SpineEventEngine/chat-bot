@@ -23,18 +23,19 @@ package io.spine.chatbot.travis;
 import io.spine.chatbot.CanFailFast;
 import io.spine.chatbot.github.Slug;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.protobuf.Messages.defaultInstance;
+import static java.util.Collections.synchronizedMap;
 
 /**
  * An in-memory test-only implementation of the Travis CI API client.
  */
 public final class InMemoryTravisClient extends CanFailFast implements TravisClient {
 
-    private final Map<Query<?>, TravisResponse> responses = new ConcurrentHashMap<>();
+    private final Map<Query<?>, TravisResponse> responses = synchronizedMap(new HashMap<>());
 
     private InMemoryTravisClient(boolean failFast) {
         super(failFast);
