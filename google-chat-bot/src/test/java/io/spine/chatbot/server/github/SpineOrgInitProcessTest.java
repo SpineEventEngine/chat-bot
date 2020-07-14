@@ -38,7 +38,7 @@ import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
 final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
 
     @Nested
-    @DisplayName("perform initialization of watched spine resources")
+    @DisplayName("perform initialization of watched Spine resources")
     final class Init {
 
         private final SpaceId space = space("spaces/qjwrp1441");

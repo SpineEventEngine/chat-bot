@@ -117,7 +117,7 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
         }
 
         @Test
-        @DisplayName("producing MessageAdded event")
+        @DisplayName("producing `MessageAdded` event")
         void producingEvent() {
             var messageAdded = MessageAdded
                     .newBuilder()

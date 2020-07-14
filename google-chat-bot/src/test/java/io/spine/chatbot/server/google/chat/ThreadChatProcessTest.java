@@ -114,7 +114,7 @@ final class ThreadChatProcessTest {
                                                     BuildStateChange stateChange);
 
         @Test
-        @DisplayName("producing MessageCreated and ThreadCreated events")
+        @DisplayName("producing `MessageCreated` and `ThreadCreated` events")
         void producingEvents() {
             var messageCreated = MessageCreated
                     .newBuilder()

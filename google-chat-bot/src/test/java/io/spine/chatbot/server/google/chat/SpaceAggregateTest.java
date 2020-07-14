@@ -62,7 +62,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         }
 
         @Test
-        @DisplayName("producing SpaceRegistered event")
+        @DisplayName("producing `SpaceRegistered` event")
         void producingEvent() {
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
@@ -73,7 +73,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         }
 
         @Test
-        @DisplayName("setting Space state")
+        @DisplayName("setting space state")
         void settingState() {
             var expectedState = Space
                     .newBuilder()
@@ -108,7 +108,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         }
 
         @Test
-        @DisplayName("producing SpaceRegistered event")
+        @DisplayName("producing `SpaceRegistered` event")
         void producingEvent() {
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
@@ -119,7 +119,7 @@ final class SpaceAggregateTest extends GoogleChatContextAwareTest {
         }
 
         @Test
-        @DisplayName("setting Space state")
+        @DisplayName("setting space state")
         void settingState() {
             var expectedState = Space
                     .newBuilder()

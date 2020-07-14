@@ -53,7 +53,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     private static final SpaceId chatSpace = space("spaces/1245wrq");
 
     @Test
-    @DisplayName("throw NoBuildsFound rejection when Travis API cannot return builds for a repo")
+    @DisplayName("throw `NoBuildsFound` rejection when Travis API cannot return builds for a repo")
     void throwNoBuildsFoundRejection() {
         travisClient().setBuildsFor(Slugs.forRepo(repository),
                                     RepoBranchBuildResponse.getDefaultInstance());
@@ -94,7 +94,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         }
 
         @Test
-        @DisplayName("producing BuildFailed event")
+        @DisplayName("producing `BuildFailed` event")
         void producingEvent() {
             var stateChange = BuildStateChange
                     .newBuilder()
@@ -157,7 +157,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         }
 
         @Test
-        @DisplayName("producing BuildRecovered event")
+        @DisplayName("producing `BuildRecovered` event")
         void producingEvent() {
             var stateChange = BuildStateChange
                     .newBuilder()
@@ -232,7 +232,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         }
 
         @Test
-        @DisplayName("producing BuildSucceededAgain event")
+        @DisplayName("producing `BuildSucceededAgain` event")
         void producingEvent() {
             var stateChange = BuildStateChange
                     .newBuilder()

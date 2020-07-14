@@ -74,7 +74,7 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
         }
 
         @Test
-        @DisplayName("producing OrganizationRegistered event")
+        @DisplayName("producing `OrganizationRegistered` event")
         void producingEvent() {
             var organizationRegistered = OrganizationRegistered
                     .newBuilder()

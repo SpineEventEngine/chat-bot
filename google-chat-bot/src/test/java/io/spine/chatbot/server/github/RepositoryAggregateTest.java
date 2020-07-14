@@ -72,7 +72,7 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
         }
 
         @Test
-        @DisplayName("producing RepositoryRegistered event")
+        @DisplayName("producing `RepositoryRegistered` event")
         void producingEvent() {
             var repositoryRegistered = RepositoryRegistered
                     .newBuilder()
