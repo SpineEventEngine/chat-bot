@@ -37,7 +37,7 @@ import static io.spine.chatbot.server.google.chat.ChatEvents.toBotRemovedFromSpa
 import static io.spine.chatbot.server.google.chat.ChatEvents.toMessageReceived;
 
 /**
- * Processes incoming {@link ChatEvent} message and emits one of the following domain events:
+ * Processes incoming {@link ChatEvent} messages and emits one of the following domain events:
  *
  * <ul>
  *     <li>{@link BotAddedToSpace} — the ChatBot is added to a space;
@@ -52,7 +52,7 @@ import static io.spine.chatbot.server.google.chat.ChatEvents.toMessageReceived;
 final class IncomingEventsHandler extends AbstractEventReactor implements Logging {
 
     /**
-     * Processes incoming external {@link ChatEvent}.
+     * Processes an incoming external {@link ChatEvent}.
      *
      * <p>If the event type is not supported, returns {@link #nothing() nothing}.
      */
