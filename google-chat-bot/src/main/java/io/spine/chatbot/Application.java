@@ -37,7 +37,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 /**
  * The entry point to the Spine ChatBot application.
  *
- * <p>The application itself exposes a number of REST endpoints accessible for the clients such as:
+ * <p>The application exposes a number of REST endpoints accessible for the clients such as:
  *
  * <ul>
  *     <li>{@code /chat/incoming/event} — handles incoming events from the Google Chat space.
@@ -73,16 +73,14 @@ public final class Application implements Logging {
      */
     public static void main(String[] args) {
         var application = new Application();
-        application.start(args);
+        application.start();
     }
 
     /**
-     * Starts the application.
-     *
-     * <p>Performs bounded contexts initialization, starts GRPC {@link Server} and runs
+     * Performs bounded contexts initialization, starts GRPC {@link Server} and runs
      * the {@link Micronaut}.
      */
-    private void start(String[] args) {
+    private void start() {
         _config().log("Initializing server environment.");
         ChatBotServerEnvironment.init();
         _config().log("Setting up bounded contexts.");
@@ -95,7 +93,7 @@ public final class Application implements Logging {
         _config().log("Starting GRPC server.");
         var server = startServer(gitHubContext, googleChatContext);
         _config().log("Starting Micronaut application.");
-        var applicationContext = Micronaut.run(Application.class, args);
+        var applicationContext = Micronaut.run(Application.class);
         applicationContext.registerSingleton(new ShutdownHook(server));
     }
 
