@@ -30,11 +30,11 @@ import io.spine.server.storage.datastore.DsShardedWorkRegistry;
  * Delivers messages using Datastore as the underlying storage.
  *
  * <p>The delivery is based on the {@link DatastoreStorageFactory Datastore} and uses
- * {@link DsShardedWorkRegistry} as the {@link ShardedWorkRegistry work registry}.
+ * {@link DsShardedWorkRegistry} as the {@linkplain ShardedWorkRegistry work registry}.
  */
 final class DistributedDelivery {
 
-    /** The number of shards used for the signals delivery. **/
+    /** The number of shards used for the signal delivery. **/
     private static final int NUMBER_OF_SHARDS = 50;
 
     /**

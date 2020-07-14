@@ -26,13 +26,14 @@ import io.spine.server.delivery.DeliveryStats;
 import io.spine.server.delivery.ShardIndex;
 import io.spine.server.delivery.ShardedRecord;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Delivers messages from a particular shard.
  *
  * <p>Wraps the {@link io.spine.server.delivery.Delivery#deliverMessagesFrom(ShardIndex)
- * Delivery#deliverMessagesFrom}
- * with server environment-specific logging and provides helpers that unifies the usage of the
- * delivery.
+ * Delivery#deliverMessagesFrom} with server environment-specific logging and provides helpers
+ * that unifies the usage of the delivery.
  */
 final class ShardDelivery implements Logging {
 
@@ -46,13 +47,15 @@ final class ShardDelivery implements Logging {
      * Delivers the {@code message}.
      */
     static void deliver(ShardedRecord message) {
+        checkNotNull(message);
         deliverFrom(message.shardIndex());
     }
 
     /**
      * Delivers messages from the {@code shard}.
      */
-    static void deliverFrom(ShardIndex shard) {
+    private static void deliverFrom(ShardIndex shard) {
+        checkNotNull(shard);
         var delivery = new ShardDelivery(shard);
         delivery.deliverNow();
     }
@@ -63,8 +66,8 @@ final class ShardDelivery implements Logging {
         var nodeId = server.nodeId()
                            .getValue();
         var indexValue = shard.getIndex();
-        trace.log("Delivering messages from the shard with index `%d`. NodeId=%s.", indexValue,
-                  nodeId);
+        trace.log("Delivering messages from the shard with index `%d`. NodeId=%s.",
+                  indexValue, nodeId);
         var stats = server.delivery()
                           .deliverMessagesFrom(shard);
         if (stats.isPresent()) {
