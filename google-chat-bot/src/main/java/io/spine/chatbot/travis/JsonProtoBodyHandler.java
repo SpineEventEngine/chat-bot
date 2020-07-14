@@ -49,7 +49,8 @@ final class JsonProtoBodyHandler<T extends Message> implements HttpResponse.Body
      * Creates a body handler for a specified Protobuf message.
      */
     static <T extends Message> JsonProtoBodyHandler<T> jsonBodyHandler(Class<T> type) {
-        return new JsonProtoBodyHandler<>(checkNotNull(type));
+        checkNotNull(type);
+        return new JsonProtoBodyHandler<>(type);
     }
 
     @Override
