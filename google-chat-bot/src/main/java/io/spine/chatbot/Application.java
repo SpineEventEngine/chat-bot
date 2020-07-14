@@ -42,10 +42,7 @@ import io.spine.logging.Logging;
 public final class Application implements Logging {
 
     static {
-        System.setProperty(
-                "flogger.backend_factory",
-                "com.google.common.flogger.backend.log4j2.Log4j2BackendFactory#getInstance"
-        );
+        useLog4j2FloggerBackend();
     }
 
     /**
@@ -73,5 +70,15 @@ public final class Application implements Logging {
               .start();
         _config().log("Starting Micronaut application.");
         Micronaut.run(Application.class);
+    }
+
+    /**
+     * Configures Log4j2 as the <a href="https://github.com/google/flogger">Flogger</a> backend.
+     */
+    private static void useLog4j2FloggerBackend() {
+        System.setProperty(
+                "flogger.backend_factory",
+                "com.google.common.flogger.backend.log4j2.Log4j2BackendFactory#getInstance"
+        );
     }
 }
