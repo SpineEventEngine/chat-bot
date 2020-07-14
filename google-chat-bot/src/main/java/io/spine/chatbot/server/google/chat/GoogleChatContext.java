@@ -21,6 +21,7 @@
 package io.spine.chatbot.server.google.chat;
 
 import io.spine.chatbot.google.chat.GoogleChatClient;
+import io.spine.chatbot.server.ContextBuilderAware;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
 
@@ -29,7 +30,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Provides {@link BoundedContextBuilder} for the Google Chat context.
  */
-public final class GoogleChatContext {
+public final class GoogleChatContext implements ContextBuilderAware {
 
     /** The name of the Google Chat Context. **/
     static final String GOOGLE_CHAT_CONTEXT_NAME = "GoogleChat";
@@ -43,6 +44,7 @@ public final class GoogleChatContext {
     /**
      * Returns the context builder associated with the Google Chat context.
      */
+    @Override
     public BoundedContextBuilder builder() {
         return this.builder;
     }
@@ -65,6 +67,13 @@ public final class GoogleChatContext {
      */
     public static Builder newBuilder() {
         return new Builder();
+    }
+
+    /**
+     * Creates a new Google Chat context.
+     */
+    public static GoogleChatContext newInstance() {
+        return newBuilder().build();
     }
 
     /**

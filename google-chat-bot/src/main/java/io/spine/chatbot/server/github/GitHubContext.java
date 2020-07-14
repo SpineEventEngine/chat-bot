@@ -20,6 +20,7 @@
 
 package io.spine.chatbot.server.github;
 
+import io.spine.chatbot.server.ContextBuilderAware;
 import io.spine.chatbot.travis.TravisClient;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
@@ -29,7 +30,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Provides {@link BoundedContextBuilder} for the GitHub context.
  */
-public final class GitHubContext {
+public final class GitHubContext implements ContextBuilderAware {
 
     /**
      * The name of the GitHub Context.
@@ -45,6 +46,7 @@ public final class GitHubContext {
     /**
      * Returns the context builder associated with the GitHub context.
      */
+    @Override
     public BoundedContextBuilder builder() {
         return this.builder;
     }
@@ -64,6 +66,13 @@ public final class GitHubContext {
      */
     public static Builder newBuilder() {
         return new Builder();
+    }
+
+    /**
+     * Creates a new GitHub context.
+     */
+    public static GitHubContext newInstance() {
+        return newBuilder().build();
     }
 
     /**
