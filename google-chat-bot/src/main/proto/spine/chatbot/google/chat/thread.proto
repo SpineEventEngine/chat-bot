@@ -45,7 +45,7 @@ message Thread {
     SpaceId space = 3;
 
     // Messages posted by the bot to the thread.
-    repeated MessageId messages = 4;
+    repeated MessageId message = 4;
 }
 
 // Chat Thread resource.

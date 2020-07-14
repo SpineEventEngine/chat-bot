@@ -77,6 +77,6 @@ final class ThreadAggregate extends Aggregate<ThreadId, Thread, Thread.Builder> 
 
     @Apply
     private void on(MessageAdded e) {
-        builder().addMessages(e.getMessage());
+        builder().addMessage(e.getMessage());
     }
 }

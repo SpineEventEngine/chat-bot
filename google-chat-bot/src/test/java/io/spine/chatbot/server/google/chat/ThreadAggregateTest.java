@@ -135,7 +135,7 @@ final class ThreadAggregateTest extends GoogleChatContextAwareTest {
                     .setId(thread)
                     .setSpace(space)
                     .setResource(threadResource)
-                    .addMessages(message)
+                    .addMessage(message)
                     .vBuild();
             context().assertState(thread, Thread.class)
                      .isEqualTo(state);
