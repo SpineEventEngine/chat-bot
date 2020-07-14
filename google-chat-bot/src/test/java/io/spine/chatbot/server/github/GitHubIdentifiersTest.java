@@ -20,41 +20,14 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.github.OrganizationId;
-import io.spine.chatbot.github.RepositoryId;
+import io.spine.chatbot.server.google.chat.GoogleChatIdentifiers;
+import io.spine.testing.UtilityClassTest;
+import org.junit.jupiter.api.DisplayName;
 
-import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
+@DisplayName("`GitHubIdentifiers` should")
+final class GitHubIdentifiersTest extends UtilityClassTest<GoogleChatIdentifiers> {
 
-/**
- * A utility for working with {@link GitHubContext} identifiers.
- */
-public final class GitHubIdentifier {
-
-    /**
-     * Prevents instantiation of this utility class.
-     */
-    private GitHubIdentifier() {
-    }
-
-    /**
-     * Creates a new {@code OrganizationId} out of the specified {@code name}.
-     */
-    public static OrganizationId organization(String name) {
-        checkNotEmptyOrBlank(name);
-        return OrganizationId
-                .newBuilder()
-                .setValue(name)
-                .vBuild();
-    }
-
-    /**
-     * Creates a new {@code RepositoryId} out of the specified {@code slug}.
-     */
-    public static RepositoryId repository(String slug) {
-        checkNotEmptyOrBlank(slug);
-        return RepositoryId
-                .newBuilder()
-                .setValue(slug)
-                .vBuild();
+    GitHubIdentifiersTest() {
+        super(GoogleChatIdentifiers.class);
     }
 }

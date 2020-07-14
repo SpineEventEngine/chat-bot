@@ -37,8 +37,8 @@ import static io.spine.chatbot.google.chat.incoming.EventType.ADDED_TO_SPACE;
 import static io.spine.chatbot.google.chat.incoming.EventType.MESSAGE;
 import static io.spine.chatbot.google.chat.incoming.EventType.REMOVED_FROM_SPACE;
 import static io.spine.chatbot.google.chat.incoming.SpaceType.ROOM;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.message;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
 
 @DisplayName("`IncomingEventsHandler` should")
 final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {

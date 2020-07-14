@@ -37,10 +37,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
+import static io.spine.chatbot.server.github.GitHubIdentifiers.repository;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.message;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.thread;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
 
 @DisplayName("`ThreadChatProcess` should")

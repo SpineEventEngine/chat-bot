@@ -32,8 +32,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.GitHubIdentifier.organization;
-import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
+import static io.spine.chatbot.server.github.GitHubIdentifiers.organization;
+import static io.spine.chatbot.server.github.GitHubIdentifiers.repository;
 import static io.spine.chatbot.url.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.url.MoreUrls.travisUrlFor;
 

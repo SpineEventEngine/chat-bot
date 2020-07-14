@@ -26,7 +26,7 @@ import io.spine.chatbot.google.chat.incoming.event.BotRemovedFromSpace;
 import io.spine.chatbot.google.chat.incoming.event.MessageReceived;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.message;
 
 /**
  * A utility for working with {@link ChatEvent}s.

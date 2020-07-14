@@ -29,12 +29,12 @@ import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 /**
  * A utility for working with {@link GoogleChatContext} identifiers.
  */
-public final class GoogleChatIdentifier {
+public final class GoogleChatIdentifiers {
 
     /**
      * Prevents instantiation of this utility class.
      */
-    private GoogleChatIdentifier() {
+    private GoogleChatIdentifiers() {
     }
 
     /**

@@ -40,10 +40,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.GitHubIdentifier.organization;
-import static io.spine.chatbot.server.github.GitHubIdentifier.repository;
+import static io.spine.chatbot.server.github.GitHubIdentifiers.organization;
+import static io.spine.chatbot.server.github.GitHubIdentifiers.repository;
 import static io.spine.chatbot.server.github.RepoBuildProcess.buildFrom;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
 
 @DisplayName("`RepoBuildProcess` should")
 final class RepoBuildProcessTest extends GitHubContextAwareTest {

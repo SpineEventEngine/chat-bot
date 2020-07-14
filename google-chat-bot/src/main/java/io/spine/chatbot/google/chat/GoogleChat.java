@@ -30,8 +30,8 @@ import io.spine.logging.Logging;
 import java.io.IOException;
 
 import static io.spine.chatbot.google.chat.BuildStateUpdates.buildStateMessage;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.message;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.thread;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
 import static io.spine.util.Exceptions.newIllegalStateException;
 

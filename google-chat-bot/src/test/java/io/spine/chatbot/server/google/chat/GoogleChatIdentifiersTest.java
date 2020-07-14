@@ -34,16 +34,16 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.space;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.message;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
-@DisplayName("`GoogleChatIdentifier` should")
-final class GoogleChatIdentifierTest extends UtilityClassTest<GoogleChatIdentifier> {
+@DisplayName("`GoogleChatIdentifiers` should")
+final class GoogleChatIdentifiersTest extends UtilityClassTest<GoogleChatIdentifiers> {
 
-    GoogleChatIdentifierTest() {
-        super(GoogleChatIdentifier.class);
+    GoogleChatIdentifiersTest() {
+        super(GoogleChatIdentifiers.class);
     }
 
     // nested tests do not work with static classes
