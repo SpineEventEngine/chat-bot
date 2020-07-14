@@ -63,7 +63,7 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
         var space = chatEvent.getSpace();
         switch (chatEvent.getType()) {
             case MESSAGE:
-                _info().log("A new user message received in the space `%s` (%s).",
+                _debug().log("A new user message received in the space `%s` (%s).",
                             space.getDisplayName(), space.getName());
                 return EitherOf4.withC(toMessageReceived(chatEvent));
             case ADDED_TO_SPACE:
