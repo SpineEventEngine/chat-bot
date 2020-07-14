@@ -40,7 +40,7 @@ import "spine/chatbot/google/chat/identifiers.proto";
 
 // A build process of a GitHub repository.
 message RepositoryBuild {
-    option (entity) = {kind: PROCESS_MANAGER visibility: FULL};
+    option (entity) = {kind: PROCESS_MANAGER visibility: NONE};
 
     RepositoryId repository = 1;
 

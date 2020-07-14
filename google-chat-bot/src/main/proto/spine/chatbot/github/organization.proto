@@ -37,7 +37,7 @@ import "spine/chatbot/google/chat/identifiers.proto";
 
 // A GitHub organization.
 message Organization {
-    option (entity) = {kind: AGGREGATE visibility: FULL};
+    option (entity) = {kind: AGGREGATE visibility: NONE};
     option (is).java_type = "io.spine.chatbot.server.github.OrgHeaderAware";
 
     OrganizationId id = 1;

@@ -39,7 +39,7 @@ import "spine/chatbot/google/chat/identifiers.proto";
 // for a particular Chat Space.
 //
 message OrganizationInit {
-    option (entity) = {kind: PROCESS_MANAGER visibility: FULL};
+    option (entity) = {kind: PROCESS_MANAGER visibility: NONE};
 
     // The organization for which the initialization is performed.
     OrganizationId organization = 1;
