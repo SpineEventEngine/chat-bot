@@ -31,12 +31,10 @@ import io.spine.server.storage.memory.InMemoryStorageFactory;
 import io.spine.server.transport.memory.InMemoryTransportFactory;
 
 /**
- * ChatBot server environment definition.
+ * Initializes the {@link io.spine.server.ServerEnvironment}.
  *
- * <p>Initializes the {@link io.spine.server.ServerEnvironment}.
- *
- * <p>Configures the {@link StorageFactory} based on
- * the current {@link Environment} — Datastore-based for Production and in-memory-based for tests.
+ * <p>Configures the {@link StorageFactory} depending on the current {@link Environment}.
+ * Uses the Datastore storage factory for the production mode and in-memory storage for tests.
  *
  * <p>Configures the inbox delivery through the Datastore work registry while
  * in Production environment, otherwise uses local synchronous delivery.
