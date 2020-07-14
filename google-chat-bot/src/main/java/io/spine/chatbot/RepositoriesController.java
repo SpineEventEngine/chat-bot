@@ -51,8 +51,8 @@ final class RepositoriesController implements Logging {
     }
 
     private void checkBuildStatus(Client client, RepositoryId repo, Organization org) {
-        _info().log("Sending `%s` command for the repository `%s`.",
-                    CheckRepositoryBuild.class.getSimpleName(), repo.getValue());
+        _debug().log("Sending `%s` command for the repository `%s`.",
+                     CheckRepositoryBuild.class.getSimpleName(), repo.getValue());
         var checkRepositoryBuild = checkRepoBuildCommand(repo, org);
         client.post(checkRepositoryBuild);
     }
