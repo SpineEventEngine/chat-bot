@@ -42,30 +42,27 @@ final class RepositoriesController implements Logging {
         _debug().log("Checking repositories build statuses.");
         try (var client = Client.newInstance()) {
             var organizations = client.listOrganizations();
-            for (var organization : organizations) {
-                var repos = client.listOrgRepos(organization.getId());
-                repos.forEach(repo -> checkBuildStatus(client, repo, organization));
+            for (var org : organizations) {
+                var repos = client.listOrgRepos(org.getId());
+                repos.forEach(repo -> checkBuildStatus(client, repo, org));
             }
             return "success";
         }
     }
 
-    private void checkBuildStatus(Client client,
-                                  RepositoryId repository,
-                                  Organization organization) {
+    private void checkBuildStatus(Client client, RepositoryId repo, Organization org) {
         _info().log("Sending `%s` command for the repository `%s`.",
-                    CheckRepositoryBuild.class.getSimpleName(), repository.getValue());
-        var checkRepositoryBuild = checkRepoBuildCommand(repository, organization);
+                    CheckRepositoryBuild.class.getSimpleName(), repo.getValue());
+        var checkRepositoryBuild = checkRepoBuildCommand(repo, org);
         client.post(checkRepositoryBuild);
     }
 
-    private static CheckRepositoryBuild
-    checkRepoBuildCommand(RepositoryId repository, Organization organization) {
+    private static CheckRepositoryBuild checkRepoBuildCommand(RepositoryId repo, Organization org) {
         return CheckRepositoryBuild
                 .newBuilder()
-                .setRepository(repository)
-                .setOrganization(organization.getId())
-                .setSpace(organization.space())
+                .setRepository(repo)
+                .setOrganization(org.getId())
+                .setSpace(org.space())
                 .vBuild();
     }
 }

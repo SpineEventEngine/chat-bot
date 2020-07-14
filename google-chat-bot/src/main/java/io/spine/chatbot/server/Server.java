@@ -51,6 +51,15 @@ public final class Server implements Logging {
     }
 
     /**
+     * Creates a new in-process GRPC server with the supplied {@code contexts}.
+     */
+    public static Server withContexts(ContextBuilderAware... contexts) {
+        checkNotNull(contexts);
+        checkArgument(contexts.length > 0, "At least a single Bounded Context is required.");
+        return new Server(ImmutableSet.copyOf(contexts));
+    }
+
+    /**
      * Returns the name of the server.
      */
     public static String name() {
@@ -92,15 +101,6 @@ public final class Server implements Logging {
             serverBuilder.add(contextAware.builder());
         }
         grpcServer = serverBuilder.build();
-    }
-
-    /**
-     * Creates a new in-process GRPC server with the supplied {@code contexts}.
-     */
-    public static Server withContexts(ContextBuilderAware... contexts) {
-        checkNotNull(contexts);
-        checkArgument(contexts.length > 0, "At least a single Bounded Context is required.");
-        return new Server(ImmutableSet.copyOf(contexts));
     }
 
     /**

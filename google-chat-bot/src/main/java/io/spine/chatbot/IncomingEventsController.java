@@ -52,8 +52,8 @@ final class IncomingEventsController implements Logging {
      * <p>Dispatches the event using {@link ThirdPartyContext}.
      */
     @Post(value = "/incoming/event", consumes = APPLICATION_JSON)
-    String on(@Body PubsubPushRequest pushNotification) {
-        var message = pushNotification.getMessage();
+    String on(@Body PubsubPushRequest pushRequest) {
+        var message = pushRequest.getMessage();
         var chatEventJson = message.getData()
                                    .toStringUtf8();
         _debug().log("Received a new chat event: %s", chatEventJson);

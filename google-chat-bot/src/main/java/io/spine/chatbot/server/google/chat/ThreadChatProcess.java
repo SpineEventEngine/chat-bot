@@ -56,9 +56,9 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
     Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildFailed e) {
         var change = e.getChange();
         var build = change.getNewValue();
-        var repository = e.getRepository();
-        _info().log("A build for the repository `%s` failed.", repository.getValue());
-        return processBuildStateUpdate(build, repository);
+        var repo = e.getRepository();
+        _info().log("A build for the repository `%s` failed.", repo.getValue());
+        return processBuildStateUpdate(build, repo);
     }
 
     /**
@@ -77,7 +77,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
     }
 
     private Pair<MessageCreated, Optional<ThreadCreated>>
-    processBuildStateUpdate(Build build, RepositoryId repository) {
+    processBuildStateUpdate(Build build, RepositoryId repo) {
         var sentUpdate = client.sendBuildStateUpdate(build, state().getResource());
         var space = sentUpdate.getSpace();
         var thread = sentUpdate.getThread();
@@ -90,7 +90,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         if (shouldCreateThread()) {
             var resource = sentUpdate.getResource();
             _debug().log("A new thread `%s` created for the repository `%s`.",
-                         resource.getName(), repository.getValue());
+                         resource.getName(), repo.getValue());
             builder().setResource(resource)
                      .setSpace(space);
             var threadCreated = ThreadCreated
