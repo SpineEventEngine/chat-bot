@@ -22,7 +22,7 @@
  * This package contains Google Chat API facade.
  *
  * <p>The usage of the Chat API itself it not straightforward. That's why it is recommended to
- * use the {@link io.spine.chatbot.google.chat.GoogleChatClient facade} instead.
+ * use the {@linkplain io.spine.chatbot.google.chat.GoogleChatClient facade} instead.
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault

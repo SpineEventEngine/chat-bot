@@ -43,7 +43,7 @@ import static io.spine.util.Exceptions.newIllegalArgumentException;
 final class BeanFactory {
 
     /**
-     * Registers {@link PubsubPushRequest push request} Jackson deserializer.
+     * Registers {@linkplain PubsubPushRequest push request} Jackson deserializer.
      */
     @Singleton
     @Bean

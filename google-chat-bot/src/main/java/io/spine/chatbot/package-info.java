@@ -19,7 +19,7 @@
  */
 
 /**
- * This contains package the application {@link io.spine.chatbot.Application entry point}.
+ * This contains package the application {@linkplain io.spine.chatbot.Application entry point}.
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault

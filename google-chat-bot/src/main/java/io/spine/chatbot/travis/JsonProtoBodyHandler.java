@@ -32,7 +32,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Converts the incoming JSON strings into Protobuf messages relying on the Spine
- * {@link Json conversion functionality}.
+ * {@linkplain Json conversion functionality}.
  *
  * @param <T>
  *         the Protobuf message supplied in the response body
