@@ -45,7 +45,7 @@ public interface BuildStateMixin extends BuildOrBuilder {
     /**
      * Determines whether the build is failed.
      *
-     * @return `true` if the build is failed, `false` otherwise
+     * @return {@code true} if the build is failed, {@code false} otherwise
      * @see #failed(Build.State)
      */
     default boolean failed() {
