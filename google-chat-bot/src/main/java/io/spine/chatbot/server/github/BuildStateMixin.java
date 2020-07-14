@@ -95,9 +95,9 @@ public interface BuildStateMixin extends BuildOrBuilder {
      * <p>The status is considered:
      *
      * <ul>
-     *     <li>{@code failed} if the new state is {@link #failed() failed}.
+     *     <li>{@code failed} if the new state is {@link #failed() failed};
      *     <li>{@code recovered} if the new state is {@code passed} and the previous is
-     *     {@link #failed() failed}.
+     *     {@link #failed() failed};
      *     <li>{@code stable} if the new state is {@code passed} and the previous is either
      *     {@code unknown} meaning that there were no previous states or {@code passed} as well.
      * </ul>

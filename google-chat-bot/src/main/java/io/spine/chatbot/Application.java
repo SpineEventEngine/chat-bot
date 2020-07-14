@@ -32,7 +32,7 @@ import io.spine.logging.Logging;
  * <p>The application exposes a number of REST endpoints accessible for the clients such as:
  *
  * <ul>
- *     <li>{@code /chat/incoming/event} — handles incoming events from the Google Chat space.
+ *     <li>{@code /chat/incoming/event} — handles incoming events from the Google Chat space;
  *     <li>{@code /repositories/check} — triggers checking of the repositories build statuses.
  * </ul>
  *
