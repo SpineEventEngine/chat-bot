@@ -1,0 +1,127 @@
+/*
+ * Copyright 2020, TeamDev. All rights reserved.
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+package io.spine.chatbot.server;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.errorprone.annotations.concurrent.LazyInit;
+import io.spine.logging.Logging;
+
+import java.io.IOException;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.util.Exceptions.newIllegalStateException;
+
+/**
+ * A ChatBot application's Spine server.
+ *
+ * <p>Abstracts working with Spine's {@link io.spine.server.Server server}.
+ */
+public final class Server implements Logging {
+
+    /** Name of the GRPC {@link io.spine.server.Server}. **/
+    private static final String SERVER_NAME = "ChatBotServer";
+
+    private final ImmutableSet<ContextBuilderAware> contexts;
+
+    @LazyInit
+    private io.spine.server.Server grpcServer;
+
+    private Server(ImmutableSet<ContextBuilderAware> contexts) {
+        this.contexts = contexts;
+    }
+
+    /**
+     * Returns the name of the server.
+     */
+    public static String name() {
+        return SERVER_NAME;
+    }
+
+    /**
+     * Starts the server.
+     *
+     * <p>Performs {@linkplain #init() initialization} of the server if it was not
+     * previously initialized.
+     */
+    public void start() {
+        if (grpcServer == null) {
+            init();
+        }
+        try {
+            _config().log("Starting GRPC server.");
+            grpcServer.start();
+            Runtime.getRuntime()
+                   .addShutdownHook(ShutdownHook.newInstance(grpcServer));
+        } catch (IOException e) {
+            throw newIllegalStateException(
+                    e, "Unable to start Spine GRPC server `%s`.", SERVER_NAME
+            );
+        }
+    }
+
+    /**
+     * Initializes the server and its {@link ServerEnvironment environment}.
+     */
+    public void init() {
+        _config().log("Initializing server environment.");
+        ServerEnvironment.init();
+        _config().log("Bootstrapping server.");
+        io.spine.server.Server.Builder serverBuilder = io.spine.server.Server.inProcess(
+                SERVER_NAME);
+        for (ContextBuilderAware contextAware : contexts) {
+            serverBuilder.add(contextAware.builder());
+        }
+        grpcServer = serverBuilder.build();
+    }
+
+    /**
+     * Creates a new in-process GRPC server with the supplied {@code contexts}.
+     */
+    public static Server withContexts(ContextBuilderAware... contexts) {
+        checkNotNull(contexts);
+        checkArgument(contexts.length > 0, "At least a single Bounded Context is required.");
+        return new Server(ImmutableSet.copyOf(contexts));
+    }
+
+    /**
+     * Gracefully stops the {@link #server}.
+     */
+    private static final class ShutdownHook implements Runnable, Logging {
+
+        private final io.spine.server.Server server;
+
+        private ShutdownHook(io.spine.server.Server server) {
+            this.server = server;
+        }
+
+        private static Thread newInstance(io.spine.server.Server server) {
+            checkNotNull(server);
+            return new Thread(new ShutdownHook(server));
+        }
+
+        @Override
+        public void run() {
+            _info().log("Shutting down the GRPC server.");
+            server.shutdownAndWait();
+        }
+    }
+}

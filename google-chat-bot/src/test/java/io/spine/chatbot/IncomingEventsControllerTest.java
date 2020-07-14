@@ -28,6 +28,7 @@ import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.annotation.MicronautTest;
 import io.spine.chatbot.google.chat.InMemoryGoogleChatClient;
+import io.spine.chatbot.server.Server;
 import io.spine.chatbot.server.github.GitHubContext;
 import io.spine.chatbot.server.google.chat.GoogleChatContext;
 import io.spine.chatbot.travis.InMemoryTravisClient;
@@ -42,7 +43,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static io.micronaut.http.HttpRequest.POST;
-import static io.spine.chatbot.Application.startServer;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -54,7 +54,6 @@ final class IncomingEventsControllerTest {
     @Client("/")
     private HttpClient client;
 
-    @SuppressWarnings("ResultOfMethodCallIgnored") // we're not interested in GRPC server here
     @BeforeAll
     static void setupServer() {
         var chatContext = GoogleChatContext
@@ -65,7 +64,8 @@ final class IncomingEventsControllerTest {
                 .newBuilder()
                 .setTravis(InMemoryTravisClient.lenientClient())
                 .build();
-        startServer(gitHubContext, chatContext);
+        Server.withContexts(chatContext, gitHubContext)
+              .start();
     }
 
     @Test

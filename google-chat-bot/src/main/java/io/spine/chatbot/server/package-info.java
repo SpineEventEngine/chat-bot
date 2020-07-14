@@ -21,13 +21,10 @@
 /**
  * This package contains the ChatBot server.
  */
-@BoundedContext(GitHubContext.GIT_HUB_CONTEXT_NAME)
 @CheckReturnValue
 @ParametersAreNonnullByDefault
 package io.spine.chatbot.server;
 
 import com.google.errorprone.annotations.CheckReturnValue;
-import io.spine.chatbot.server.github.GitHubContext;
-import io.spine.core.BoundedContext;
 
 import javax.annotation.ParametersAreNonnullByDefault;

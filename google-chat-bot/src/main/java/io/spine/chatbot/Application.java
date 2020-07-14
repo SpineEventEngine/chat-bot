@@ -20,19 +20,11 @@
 
 package io.spine.chatbot;
 
-import com.google.common.annotations.VisibleForTesting;
-import io.micronaut.context.event.ApplicationEventListener;
-import io.micronaut.context.event.ShutdownEvent;
 import io.micronaut.runtime.Micronaut;
+import io.spine.chatbot.server.Server;
 import io.spine.chatbot.server.github.GitHubContext;
 import io.spine.chatbot.server.google.chat.GoogleChatContext;
 import io.spine.logging.Logging;
-import io.spine.server.Server;
-
-import java.io.IOException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * The entry point to the Spine ChatBot application.
@@ -56,9 +48,6 @@ public final class Application implements Logging {
         );
     }
 
-    /** Name of the GRPC {@link Server}. **/
-    static final String SERVER_NAME = "ChatBotServer";
-
     /**
      * Prevents direct instantiation.
      */
@@ -77,64 +66,12 @@ public final class Application implements Logging {
     }
 
     /**
-     * Performs bounded contexts initialization, starts GRPC {@link Server} and runs
-     * the {@link Micronaut}.
+     * Starts {@link Server} and runs the {@link Micronaut}.
      */
     private void start() {
-        _config().log("Initializing server environment.");
-        ChatBotServerEnvironment.init();
-        _config().log("Setting up bounded contexts.");
-        var gitHubContext = GitHubContext
-                .newBuilder()
-                .build();
-        var googleChatContext = GoogleChatContext
-                .newBuilder()
-                .build();
-        _config().log("Starting GRPC server.");
-        var server = startServer(gitHubContext, googleChatContext);
+        Server.withContexts(GitHubContext.newInstance(), GoogleChatContext.newInstance())
+              .start();
         _config().log("Starting Micronaut application.");
-        var applicationContext = Micronaut.run(Application.class);
-        applicationContext.registerSingleton(new ShutdownHook(server));
-    }
-
-    /**
-     * Starts in-process GRPC server.
-     */
-    @VisibleForTesting
-    static Server startServer(GitHubContext gitHubContext, GoogleChatContext googleChatContext) {
-        Server server = Server
-                .inProcess(SERVER_NAME)
-                .add(gitHubContext.builder())
-                .add(googleChatContext.builder())
-                .build();
-        try {
-            server.start();
-        } catch (IOException e) {
-            throw newIllegalStateException(
-                    e, "Unable to start Spine GRPC server `%s`.", SERVER_NAME
-            );
-        }
-        return server;
-    }
-
-    /**
-     * Gracefully stops the {@link #server}.
-     */
-    private static final class ShutdownHook
-            implements ApplicationEventListener<ShutdownEvent>, Logging {
-
-        private final Server server;
-
-        private ShutdownHook(Server server) {
-            this.server = checkNotNull(server);
-        }
-
-        @Override
-        public void onApplicationEvent(ShutdownEvent event) {
-            _info().log("Shutting down the application.");
-            if (server != null) {
-                server.shutdownAndWait();
-            }
-        }
+        Micronaut.run(Application.class);
     }
 }

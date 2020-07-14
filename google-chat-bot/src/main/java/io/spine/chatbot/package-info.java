@@ -19,8 +19,7 @@
  */
 
 /**
- * This contains package the application {@link io.spine.chatbot.Application entry point}
- * and the {@link io.spine.chatbot.ChatBotServerEnvironment environment} configurations.
+ * This contains package the application {@link io.spine.chatbot.Application entry point}.
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault

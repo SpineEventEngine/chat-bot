@@ -18,14 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot;
+package io.spine.chatbot.server;
 
 import com.google.cloud.datastore.DatastoreOptions;
 import io.spine.base.Environment;
 import io.spine.base.Production;
 import io.spine.base.Tests;
 import io.spine.chatbot.delivery.LocalDelivery;
-import io.spine.server.ServerEnvironment;
 import io.spine.server.storage.StorageFactory;
 import io.spine.server.storage.datastore.DatastoreStorageFactory;
 import io.spine.server.storage.memory.InMemoryStorageFactory;
@@ -34,7 +33,7 @@ import io.spine.server.transport.memory.InMemoryTransportFactory;
 /**
  * ChatBot server environment definition.
  *
- * <p>Initializes the {@link ServerEnvironment}.
+ * <p>Initializes the {@link io.spine.server.ServerEnvironment}.
  *
  * <p>Configures the {@link StorageFactory} based on
  * the current {@link Environment} — Datastore-based for Production and in-memory-based for tests.
@@ -42,22 +41,22 @@ import io.spine.server.transport.memory.InMemoryTransportFactory;
  * <p>Configures the inbox delivery through the Datastore work registry while
  * in Production environment, otherwise uses local synchronous delivery.
  */
-final class ChatBotServerEnvironment {
+final class ServerEnvironment {
 
     /**
      * Prevents instantiation of this utility class.
      */
-    private ChatBotServerEnvironment() {
+    private ServerEnvironment() {
     }
 
     /**
-     * Initializes {@link ServerEnvironment} for ChatBot.
+     * Initializes {@link io.spine.server.ServerEnvironment ServerEnvironment} for ChatBot.
      */
     static void init() {
         //TODO:2020-06-21:yuri-sergiichuk: switch to io.spine.chatbot.delivery.DistributedDelivery
         // for Production environment after implementing the delivery strategy.
         // see https://github.com/SpineEventEngine/chat-bot/issues/5.
-        ServerEnvironment
+        io.spine.server.ServerEnvironment
                 .instance()
                 .use(InMemoryTransportFactory.newInstance(), Production.class)
                 .use(LocalDelivery.instance, Production.class)
