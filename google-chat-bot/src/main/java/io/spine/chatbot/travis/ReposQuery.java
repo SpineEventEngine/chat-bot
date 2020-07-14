@@ -18,18 +18,30 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.chatbot.travis;
+
+import io.spine.chatbot.api.travis.RepositoriesResponse;
+import io.spine.chatbot.github.Slug;
+
 /**
- * This package contains Travis CI v3 API client.
+ * A repositories query to the Travis CI API.
  *
- * <p>The travis itself does not provide an idiomatic Java client, so the API contains only
- * specific required functionality.
- *
- * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
+ * @see <a href="https://developer.travis-ci.com/resource/repositories#for_owner">
+ *         Repos for owner</a>
  */
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.chatbot.api.travis;
+public final class ReposQuery extends Query<RepositoriesResponse> {
 
-import com.google.errorprone.annotations.CheckReturnValue;
+    private ReposQuery(String request) {
+        super(request, RepositoriesResponse.class);
+    }
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    /**
+     * Creates a repository query for repositories of the specified {@code owner}
+     * (either a user or an organization).
+     */
+    public static ReposQuery forOwner(Slug owner) {
+        var encodedOwner = owner.encodedValue();
+        var request = "/owner/" + encodedOwner + "/repos";
+        return new ReposQuery(request);
+    }
+}

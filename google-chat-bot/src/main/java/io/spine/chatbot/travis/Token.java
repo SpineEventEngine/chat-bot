@@ -18,12 +18,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.travis;
+package io.spine.chatbot.travis;
 
-import com.google.protobuf.Message;
+import io.spine.chatbot.google.secret.Secret;
+
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
- * Travis CI API response marker.
+ * A Travis CI API access token.
  */
-public interface TravisResponse extends Message {
+final class Token extends Secret {
+
+    private static final String TRAVIS_API_TOKEN = "TravisApiToken";
+
+    private final String value;
+
+    private Token(String value) {
+        this.value = value;
+    }
+
+    /**
+     * Returns the token value.
+     */
+    String value() {
+        return value;
+    }
+
+    /**
+     * Creates the Travis CI API access token.
+     */
+    static Token privateToken() {
+        var value = checkNotEmptyOrBlank(retrieveSecret(TRAVIS_API_TOKEN));
+        return new Token(value);
+    }
 }

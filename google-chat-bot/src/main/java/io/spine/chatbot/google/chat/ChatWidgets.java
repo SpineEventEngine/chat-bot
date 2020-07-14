@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.google.chat;
+package io.spine.chatbot.google.chat;
 
 import com.google.api.services.chat.v1.model.Button;
 import com.google.api.services.chat.v1.model.Card;

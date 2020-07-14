@@ -18,15 +18,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.google.chat;
+package io.spine.chatbot.travis;
 
-import io.spine.testing.UtilityClassTest;
-import org.junit.jupiter.api.DisplayName;
+import static io.spine.chatbot.travis.Token.privateToken;
 
-@DisplayName("`ChatWidgets` should")
-final class ChatWidgetsTest extends UtilityClassTest<ChatWidgets> {
+/**
+ * A Travis CI API client.
+ *
+ * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
+ */
+public interface TravisClient {
 
-    ChatWidgetsTest() {
-        super(ChatWidgets.class);
+    /**
+     * Executes supplied {@code query} and returns response of type {@code T}.
+     *
+     * @param query
+     *         query to execute
+     * @param <T>
+     *         type of the query response
+     * @return query execution result
+     */
+    <T extends TravisResponse> T execute(Query<T> query);
+
+    /**
+     * Creates a new Travis client with the default Travis token.
+     */
+    static TravisClient newInstance() {
+        return new Travis(privateToken());
     }
 }

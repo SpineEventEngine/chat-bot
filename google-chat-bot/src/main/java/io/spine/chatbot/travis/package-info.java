@@ -18,32 +18,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.travis;
-
-import static io.spine.chatbot.api.travis.Token.privateToken;
-
 /**
- * A Travis CI API client.
+ * This package contains Travis CI v3 API client.
+ *
+ * <p>The travis itself does not provide an idiomatic Java client, so the API contains only
+ * specific required functionality.
  *
  * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
  */
-public interface TravisClient {
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.chatbot.travis;
 
-    /**
-     * Executes supplied {@code query} and returns response of type {@code T}.
-     *
-     * @param query
-     *         query to execute
-     * @param <T>
-     *         type of the query response
-     * @return query execution result
-     */
-    <T extends TravisResponse> T execute(Query<T> query);
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    /**
-     * Creates a new Travis client with the default Travis token.
-     */
-    static TravisClient newInstance() {
-        return new Travis(privateToken());
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

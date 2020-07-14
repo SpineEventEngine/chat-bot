@@ -20,7 +20,7 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.api.travis.TravisClient;
+import io.spine.chatbot.travis.TravisClient;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
 

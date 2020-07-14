@@ -21,7 +21,7 @@
 package io.spine.chatbot.server.github;
 
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
-import io.spine.chatbot.api.travis.InMemoryTravisClient;
+import io.spine.chatbot.travis.InMemoryTravisClient;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.ContextAwareTest;
 import org.junit.jupiter.api.AfterEach;

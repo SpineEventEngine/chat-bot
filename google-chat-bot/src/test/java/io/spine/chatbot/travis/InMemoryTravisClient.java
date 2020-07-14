@@ -18,9 +18,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.travis;
+package io.spine.chatbot.travis;
 
-import io.spine.chatbot.api.FailFastAwareClient;
+import io.spine.chatbot.FailFastAwareClient;
+import io.spine.chatbot.api.travis.RepoBranchBuildResponse;
+import io.spine.chatbot.api.travis.RepositoriesResponse;
 import io.spine.chatbot.github.Slug;
 
 import java.util.Map;

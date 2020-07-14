@@ -20,7 +20,7 @@
 
 package io.spine.chatbot.server.google.chat;
 
-import io.spine.chatbot.api.google.chat.InMemoryGoogleChatClient;
+import io.spine.chatbot.google.chat.InMemoryGoogleChatClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

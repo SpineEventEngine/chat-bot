@@ -21,11 +21,11 @@
 package io.spine.chatbot.server.google.chat;
 
 import com.google.errorprone.annotations.concurrent.LazyInit;
-import io.spine.chatbot.api.google.chat.GoogleChatClient;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
+import io.spine.chatbot.google.chat.GoogleChatClient;
 import io.spine.chatbot.google.chat.ThreadId;
 import io.spine.chatbot.google.chat.event.MessageCreated;
 import io.spine.chatbot.google.chat.event.ThreadCreated;

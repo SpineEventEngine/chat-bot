@@ -18,10 +18,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.google.chat;
+package io.spine.chatbot.google.chat;
 
 import com.google.auth.oauth2.GoogleCredentials;
-import io.spine.chatbot.api.google.secret.Secret;
+import io.spine.chatbot.google.secret.Secret;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

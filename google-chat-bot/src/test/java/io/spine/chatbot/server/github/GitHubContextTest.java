@@ -20,7 +20,7 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.api.travis.InMemoryTravisClient;
+import io.spine.chatbot.travis.InMemoryTravisClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

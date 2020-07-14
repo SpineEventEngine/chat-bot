@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.travis;
+package io.spine.chatbot.travis;
 
 import java.io.IOException;
 import java.net.URI;
@@ -26,7 +26,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 
 import static com.google.api.client.util.Preconditions.checkNotNull;
-import static io.spine.chatbot.api.travis.JsonProtoBodyHandler.jsonBodyHandler;
+import static io.spine.chatbot.travis.JsonProtoBodyHandler.jsonBodyHandler;
 import static java.lang.String.format;
 
 /**

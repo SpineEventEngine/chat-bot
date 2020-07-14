@@ -20,7 +20,7 @@
 
 package io.spine.chatbot.server.google.chat;
 
-import io.spine.chatbot.api.google.chat.GoogleChatClient;
+import io.spine.chatbot.google.chat.GoogleChatClient;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
 

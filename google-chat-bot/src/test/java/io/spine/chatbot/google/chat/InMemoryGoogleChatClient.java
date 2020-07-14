@@ -18,11 +18,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.google.chat;
+package io.spine.chatbot.google.chat;
 
-import io.spine.chatbot.api.FailFastAwareClient;
+import io.spine.chatbot.FailFastAwareClient;
 import io.spine.chatbot.github.repository.build.Build;
-import io.spine.chatbot.google.chat.BuildStateUpdate;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
 import java.util.Map;

@@ -18,16 +18,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.chatbot.google.chat;
+
+import com.google.api.services.chat.v1.HangoutsChat;
+import io.spine.chatbot.github.repository.build.Build;
+import io.spine.chatbot.google.chat.thread.ThreadResource;
+
+import static io.spine.chatbot.google.chat.HangoutsChatProvider.newHangoutsChat;
+
 /**
- * This package contains Google Chat API facade.
+ * Google Chat API client abstraction.
  *
- * <p>The usage of the Chat API itself it not straightforward. That's why it is recommended to
- * use the {@link io.spine.chatbot.api.google.chat.GoogleChatClient facade} instead.
+ * <p>Abstracts out usage of the chat API by exposing only ready-to-use ChatBot-specific
+ * methods.
  */
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.chatbot.api.google.chat;
+public interface GoogleChatClient {
 
-import com.google.errorprone.annotations.CheckReturnValue;
+    /**
+     * Sends {@link Build} state update message to the related space and thread.
+     *
+     * <p>If the {@code thread} has no name specified the message is sent to a new thread.
+     *
+     * @return a sent build state update message
+     */
+    BuildStateUpdate sendBuildStateUpdate(Build build, ThreadResource thread);
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    /**
+     * Creates a new Google Chat client.
+     *
+     * <p>The client is backed by {@link HangoutsChat} API.
+     */
+    static GoogleChatClient newInstance() {
+        return new GoogleChat(newHangoutsChat());
+    }
+}

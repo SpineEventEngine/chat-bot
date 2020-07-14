@@ -18,20 +18,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.google.chat;
+package io.spine.chatbot.google.chat;
 
 import com.google.api.services.chat.v1.HangoutsChat;
 import com.google.api.services.chat.v1.model.Message;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.chatbot.github.repository.build.Build;
-import io.spine.chatbot.google.chat.BuildStateUpdate;
-import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 import io.spine.logging.Logging;
 
 import java.io.IOException;
 
-import static io.spine.chatbot.api.google.chat.BuildStateUpdates.buildStateMessage;
+import static io.spine.chatbot.google.chat.BuildStateUpdates.buildStateMessage;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.message;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifier.thread;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;

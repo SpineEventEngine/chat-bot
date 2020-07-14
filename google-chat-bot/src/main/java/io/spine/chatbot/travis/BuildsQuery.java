@@ -18,38 +18,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.google.chat;
+package io.spine.chatbot.travis;
 
-import com.google.api.services.chat.v1.HangoutsChat;
-import io.spine.chatbot.github.repository.build.Build;
-import io.spine.chatbot.google.chat.BuildStateUpdate;
-import io.spine.chatbot.google.chat.thread.ThreadResource;
-
-import static io.spine.chatbot.api.google.chat.HangoutsChatProvider.newHangoutsChat;
+import io.spine.chatbot.api.travis.RepoBranchBuildResponse;
+import io.spine.chatbot.github.Slug;
 
 /**
- * Google Chat API client abstraction.
+ * A branch builds query to the Travis CI API.
  *
- * <p>Abstracts out usage of the chat API by exposing only ready-to-use ChatBot-specific
- * methods.
+ * @see <a href="https://developer.travis-ci.com/resource/branch#find">Find branch build</a>
  */
-public interface GoogleChatClient {
+public final class BuildsQuery extends Query<RepoBranchBuildResponse> {
+
+    private BuildsQuery(String request) {
+        super(request, RepoBranchBuildResponse.class);
+    }
 
     /**
-     * Sends {@link Build} state update message to the related space and thread.
+     * Creates a query for the {@code repository}.
      *
-     * <p>If the {@code thread} has no name specified the message is sent to a new thread.
-     *
-     * @return a sent build state update message
+     * <p>Requests the latest build from the {@code master} branch.
      */
-    BuildStateUpdate sendBuildStateUpdate(Build build, ThreadResource thread);
-
-    /**
-     * Creates a new Google Chat client.
-     *
-     * <p>The client is backed by {@link HangoutsChat} API.
-     */
-    static GoogleChatClient newInstance() {
-        return new GoogleChat(newHangoutsChat());
+    public static BuildsQuery forRepo(Slug repository) {
+        var encodedSlug = repository.encodedValue();
+        var request = "/repo/"
+                + encodedSlug
+                + "/branch/master?&include=build.commit,build.created_by";
+        return new BuildsQuery(request);
     }
 }

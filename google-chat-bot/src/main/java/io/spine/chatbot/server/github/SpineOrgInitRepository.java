@@ -21,10 +21,10 @@
 package io.spine.chatbot.server.github;
 
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
-import io.spine.chatbot.api.travis.TravisClient;
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
+import io.spine.chatbot.travis.TravisClient;
 import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.server.route.EventRouting;
 

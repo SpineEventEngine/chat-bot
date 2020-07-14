@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.google.chat;
+package io.spine.chatbot.google.chat;
 
 import com.google.api.services.chat.v1.model.CardHeader;
 import com.google.api.services.chat.v1.model.KeyValue;
@@ -31,10 +31,10 @@ import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.chatbot.api.google.chat.ChatWidgets.cardWith;
-import static io.spine.chatbot.api.google.chat.ChatWidgets.linkButton;
-import static io.spine.chatbot.api.google.chat.ChatWidgets.sectionWithWidget;
-import static io.spine.chatbot.api.google.chat.ChatWidgets.textParagraph;
+import static io.spine.chatbot.google.chat.ChatWidgets.cardWith;
+import static io.spine.chatbot.google.chat.ChatWidgets.linkButton;
+import static io.spine.chatbot.google.chat.ChatWidgets.sectionWithWidget;
+import static io.spine.chatbot.google.chat.ChatWidgets.textParagraph;
 import static io.spine.protobuf.Messages.isNotDefault;
 import static io.spine.validate.Validate.checkValid;
 

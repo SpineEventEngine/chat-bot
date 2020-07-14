@@ -18,31 +18,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.api.travis;
-
-import io.spine.chatbot.github.Slug;
-
 /**
- * A branch builds query to the Travis CI API.
+ * This package contains Google Chat API facade.
  *
- * @see <a href="https://developer.travis-ci.com/resource/branch#find">Find branch build</a>
+ * <p>The usage of the Chat API itself it not straightforward. That's why it is recommended to
+ * use the {@link io.spine.chatbot.google.chat.GoogleChatClient facade} instead.
  */
-public final class BuildsQuery extends Query<RepoBranchBuildResponse> {
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.chatbot.google.chat;
 
-    private BuildsQuery(String request) {
-        super(request, RepoBranchBuildResponse.class);
-    }
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    /**
-     * Creates a query for the {@code repository}.
-     *
-     * <p>Requests the latest build from the {@code master} branch.
-     */
-    public static BuildsQuery forRepo(Slug repository) {
-        var encodedSlug = repository.encodedValue();
-        var request = "/repo/"
-                + encodedSlug
-                + "/branch/master?&include=build.commit,build.created_by";
-        return new BuildsQuery(request);
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

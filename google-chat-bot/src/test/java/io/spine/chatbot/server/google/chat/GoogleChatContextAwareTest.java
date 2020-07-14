@@ -21,7 +21,7 @@
 package io.spine.chatbot.server.google.chat;
 
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
-import io.spine.chatbot.api.google.chat.InMemoryGoogleChatClient;
+import io.spine.chatbot.google.chat.InMemoryGoogleChatClient;
 import io.spine.server.BoundedContextBuilder;
 import io.spine.testing.server.blackbox.ContextAwareTest;
 import org.junit.jupiter.api.AfterEach;

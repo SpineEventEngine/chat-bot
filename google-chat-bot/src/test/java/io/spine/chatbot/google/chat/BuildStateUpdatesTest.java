@@ -18,13 +18,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * This package contains Google Secret Manager API facade.
- */
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.chatbot.api.google.secret;
+package io.spine.chatbot.google.chat;
 
-import com.google.errorprone.annotations.CheckReturnValue;
+import io.spine.testing.UtilityClassTest;
+import org.junit.jupiter.api.DisplayName;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+@DisplayName("`BuildStateUpdates` should")
+final class BuildStateUpdatesTest extends UtilityClassTest<BuildStateUpdates> {
+
+    BuildStateUpdatesTest() {
+        super(BuildStateUpdates.class);
+    }
+}

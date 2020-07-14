@@ -18,13 +18,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+package io.spine.chatbot.travis;
+
+import com.google.protobuf.Message;
+
 /**
- * This package contains server-side reusable APIs.
+ * Travis CI API response marker.
  */
-@CheckReturnValue
-@ParametersAreNonnullByDefault
-package io.spine.chatbot.api;
-
-import com.google.errorprone.annotations.CheckReturnValue;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+public interface TravisResponse extends Message {
+}
