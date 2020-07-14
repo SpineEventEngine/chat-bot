@@ -35,20 +35,20 @@ import static io.spine.util.Exceptions.newIllegalStateException;
 /**
  * Provides fully-configured {@link HangoutsChat chat} client.
  */
-final class HangoutsChatProvider {
+final class HangoutsChatFactory {
 
     private static final String BOT_NAME = "Spine ChatBot";
 
     /**
      * Prevents direct instantiation of the utility class.
      */
-    private HangoutsChatProvider() {
+    private HangoutsChatFactory() {
     }
 
     /**
      * Creates a new instance of the {@link HangoutsChat} client.
      */
-    static HangoutsChat newHangoutsChat() {
+    static HangoutsChat newInstance() {
         var credentials = chatServiceAccountKey().toCredentials();
         var credentialsAdapter = new HttpCredentialsAdapter(credentials);
         var chat = chatWithCredentials(credentialsAdapter)

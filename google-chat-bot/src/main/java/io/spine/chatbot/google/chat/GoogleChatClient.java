@@ -24,8 +24,6 @@ import com.google.api.services.chat.v1.HangoutsChat;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
-import static io.spine.chatbot.google.chat.HangoutsChatProvider.newHangoutsChat;
-
 /**
  * A client to the Google Chat server.
  *
@@ -49,6 +47,6 @@ public interface GoogleChatClient {
      * <p>The client is backed by {@link HangoutsChat} API.
      */
     static GoogleChatClient newInstance() {
-        return new GoogleChat(newHangoutsChat());
+        return new GoogleChat(HangoutsChatFactory.newInstance());
     }
 }
