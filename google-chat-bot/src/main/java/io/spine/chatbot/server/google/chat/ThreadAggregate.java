@@ -32,7 +32,7 @@ import io.spine.server.aggregate.Apply;
 import io.spine.server.event.React;
 
 /**
- * A thread in the chat room.
+ * A thread in a chat room.
  *
  * <p>A new thread is initialized as early as a new conversation is started in the room.
  * It happens once the first message is posted to the conversation.
