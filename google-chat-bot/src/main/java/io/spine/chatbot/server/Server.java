@@ -23,6 +23,7 @@ package io.spine.chatbot.server;
 import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.logging.Logging;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.io.IOException;
 
@@ -43,7 +44,7 @@ public final class Server implements Logging {
     private final ImmutableSet<ContextBuilderAware> contexts;
 
     @LazyInit
-    private io.spine.server.Server grpcServer;
+    private io.spine.server.@MonotonicNonNull Server grpcServer;
 
     private Server(ImmutableSet<ContextBuilderAware> contexts) {
         this.contexts = contexts;
