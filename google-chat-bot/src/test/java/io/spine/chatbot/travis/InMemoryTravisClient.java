@@ -21,8 +21,6 @@
 package io.spine.chatbot.travis;
 
 import io.spine.chatbot.FailFastAwareClient;
-import io.spine.chatbot.api.travis.RepoBranchBuildResponse;
-import io.spine.chatbot.api.travis.RepositoriesResponse;
 import io.spine.chatbot.github.Slug;
 
 import java.util.Map;
@@ -43,7 +41,7 @@ public final class InMemoryTravisClient extends FailFastAwareClient implements T
     }
 
     /**
-     * Creates a {@link #failFast} in-memory Travis CI client.
+     * Creates a {@link #FailFastAwareClient#failFast failFast} in-memory Travis CI client.
      */
     public static InMemoryTravisClient strictClient() {
         return new InMemoryTravisClient(true);

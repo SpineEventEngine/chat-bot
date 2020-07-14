@@ -41,7 +41,7 @@ public final class InMemoryGoogleChatClient extends FailFastAwareClient implemen
     }
 
     /**
-     * Creates a {@link #failFast} in-memory Google Chat client.
+     * Creates a {@link #FailFastAwareClient#failFast failFast} in-memory Google Chat client.
      */
     public static InMemoryGoogleChatClient strictClient() {
         return new InMemoryGoogleChatClient(true);
