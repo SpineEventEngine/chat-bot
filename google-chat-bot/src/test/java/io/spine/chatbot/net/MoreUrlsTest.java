@@ -20,6 +20,8 @@
 
 package io.spine.chatbot.net;
 
+import io.spine.chatbot.github.Slug;
+import io.spine.chatbot.server.github.Slugs;
 import io.spine.net.Urls;
 import io.spine.testing.UtilityClassTest;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +36,7 @@ import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
 @DisplayName("`MoreUrls` should")
 final class MoreUrlsTest extends UtilityClassTest<MoreUrls> {
 
-    private static final String REPO_SLUG = "SpineEventEngine/chat-bot";
+    private static final Slug REPO_SLUG = Slugs.create("SpineEventEngine/chat-bot");
 
     MoreUrlsTest() {
         super(MoreUrls.class);

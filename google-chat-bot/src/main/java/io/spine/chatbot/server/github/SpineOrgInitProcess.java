@@ -42,10 +42,10 @@ import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
-import static io.spine.chatbot.server.github.GitHubIdentifiers.organization;
-import static io.spine.chatbot.server.github.GitHubIdentifiers.repository;
 import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
+import static io.spine.chatbot.server.github.GitHubIdentifiers.organization;
+import static io.spine.chatbot.server.github.GitHubIdentifiers.repository;
 
 /**
  * Spine organization init process.
@@ -96,8 +96,8 @@ final class SpineOrgInitProcess
     }
 
     private RegisterRepository registerRepoCommand(Repository repo, OrganizationId org) {
-        var slug = repo.getSlug();
-        _info().log("Registering `%s` repository.", slug);
+        var slug = Slugs.create(repo.getSlug());
+        _info().log("Registering `%s` repository.", slug.getValue());
         var header = RepoHeader
                 .newBuilder()
                 .setOrganization(org)
@@ -107,19 +107,20 @@ final class SpineOrgInitProcess
                 .vBuild();
         return RegisterRepository
                 .newBuilder()
-                .setId(repository(slug))
+                .setId(repository(slug.getValue()))
                 .setHeader(header)
                 .vBuild();
     }
 
     private RegisterOrganization registerOrgCommand(OrganizationId spineOrg, SpaceId space) {
-        _info().log("Registering `%s` organization.", ORGANIZATION.getValue());
+        var slug = Slugs.forOrg(spineOrg);
+        _info().log("Registering `%s` organization.", spineOrg.getValue());
         var header = OrgHeader
                 .newBuilder()
                 .setName("Spine Event Engine")
                 .setWebsite(Urls.create("https://spine.io/"))
-                .setTravisProfile(travisUrlFor(ORGANIZATION.getValue()))
-                .setGithubProfile(githubUrlFor(ORGANIZATION.getValue()))
+                .setTravisProfile(travisUrlFor(slug))
+                .setGithubProfile(githubUrlFor(slug))
                 .setSpace(space)
                 .vBuild();
         return RegisterOrganization

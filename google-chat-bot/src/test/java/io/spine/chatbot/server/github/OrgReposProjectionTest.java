@@ -35,11 +35,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
+import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
 import static io.spine.chatbot.server.github.GitHubIdentifiers.organization;
 import static io.spine.chatbot.server.github.GitHubIdentifiers.repository;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
-import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
-import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
 
 @DisplayName("`OrgReposProjection` should")
 final class OrgReposProjectionTest extends GitHubContextAwareTest {
@@ -53,8 +53,8 @@ final class OrgReposProjectionTest extends GitHubContextAwareTest {
         private final SpaceId googleChatSpace = space("spaces/qwdp123tt1");
         private final OrganizationId organization = organization("OurOrg");
 
-        private final Url githubUrl = githubUrlFor(organization.getValue());
-        private final Url travisCiUrl = travisUrlFor(organization.getValue());
+        private final Url githubUrl = githubUrlFor(Slugs.forOrg(organization));
+        private final Url travisCiUrl = travisUrlFor(Slugs.forOrg(organization));
         private final Url websiteUrl = Urls.create("https://our-organization.com");
 
         private final OrgHeader header = OrgHeader
@@ -98,8 +98,8 @@ final class OrgReposProjectionTest extends GitHubContextAwareTest {
         private final OrganizationId organization = organization("MultiRepoOrg");
         private final RepositoryId repository = repository("main-repo");
 
-        private final Url githubUrl = githubUrlFor(organization.getValue());
-        private final Url travisCiUrl = travisUrlFor(organization.getValue());
+        private final Url githubUrl = githubUrlFor(Slugs.forOrg(organization));
+        private final Url travisCiUrl = travisUrlFor(Slugs.forOrg(organization));
         private final Url websiteUrl = Urls.create("https://multi-repo-organization.com");
 
         private final OrgHeader orgHeader = OrgHeader

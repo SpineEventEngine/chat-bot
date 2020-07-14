@@ -163,8 +163,8 @@ final class RepoBuildProcess
     @VisibleForTesting
     static Build buildFrom(RepoBranchBuildResponse branchBuild, SpaceId space) {
         var branchBuildName = branchBuild.getName();
-        var slug = branchBuild.getRepository()
-                              .getSlug();
+        var slug = Slugs.create(branchBuild.getRepository()
+                                           .getSlug());
         var build = branchBuild.getLastBuild();
         return Build
                 .newBuilder()
@@ -176,7 +176,7 @@ final class RepoBuildProcess
                 .setLastCommit(from(build.getCommit()))
                 .setCreatedBy(build.getCreatedBy()
                                    .getLogin())
-                .setRepository(Slugs.create(slug))
+                .setRepository(slug)
                 .setTravisCiUrl(travisBuildUrlFor(slug, build.getId()))
                 .vBuild();
     }

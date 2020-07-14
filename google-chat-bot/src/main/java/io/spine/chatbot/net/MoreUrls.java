@@ -20,11 +20,11 @@
 
 package io.spine.chatbot.net;
 
+import io.spine.chatbot.github.Slug;
 import io.spine.net.Url;
 import io.spine.net.Urls;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 import static io.spine.util.Preconditions2.checkPositive;
 import static java.lang.String.format;
 
@@ -46,27 +46,29 @@ public final class MoreUrls {
      * Creates a new Travis CI build URL for a build with the specified {@code buildId} of
      * the repository with the specified {@code slug}.
      */
-    public static Url travisBuildUrlFor(String slug, long buildId) {
-        checkNotEmptyOrBlank(slug);
-        var spec = format("%s/%s/builds/%d", TRAVIS_GITHUB_ENDPOINT, slug, checkPositive(buildId));
+    public static Url travisBuildUrlFor(Slug slug, long buildId) {
+        checkNotNull(slug);
+        var spec = format(
+                "%s/%s/builds/%d", TRAVIS_GITHUB_ENDPOINT, slug.getValue(), checkPositive(buildId)
+        );
         return Urls.create(spec);
     }
 
     /**
      * Creates a new Travis CI URL.
      */
-    public static Url travisUrlFor(String slug) {
+    public static Url travisUrlFor(Slug slug) {
         checkNotNull(slug);
-        var spec = format("%s/%s", TRAVIS_GITHUB_ENDPOINT, slug);
+        var spec = format("%s/%s", TRAVIS_GITHUB_ENDPOINT, slug.getValue());
         return Urls.create(spec);
     }
 
     /**
      * Creates a new GitHub URL.
      */
-    public static Url githubUrlFor(String slug) {
+    public static Url githubUrlFor(Slug slug) {
         checkNotNull(slug);
-        var spec = format("%s/%s", GITHUB, slug);
+        var spec = format("%s/%s", GITHUB, slug.getValue());
         return Urls.create(spec);
     }
 }

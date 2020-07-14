@@ -51,8 +51,8 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
         private final RepositoryId repository = repository(REPO_SLUG);
         private final OrganizationId organization = organization(ORG_SLUG);
 
-        private final Url githubUrl = githubUrlFor(REPO_SLUG);
-        private final Url travisCiUrl = travisUrlFor(REPO_SLUG);
+        private final Url githubUrl = githubUrlFor(Slugs.forOrg(organization));
+        private final Url travisCiUrl = travisUrlFor(Slugs.forRepo(repository));
         private final RepoHeader header = RepoHeader
                 .newBuilder()
                 .setGithubProfile(githubUrl)

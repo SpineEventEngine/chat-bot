@@ -50,8 +50,8 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
         private final SpaceId googleChatSpace = space("spaces/qwdp123ttQ");
         private final OrganizationId organization = organization("TestOrganization");
 
-        private final Url githubUrl = githubUrlFor(organization.getValue());
-        private final Url travisCiUrl = travisUrlFor(organization.getValue());
+        private final Url githubUrl = githubUrlFor(Slugs.forOrg(organization));
+        private final Url travisCiUrl = travisUrlFor(Slugs.forOrg(organization));
         private final Url websiteUrl = Urls.create("https://test-organization.com");
 
         private final OrgHeader header = OrgHeader
