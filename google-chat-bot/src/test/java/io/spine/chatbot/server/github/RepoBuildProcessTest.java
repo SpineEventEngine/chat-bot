@@ -20,10 +20,6 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.api.travis.Author;
-import io.spine.chatbot.api.travis.Commit;
-import io.spine.chatbot.api.travis.RepoBranchBuildResponse;
-import io.spine.chatbot.api.travis.Repository;
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.Build;
@@ -35,6 +31,10 @@ import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.github.repository.build.event.BuildSucceededAgain;
 import io.spine.chatbot.github.repository.build.rejection.RepositoryBuildRejections;
 import io.spine.chatbot.google.chat.SpaceId;
+import io.spine.chatbot.travis.Author;
+import io.spine.chatbot.travis.Commit;
+import io.spine.chatbot.travis.RepoBranchBuildResponse;
+import io.spine.chatbot.travis.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -77,7 +77,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     @DisplayName("handle build failure")
     final class FailedBuild {
 
-        private final io.spine.chatbot.api.travis.Build build = failedBuild();
+        private final io.spine.chatbot.travis.Build build = failedBuild();
         private final RepoBranchBuildResponse branchBuild = branchBuildOf(build);
         private final Build buildState = buildFrom(branchBuild, chatSpace);
 
@@ -127,12 +127,12 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     @DisplayName("handle build recovery")
     final class RecoveredBuild {
 
-        private final io.spine.chatbot.api.travis.Build previousBuild = failedBuild();
+        private final io.spine.chatbot.travis.Build previousBuild = failedBuild();
         private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
         private final Build previousBuildState = buildFrom(previousBranchBuild,
                                                            chatSpace);
 
-        private final io.spine.chatbot.api.travis.Build newBuild = passingBuild();
+        private final io.spine.chatbot.travis.Build newBuild = passingBuild();
         private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
         private final Build newBuildState = buildFrom(newBranchBuild, chatSpace);
 
@@ -191,14 +191,14 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     @DisplayName("handle stable builds")
     final class StableBuild {
 
-        private final io.spine.chatbot.api.travis.Build initialFailedBuild = failedBuild();
+        private final io.spine.chatbot.travis.Build initialFailedBuild = failedBuild();
 
-        private final io.spine.chatbot.api.travis.Build previousBuild = passingBuild();
+        private final io.spine.chatbot.travis.Build previousBuild = passingBuild();
         private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
         private final Build previousBuildState = buildFrom(previousBranchBuild,
                                                            chatSpace);
 
-        private final io.spine.chatbot.api.travis.Build newBuild = nextPassingBuild();
+        private final io.spine.chatbot.travis.Build newBuild = nextPassingBuild();
         private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
         private final Build newBuildState = buildFrom(newBranchBuild, chatSpace);
 
@@ -261,7 +261,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         }
     }
 
-    private static RepoBranchBuildResponse branchBuildOf(io.spine.chatbot.api.travis.Build build) {
+    private static RepoBranchBuildResponse branchBuildOf(io.spine.chatbot.travis.Build build) {
         return RepoBranchBuildResponse
                 .newBuilder()
                 .setLastBuild(build)
@@ -271,8 +271,8 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                 .buildPartial();
     }
 
-    private static io.spine.chatbot.api.travis.Build passingBuild() {
-        return io.spine.chatbot.api.travis.Build
+    private static io.spine.chatbot.travis.Build passingBuild() {
+        return io.spine.chatbot.travis.Build
                 .newBuilder()
                 .setId(123153L)
                 .setNumber("42")
@@ -283,8 +283,8 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                 .buildPartial();
     }
 
-    private static io.spine.chatbot.api.travis.Build nextPassingBuild() {
-        return io.spine.chatbot.api.travis.Build
+    private static io.spine.chatbot.travis.Build nextPassingBuild() {
+        return io.spine.chatbot.travis.Build
                 .newBuilder()
                 .setId(123154L)
                 .setNumber("43")
@@ -295,8 +295,8 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                 .buildPartial();
     }
 
-    private static io.spine.chatbot.api.travis.Build failedBuild() {
-        return io.spine.chatbot.api.travis.Build
+    private static io.spine.chatbot.travis.Build failedBuild() {
+        return io.spine.chatbot.travis.Build
                 .newBuilder()
                 .setId(123152L)
                 .setNumber("41")

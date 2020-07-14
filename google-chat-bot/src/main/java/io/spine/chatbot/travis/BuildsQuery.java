@@ -20,7 +20,6 @@
 
 package io.spine.chatbot.travis;
 
-import io.spine.chatbot.api.travis.RepoBranchBuildResponse;
 import io.spine.chatbot.github.Slug;
 
 /**

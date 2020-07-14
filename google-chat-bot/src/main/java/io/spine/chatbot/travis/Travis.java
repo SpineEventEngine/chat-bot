@@ -37,7 +37,7 @@ import static java.lang.String.format;
 final class Travis implements TravisClient {
 
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
-    private static final String BASE_URL = "https://api.travis-ci.com";
+    private static final String BASE_URL = "https://travis-ci.com";
     private static final String API_HEADER = "Travis-API-Version";
     private static final String API_VERSION = "3";
     private static final String AUTH_HEADER = "Authorization";

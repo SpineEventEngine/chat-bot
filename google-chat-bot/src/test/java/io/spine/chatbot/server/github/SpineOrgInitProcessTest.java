@@ -20,12 +20,12 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.api.travis.RepositoriesResponse;
-import io.spine.chatbot.api.travis.Repository;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
 import io.spine.chatbot.google.chat.SpaceHeader;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.google.chat.event.SpaceRegistered;
+import io.spine.chatbot.travis.RepositoriesResponse;
+import io.spine.chatbot.travis.Repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

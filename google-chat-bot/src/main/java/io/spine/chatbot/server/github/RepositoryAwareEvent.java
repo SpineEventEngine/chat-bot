@@ -23,11 +23,6 @@ package io.spine.chatbot.server.github;
 import com.google.errorprone.annotations.Immutable;
 import io.spine.annotation.GeneratedMixin;
 import io.spine.base.EventMessage;
-import io.spine.chatbot.github.RepositoryId;
-
-import java.util.Set;
-
-import static io.spine.server.route.EventRoute.withId;
 
 /**
  * A repository-aware event message.

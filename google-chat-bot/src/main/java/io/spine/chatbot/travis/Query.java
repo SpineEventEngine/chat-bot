@@ -31,7 +31,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @param <T>
  *         type of the expected query execution response
  */
-public abstract class Query<T extends TravisResponse> {
+abstract class Query<T extends TravisResponse> {
 
     private final Class<T> responseType;
     private final String request;
