@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.url;
+package io.spine.chatbot.net;
 
 import io.spine.net.Urls;
 import io.spine.testing.UtilityClassTest;
@@ -27,9 +27,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.chatbot.url.MoreUrls.githubUrlFor;
-import static io.spine.chatbot.url.MoreUrls.travisBuildUrlFor;
-import static io.spine.chatbot.url.MoreUrls.travisUrlFor;
+import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
+import static io.spine.chatbot.net.MoreUrls.travisBuildUrlFor;
+import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
 
 @DisplayName("`MoreUrls` should")
 final class MoreUrlsTest extends UtilityClassTest<MoreUrls> {

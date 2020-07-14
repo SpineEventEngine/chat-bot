@@ -23,7 +23,7 @@
  */
 @CheckReturnValue
 @ParametersAreNonnullByDefault
-package io.spine.chatbot.url;
+package io.spine.chatbot.net;
 
 import com.google.errorprone.annotations.CheckReturnValue;
 

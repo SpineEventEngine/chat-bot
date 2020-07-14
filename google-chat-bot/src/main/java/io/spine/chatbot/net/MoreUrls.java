@@ -18,7 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.url;
+package io.spine.chatbot.net;
 
 import io.spine.net.Url;
 import io.spine.net.Urls;

@@ -35,8 +35,8 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.server.github.GitHubIdentifiers.organization;
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
-import static io.spine.chatbot.url.MoreUrls.githubUrlFor;
-import static io.spine.chatbot.url.MoreUrls.travisUrlFor;
+import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
+import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
 
 @DisplayName("`OrganizationAggregate` should")
 final class OrganizationAggregateTest extends GitHubContextAwareTest {
