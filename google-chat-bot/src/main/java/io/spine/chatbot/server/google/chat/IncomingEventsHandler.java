@@ -37,9 +37,7 @@ import static io.spine.chatbot.server.google.chat.ChatEvents.toBotRemovedFromSpa
 import static io.spine.chatbot.server.google.chat.ChatEvents.toMessageReceived;
 
 /**
- * Google Chat incoming events reactor.
- *
- * <p>Processes incoming {@link ChatEvent} message and emits one of the following domain events:
+ * Processes incoming {@link ChatEvent} message and emits one of the following domain events:
  *
  * <ul>
  *     <li>{@link BotAddedToSpace} — the ChatBot is added to a space;
