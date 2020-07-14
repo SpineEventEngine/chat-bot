@@ -30,7 +30,7 @@ import static io.spine.chatbot.travis.Token.privateToken;
 public interface TravisClient {
 
     /**
-     * Executes supplied {@code query} and returns response of type {@code T}.
+     * Executes the supplied {@code query} and returns the response of type {@code T}.
      *
      * @param query
      *         query to execute
