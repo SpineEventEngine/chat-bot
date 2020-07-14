@@ -26,7 +26,6 @@ import io.spine.chatbot.client.Client;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
-import io.spine.chatbot.server.Server;
 import io.spine.logging.Logging;
 
 /**
@@ -41,7 +40,7 @@ final class RepositoriesController implements Logging {
     @Post("/builds/check")
     String checkBuildStatuses() {
         _debug().log("Checking repositories build statuses.");
-        try (var client = Client.inProcessClient(Server.name())) {
+        try (var client = Client.newInstance()) {
             var organizations = client.listOrganizations();
             for (var organization : organizations) {
                 var repos = client.listOrgRepos(organization.getId());

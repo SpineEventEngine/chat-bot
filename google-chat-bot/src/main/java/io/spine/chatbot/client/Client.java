@@ -28,6 +28,7 @@ import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.OrganizationRepositories;
+import io.spine.chatbot.server.Server;
 import io.spine.client.CommandRequest;
 import io.spine.client.Subscription;
 
@@ -51,12 +52,11 @@ public final class Client implements AutoCloseable {
     }
 
     /**
-     * Creates a new in-process client configured for the specified server.
+     * Creates a new in-process client linked to the {@link Server}.
      */
-    public static Client inProcessClient(String serverName) {
-        checkNotNull(serverName);
+    public static Client newInstance() {
         io.spine.client.Client client = io.spine.client.Client
-                .inProcess(serverName)
+                .inProcess(Server.name())
                 .build();
         return new Client(client);
     }
