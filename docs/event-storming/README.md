@@ -23,4 +23,6 @@ The stickies color on the board represents the following:
 
 # Google Chat Bounded Context
 
-![Google Chat Bounded Context EventStorming](./google-chat-bc.jpg "Google Chat Bounded Context")
+![Google Chat Bounded Context EventStorming Part 1](./google-chat-bc-1.jpg "Google Chat Bounded Context Part 1")
+
+![Google Chat Bounded Context EventStorming Part 2](./google-chat-bc-2.jpg "Google Chat Bounded Context Part 2")
