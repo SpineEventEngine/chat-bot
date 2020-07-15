@@ -18,42 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.google.chat;
-
-import io.spine.annotation.GeneratedMixin;
-import io.spine.chatbot.google.chat.SpaceHeader;
-
 /**
- * Common interface for messages aware of the {@link SpaceHeader}.
+ * This package contains entities related to the Google Chat incoming events handling.
  */
-@GeneratedMixin
-public interface SpaceHeaderAware {
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.chatbot.google.chat.incoming;
 
-    /**
-     * Returns the space header.
-     *
-     * @implNote This method is implemented in the deriving Protobuf messages.
-     */
-    SpaceHeader getHeader();
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    /**
-     * Determines whether a space is a Direct Message (DM) between a bot and a human.
-     */
-    default boolean directMessage() {
-        return getHeader().getSingleUserBotDm();
-    }
-
-    /**
-     * Determines whether the messages are threaded in the space.
-     */
-    default boolean isThreaded() {
-        return getHeader().getThreaded();
-    }
-
-    /**
-     * Returns the display name of the space.
-     */
-    default String displayName() {
-        return getHeader().getDisplayName();
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

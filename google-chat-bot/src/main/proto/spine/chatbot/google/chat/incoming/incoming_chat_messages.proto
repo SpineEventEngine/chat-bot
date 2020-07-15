@@ -142,8 +142,7 @@ message Thread {
 // reference</a> declaration for more details.
 //
 message Space {
-
-    option (is).java_type = "io.spine.chatbot.server.google.chat.incoming.SpaceMixin";
+    option (is).java_type = "SpaceMixin";
 
     // The resource name of the space, in the form "spaces/*".
     string name = 1 [(required) = true, (pattern).regex = "spaces/.+"];

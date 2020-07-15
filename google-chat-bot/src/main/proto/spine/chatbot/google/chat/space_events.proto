@@ -35,7 +35,7 @@ import "spine/chatbot/google/chat/space.proto";
 
 // A new Chat space registered.
 message SpaceRegistered {
-    option (is).java_type = "io.spine.chatbot.server.google.chat.SpaceHeaderAware";
+    option (is).java_type = "io.spine.chatbot.google.chat.SpaceHeaderAware";
 
     SpaceId space = 1 [(required) = true];
 

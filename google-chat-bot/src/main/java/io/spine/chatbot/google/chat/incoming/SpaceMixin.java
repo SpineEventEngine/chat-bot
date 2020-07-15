@@ -18,12 +18,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.google.chat.incoming;
+package io.spine.chatbot.google.chat.incoming;
 
 import io.spine.annotation.GeneratedMixin;
 import io.spine.chatbot.google.chat.SpaceId;
-import io.spine.chatbot.google.chat.incoming.SpaceOrBuilder;
-import io.spine.chatbot.google.chat.incoming.SpaceType;
 
 import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
 
