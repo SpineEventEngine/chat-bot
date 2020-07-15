@@ -19,7 +19,8 @@ The stickies color on the board represents the following:
 
 # GitHub Bounded Context
 
-![GitHub Bounded Context EventStorming](./github-bc.jpg "GitHub Bounded Context")
+![GitHub Bounded Context EventStorming Part 1](./github-bc-1.jpg "GitHub Bounded Context Part 1")
+![GitHub Bounded Context EventStorming Part 2](./github-bc-2.jpg "GitHub Bounded Context Part 2")
 
 # Google Chat Bounded Context
 
