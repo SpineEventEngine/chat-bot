@@ -24,14 +24,13 @@ import io.spine.annotation.GeneratedMixin;
 
 import java.util.EnumSet;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.chatbot.github.repository.build.Build.State.BS_UNKNOWN;
 import static io.spine.chatbot.github.repository.build.Build.State.PASSED;
 import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.FAILED;
 import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.RECOVERED;
 import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.STABLE;
-import static io.spine.util.Exceptions.newIllegalArgumentException;
 import static io.spine.util.Exceptions.newIllegalStateException;
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
  * Augments {@link Build} with useful methods.
@@ -62,18 +61,11 @@ public interface BuildStateMixin extends BuildOrBuilder {
 
     /**
      * Creates an instance of the {@linkplain Build.State build state} of out its
-     * string representation.
+     * string representation, ignoring the case.
      */
     static Build.State buildStateFrom(String state) {
-        checkNotNull(state);
-        for (Build.State buildState : Build.State.values()) {
-            if (state.equalsIgnoreCase(buildState.name())) {
-                return buildState;
-            }
-        }
-        throw newIllegalArgumentException(
-                "Unable to create build state out of the supplied string value `%s`.", state
-        );
+        checkNotEmptyOrBlank(state);
+        return Build.State.valueOf(state.toUpperCase());
     }
 
     /**

@@ -22,10 +22,14 @@ package io.spine.chatbot.github.repository.build;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import static io.spine.chatbot.github.repository.build.BuildStateMixin.buildStateFrom;
 import static io.spine.testing.Tests.nullRef;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
 
 @DisplayName("`BuildStateMixin` should")
 final class BuildStateMixinTest {
@@ -40,5 +44,14 @@ final class BuildStateMixinTest {
     @DisplayName("not accept unknown build states")
     void notAcceptUnknownStates() {
         assertThrows(IllegalArgumentException.class, () -> buildStateFrom("unknown"));
+    }
+
+    @DisplayName("accept valid `Build.State` value")
+    @ParameterizedTest
+    @EnumSource(mode = EXCLUDE, value = Build.State.class, names = {"BS_UNKNOWN", "UNRECOGNIZED"})
+    void processValidValues(Build.State state) {
+        assertDoesNotThrow(() -> {
+            buildStateFrom(state.name());
+        });
     }
 }
