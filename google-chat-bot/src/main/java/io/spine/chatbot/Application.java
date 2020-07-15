@@ -62,9 +62,6 @@ public final class Application implements Logging {
         application.start();
     }
 
-    /**
-     * Starts {@link Server} and runs the {@link Micronaut}.
-     */
     private void start() {
         Server.withContexts(GitHubContext.newInstance(), GoogleChatContext.newInstance())
               .start();
