@@ -20,7 +20,6 @@
 
 package io.spine.chatbot.server.github;
 
-import io.spine.chatbot.github.Slugs;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
 import io.spine.chatbot.google.chat.SpaceHeader;
 import io.spine.chatbot.google.chat.SpaceId;
@@ -32,6 +31,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.chatbot.github.Slugs.orgSlug;
 import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.space;
 import static io.spine.chatbot.server.github.SpineOrgInitProcess.ORGANIZATION;
 
@@ -61,7 +61,7 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
                     .newBuilder()
                     .addRepositories(repo)
                     .vBuild();
-            travisClient().setRepositoriesFor(Slugs.forOrg(ORGANIZATION), repositoriesResponse);
+            travisClient().setRepositoriesFor(orgSlug(ORGANIZATION), repositoriesResponse);
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
                     .setSpace(space)

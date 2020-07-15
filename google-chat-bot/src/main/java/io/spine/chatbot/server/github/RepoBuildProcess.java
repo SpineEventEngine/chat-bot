@@ -24,7 +24,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.Time;
 import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.Slugs;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
 import io.spine.chatbot.github.repository.build.BuildStateMixin;
@@ -46,6 +45,8 @@ import io.spine.server.procman.ProcessManager;
 import io.spine.server.tuple.EitherOf3;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
+import static io.spine.chatbot.github.Slugs.newSlug;
+import static io.spine.chatbot.github.Slugs.repoSlug;
 import static io.spine.chatbot.net.MoreUrls.travisBuildUrlFor;
 import static io.spine.protobuf.Messages.isDefault;
 import static io.spine.util.Exceptions.newIllegalStateException;
@@ -83,7 +84,7 @@ final class RepoBuildProcess
             throws NoBuildsFound {
         var repo = c.getRepository();
         _info().log("Checking build status for the repository `%s`.", repo.getValue());
-        var branchBuild = client.execute(BuildsQuery.forRepo(Slugs.forRepo(repo)));
+        var branchBuild = client.execute(BuildsQuery.forRepo(repoSlug(repo)));
         if (isDefault(branchBuild.getLastBuild())) {
             _warn().log("No builds found for the repository `%s`.", repo.getValue());
             throw NoBuildsFound
@@ -164,8 +165,8 @@ final class RepoBuildProcess
     @VisibleForTesting
     static Build buildFrom(RepoBranchBuildResponse branchBuild, SpaceId space) {
         var branchBuildName = branchBuild.getName();
-        var slug = Slugs.create(branchBuild.getRepository()
-                                           .getSlug());
+        var slug = newSlug(branchBuild.getRepository()
+                                      .getSlug());
         var build = branchBuild.getLastBuild();
         return Build
                 .newBuilder()

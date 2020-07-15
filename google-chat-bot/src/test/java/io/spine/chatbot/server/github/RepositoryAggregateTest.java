@@ -22,7 +22,6 @@ package io.spine.chatbot.server.github;
 
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.Slugs;
 import io.spine.chatbot.github.repository.RepoHeader;
 import io.spine.chatbot.github.repository.Repository;
 import io.spine.chatbot.github.repository.command.RegisterRepository;
@@ -35,6 +34,8 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.github.GitHubIdentifiers.organization;
 import static io.spine.chatbot.github.GitHubIdentifiers.repository;
+import static io.spine.chatbot.github.Slugs.orgSlug;
+import static io.spine.chatbot.github.Slugs.repoSlug;
 import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
 
@@ -52,8 +53,8 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
         private final RepositoryId repo = repository(REPO_SLUG);
         private final OrganizationId org = organization(ORG_SLUG);
 
-        private final Url githubProfile = githubUrlFor(Slugs.forOrg(org));
-        private final Url travisProfile = travisUrlFor(Slugs.forRepo(repo));
+        private final Url githubProfile = githubUrlFor(orgSlug(org));
+        private final Url travisProfile = travisUrlFor(repoSlug(repo));
         private final RepoHeader repoHeader = RepoHeader
                 .newBuilder()
                 .setGithubProfile(githubProfile)

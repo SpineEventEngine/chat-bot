@@ -22,7 +22,6 @@ package io.spine.chatbot.server.github;
 
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.Slugs;
 import io.spine.chatbot.github.organization.OrgHeader;
 import io.spine.chatbot.github.organization.OrganizationRepositories;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
@@ -38,6 +37,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.github.GitHubIdentifiers.organization;
 import static io.spine.chatbot.github.GitHubIdentifiers.repository;
+import static io.spine.chatbot.github.Slugs.orgSlug;
 import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.space;
 import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
@@ -54,8 +54,8 @@ final class OrgReposProjectionTest extends GitHubContextAwareTest {
         private final SpaceId googleChatSpace = space("spaces/qwdp123tt1");
         private final OrganizationId organization = organization("OurOrg");
 
-        private final Url githubUrl = githubUrlFor(Slugs.forOrg(organization));
-        private final Url travisCiUrl = travisUrlFor(Slugs.forOrg(organization));
+        private final Url githubUrl = githubUrlFor(orgSlug(organization));
+        private final Url travisCiUrl = travisUrlFor(orgSlug(organization));
         private final Url websiteUrl = Urls.create("https://our-organization.com");
 
         private final OrgHeader header = OrgHeader
@@ -99,8 +99,8 @@ final class OrgReposProjectionTest extends GitHubContextAwareTest {
         private final OrganizationId org = organization("MultiRepoOrg");
         private final RepositoryId repo = repository("main-repo");
 
-        private final Url githubUrl = githubUrlFor(Slugs.forOrg(org));
-        private final Url travisCiUrl = travisUrlFor(Slugs.forOrg(org));
+        private final Url githubUrl = githubUrlFor(orgSlug(org));
+        private final Url travisCiUrl = travisUrlFor(orgSlug(org));
         private final Url websiteUrl = Urls.create("https://multi-repo-organization.com");
 
         private final OrgHeader orgHeader = OrgHeader

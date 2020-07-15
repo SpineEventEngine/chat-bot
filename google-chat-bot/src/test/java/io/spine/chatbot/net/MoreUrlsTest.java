@@ -36,7 +36,7 @@ import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
 @DisplayName("`MoreUrls` should")
 final class MoreUrlsTest extends UtilityClassTest<MoreUrls> {
 
-    private static final Slug REPO_SLUG = Slugs.create("SpineEventEngine/chat-bot");
+    private static final Slug REPO_SLUG = Slugs.newSlug("SpineEventEngine/chat-bot");
 
     MoreUrlsTest() {
         super(MoreUrls.class);

@@ -25,7 +25,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.CommandMessage;
 import io.spine.chatbot.github.OrganizationId;
-import io.spine.chatbot.github.Slugs;
 import io.spine.chatbot.github.organization.OrgHeader;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
@@ -45,6 +44,8 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import static io.spine.chatbot.github.GitHubIdentifiers.organization;
 import static io.spine.chatbot.github.GitHubIdentifiers.repository;
+import static io.spine.chatbot.github.Slugs.newSlug;
+import static io.spine.chatbot.github.Slugs.orgSlug;
 import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
 
@@ -87,7 +88,7 @@ final class SpineOrgInitProcess
         _info().log("Starting Spine organization initialization process in the space `%s`.", space);
         var commands = ImmutableSet.<CommandMessage>builder();
         commands.add(registerOrgCommand(ORGANIZATION, space));
-        client.execute(ReposQuery.forOwner(Slugs.forOrg(ORGANIZATION)))
+        client.execute(ReposQuery.forOwner(orgSlug(ORGANIZATION)))
               .getRepositoriesList()
               .stream()
               .filter(repository -> WATCHED_REPOS.contains(repository.getName()))
@@ -99,7 +100,7 @@ final class SpineOrgInitProcess
     }
 
     private RegisterRepository registerRepoCommand(Repository repo, OrganizationId org) {
-        var slug = Slugs.create(repo.getSlug());
+        var slug = newSlug(repo.getSlug());
         _info().log("Registering `%s` repository.", slug.getValue());
         var header = RepoHeader
                 .newBuilder()
@@ -116,7 +117,7 @@ final class SpineOrgInitProcess
     }
 
     private RegisterOrganization registerOrgCommand(OrganizationId spineOrg, SpaceId space) {
-        var slug = Slugs.forOrg(spineOrg);
+        var slug = orgSlug(spineOrg);
         _info().log("Registering `%s` organization.", spineOrg.getValue());
         var header = OrgHeader
                 .newBuilder()

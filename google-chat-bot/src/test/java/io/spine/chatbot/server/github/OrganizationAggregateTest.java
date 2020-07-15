@@ -21,7 +21,6 @@
 package io.spine.chatbot.server.github;
 
 import io.spine.chatbot.github.OrganizationId;
-import io.spine.chatbot.github.Slugs;
 import io.spine.chatbot.github.organization.OrgHeader;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
@@ -35,6 +34,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.github.GitHubIdentifiers.organization;
+import static io.spine.chatbot.github.Slugs.orgSlug;
 import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.space;
 import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
@@ -51,8 +51,8 @@ final class OrganizationAggregateTest extends GitHubContextAwareTest {
         private final SpaceId googleChatSpace = space("spaces/qwdp123ttQ");
         private final OrganizationId organization = organization("TestOrganization");
 
-        private final Url githubUrl = githubUrlFor(Slugs.forOrg(organization));
-        private final Url travisCiUrl = travisUrlFor(Slugs.forOrg(organization));
+        private final Url githubUrl = githubUrlFor(orgSlug(organization));
+        private final Url travisCiUrl = travisUrlFor(orgSlug(organization));
         private final Url websiteUrl = Urls.create("https://test-organization.com");
 
         private final OrgHeader header = OrgHeader

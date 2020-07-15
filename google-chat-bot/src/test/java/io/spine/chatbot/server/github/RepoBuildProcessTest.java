@@ -22,7 +22,6 @@ package io.spine.chatbot.server.github;
 
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.Slugs;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
 import io.spine.chatbot.github.repository.build.RepositoryBuild;
@@ -43,6 +42,7 @@ import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.github.GitHubIdentifiers.organization;
 import static io.spine.chatbot.github.GitHubIdentifiers.repository;
+import static io.spine.chatbot.github.Slugs.repoSlug;
 import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.space;
 import static io.spine.chatbot.server.github.RepoBuildProcess.buildFrom;
 
@@ -56,8 +56,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     @Test
     @DisplayName("throw `NoBuildsFound` rejection when Travis API cannot return builds for a repo")
     void throwNoBuildsFoundRejection() {
-        travisClient().setBuildsFor(Slugs.forRepo(repo),
-                                    RepoBranchBuildResponse.getDefaultInstance());
+        travisClient().setBuildsFor(repoSlug(repo), RepoBranchBuildResponse.getDefaultInstance());
         var checkRepoBuild = CheckRepositoryBuild
                 .newBuilder()
                 .setRepository(repo)
@@ -84,7 +83,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         @BeforeEach
         void sendCheckCommand() {
-            travisClient().setBuildsFor(Slugs.forRepo(repo), branchBuild);
+            travisClient().setBuildsFor(repoSlug(repo), branchBuild);
             var checkRepoBuild = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repo)
@@ -139,7 +138,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         @BeforeEach
         void sendCheckCommands() {
-            travisClient().setBuildsFor(Slugs.forRepo(repo), previousBranchBuild);
+            travisClient().setBuildsFor(repoSlug(repo), previousBranchBuild);
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repo)
@@ -147,7 +146,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(Slugs.forRepo(repo), newBranchBuild);
+            travisClient().setBuildsFor(repoSlug(repo), newBranchBuild);
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repo)
@@ -205,8 +204,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         @BeforeEach
         void sendCheckCommands() {
-            travisClient().setBuildsFor(Slugs.forRepo(repo),
-                                        branchBuildOf(initialFailedBuild));
+            travisClient().setBuildsFor(repoSlug(repo), branchBuildOf(initialFailedBuild));
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repo)
@@ -214,7 +212,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(Slugs.forRepo(repo), previousBranchBuild);
+            travisClient().setBuildsFor(repoSlug(repo), previousBranchBuild);
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repo)
@@ -222,7 +220,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoRecovery);
-            travisClient().setBuildsFor(Slugs.forRepo(repo), newBranchBuild);
+            travisClient().setBuildsFor(repoSlug(repo), newBranchBuild);
             var checkRepoStable = CheckRepositoryBuild
                     .newBuilder()
                     .setRepository(repo)

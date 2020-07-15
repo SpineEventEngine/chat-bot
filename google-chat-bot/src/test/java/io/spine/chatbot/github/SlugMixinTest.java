@@ -31,7 +31,7 @@ final class SlugMixinTest {
     @Test
     @DisplayName("encode slug value")
     void encodeSlugValue() {
-        var slug = Slugs.create("TestOrganization/test-repository");
+        var slug = Slugs.newSlug("TestOrganization/test-repository");
         assertEquals("TestOrganization%2Ftest-repository", slug.encodedValue());
     }
 }

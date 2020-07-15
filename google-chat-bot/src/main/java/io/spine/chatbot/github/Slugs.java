@@ -37,23 +37,23 @@ public final class Slugs {
     /**
      * Creates a new {@code Slug} for the {@code repository}.
      */
-    public static Slug forRepo(RepositoryId repo) {
+    public static Slug repoSlug(RepositoryId repo) {
         checkNotNull(repo);
-        return create(repo.getValue());
+        return newSlug(repo.getValue());
     }
 
     /**
      * Creates a new {@code Slug} for the {@code organization}.
      */
-    public static Slug forOrg(OrganizationId org) {
+    public static Slug orgSlug(OrganizationId org) {
         checkNotNull(org);
-        return create(org.getValue());
+        return newSlug(org.getValue());
     }
 
     /**
      * Creates a new {@code Slug} with the specified {@code value}.
      */
-    public static Slug create(String value) {
+    public static Slug newSlug(String value) {
         checkNotEmptyOrBlank(value);
         return Slug.newBuilder()
                    .setValue(value)
