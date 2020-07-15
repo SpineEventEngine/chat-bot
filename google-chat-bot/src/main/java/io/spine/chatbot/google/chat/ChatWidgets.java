@@ -38,6 +38,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Provides building blocks to empower the rich messages sent to Google Chat.
+ *
+ * @see <a href="https://developers.google.com/hangouts/chat/reference/message-formats/cards">
+ *         Google Chat Cards</a>
  */
 final class ChatWidgets {
 
