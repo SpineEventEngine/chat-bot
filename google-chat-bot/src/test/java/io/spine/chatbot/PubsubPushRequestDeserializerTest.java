@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 
+import static io.spine.testing.Tests.nullRef;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 @MicronautTest
@@ -62,7 +63,7 @@ final class PubsubPushRequestDeserializerTest {
                 .setMessage(pubsubMessage)
                 .vBuild();
 
-        var mapper = mapperFactory.objectMapper(null, null);
+        var mapper = mapperFactory.objectMapper(nullRef(), nullRef());
 
         var pushNotification = mapper.readValue(pushRequestJson(), PubsubPushRequest.class);
         ProtoTruth.assertThat(pushNotification)

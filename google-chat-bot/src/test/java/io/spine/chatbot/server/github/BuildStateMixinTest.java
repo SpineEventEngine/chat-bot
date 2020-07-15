@@ -24,6 +24,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static io.spine.chatbot.server.github.BuildStateMixin.buildStateFrom;
+import static io.spine.testing.Tests.nullRef;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("`BuildStateMixin` should")
@@ -33,7 +34,7 @@ final class BuildStateMixinTest {
     @Test
     @DisplayName("not accept `null` build states")
     void notAcceptNull() {
-        assertThrows(NullPointerException.class, () -> buildStateFrom(null));
+        assertThrows(NullPointerException.class, () -> buildStateFrom(nullRef()));
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
