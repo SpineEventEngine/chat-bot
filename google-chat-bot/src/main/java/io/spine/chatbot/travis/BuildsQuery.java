@@ -38,8 +38,8 @@ public final class BuildsQuery extends Query<RepoBranchBuildResponse> {
      *
      * <p>Requests the latest build from the {@code master} branch.
      */
-    public static BuildsQuery forRepo(Slug repository) {
-        var encodedSlug = repository.encodedValue();
+    public static BuildsQuery forRepo(Slug repo) {
+        var encodedSlug = repo.encodedValue();
         var request = "/repo/"
                 + encodedSlug
                 + "/branch/master?&include=build.commit,build.created_by";
