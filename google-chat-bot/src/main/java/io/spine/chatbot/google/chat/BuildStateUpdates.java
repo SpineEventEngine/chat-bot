@@ -55,7 +55,8 @@ final class BuildStateUpdates {
     }
 
     /**
-     * Creates a new {@link Build} update message from the supplied state and thread.
+     * Creates a new {@link Build} update message from the supplied {@code build}
+     * and {@code thread}.
      *
      * <p>If the thread has no name set, assumes that the update message should be
      * sent to a new thread.
