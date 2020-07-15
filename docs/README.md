@@ -1,4 +1,4 @@
 ChatBot docs
 -------
 
-1. [Event Storming board](event-storming/README.md).
+1. [EventStorming board](event-storming/README.md).
