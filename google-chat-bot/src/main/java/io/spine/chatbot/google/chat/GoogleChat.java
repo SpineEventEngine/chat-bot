@@ -29,6 +29,7 @@ import io.spine.logging.Logging;
 
 import java.io.IOException;
 
+import static com.google.api.client.util.Preconditions.checkNotNull;
 import static io.spine.chatbot.google.chat.BuildStateUpdates.buildStateMessage;
 import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.message;
 import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.thread;
@@ -45,11 +46,13 @@ final class GoogleChat implements GoogleChatClient, Logging {
     private final HangoutsChat chat;
 
     GoogleChat(HangoutsChat chat) {
-        this.chat = chat;
+        this.chat = checkNotNull(chat);
     }
 
     @Override
     public BuildStateUpdate sendBuildStateUpdate(Build build, ThreadResource thread) {
+        checkNotNull(build);
+        checkNotNull(thread);
         var repo = build.getRepository();
         var trace = _trace();
         trace.log("Building state update message for the repository `%s`.", repo);

@@ -35,6 +35,7 @@ import io.spine.net.Url;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
  * Provides building blocks to empower the rich messages sent to Google Chat.
@@ -55,7 +56,7 @@ final class ChatWidgets {
      * and {@code url} to open upon a click.
      */
     static Button linkButton(String title, Url url) {
-        checkNotNull(title);
+        checkNotEmptyOrBlank(title);
         checkNotNull(url);
         var button = new TextButton().setText(title)
                                      .setOnClick(openLink(url));
@@ -92,7 +93,7 @@ final class ChatWidgets {
      *         Card text formatting</a>
      */
     static WidgetMarkup textParagraph(String formattedText) {
-        checkNotNull(formattedText);
+        checkNotEmptyOrBlank(formattedText);
         return new WidgetMarkup().setTextParagraph(new TextParagraph().setText(formattedText));
     }
 }
