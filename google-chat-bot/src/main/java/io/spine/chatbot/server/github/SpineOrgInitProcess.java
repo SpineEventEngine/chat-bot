@@ -43,10 +43,10 @@ import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
+import static io.spine.chatbot.github.GitHubIdentifiers.organization;
+import static io.spine.chatbot.github.GitHubIdentifiers.repository;
 import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
-import static io.spine.chatbot.server.github.GitHubIdentifiers.organization;
-import static io.spine.chatbot.server.github.GitHubIdentifiers.repository;
 
 /**
  * Spine organization init process.

@@ -20,6 +20,7 @@
 
 package io.spine.chatbot.server.google.chat;
 
+import io.spine.chatbot.google.chat.GoogleChatIdentifiers;
 import io.spine.chatbot.google.chat.MessageId;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.testing.UtilityClassTest;
@@ -34,8 +35,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.message;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
+import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.message;
+import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.space;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 

@@ -18,16 +18,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.google.chat;
-
-import io.spine.chatbot.google.chat.MessageId;
-import io.spine.chatbot.google.chat.SpaceId;
-import io.spine.chatbot.google.chat.ThreadId;
+package io.spine.chatbot.google.chat;
 
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
- * A utility for working with {@link GoogleChatContext} identifiers.
+ * A utility for working with {@code Google Chat} context identifiers.
  */
 public final class GoogleChatIdentifiers {
 

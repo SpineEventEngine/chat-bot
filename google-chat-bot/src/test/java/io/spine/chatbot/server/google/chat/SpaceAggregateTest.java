@@ -33,9 +33,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.space;
 import static io.spine.chatbot.google.chat.incoming.EventType.ADDED_TO_SPACE;
 import static io.spine.chatbot.google.chat.incoming.SpaceType.ROOM;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
 
 @DisplayName("`SpaceAggregate` should")
 final class SpaceAggregateTest extends GoogleChatContextAwareTest {

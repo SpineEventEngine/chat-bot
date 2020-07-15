@@ -23,7 +23,7 @@ package io.spine.chatbot.google.chat.incoming;
 import io.spine.annotation.GeneratedMixin;
 import io.spine.chatbot.google.chat.SpaceId;
 
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
+import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.space;
 
 /**
  * Provides utility helpers for the {@link io.spine.chatbot.google.chat.incoming.Space Space} type.
