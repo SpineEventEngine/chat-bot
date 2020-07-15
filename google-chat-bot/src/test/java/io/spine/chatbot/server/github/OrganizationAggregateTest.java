@@ -21,6 +21,7 @@
 package io.spine.chatbot.server.github;
 
 import io.spine.chatbot.github.OrganizationId;
+import io.spine.chatbot.github.Slugs;
 import io.spine.chatbot.github.organization.OrgHeader;
 import io.spine.chatbot.github.organization.Organization;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
@@ -33,10 +34,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.GitHubIdentifiers.organization;
-import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
 import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
+import static io.spine.chatbot.server.github.GitHubIdentifiers.organization;
+import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
 
 @DisplayName("`OrganizationAggregate` should")
 final class OrganizationAggregateTest extends GitHubContextAwareTest {

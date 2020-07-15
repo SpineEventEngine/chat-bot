@@ -18,10 +18,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.chatbot.github.organization;
 
 import io.spine.annotation.GeneratedMixin;
-import io.spine.chatbot.github.organization.OrgHeader;
 import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.net.Url;
 

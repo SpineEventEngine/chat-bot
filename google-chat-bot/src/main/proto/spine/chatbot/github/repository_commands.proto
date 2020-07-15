@@ -35,7 +35,7 @@ import "spine/chatbot/github/repository.proto";
 
 // A request to register a repository.
 message RegisterRepository {
-    option (is).java_type = "io.spine.chatbot.server.github.RepoHeaderAware";
+    option (is).java_type = "io.spine.chatbot.github.repository.RepoHeaderAware";
 
     RepositoryId id = 1 [(required) = true];
 

@@ -22,6 +22,7 @@ package io.spine.chatbot.server.github;
 
 import io.spine.chatbot.github.OrganizationId;
 import io.spine.chatbot.github.RepositoryId;
+import io.spine.chatbot.github.Slugs;
 import io.spine.chatbot.github.organization.OrgHeader;
 import io.spine.chatbot.github.organization.OrganizationRepositories;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;

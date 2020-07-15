@@ -18,28 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
-
-import io.spine.annotation.GeneratedMixin;
-import io.spine.chatbot.github.RepositoryId;
-
 /**
- * Common interface for messages aware of the {@link RepositoryId repository}.
+ * This package contains the GitHub-specific language.
  */
-@GeneratedMixin
-public interface RepositoryAware {
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.chatbot.github;
 
-    /**
-     * Obtains the repository ID.
-     */
-    default RepositoryId repository() {
-        return getRepository();
-    }
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    /**
-     * Obtains the repository ID.
-     *
-     * @implNote This method is implemented in the deriving Protobuf messages.
-     */
-    RepositoryId getRepository();
-}
+import javax.annotation.ParametersAreNonnullByDefault;

@@ -18,12 +18,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.chatbot.github.repository.build;
 
 import io.spine.annotation.GeneratedMixin;
-import io.spine.chatbot.github.repository.build.Build;
-import io.spine.chatbot.github.repository.build.BuildOrBuilder;
-import io.spine.chatbot.github.repository.build.BuildStateChange;
 
 import java.util.EnumSet;
 

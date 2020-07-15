@@ -21,7 +21,7 @@
 package io.spine.chatbot.net;
 
 import io.spine.chatbot.github.Slug;
-import io.spine.chatbot.server.github.Slugs;
+import io.spine.chatbot.github.Slugs;
 import io.spine.net.Urls;
 import io.spine.testing.UtilityClassTest;
 import org.junit.jupiter.api.DisplayName;

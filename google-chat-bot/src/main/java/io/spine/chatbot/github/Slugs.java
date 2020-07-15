@@ -18,11 +18,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
-
-import io.spine.chatbot.github.OrganizationId;
-import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.Slug;
+package io.spine.chatbot.github;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;

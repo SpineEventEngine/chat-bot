@@ -35,7 +35,7 @@ import "spine/chatbot/github/repository.proto";
 
 // A repository is registered.
 message RepositoryRegistered {
-    option (is).java_type = "io.spine.chatbot.server.github.RepoHeaderAware";
+    option (is).java_type = "io.spine.chatbot.github.repository.RepoHeaderAware";
 
     RepositoryId repository = 1 [(required) = true];
 

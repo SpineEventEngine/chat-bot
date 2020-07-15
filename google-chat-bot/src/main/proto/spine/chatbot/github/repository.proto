@@ -36,7 +36,7 @@ import "spine/chatbot/github/identifiers.proto";
 // A GitHub repository.
 message Repository {
     option (entity) = {kind: AGGREGATE visibility: NONE};
-    option (is).java_type = "io.spine.chatbot.server.github.RepoHeaderAware";
+    option (is).java_type = "RepoHeaderAware";
 
     RepositoryId id = 1;
 

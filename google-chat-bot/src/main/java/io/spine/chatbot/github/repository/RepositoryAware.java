@@ -18,16 +18,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.chatbot.github.repository;
 
-import com.google.errorprone.annotations.Immutable;
 import io.spine.annotation.GeneratedMixin;
-import io.spine.base.EventMessage;
+import io.spine.chatbot.github.RepositoryId;
 
 /**
- * A repository-aware event message.
+ * Common interface for messages aware of the {@link RepositoryId repository}.
  */
 @GeneratedMixin
-@Immutable
-public interface RepositoryAwareEvent extends RepositoryAware, EventMessage {
+public interface RepositoryAware {
+
+    /**
+     * Obtains the repository ID.
+     */
+    default RepositoryId repository() {
+        return getRepository();
+    }
+
+    /**
+     * Obtains the repository ID.
+     *
+     * @implNote This method is implemented in the deriving Protobuf messages.
+     */
+    RepositoryId getRepository();
 }

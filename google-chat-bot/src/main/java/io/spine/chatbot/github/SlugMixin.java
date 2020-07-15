@@ -18,29 +18,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.chatbot.github;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.spine.annotation.GeneratedMixin;
 
-import static io.spine.chatbot.server.github.BuildStateMixin.buildStateFrom;
-import static io.spine.testing.Tests.nullRef;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
-@DisplayName("`BuildStateMixin` should")
-final class BuildStateMixinTest {
+/**
+ * Augments {@link io.spine.chatbot.github.Slug Slug} with useful methods.
+ */
+@GeneratedMixin
+public interface SlugMixin extends SlugOrBuilder {
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    @Test
-    @DisplayName("not accept `null` build states")
-    void notAcceptNull() {
-        assertThrows(NullPointerException.class, () -> buildStateFrom(nullRef()));
+    /**
+     * Returns the slug {@code value}.
+     */
+    default String value() {
+        return getValue();
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    @Test
-    @DisplayName("not accept unknown build states")
-    void notAcceptUnknownStates() {
-        assertThrows(IllegalArgumentException.class, () -> buildStateFrom("unknown"));
+    /**
+     * Returns URL-encoded slug {@code value}.
+     */
+    default String encodedValue() {
+        return encode(getValue());
+    }
+
+    /**
+     * Encodes passed value using {@link URLEncoder} and
+     * {@link StandardCharsets#UTF_8 UTF_8} charset.
+     */
+    private static String encode(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
 }

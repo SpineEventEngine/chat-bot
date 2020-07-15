@@ -18,27 +18,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-syntax = "proto3";
+package io.spine.chatbot.github.repository;
 
-package spine.chatbot.github;
+import com.google.errorprone.annotations.Immutable;
+import io.spine.annotation.GeneratedMixin;
+import io.spine.base.EventMessage;
 
-import "spine/options.proto";
-
-option (type_url_prefix) = "type.spine.io.chatbot";
-option java_package = "io.spine.chatbot.github.organization.event";
-option java_outer_classname = "OrganizationEventsProto";
-option java_multiple_files = true;
-option java_generate_equals_and_hash = true;
-
-import "spine/chatbot/github/identifiers.proto";
-import "spine/chatbot/github/organization.proto";
-
-// An organization is registered.
-message OrganizationRegistered {
-    option (is).java_type = "io.spine.chatbot.github.organization.OrgHeaderAware";
-
-    OrganizationId organization = 1 [(required) = true];
-
-    // The organization header.
-    OrgHeader header = 2 [(required) = true, (validate) = true];
+/**
+ * A repository-aware event message.
+ */
+@GeneratedMixin
+@Immutable
+public interface RepositoryAwareEvent extends RepositoryAware, EventMessage {
 }

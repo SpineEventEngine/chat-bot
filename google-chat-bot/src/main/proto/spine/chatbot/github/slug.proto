@@ -12,7 +12,7 @@ option java_generate_equals_and_hash = true;
 
 // A unique human-readable identifier.
 message Slug {
-    option (is).java_type = "io.spine.chatbot.server.github.SlugMixin";
+    option (is).java_type = "SlugMixin";
 
     // The slug value.
     //

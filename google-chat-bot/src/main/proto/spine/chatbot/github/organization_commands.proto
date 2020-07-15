@@ -35,7 +35,7 @@ import "spine/chatbot/github/organization.proto";
 
 // A request to register an organization.
 message RegisterOrganization {
-    option (is).java_type = "io.spine.chatbot.server.github.OrgHeaderAware";
+    option (is).java_type = "io.spine.chatbot.github.organization.OrgHeaderAware";
 
     OrganizationId id = 1 [(required) = true];
 

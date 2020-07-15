@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.base.CommandMessage;
 import io.spine.chatbot.github.OrganizationId;
+import io.spine.chatbot.github.Slugs;
 import io.spine.chatbot.github.organization.OrgHeader;
 import io.spine.chatbot.github.organization.command.RegisterOrganization;
 import io.spine.chatbot.github.organization.init.OrganizationInit;

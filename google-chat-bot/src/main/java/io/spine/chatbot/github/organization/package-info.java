@@ -18,39 +18,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
-
-import io.spine.annotation.GeneratedMixin;
-import io.spine.chatbot.github.SlugOrBuilder;
-
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
 /**
- * Augments {@link io.spine.chatbot.github.Slug Slug} with useful methods.
+ * This package contains the GitHub organization-specific language.
  */
-@GeneratedMixin
-public interface SlugMixin extends SlugOrBuilder {
+@CheckReturnValue
+@ParametersAreNonnullByDefault
+package io.spine.chatbot.github.organization;
 
-    /**
-     * Returns the slug {@code value}.
-     */
-    default String value() {
-        return getValue();
-    }
+import com.google.errorprone.annotations.CheckReturnValue;
 
-    /**
-     * Returns URL-encoded slug {@code value}.
-     */
-    default String encodedValue() {
-        return encode(getValue());
-    }
-
-    /**
-     * Encodes passed value using {@link URLEncoder} and
-     * {@link StandardCharsets#UTF_8 UTF_8} charset.
-     */
-    private static String encode(String value) {
-        return URLEncoder.encode(value, StandardCharsets.UTF_8);
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

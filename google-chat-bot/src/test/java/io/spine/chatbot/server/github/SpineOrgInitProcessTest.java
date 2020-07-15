@@ -20,6 +20,7 @@
 
 package io.spine.chatbot.server.github;
 
+import io.spine.chatbot.github.Slugs;
 import io.spine.chatbot.github.organization.init.OrganizationInit;
 import io.spine.chatbot.google.chat.SpaceHeader;
 import io.spine.chatbot.google.chat.SpaceId;

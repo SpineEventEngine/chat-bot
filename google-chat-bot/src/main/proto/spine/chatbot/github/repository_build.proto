@@ -56,7 +56,7 @@ message RepositoryBuild {
 
 // A repository branch build.
 message Build {
-    option (is).java_type = "io.spine.chatbot.server.github.BuildStateMixin";
+    option (is).java_type = "BuildStateMixin";
 
     // Incremental number for a repository's builds.
     string number = 1;
