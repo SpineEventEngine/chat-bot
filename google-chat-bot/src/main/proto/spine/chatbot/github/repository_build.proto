@@ -44,7 +44,7 @@ message RepositoryBuild {
 
     RepositoryId repository = 1;
 
-    // The time of the last status check.
+    // The time of the last build status check.
     .google.protobuf.Timestamp when_last_checked = 2;
 
     // The current build.
@@ -137,7 +137,7 @@ message Commit {
     string authored_by = 5;
 }
 
-// Definition of a change in a `build_state` field.
+// Definition of a change in a `build` field.
 message BuildStateChange {
 
     // The value of the field that's changing.
