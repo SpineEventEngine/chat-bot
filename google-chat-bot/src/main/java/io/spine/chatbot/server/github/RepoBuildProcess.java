@@ -64,7 +64,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  *     {@code passing} previously.
  * </ul>
  *
- * Or, if the repository builds could not be retrieved, throws {@link NoBuildsFound} rejection.
+ * Or, if the repository builds cannot be retrieved, throws {@link NoBuildsFound} rejection.
  */
 final class RepoBuildProcess
         extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder>
@@ -76,8 +76,7 @@ final class RepoBuildProcess
     /**
      * Checks the repository build state and propagates the respective events.
      *
-     * <p>If the repository build state could not be retrieved,
-     * throws {@link NoBuildsFound} rejection.
+     * <p>If the repository build state cannot be retrieved, throws {@link NoBuildsFound} rejection.
      */
     @Assign
     EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain> handle(CheckRepositoryBuild c)

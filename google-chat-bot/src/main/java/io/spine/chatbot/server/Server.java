@@ -38,7 +38,9 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  */
 public final class Server implements Logging {
 
-    /** Name of the GRPC {@link io.spine.server.Server}. **/
+    /**
+     * The name of the GRPC {@link io.spine.server.Server Server}.
+     */
     private static final String SERVER_NAME = "ChatBotServer";
 
     private final ImmutableSet<ContextBuilderAware> contexts;

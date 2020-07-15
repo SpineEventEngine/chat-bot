@@ -31,7 +31,7 @@ import io.spine.server.storage.memory.InMemoryStorageFactory;
 import io.spine.server.transport.memory.InMemoryTransportFactory;
 
 /**
- * Initializes the {@link io.spine.server.ServerEnvironment}.
+ * Initializes the {@link io.spine.server.ServerEnvironment ServerEnvironment}.
  *
  * <p>Configures the {@link StorageFactory} depending on the current {@link Environment}.
  * Uses the Datastore storage factory for the production mode and in-memory storage for tests.

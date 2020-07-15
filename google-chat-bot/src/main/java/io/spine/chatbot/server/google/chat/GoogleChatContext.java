@@ -32,7 +32,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class GoogleChatContext implements ContextBuilderAware {
 
-    /** The name of the Google Chat Context. **/
+    /**
+     * The name of the Google Chat Context.
+     */
     static final String GOOGLE_CHAT_CONTEXT_NAME = "GoogleChat";
 
     private final BoundedContextBuilder builder;

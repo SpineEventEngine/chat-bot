@@ -62,7 +62,9 @@ final class SpineOrgInitProcess
             "base", "time", "core-java", "web", "gcloud-java", "bootstrap", "money", "jdbc-storage"
     );
 
-    /** The initialization process ID. **/
+    /**
+     * The initialization process ID.
+     */
     static final OrganizationId ORGANIZATION = organization("SpineEventEngine");
 
     @LazyInit
