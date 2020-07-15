@@ -50,7 +50,7 @@ public interface BuildStateMixin extends BuildOrBuilder {
     }
 
     /**
-     * Returns a capitalized label of the {@link Build.State build state}.
+     * Returns a capitalized label of the {@linkplain Build.State build state}.
      */
     default String stateLabel() {
         var state = getState();
@@ -61,7 +61,7 @@ public interface BuildStateMixin extends BuildOrBuilder {
     }
 
     /**
-     * Creates an instance of the {@link Build.State build state} of out its
+     * Creates an instance of the {@linkplain Build.State build state} of out its
      * string representation.
      */
     static Build.State buildStateFrom(String state) {
@@ -77,7 +77,7 @@ public interface BuildStateMixin extends BuildOrBuilder {
     }
 
     /**
-     * Determines the {@link BuildStateChange state chage} of the build comparing to the
+     * Determines the {@linkplain BuildStateChange state change} of the build comparing to the
      * {@code previousState}.
      *
      * @see #stateChange(BuildStateMixin, BuildStateMixin)
@@ -87,7 +87,7 @@ public interface BuildStateMixin extends BuildOrBuilder {
     }
 
     /**
-     * Determines the {@link BuildStateChange state chage} between build states.
+     * Determines the {@linkplain BuildStateChange state change} between build states.
      *
      * <p>The status is considered:
      *
