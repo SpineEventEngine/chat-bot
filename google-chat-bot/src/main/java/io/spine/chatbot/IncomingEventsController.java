@@ -56,7 +56,7 @@ final class IncomingEventsController implements Logging {
         var message = pushRequest.getMessage();
         var chatEventJson = message.getData()
                                    .toStringUtf8();
-        _debug().log("Received a new chat event: %s", chatEventJson);
+        _debug().log("Received a new chat event:%n%s", chatEventJson);
         ChatEvent chatEvent = Json.fromJson(chatEventJson, ChatEvent.class);
         var actor = eventActor(chatEvent.getUser());
         var chatEventReceived = ChatEventReceived
