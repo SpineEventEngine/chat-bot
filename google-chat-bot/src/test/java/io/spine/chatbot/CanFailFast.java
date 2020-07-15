@@ -31,7 +31,9 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  */
 public abstract class CanFailFast implements Logging {
 
-    /** Determines whether the client should fail if a particular response is not preconfigured. **/
+    /**
+     * Determines whether the client should fail if a particular response is not preconfigured.
+     */
     private final boolean failFast;
 
     /**
