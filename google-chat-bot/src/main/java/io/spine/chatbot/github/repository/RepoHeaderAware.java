@@ -31,7 +31,7 @@ import io.spine.net.Url;
 public interface RepoHeaderAware {
 
     /**
-     * Returns the repository header.
+     * Returns the repository {@code header}.
      *
      * @implNote This method is implemented in the deriving Protobuf messages.
      */

@@ -31,7 +31,7 @@ import io.spine.net.Url;
 public interface OrgHeaderAware {
 
     /**
-     * Returns the organization header.
+     * Returns the organization {@code header}.
      *
      * @implNote This method is implemented in the deriving Protobuf messages.
      */
