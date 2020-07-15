@@ -46,7 +46,7 @@ final class GoogleChatKey extends Secret {
     }
 
     /**
-     * Creates the Google Chat service account key.
+     * Creates a new Google Chat service account key.
      */
     static GoogleChatKey chatServiceAccountKey() {
         var value = checkNotEmptyOrBlank(retrieveSecret(CHAT_SERVICE_ACCOUNT));
