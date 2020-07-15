@@ -52,11 +52,10 @@ final class ThreadChatProcessTest {
     final class BuildIsFailed extends BuildStateChanged {
 
         @Override
-        EventMessage buildStateChangeEvent(RepositoryId repositoryId,
-                                           BuildStateChange stateChange) {
+        EventMessage buildStateChangeEvent(RepositoryId repo, BuildStateChange stateChange) {
             return BuildFailed
                     .newBuilder()
-                    .setRepository(repositoryId)
+                    .setRepository(repo)
                     .setChange(stateChange)
                     .vBuild();
         }
@@ -68,11 +67,10 @@ final class ThreadChatProcessTest {
     final class BuildIsRecovered extends BuildStateChanged {
 
         @Override
-        EventMessage buildStateChangeEvent(RepositoryId repositoryId,
-                                           BuildStateChange stateChange) {
+        EventMessage buildStateChangeEvent(RepositoryId repo, BuildStateChange stateChange) {
             return BuildRecovered
                     .newBuilder()
-                    .setRepository(repositoryId)
+                    .setRepository(repo)
                     .setChange(stateChange)
                     .vBuild();
         }
@@ -82,8 +80,8 @@ final class ThreadChatProcessTest {
 
         private static final String buildNumber = "551";
 
-        private final RepositoryId repository = repository("SpineEventEngine/money");
-        private final ThreadId thread = thread(repository.getValue());
+        private final RepositoryId repo = repository("SpineEventEngine/money");
+        private final ThreadId thread = thread(repo.getValue());
         private final SpaceId space = space("spaces/1241pjwqe");
 
         private final BuildStateUpdate stateUpdate = BuildStateUpdate
@@ -106,11 +104,11 @@ final class ThreadChatProcessTest {
                     .newBuilder()
                     .setNewValue(newBuildState)
                     .vBuild();
-            var buildFailed = buildStateChangeEvent(repository, buildStateChange);
+            var buildFailed = buildStateChangeEvent(repo, buildStateChange);
             context().receivesExternalEvent(buildFailed);
         }
 
-        abstract EventMessage buildStateChangeEvent(RepositoryId repositoryId,
+        abstract EventMessage buildStateChangeEvent(RepositoryId repo,
                                                     BuildStateChange stateChange);
 
         @Test

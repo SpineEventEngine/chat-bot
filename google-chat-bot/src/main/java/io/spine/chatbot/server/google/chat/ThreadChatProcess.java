@@ -71,9 +71,9 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
     Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildRecovered e) {
         var change = e.getChange();
         var build = change.getNewValue();
-        var repository = e.getRepository();
-        _info().log("A build for the repository `%s` recovered.", repository.getValue());
-        return processBuildStateUpdate(build, repository);
+        var repo = e.getRepository();
+        _info().log("A build for the repository `%s` recovered.", repo.getValue());
+        return processBuildStateUpdate(build, repo);
     }
 
     private Pair<MessageCreated, Optional<ThreadCreated>>

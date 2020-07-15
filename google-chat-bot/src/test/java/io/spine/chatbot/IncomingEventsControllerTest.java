@@ -76,12 +76,12 @@ final class IncomingEventsControllerTest {
                 .setMessageId("129y418y4houfhiuehwr")
                 .setData(ByteString.copyFromUtf8(chatEventJson()))
                 .build();
-        var pushNotification = PubsubPushRequest
+        var pushRequest = PubsubPushRequest
                 .newBuilder()
                 .setMessage(pubsubMessage)
                 .setSubscription("projects/test-project/subscriptions/test-subscription")
                 .vBuild();
-        var request = POST("/chat/incoming/event", Json.toJson(pushNotification))
+        var request = POST("/chat/incoming/event", Json.toJson(pushRequest))
                 .contentType(MediaType.APPLICATION_JSON);
         String actual = client.toBlocking()
                               .retrieve(request);

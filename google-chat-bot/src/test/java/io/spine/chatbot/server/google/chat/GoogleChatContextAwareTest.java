@@ -31,13 +31,13 @@ import org.junit.jupiter.api.AfterEach;
  */
 abstract class GoogleChatContextAwareTest extends ContextAwareTest {
 
-    private final InMemoryGoogleChatClient googleChatClient = InMemoryGoogleChatClient.strictClient();
+    private final InMemoryGoogleChatClient client = InMemoryGoogleChatClient.strictClient();
 
     @Override
     protected final BoundedContextBuilder contextBuilder() {
         return GoogleChatContext
                 .newBuilder()
-                .setClient(googleChatClient)
+                .setClient(client)
                 .build()
                 .builder();
     }
@@ -47,13 +47,13 @@ abstract class GoogleChatContextAwareTest extends ContextAwareTest {
     @Override
     protected final void closeContext() {
         super.closeContext();
-        googleChatClient.reset();
+        client.reset();
     }
 
     /**
      * Returns configured for the {@link #context() context} Google Chat client.
      */
     final InMemoryGoogleChatClient googleChatClient() {
-        return googleChatClient;
+        return client;
     }
 }

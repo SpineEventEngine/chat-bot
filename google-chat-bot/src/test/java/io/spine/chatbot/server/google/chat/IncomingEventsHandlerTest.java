@@ -43,8 +43,8 @@ import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
 @DisplayName("`IncomingEventsHandler` should")
 final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
 
-    private static final SpaceId spaceId = space("spaces/fqeq325661a");
-    private static final MessageId messageId = message("spaces/fqeq325661a/messages/422");
+    private static final SpaceId space = space("spaces/fqeq325661a");
+    private static final MessageId message = message("spaces/fqeq325661a/messages/422");
 
     @Test
     @DisplayName("add bot to a space")
@@ -54,7 +54,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
         var botAddedToSpace = BotAddedToSpace
                 .newBuilder()
                 .setEvent(chatEventReceived.getEvent())
-                .setSpace(spaceId)
+                .setSpace(space)
                 .vBuild();
         // when
         context().receivesExternalEvent(chatEventReceived);
@@ -70,7 +70,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
         var botRemovedFromSpace = BotRemovedFromSpace
                 .newBuilder()
                 .setEvent(chatEventReceived.getEvent())
-                .setSpace(spaceId)
+                .setSpace(space)
                 .vBuild();
         // when
         context().receivesExternalEvent(chatEventReceived);
@@ -86,7 +86,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
         var messageReceived = MessageReceived
                 .newBuilder()
                 .setEvent(chatEventReceived.getEvent())
-                .setMessage(messageId)
+                .setMessage(message)
                 .vBuild();
         // when
         context().receivesExternalEvent(chatEventReceived);
@@ -115,7 +115,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
     private static Message chatMessage() {
         return Message
                 .newBuilder()
-                .setName(messageId.getValue())
+                .setName(message.getValue())
                 .setSender(sender())
                 .setText("To be, or not to be, that is the question.")
                 .vBuild();
@@ -131,7 +131,7 @@ final class IncomingEventsHandlerTest extends GoogleChatContextAwareTest {
     private static io.spine.chatbot.google.chat.incoming.Space chatSpace() {
         return io.spine.chatbot.google.chat.incoming.Space
                 .newBuilder()
-                .setName(spaceId.getValue())
+                .setName(space.getValue())
                 .setType(ROOM)
                 .vBuild();
     }

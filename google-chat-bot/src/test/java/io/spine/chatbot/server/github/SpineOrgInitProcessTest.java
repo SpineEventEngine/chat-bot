@@ -42,13 +42,13 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
     final class Init {
 
         private final SpaceId space = space("spaces/qjwrp1441");
-        private final Repository repository = Repository
+        private final Repository repo = Repository
                 .newBuilder()
                 .setId(123312L)
                 .setName("time")
                 .setSlug("SpineEventEngine/time")
                 .vBuild();
-        private final SpaceHeader header = SpaceHeader
+        private final SpaceHeader spaceHeader = SpaceHeader
                 .newBuilder()
                 .setThreaded(true)
                 .setDisplayName("Test Space")
@@ -58,13 +58,13 @@ final class SpineOrgInitProcessTest extends GitHubContextAwareTest {
         void registerSpace() {
             var repositoriesResponse = RepositoriesResponse
                     .newBuilder()
-                    .addRepositories(repository)
+                    .addRepositories(repo)
                     .vBuild();
             travisClient().setRepositoriesFor(Slugs.forOrg(ORGANIZATION), repositoriesResponse);
             var spaceRegistered = SpaceRegistered
                     .newBuilder()
                     .setSpace(space)
-                    .setHeader(header)
+                    .setHeader(spaceHeader)
                     .vBuild();
             context().receivesExternalEvent(spaceRegistered);
         }

@@ -94,12 +94,12 @@ final class OrgReposProjectionTest extends GitHubContextAwareTest {
 
         private static final String orgName = "Multi Repo Org";
 
-        private final SpaceId googleChatSpace = space("spaces/qqwp123ttQ");
-        private final OrganizationId organization = organization("MultiRepoOrg");
-        private final RepositoryId repository = repository("main-repo");
+        private final SpaceId space = space("spaces/qqwp123ttQ");
+        private final OrganizationId org = organization("MultiRepoOrg");
+        private final RepositoryId repo = repository("main-repo");
 
-        private final Url githubUrl = githubUrlFor(Slugs.forOrg(organization));
-        private final Url travisCiUrl = travisUrlFor(Slugs.forOrg(organization));
+        private final Url githubUrl = githubUrlFor(Slugs.forOrg(org));
+        private final Url travisCiUrl = travisUrlFor(Slugs.forOrg(org));
         private final Url websiteUrl = Urls.create("https://multi-repo-organization.com");
 
         private final OrgHeader orgHeader = OrgHeader
@@ -108,7 +108,7 @@ final class OrgReposProjectionTest extends GitHubContextAwareTest {
                 .setTravisProfile(travisCiUrl)
                 .setWebsite(websiteUrl)
                 .setName(orgName)
-                .setSpace(googleChatSpace)
+                .setSpace(space)
                 .vBuild();
 
         private final RepoHeader repoHeader = RepoHeader
@@ -116,14 +116,14 @@ final class OrgReposProjectionTest extends GitHubContextAwareTest {
                 .setGithubProfile(githubUrl)
                 .setTravisProfile(travisCiUrl)
                 .setName("Main Repo")
-                .setOrganization(organization)
+                .setOrganization(org)
                 .vBuild();
 
         @BeforeEach
         void registerOrg() {
             var registerOrganization = RegisterOrganization
                     .newBuilder()
-                    .setId(organization)
+                    .setId(org)
                     .setHeader(orgHeader)
                     .vBuild();
             context().receivesCommand(registerOrganization);
@@ -134,16 +134,16 @@ final class OrgReposProjectionTest extends GitHubContextAwareTest {
         void settingState() {
             var registerRepository = RegisterRepository
                     .newBuilder()
-                    .setId(repository)
+                    .setId(repo)
                     .setHeader(repoHeader)
                     .vBuild();
             context().receivesCommand(registerRepository);
             var expectedState = OrganizationRepositories
                     .newBuilder()
-                    .setOrganization(organization)
-                    .addRepository(repository)
+                    .setOrganization(org)
+                    .addRepository(repo)
                     .vBuild();
-            context().assertState(organization, OrganizationRepositories.class)
+            context().assertState(org, OrganizationRepositories.class)
                      .isEqualTo(expectedState);
         }
 
@@ -152,17 +152,17 @@ final class OrgReposProjectionTest extends GitHubContextAwareTest {
         void handleDuplicateRepos() {
             var registerRepository = RegisterRepository
                     .newBuilder()
-                    .setId(repository)
+                    .setId(repo)
                     .setHeader(repoHeader)
                     .vBuild();
             context().receivesCommand(registerRepository);
             context().receivesCommand(registerRepository);
             var expectedState = OrganizationRepositories
                     .newBuilder()
-                    .setOrganization(organization)
-                    .addRepository(repository)
+                    .setOrganization(org)
+                    .addRepository(repo)
                     .vBuild();
-            context().assertState(organization, OrganizationRepositories.class)
+            context().assertState(org, OrganizationRepositories.class)
                      .isEqualTo(expectedState);
         }
 
@@ -171,16 +171,16 @@ final class OrgReposProjectionTest extends GitHubContextAwareTest {
         void ignoreRepoWithoutOrg() {
             var registerRepository = RegisterRepository
                     .newBuilder()
-                    .setId(repository)
+                    .setId(repo)
                     .setHeader(repoHeader.toBuilder()
                                          .clearOrganization())
                     .vBuild();
             context().receivesCommand(registerRepository);
             var expectedState = OrganizationRepositories
                     .newBuilder()
-                    .setOrganization(organization)
+                    .setOrganization(org)
                     .vBuild();
-            context().assertState(organization, OrganizationRepositories.class)
+            context().assertState(org, OrganizationRepositories.class)
                      .isEqualTo(expectedState);
         }
     }

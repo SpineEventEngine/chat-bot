@@ -50,7 +50,6 @@ final class PubsubPushRequestDeserializerTest {
     @Test
     @DisplayName("deserialize Pub/Sub message")
     void deserializePubsubMessage() throws JsonProcessingException, ParseException {
-
         var pubsubMessage = PubsubMessage
                 .newBuilder()
                 .setMessageId("450292511223766")
@@ -65,8 +64,8 @@ final class PubsubPushRequestDeserializerTest {
 
         var mapper = mapperFactory.objectMapper(nullRef(), nullRef());
 
-        var pushNotification = mapper.readValue(pushRequestJson(), PubsubPushRequest.class);
-        ProtoTruth.assertThat(pushNotification)
+        var pushRequest = mapper.readValue(pushRequestJson(), PubsubPushRequest.class);
+        ProtoTruth.assertThat(pushRequest)
                   .isEqualTo(expectedResult);
     }
 

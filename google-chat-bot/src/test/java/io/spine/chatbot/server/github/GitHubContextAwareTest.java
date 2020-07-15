@@ -31,13 +31,13 @@ import org.junit.jupiter.api.AfterEach;
  */
 abstract class GitHubContextAwareTest extends ContextAwareTest {
 
-    private final InMemoryTravisClient travisClient = InMemoryTravisClient.strictClient();
+    private final InMemoryTravisClient client = InMemoryTravisClient.strictClient();
 
     @Override
     protected final BoundedContextBuilder contextBuilder() {
         return GitHubContext
                 .newBuilder()
-                .setTravis(travisClient)
+                .setTravis(client)
                 .build()
                 .builder();
     }
@@ -47,13 +47,13 @@ abstract class GitHubContextAwareTest extends ContextAwareTest {
     @Override
     protected final void closeContext() {
         super.closeContext();
-        travisClient.reset();
+        client.reset();
     }
 
     /**
      * Returns configured for the {@link #context() context} Travis client.
      */
     final InMemoryTravisClient travisClient() {
-        return travisClient;
+        return client;
     }
 }

@@ -37,10 +37,10 @@ import static io.spine.server.route.EventRoute.withId;
 final class SpineOrgInitRepository
         extends ProcessManagerRepository<OrganizationId, SpineOrgInitProcess, OrganizationInit> {
 
-    private final TravisClient travisClient;
+    private final TravisClient client;
 
-    SpineOrgInitRepository(TravisClient travisClient) {
-        this.travisClient = travisClient;
+    SpineOrgInitRepository(TravisClient client) {
+        this.client = client;
     }
 
     @OverridingMethodsMustInvokeSuper
@@ -52,6 +52,7 @@ final class SpineOrgInitRepository
 
     @Override
     protected void configure(SpineOrgInitProcess processManager) {
-        processManager.setClient(travisClient);
+        super.configure(processManager);
+        processManager.setClient(client);
     }
 }

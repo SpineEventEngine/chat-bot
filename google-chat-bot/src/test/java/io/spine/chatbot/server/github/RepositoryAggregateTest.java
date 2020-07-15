@@ -32,10 +32,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.chatbot.server.github.GitHubIdentifiers.organization;
-import static io.spine.chatbot.server.github.GitHubIdentifiers.repository;
 import static io.spine.chatbot.net.MoreUrls.githubUrlFor;
 import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
+import static io.spine.chatbot.server.github.GitHubIdentifiers.organization;
+import static io.spine.chatbot.server.github.GitHubIdentifiers.repository;
 
 @DisplayName("`RepositoryAggregate` should")
 final class RepositoryAggregateTest extends GitHubContextAwareTest {
@@ -48,25 +48,25 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
         private static final String REPO_SLUG = ORG_SLUG + "/base";
         private static final String REPO_NAME = "Spine Base";
 
-        private final RepositoryId repository = repository(REPO_SLUG);
-        private final OrganizationId organization = organization(ORG_SLUG);
+        private final RepositoryId repo = repository(REPO_SLUG);
+        private final OrganizationId org = organization(ORG_SLUG);
 
-        private final Url githubUrl = githubUrlFor(Slugs.forOrg(organization));
-        private final Url travisCiUrl = travisUrlFor(Slugs.forRepo(repository));
-        private final RepoHeader header = RepoHeader
+        private final Url githubProfile = githubUrlFor(Slugs.forOrg(org));
+        private final Url travisProfile = travisUrlFor(Slugs.forRepo(repo));
+        private final RepoHeader repoHeader = RepoHeader
                 .newBuilder()
-                .setGithubProfile(githubUrl)
-                .setTravisProfile(travisCiUrl)
+                .setGithubProfile(githubProfile)
+                .setTravisProfile(travisProfile)
                 .setName(REPO_NAME)
-                .setOrganization(organization)
+                .setOrganization(org)
                 .vBuild();
 
         @BeforeEach
         void registerRepository() {
             var registerRepository = RegisterRepository
                     .newBuilder()
-                    .setId(repository)
-                    .setHeader(header)
+                    .setId(repo)
+                    .setHeader(repoHeader)
                     .vBuild();
             context().receivesCommand(registerRepository);
         }
@@ -76,8 +76,8 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
         void producingEvent() {
             var repositoryRegistered = RepositoryRegistered
                     .newBuilder()
-                    .setRepository(repository)
-                    .setHeader(header)
+                    .setRepository(repo)
+                    .setHeader(repoHeader)
                     .vBuild();
             context().assertEvent(repositoryRegistered);
         }
@@ -87,10 +87,10 @@ final class RepositoryAggregateTest extends GitHubContextAwareTest {
         void settingState() {
             var expectedState = Repository
                     .newBuilder()
-                    .setId(repository)
-                    .setHeader(header)
+                    .setId(repo)
+                    .setHeader(repoHeader)
                     .vBuild();
-            context().assertState(repository, Repository.class)
+            context().assertState(repo, Repository.class)
                      .isEqualTo(expectedState);
         }
     }

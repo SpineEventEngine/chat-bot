@@ -76,10 +76,10 @@ public final class InMemoryTravisClient extends CanFailFast implements TravisCli
     /**
      * Sets up a stub {@code repositories} response for a specified {@code owner}.
      */
-    public void setRepositoriesFor(Slug owner, RepositoriesResponse repositories) {
+    public void setRepositoriesFor(Slug owner, RepositoriesResponse repos) {
         checkNotNull(owner);
-        checkNotNull(repositories);
-        responses.put(ReposQuery.forOwner(owner), repositories);
+        checkNotNull(repos);
+        responses.put(ReposQuery.forOwner(owner), repos);
     }
 
     /**

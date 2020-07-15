@@ -90,7 +90,8 @@ final class BeanFactory {
                 return result;
             } catch (IOException e) {
                 throw newIllegalArgumentException(
-                        e, "Unable to deserialize `PubsubPushRequest` json."
+                        e, "Unable to deserialize `%s` json.",
+                        PubsubPushRequest.class.getSimpleName()
                 );
             }
         }

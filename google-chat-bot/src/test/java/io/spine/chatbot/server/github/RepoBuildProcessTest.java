@@ -49,25 +49,25 @@ import static io.spine.chatbot.server.google.chat.GoogleChatIdentifiers.space;
 final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
     private static final OrganizationId org = organization("SpineEventEngine");
-    private static final RepositoryId repository = repository("SpineEventEngine/web");
-    private static final SpaceId chatSpace = space("spaces/1245wrq");
+    private static final RepositoryId repo = repository("SpineEventEngine/web");
+    private static final SpaceId space = space("spaces/1245wrq");
 
     @Test
     @DisplayName("throw `NoBuildsFound` rejection when Travis API cannot return builds for a repo")
     void throwNoBuildsFoundRejection() {
-        travisClient().setBuildsFor(Slugs.forRepo(repository),
+        travisClient().setBuildsFor(Slugs.forRepo(repo),
                                     RepoBranchBuildResponse.getDefaultInstance());
         var checkRepoBuild = CheckRepositoryBuild
                 .newBuilder()
-                .setRepository(repository)
+                .setRepository(repo)
                 .setOrganization(org)
-                .setSpace(chatSpace)
+                .setSpace(space)
                 .vBuild();
         context().receivesCommand(checkRepoBuild);
 
         var noBuildsFound = RepositoryBuildRejections.NoBuildsFound
                 .newBuilder()
-                .setRepository(repository)
+                .setRepository(repo)
                 .vBuild();
         context().assertEvent(noBuildsFound);
     }
@@ -79,15 +79,15 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
         private final io.spine.chatbot.travis.Build build = failedBuild();
         private final RepoBranchBuildResponse branchBuild = branchBuildOf(build);
-        private final Build buildState = buildFrom(branchBuild, chatSpace);
+        private final Build buildState = buildFrom(branchBuild, space);
 
         @BeforeEach
         void sendCheckCommand() {
-            travisClient().setBuildsFor(Slugs.forRepo(repository), branchBuild);
+            travisClient().setBuildsFor(Slugs.forRepo(repo), branchBuild);
             var checkRepoBuild = CheckRepositoryBuild
                     .newBuilder()
-                    .setRepository(repository)
-                    .setSpace(chatSpace)
+                    .setRepository(repo)
+                    .setSpace(space)
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoBuild);
@@ -102,7 +102,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .vBuild();
             var buildFailed = BuildFailed
                     .newBuilder()
-                    .setRepository(repository)
+                    .setRepository(repo)
                     .setChange(stateChange)
                     .vBuild();
             context().assertEvent(buildFailed);
@@ -113,11 +113,11 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         void settingState() {
             var expectedState = RepositoryBuild
                     .newBuilder()
-                    .setRepository(repository)
+                    .setRepository(repo)
                     .setBuild(buildState)
                     .setCurrentState(buildState.getState())
                     .vBuild();
-            context().assertState(repository, RepositoryBuild.class)
+            context().assertState(repo, RepositoryBuild.class)
                      .isEqualTo(expectedState);
         }
     }
@@ -130,27 +130,27 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         private final io.spine.chatbot.travis.Build previousBuild = failedBuild();
         private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
         private final Build previousBuildState = buildFrom(previousBranchBuild,
-                                                           chatSpace);
+                                                           space);
 
         private final io.spine.chatbot.travis.Build newBuild = passingBuild();
         private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
-        private final Build newBuildState = buildFrom(newBranchBuild, chatSpace);
+        private final Build newBuildState = buildFrom(newBranchBuild, space);
 
         @BeforeEach
         void sendCheckCommands() {
-            travisClient().setBuildsFor(Slugs.forRepo(repository), previousBranchBuild);
+            travisClient().setBuildsFor(Slugs.forRepo(repo), previousBranchBuild);
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
-                    .setRepository(repository)
-                    .setSpace(chatSpace)
+                    .setRepository(repo)
+                    .setSpace(space)
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(Slugs.forRepo(repository), newBranchBuild);
+            travisClient().setBuildsFor(Slugs.forRepo(repo), newBranchBuild);
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
-                    .setRepository(repository)
-                    .setSpace(chatSpace)
+                    .setRepository(repo)
+                    .setSpace(space)
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoRecovery);
@@ -166,7 +166,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .vBuild();
             var buildFailed = BuildRecovered
                     .newBuilder()
-                    .setRepository(repository)
+                    .setRepository(repo)
                     .setChange(stateChange)
                     .vBuild();
             context().assertEvent(buildFailed);
@@ -177,11 +177,11 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         void settingState() {
             var expectedState = RepositoryBuild
                     .newBuilder()
-                    .setRepository(repository)
+                    .setRepository(repo)
                     .setBuild(newBuildState)
                     .setCurrentState(newBuildState.getState())
                     .vBuild();
-            context().assertState(repository, RepositoryBuild.class)
+            context().assertState(repo, RepositoryBuild.class)
                      .isEqualTo(expectedState);
         }
     }
@@ -196,36 +196,36 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         private final io.spine.chatbot.travis.Build previousBuild = passingBuild();
         private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
         private final Build previousBuildState = buildFrom(previousBranchBuild,
-                                                           chatSpace);
+                                                           space);
 
         private final io.spine.chatbot.travis.Build newBuild = nextPassingBuild();
         private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
-        private final Build newBuildState = buildFrom(newBranchBuild, chatSpace);
+        private final Build newBuildState = buildFrom(newBranchBuild, space);
 
         @BeforeEach
         void sendCheckCommands() {
-            travisClient().setBuildsFor(Slugs.forRepo(repository),
+            travisClient().setBuildsFor(Slugs.forRepo(repo),
                                         branchBuildOf(initialFailedBuild));
             var checkRepoFailure = CheckRepositoryBuild
                     .newBuilder()
-                    .setRepository(repository)
-                    .setSpace(chatSpace)
+                    .setRepository(repo)
+                    .setSpace(space)
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(Slugs.forRepo(repository), previousBranchBuild);
+            travisClient().setBuildsFor(Slugs.forRepo(repo), previousBranchBuild);
             var checkRepoRecovery = CheckRepositoryBuild
                     .newBuilder()
-                    .setRepository(repository)
-                    .setSpace(chatSpace)
+                    .setRepository(repo)
+                    .setSpace(space)
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoRecovery);
-            travisClient().setBuildsFor(Slugs.forRepo(repository), newBranchBuild);
+            travisClient().setBuildsFor(Slugs.forRepo(repo), newBranchBuild);
             var checkRepoStable = CheckRepositoryBuild
                     .newBuilder()
-                    .setRepository(repository)
-                    .setSpace(chatSpace)
+                    .setRepository(repo)
+                    .setSpace(space)
                     .setOrganization(org)
                     .vBuild();
             context().receivesCommand(checkRepoStable);
@@ -241,7 +241,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                     .vBuild();
             var buildSucceededAgain = BuildSucceededAgain
                     .newBuilder()
-                    .setRepository(repository)
+                    .setRepository(repo)
                     .setChange(stateChange)
                     .vBuild();
             context().assertEvent(buildSucceededAgain);
@@ -252,11 +252,11 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         void settingState() {
             var expectedState = RepositoryBuild
                     .newBuilder()
-                    .setRepository(repository)
+                    .setRepository(repo)
                     .setBuild(newBuildState)
                     .setCurrentState(newBuildState.getState())
                     .vBuild();
-            context().assertState(repository, RepositoryBuild.class)
+            context().assertState(repo, RepositoryBuild.class)
                      .isEqualTo(expectedState);
         }
     }
@@ -267,7 +267,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                 .setLastBuild(build)
                 .setName("master")
                 .setRepository(Repository.newBuilder()
-                                         .setSlug(repository.getValue()))
+                                         .setSlug(repo.getValue()))
                 .buildPartial();
     }
 
@@ -364,7 +364,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                 .newBuilder()
                 .setId(1112)
                 .setName("web")
-                .setSlug(repository.getValue())
+                .setSlug(repo.getValue())
                 .buildPartial();
     }
 }
