@@ -26,7 +26,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Augments {@link io.spine.chatbot.github.Slug Slug} with useful methods.
+ * Augments {@link Slug} with useful methods.
  */
 @GeneratedMixin
 public interface SlugMixin extends SlugOrBuilder {
