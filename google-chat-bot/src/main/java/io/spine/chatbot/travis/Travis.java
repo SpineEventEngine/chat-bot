@@ -20,6 +20,8 @@
 
 package io.spine.chatbot.travis;
 
+import io.spine.logging.Logging;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -27,17 +29,17 @@ import java.net.http.HttpRequest;
 
 import static com.google.api.client.util.Preconditions.checkNotNull;
 import static io.spine.chatbot.travis.JsonProtoBodyHandler.jsonBodyHandler;
-import static java.lang.String.format;
+import static io.spine.util.Exceptions.newIllegalStateException;
 
 /**
  * A client to the Travis CI REST API.
  *
  * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
  */
-final class Travis implements TravisClient {
+final class Travis implements TravisClient, Logging {
 
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
-    private static final String BASE_URL = "https://travis-ci.com";
+    private static final String BASE_URL = "https://api.travis-ci.com";
     private static final String API_HEADER = "Travis-API-Version";
     private static final String API_VERSION = "3";
     private static final String AUTH_HEADER = "Authorization";
@@ -60,13 +62,15 @@ final class Travis implements TravisClient {
     private <T extends TravisResponse> T execute(String request, Class<T> responseType) {
         var apiRequest = apiRequest(request, apiToken);
         try {
+            _trace().log("Executing Travis API request `%s` for response `%s`.",
+                         request, responseType.getSimpleName());
             var result = CLIENT.send(apiRequest, jsonBodyHandler(responseType));
             return result.body();
         } catch (IOException | InterruptedException e) {
-            var message = format(
-                    "Unable to query data for response of type '%s' using request '%s'.",
-                    responseType, request);
-            throw new RuntimeException(message, e);
+            throw newIllegalStateException(
+                    e, "Unable to query data for response of type '%s' using request '%s'.",
+                    responseType, request
+            );
         }
     }
 
