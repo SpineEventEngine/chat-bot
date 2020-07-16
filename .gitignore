@@ -21,7 +21,9 @@
 Thumbs.db
 .DS_Store
 .gradle
-build/
+/build/
+/buildSrc/build/
+/google-chat-bot/build/
 target/
 out/
 .idea
