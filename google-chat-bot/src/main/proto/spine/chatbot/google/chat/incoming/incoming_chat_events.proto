@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package spine.chatbot.google.chat.incoming;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.google.chat.incoming.event";
+option java_outer_classname = "IncomingChatEventsProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/chatbot/google/chat/identifiers.proto";
+import "spine/chatbot/google/chat/incoming/incoming_chat_messages.proto";
+
+// A new event received from the Chat.
+message ChatEventReceived {
+
+    // The received event.
+    ChatEvent event = 1 [(required) = true];
+}
+
+// The ChatBot is added to a Chat space.
+message BotAddedToSpace {
+
+    // The ID of the Space to which the ChatBot is added.
+    SpaceId space = 1 [(required) = true];
+
+    // The actual chat event message.
+    ChatEvent event = 2 [(required) = true];
+}
+
+// The ChatBot is removed from the Chat space.
+message BotRemovedFromSpace {
+
+    // The ID of the Space from which the ChatBot is removed.
+    SpaceId space = 1 [(required) = true];
+
+    // The actual chat event message.
+    ChatEvent event = 2 [(required) = true];
+}
+
+// The ChatBot received a new incoming Chat message.
+message MessageReceived {
+
+    // The ID of the new message.
+    MessageId message = 1 [(required) = true];
+
+    // The actual chat event message.
+    ChatEvent event = 2 [(required) = true];
+}

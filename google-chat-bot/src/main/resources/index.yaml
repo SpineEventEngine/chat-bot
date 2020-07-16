@@ -1,0 +1,94 @@
+# This file is the configuration of the Cloud Datastore DB indexes.
+# To update the index, modify the file and run:
+#
+#   $ gcloud datastore indexes create google-chat-bot/src/main/resources/index.yaml --project <project-ID>
+#
+
+indexes:
+
+  # Common index for all the applications.
+  - kind: spine.core.Event
+    ancestor: no
+    properties:
+      - name: type
+      - name: created
+
+  # Index required for `DsInboxStorage.readAll` query.
+
+  - kind: spine.server.delivery.InboxMessage
+    ancestor: yes
+    properties:
+      - name: inbox_shard
+      - name: of_total_inbox_shards
+      - name: received_at
+      - name: version
+
+  - kind: spine.server.delivery.InboxMessage
+    properties:
+      - name: inbox_shard
+      - name: of_total_inbox_shards
+      - name: received_at
+      - name: version
+
+  # Index required for `DsInboxStorage.newestMessageToDeliver` query.
+
+  - kind: spine.server.delivery.InboxMessage
+    ancestor: yes
+    properties:
+      - name: inbox_shard
+      - name: of_total_inbox_shards
+      - name: status
+
+  - kind: spine.system.server.CommandLifecycle
+    properties:
+      - name: aggregate_id
+      - name: version
+        direction: desc
+      - name: created
+        direction: desc
+      - name: snapshot
+
+  - kind: spine.system.server.EntityHistory
+    properties:
+      - name: aggregate_id
+      - name: version
+        direction: desc
+      - name: created
+        direction: desc
+      - name: snapshot
+
+  - kind: spine.chatbot.github.Organization
+    properties:
+      - name: aggregate_id
+      - name: version
+        direction: desc
+      - name: created
+        direction: desc
+      - name: snapshot
+
+  - kind: spine.chatbot.github.Repository
+    properties:
+      - name: aggregate_id
+      - name: version
+        direction: desc
+      - name: created
+        direction: desc
+      - name: snapshot
+
+  - kind: spine.chatbot.google.chat.Space
+    properties:
+      - name: aggregate_id
+      - name: version
+        direction: desc
+      - name: created
+        direction: desc
+      - name: snapshot
+
+  - kind: spine.chatbot.google.chat.Thread
+    properties:
+      - name: aggregate_id
+      - name: version
+        direction: desc
+      - name: created
+        direction: desc
+      - name: snapshot

@@ -1,0 +1,66 @@
+/*
+ * Copyright 2020, TeamDev. All rights reserved.
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+syntax = "proto3";
+
+package spine.chatbot.github;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.github.organization";
+option java_outer_classname = "OrganizationProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+import "spine/net/url.proto";
+
+import "spine/chatbot/github/identifiers.proto";
+import "spine/chatbot/google/chat/identifiers.proto";
+
+// A GitHub organization.
+message Organization {
+    option (entity) = {kind: AGGREGATE visibility: QUERY};
+    option (is).java_type = "OrgHeaderAware";
+
+    OrganizationId id = 1;
+
+    // The organization header.
+    OrgHeader header = 2;
+}
+
+// The GitHub organization header.
+message OrgHeader {
+
+    // The name of the GitHub organization.
+    string name = 1 [(required) = true];
+
+    // The URL of the official organization-related website.
+    spine.net.Url website = 2;
+
+    // The URL of the organization GitHub profile.
+    spine.net.Url github_profile = 3 [(required) = true];
+
+    // The URL of the organization Travis CI profile.
+    spine.net.Url travis_profile = 4 [(required) = true];
+
+    // The Google Chat space associated with the organization.
+    google.chat.SpaceId space = 5 [(required) = true, (validate) = true];
+}

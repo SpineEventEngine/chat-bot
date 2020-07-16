@@ -1,0 +1,199 @@
+/*
+ * Copyright 2020, TeamDev. All rights reserved.
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+syntax = "proto3";
+
+// This file contains the proto definitions that conform to the
+// <a href="https://developer.travis-ci.com/">Travis CI API v3</a> data types.
+//
+// The layout of types and fields make them compatible with the Travis JSON output.
+// This way we don't have to create custom conversion.
+//
+
+package spine.chatbot.travis;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.travis";
+option java_outer_classname = "TravisCiApiProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+// The owner of a resource.
+//
+// This will be either a user or an organization.
+// See <a href="https://developer.travis-ci.com/resource/owner#Owner">reference</a> declaration
+// for more details.
+//
+message Owner {
+
+    // Value uniquely identifying the owner.
+    uint64 id = 1;
+
+    // User or organization login set on GitHub.
+    string login = 2;
+}
+
+// An individual repository.
+//
+// See <a href="https://developer.travis-ci.com/resource/repository#Repository">reference</a>
+// declaration for more details.
+//
+message Repository {
+
+    // Value uniquely identifying the repository.
+    uint64 id = 1;
+
+    // The repository's name on GitHub.
+    string name = 2;
+
+    // The repository's slug.
+    //
+    // Same as {repository.owner.name}/{repository.name}.
+    //
+    string slug = 3;
+}
+
+// The branch of a repository.
+//
+// See <a href="https://developer.travis-ci.com/resource/branch#Branch">reference</a> declaration
+// for more details.
+//
+message Branch {
+
+    // Name of the git branch.
+    string name = 1;
+}
+
+// Commit information is obtained by requesting a build.
+//
+// See <a href="https://developer.travis-ci.com/resource/commit#Commit">reference</a> declaration
+// for more details.
+//
+message Commit {
+
+    // Value uniquely identifying the commit.
+    uint64 id = 1;
+
+    // Checksum the commit has in git and is identified by.
+    string sha = 2;
+
+    // Named reference the commit has in git.
+    string ref = 3;
+
+    // Commit message.
+    string message = 4;
+
+    // URL to the commit's diff on GitHub.
+    string compare_url = 5;
+
+    // Commit date from git.
+    string committed_at = 6;
+
+    // Commit author.
+    Author author = 7;
+}
+
+// Git commit author information.
+message Author {
+
+    // Git name of the commit author.
+    string name = 1;
+}
+
+// Minimal Travis CI build representation.
+//
+// See <a href="https://developer.travis-ci.com/resource/build#Build">reference</a> declaration
+// for more details.
+//
+message Build {
+
+    // Value uniquely identifying the build.
+    uint64 id = 1;
+
+    // Incremental number for a repository's builds.
+    string number = 2;
+
+    // Current state of the build.
+    string state = 3;
+
+    // Wall clock time in seconds.
+    uint64 duration = 4;
+
+    // Event that triggered the build.
+    string event_type = 5;
+
+    // State of the previous build.
+    string previous_state = 6;
+
+    // The repository the build is associated with.
+    Repository repository = 7;
+
+    // The branch the build is associated with.
+    Branch branch = 8;
+
+    // The build's tag.
+    string tag = 9;
+
+    // The commit the build is associated with.
+    Commit commit = 10;
+
+    // The User or Organization that created the build.
+    Owner created_by = 11;
+}
+
+// A Travis `branch` API endpoint response.
+//
+// See API <a href="https://developer.travis-ci.com/resource/branch#find">reference</a> for more
+// details.
+//
+message RepoBranchBuildResponse {
+
+    option (is).java_type = "TravisResponse";
+
+    // Name of the git branch.
+    string name = 1;
+
+    // The repository.
+    Repository repository = 2;
+
+    // Whether or not this is the repository's default branch.
+    bool default_branch = 3;
+
+    // Whether or not the branch still exists on GitHub.
+    bool exists_on_github = 4;
+
+    // Last build on the branch.
+    Build last_build = 5;
+}
+
+// A Travis `repos` API endpoint response.
+//
+// See API <a href="https://developer.travis-ci.com/resource/repositories#for_owner">reference</a>
+// for more details.
+//
+message RepositoriesResponse {
+
+    option (is).java_type = "TravisResponse";
+
+    // Repositories fetched by the API call.
+    repeated Repository repositories = 1;
+}

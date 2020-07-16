@@ -1,0 +1,166 @@
+/*
+ * Copyright 2020, TeamDev. All rights reserved.
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+syntax = "proto3";
+
+package spine.chatbot.github;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.github.repository.build";
+option java_outer_classname = "RepositoryBuildProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+
+import "google/protobuf/timestamp.proto";
+
+import "spine/net/url.proto";
+import "spine/chatbot/github/identifiers.proto";
+import "spine/chatbot/github/slug.proto";
+import "spine/chatbot/google/chat/identifiers.proto";
+
+// A build process of a GitHub repository.
+message RepositoryBuild {
+    option (entity) = {kind: PROCESS_MANAGER visibility: NONE};
+
+    RepositoryId repository = 1;
+
+    // The time of the last build status check.
+    .google.protobuf.Timestamp when_last_checked = 2;
+
+    // The current build.
+    Build build = 3;
+
+    // The current repository state.
+    Build.State current_state = 4 [(column) = true];
+}
+
+// A repository branch build.
+message Build {
+    option (is).java_type = "BuildStateMixin";
+
+    // Incremental number for a repository's builds.
+    string number = 1;
+
+    // Travis CI URL of the build.
+    spine.net.Url travis_ci_url = 2;
+
+    // Current state of the build.
+    State state = 3;
+
+    // State of the previous build.
+    State previous_state = 4;
+
+    // The build state.
+    enum State {
+        BS_UNKNOWN = 0;
+
+        // The build is created.
+        CREATED = 1;
+
+        // The build is received by the CI.
+        RECEIVED = 2;
+
+        // The build is in progress.
+        STARTED = 3;
+
+        // The build has passed successfully.
+        PASSED = 4;
+
+        // The build has failed.
+        //
+        // Denotes that the developer code could not be successfully built.
+        //
+        FAILED = 5;
+
+        // The build configuration has failed.
+        //
+        // Denotes that the build configuration or pre-build steps failed.
+        //
+        ERRORED = 6;
+
+        // The build is cancelled.
+        CANCELLED = 7;
+    }
+
+    // The branch the build is associated with.
+    string branch = 5;
+
+    // The commit the build is associated with.
+    Commit last_commit = 6;
+
+    // The User or Organization that created the build.
+    string created_by = 7;
+
+    // The repository slug the build is associated with.
+    Slug repository = 8;
+
+    // The Google Chat space associated with the organization.
+    google.chat.SpaceId space = 9 [(required) = true, (validate) = true];
+}
+
+// A git commit.
+message Commit {
+
+    // Checksum the commit has in git and is identified by.
+    string sha = 1;
+
+    // Commit message.
+    string message = 2;
+
+    // URL to the commit's diff on GitHub.
+    spine.net.Url compare_url = 3;
+
+    // Commit date from git.
+    string committed_at = 4;
+
+    // Commit author from git.
+    string authored_by = 5;
+}
+
+// Definition of a change in a `build` field.
+message BuildStateChange {
+
+    // The value of the field that's changing.
+    Build previous_value = 1;
+
+    // The new value of the field.
+    Build new_value = 2 [(required) = true];
+
+    // The type of the build state change.
+    enum Type {
+
+        BSCT_UNKNOWN = 0;
+
+        // The build has failed.
+        //
+        // It could be either a build configuration failure or the actual code build issue.
+        //
+        FAILED = 1;
+
+        // The build has recovered from the failed state.
+        RECOVERED = 2;
+
+        // The build is stable.
+        STABLE = 3;
+    }
+}

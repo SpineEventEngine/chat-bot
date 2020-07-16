@@ -1,0 +1,56 @@
+/*
+ * Copyright 2020, TeamDev. All rights reserved.
+ *
+ * Redistribution and use in source and/or binary forms, with or without
+ * modification, must retain the above copyright notice and the following
+ * disclaimer.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+syntax = "proto3";
+
+package spine.chatbot.google.chat;
+
+import "spine/options.proto";
+
+option (type_url_prefix) = "type.spine.io.chatbot";
+option java_package = "io.spine.chatbot.google.chat";
+option java_outer_classname = "IdentifiersProto";
+option java_multiple_files = true;
+option java_generate_equals_and_hash = true;
+
+// Chat Space identifier.
+message SpaceId {
+
+    // Resource name of the space, in the form `spaces/<space_id>`.
+    string value = 1 [(required) = true, (pattern).regex = "spaces/.+"];
+}
+
+// Chat Room Thread identifier.
+message ThreadId {
+
+    // The thread identifier is linked to the topic discussed in the thread.
+    //
+    // E.g. if the thread is denoted to the build status of a GitHub repository,
+    // the GitHub repository slug could be used as the thread ID.
+    //
+    string value = 1 [(required) = true];
+}
+
+// Chat Message identifier.
+message MessageId {
+
+    // Resource name of the message, in the form `spaces/<space_id>/messages/<message_id>`.
+    string value = 1 [(required) = true, (pattern).regex = "spaces/.+/messages/.+"];
+}
