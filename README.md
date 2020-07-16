@@ -43,8 +43,8 @@ Then run the following script from the repository root folder:
 export APP_PORT=8080
 export LOCAL_PORT=9090
 export CONTAINER_CREDENTIALS_PATH="/tmp/keys/gcp-adc.json"
-export LOCAL_CREDENTIALS_PATH="${PWD}./credentials/gcp-adc.json"
-export GCP_PROJECT_ID="<gcp-project-id>"
+export LOCAL_CREDENTIALS_PATH="${PWD}/.credentials/gcp-adc.json"
+export GCP_PROJECT_ID="spine-chat-bot"
 docker run \
     --tty \
     --rm \
