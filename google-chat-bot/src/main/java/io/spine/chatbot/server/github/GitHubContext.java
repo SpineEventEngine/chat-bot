@@ -21,6 +21,7 @@
 package io.spine.chatbot.server.github;
 
 import io.spine.chatbot.server.ContextBuilderAware;
+import io.spine.chatbot.server.DiagnosticEventLogger;
 import io.spine.chatbot.travis.TravisClient;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
@@ -58,7 +59,8 @@ public final class GitHubContext implements ContextBuilderAware {
                 .add(RepositoryAggregate.class)
                 .add(new OrgReposRepository())
                 .add(new SpineOrgInitRepository(client))
-                .add(new RepoBuildRepository(client));
+                .add(new RepoBuildRepository(client))
+                .addEventDispatcher(new DiagnosticEventLogger());
     }
 
     /**

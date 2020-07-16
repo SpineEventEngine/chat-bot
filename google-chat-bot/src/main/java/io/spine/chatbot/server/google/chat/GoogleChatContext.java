@@ -22,6 +22,7 @@ package io.spine.chatbot.server.google.chat;
 
 import io.spine.chatbot.google.chat.GoogleChatClient;
 import io.spine.chatbot.server.ContextBuilderAware;
+import io.spine.chatbot.server.DiagnosticEventLogger;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
 
@@ -61,7 +62,8 @@ public final class GoogleChatContext implements ContextBuilderAware {
                 .add(new SpaceRepository())
                 .add(new ThreadRepository())
                 .add(new ThreadChatRepository(client))
-                .addEventDispatcher(new IncomingEventsHandler());
+                .addEventDispatcher(new IncomingEventsHandler())
+                .addEventDispatcher(new DiagnosticEventLogger());
     }
 
     /**
