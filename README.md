@@ -54,7 +54,7 @@ docker run \
     -e "GOOGLE_APPLICATION_CREDENTIALS=${CONTAINER_CREDENTIALS_PATH}" \
     -e "GCP_PROJECT_ID=${GCP_PROJECT_ID}" \
     -v "${LOCAL_CREDENTIALS_PATH}:${CONTAINER_CREDENTIALS_PATH}" \
-    gcr.io/${gcpProject}/chat-bot-server
+    gcr.io/${GCP_PROJECT_ID}/chat-bot-server
 ```
 
 The application will be available at `127.0.0.1:${LOCAL_PORT}` (e.g. `127.0.0.1:9090`). 
