@@ -30,6 +30,8 @@ object Versions {
     const val truth = "1.0.1"
     const val micronaut = "2.0.1"
     const val spineGcloud = "1.5.22"
+    const val spineBase = "1.5.23"
+    const val spineCore = "1.5.24"
     const val googleSecretManager = "1.1.1"
     const val googleChat = "v1-rev20200801-1.30.10"
     const val googleAuth = "0.21.1"
@@ -62,6 +64,10 @@ object Build {
 object Spine {
     const val datastore = "io.spine.gcloud:spine-datastore:${Versions.spineGcloud}"
     const val pubsub = "io.spine.gcloud:spine-pubsub:${Versions.spineGcloud}"
+    const val base = "io.spine:spine-base:${Versions.spineBase}"
+    const val server = "io.spine:spine-server:${Versions.spineCore}"
+    const val client = "io.spine:spine-client:${Versions.spineCore}"
+    const val core = "io.spine:spine-core:${Versions.spineCore}"
 }
 
 object Log4j2 {

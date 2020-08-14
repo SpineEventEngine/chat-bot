@@ -21,7 +21,7 @@
 import net.ltgt.gradle.errorprone.errorprone
 
 plugins {
-    `java-library`
+    java
     id("net.ltgt.errorprone")
     id("net.ltgt.apt-idea")
 }
