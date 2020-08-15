@@ -18,24 +18,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import net.saliman.gradle.plugin.properties.PropertiesPlugin
-
 plugins {
-    idea
+    java
 }
 
-apply(from = "version.gradle.kts")
-val botVersion: String by extra
-
-allprojects {
-    apply<IdeaPlugin>()
-    apply<PropertiesPlugin>()
-
-    group = "io.spine"
-    version = botVersion
-}
-
-subprojects {
-    apply<JavaConventionPlugin>()
-    apply<DependencyManagementPlugin>()
+configurations.all {
+    resolutionStrategy {
+        force(
+                Deps.build.guava,
+                Deps.build.errorProneAnnotations,
+                Deps.build.spine.base,
+                Deps.build.spine.core,
+                Deps.build.spine.server,
+                Deps.build.spine.client
+        )
+    }
 }
