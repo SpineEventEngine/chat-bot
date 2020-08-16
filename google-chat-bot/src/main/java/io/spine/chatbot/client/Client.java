@@ -105,11 +105,10 @@ public final class Client implements AutoCloseable {
      */
     public void post(CommandMessage command) {
         checkNotNull(command);
-        var subscriptions = client.asGuest()
-                                  .command(command)
-                                  .onStreamingError(Client::throwProcessingError)
-                                  .post();
-        subscriptions.forEach(this::cancelSubscription);
+        client.asGuest()
+              .command(command)
+              .onStreamingError(Client::throwProcessingError)
+              .postAndForget();
     }
 
     private <E extends EventMessage> void
