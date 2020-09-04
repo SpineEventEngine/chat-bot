@@ -42,7 +42,7 @@ import static io.spine.validate.Validate.checkValid;
  * A utility class that creates {@link Build} update messages.
  *
  * @implNote Chat entities rely on the {@code clone()} functionality internally, so we're
- *         intentionally using mutable lists while building up Chat messages.
+ *         intentionally using mutable collections while building up Chat messages.
  */
 final class BuildStateUpdates {
 
