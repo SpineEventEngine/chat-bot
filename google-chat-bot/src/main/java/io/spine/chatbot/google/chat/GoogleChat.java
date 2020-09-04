@@ -61,7 +61,8 @@ final class GoogleChat implements GoogleChatClient, Logging {
         var messageName = sentMessage.getName();
         var messageThread = sentMessage.getThread();
         trace.log(
-                "Build state update message with ID `%s` for the repository `%s` sent to the thread `%s`.",
+                "Build state update message with ID `%s` " +
+                        "for the repository `%s` sent to the thread `%s`.",
                 messageName, repo, messageThread.getName()
         );
         return BuildStateUpdate
@@ -81,7 +82,9 @@ final class GoogleChat implements GoogleChatClient, Logging {
                     .create(space.getValue(), message)
                     .execute();
         } catch (IOException e) {
-            throw newIllegalStateException(e, "Unable to send message to the space `%s`.", space);
+            throw newIllegalStateException(
+                    e, "Unable to send message to the space `%s`.", space
+            );
         }
     }
 }
