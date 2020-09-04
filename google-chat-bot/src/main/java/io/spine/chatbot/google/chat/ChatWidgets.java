@@ -40,6 +40,8 @@ import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 /**
  * Provides building blocks to empower the rich messages sent to Google Chat.
  *
+ * @implNote Chat entities rely on the {@code clone()} functionality internally, so we're
+ *         intentionally using mutable lists while building up Chat messages.
  * @see <a href="https://developers.google.com/hangouts/chat/reference/message-formats/cards">
  *         Google Chat Cards</a>
  */
