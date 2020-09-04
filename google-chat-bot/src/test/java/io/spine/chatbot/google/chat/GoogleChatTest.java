@@ -45,7 +45,7 @@ import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.thread;
 import static io.spine.chatbot.net.MoreUrls.travisBuildUrlFor;
 import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource;
 
-@DisplayName("`GoogleChat` should send a message to")
+@DisplayName("`GoogleChat` should")
 final class GoogleChatTest {
 
     @DisplayName("send a message to")
