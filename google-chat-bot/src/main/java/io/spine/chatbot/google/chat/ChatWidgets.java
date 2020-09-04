@@ -29,12 +29,12 @@ import com.google.api.services.chat.v1.model.Section;
 import com.google.api.services.chat.v1.model.TextButton;
 import com.google.api.services.chat.v1.model.TextParagraph;
 import com.google.api.services.chat.v1.model.WidgetMarkup;
-import com.google.common.collect.ImmutableList;
 import io.spine.net.Url;
 
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.newArrayList;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
 /**
@@ -58,8 +58,9 @@ final class ChatWidgets {
     static Button linkButton(String title, Url url) {
         checkNotEmptyOrBlank(title);
         checkNotNull(url);
-        var button = new TextButton().setText(title)
-                                     .setOnClick(openLink(url));
+        var button = new TextButton()
+                .setText(title)
+                .setOnClick(openLink(url));
         return new Button().setTextButton(button);
     }
 
@@ -71,11 +72,13 @@ final class ChatWidgets {
      * Creates a singleton card list with a new {@link Card} with a specified {@code header}
      * and {@code sections}.
      */
-    static ImmutableList<Card> cardWith(CardHeader header, List<Section> sections) {
+    static List<Card> cardWith(CardHeader header, List<Section> sections) {
         checkNotNull(header);
         checkNotNull(sections);
-        return ImmutableList.of(new Card().setHeader(header)
-                                          .setSections(sections));
+        var result = new Card()
+                .setHeader(header)
+                .setSections(sections);
+        return newArrayList(result);
     }
 
     /**
@@ -83,7 +86,7 @@ final class ChatWidgets {
      */
     static Section sectionWithWidget(WidgetMarkup widget) {
         checkNotNull(widget);
-        return new Section().setWidgets(List.of(widget));
+        return new Section().setWidgets(newArrayList(widget));
     }
 
     /**
