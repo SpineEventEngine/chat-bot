@@ -27,7 +27,6 @@ import com.google.api.services.chat.v1.HangoutsChat;
 import com.google.api.services.chat.v1.model.Message;
 import com.google.api.services.chat.v1.model.Thread;
 import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.Slug;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.github.repository.build.Commit;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
@@ -55,15 +54,15 @@ final class GoogleChatTest {
     final class SendMessage {
 
         private final RepositoryId repo = repository("SpineEventEngine/publisher");
-        private final Slug slug = repoSlug(repo);
         private final SpaceId space = space("spaces/pojwqdpo12");
-        private final String threadName = space.getValue() + "/threads/qiwd124";
-        private final String messageId = space.getValue() + "/messages/ojwqpj14";
+        private final String thread = space.getValue() + "/threads/qiwd124";
+        private final String message = space.getValue() + "/messages/ojwqpj14";
         private Build build;
 
         @BeforeEach
         void prepareBuild() {
             var buildNumber = 441;
+            var slug = repoSlug(repo);
             var commit = Commit
                     .newBuilder()
                     .setSha("pd1hehr1i3oh213121")
@@ -87,18 +86,18 @@ final class GoogleChatTest {
         @DisplayName("a new thread")
         void newThread() {
             var chatApi = new NoOpChat(
-                    message -> message
+                    messageToSend -> messageToSend
                             .clone()
-                            .setThread(new Thread().setName(threadName))
-                            .setName(messageId)
+                            .setThread(new Thread().setName(thread))
+                            .setName(message)
             );
             var chat = new GoogleChat(chatApi);
             var actualUpdate =
                     chat.sendBuildStateUpdate(build, ThreadResource.getDefaultInstance());
             var expectedUpdate = BuildStateUpdate
                     .newBuilder()
-                    .setMessage(message(messageId))
-                    .setResource(threadResource(threadName))
+                    .setMessage(message(message))
+                    .setResource(threadResource(thread))
                     .setThread(thread(repo.getValue()))
                     .setSpace(space)
                     .vBuild();
@@ -113,15 +112,15 @@ final class GoogleChatTest {
             var chatApi = new NoOpChat(
                     message -> message
                             .clone()
-                            .setName(messageId)
+                            .setName(this.message)
             );
             var chat = new GoogleChat(chatApi);
-            var threadResource = threadResource(threadName);
+            var threadResource = threadResource(thread);
             var actualUpdate =
                     chat.sendBuildStateUpdate(build, threadResource);
             var expectedUpdate = BuildStateUpdate
                     .newBuilder()
-                    .setMessage(message(messageId))
+                    .setMessage(message(message))
                     .setResource(threadResource)
                     .setThread(thread(repo.getValue()))
                     .setSpace(space)
