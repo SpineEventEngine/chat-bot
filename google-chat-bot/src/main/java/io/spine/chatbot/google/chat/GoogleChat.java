@@ -22,7 +22,6 @@ package io.spine.chatbot.google.chat;
 
 import com.google.api.services.chat.v1.HangoutsChat;
 import com.google.api.services.chat.v1.model.Message;
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 import io.spine.logging.Logging;
@@ -59,22 +58,22 @@ final class GoogleChat implements GoogleChatClient, Logging {
         var message = buildStateMessage(build, thread);
         trace.log("Sending state update message for the repository `%s`.", repo);
         var sentMessage = sendMessage(build.getSpace(), message);
+        var messageName = sentMessage.getName();
+        var messageThread = sentMessage.getThread();
         trace.log(
-                "Build state update message with ID `%s` for the repository `%s` sent to the thread `%s`.",
-                sentMessage.getName(), repo, sentMessage.getThread()
-                                                        .getName()
+                "Build state update message with ID `%s` " +
+                        "for the repository `%s` sent to the thread `%s`.",
+                messageName, repo, messageThread.getName()
         );
         return BuildStateUpdate
                 .newBuilder()
-                .setMessage(message(message.getName()))
-                .setResource(threadResource(message.getThread()
-                                                   .getName()))
+                .setMessage(message(messageName))
+                .setResource(threadResource(messageThread.getName()))
                 .setSpace(build.getSpace())
                 .setThread(thread(repo.value()))
                 .vBuild();
     }
 
-    @CanIgnoreReturnValue
     private Message sendMessage(SpaceId space, Message message) {
         try {
             return chat
@@ -83,7 +82,9 @@ final class GoogleChat implements GoogleChatClient, Logging {
                     .create(space.getValue(), message)
                     .execute();
         } catch (IOException e) {
-            throw newIllegalStateException(e, "Unable to send message to the space `%s`.", space);
+            throw newIllegalStateException(
+                    e, "Unable to send message to the space `%s`.", space
+            );
         }
     }
 }

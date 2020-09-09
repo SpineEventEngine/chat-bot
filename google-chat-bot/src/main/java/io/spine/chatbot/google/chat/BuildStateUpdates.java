@@ -26,11 +26,11 @@ import com.google.api.services.chat.v1.model.Message;
 import com.google.api.services.chat.v1.model.Section;
 import com.google.api.services.chat.v1.model.Thread;
 import com.google.api.services.chat.v1.model.WidgetMarkup;
-import com.google.common.collect.ImmutableList;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.newArrayList;
 import static io.spine.chatbot.google.chat.ChatWidgets.cardWith;
 import static io.spine.chatbot.google.chat.ChatWidgets.linkButton;
 import static io.spine.chatbot.google.chat.ChatWidgets.sectionWithWidget;
@@ -40,6 +40,9 @@ import static io.spine.validate.Validate.checkValid;
 
 /**
  * A utility class that creates {@link Build} update messages.
+ *
+ * @implNote Chat entities rely on the {@code clone()} functionality internally, so we're
+ *         intentionally using mutable collections while building up Chat messages.
  */
 final class BuildStateUpdates {
 
@@ -69,7 +72,7 @@ final class BuildStateUpdates {
                 .setTitle(build.getRepository()
                                .value())
                 .setImageUrl(headerIcon);
-        var sections = ImmutableList.of(
+        var sections = newArrayList(
                 buildStateSection(build),
                 commitSection(build),
                 actions(build)
@@ -88,7 +91,7 @@ final class BuildStateUpdates {
         );
         var section = new Section()
                 .setHeader("Commit " + commit.getSha())
-                .setWidgets(ImmutableList.of(
+                .setWidgets(newArrayList(
                         textParagraph(commit.getMessage()),
                         textParagraph(commitInfo)
                 ));
@@ -97,7 +100,7 @@ final class BuildStateUpdates {
 
     private static Section actions(Build build) {
         var commit = build.getLastCommit();
-        var actionButtons = new WidgetMarkup().setButtons(ImmutableList.of(
+        var actionButtons = new WidgetMarkup().setButtons(newArrayList(
                 linkButton("Build", build.getTravisCiUrl()),
                 linkButton("Changeset", commit.getCompareUrl())
         ));
