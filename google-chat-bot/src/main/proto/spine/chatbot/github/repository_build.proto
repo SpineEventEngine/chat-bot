@@ -99,7 +99,7 @@ message Build {
         ERRORED = 6;
 
         // The build is cancelled.
-        CANCELLED = 7;
+        CANCELED = 7;
     }
 
     // The branch the build is associated with.
