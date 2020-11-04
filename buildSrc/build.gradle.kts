@@ -29,11 +29,11 @@ repositories {
 }
 
 dependencies {
-    implementation("net.ltgt.gradle:gradle-errorprone-plugin:1.2.1")
+    implementation("net.ltgt.gradle:gradle-errorprone-plugin:1.3.0")
     implementation("net.ltgt.gradle:gradle-apt-plugin:0.21")
-    implementation("com.github.jengelman.gradle.plugins:shadow:6.0.0")
-    implementation("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:2.5.0")
-    implementation("io.spine.tools:spine-bootstrap:1.6.0")
+    implementation("com.github.jengelman.gradle.plugins:shadow:6.1.0")
+    implementation("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:2.6.0")
+    implementation("io.spine.tools:spine-bootstrap:1.6.4")
     implementation("net.saliman:gradle-properties-plugin:1.5.1")
 }
 
