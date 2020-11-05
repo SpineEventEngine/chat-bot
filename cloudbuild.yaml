@@ -2,7 +2,7 @@ steps:
   # The following step starts the build process using Gradle official image, performs the build
   # and runs `jib` for the specified `gcpProject` in order to build and deploy the container
   # image to the Google Container Registry.
-  - name: 'gradle:6.6-jdk11'
+  - name: 'gradle:6.7-jdk11'
     entrypoint: 'gradle'
     args: [ 'build', 'jib', '-PgcpProject=${PROJECT_ID}' ]
   # The following step deploys the previously produced container image to the Cloud Run environment
