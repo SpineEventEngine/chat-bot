@@ -79,7 +79,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "io.spine.chatbot.Application"
+    mainClass.set("io.spine.chatbot.Application")
 }
 
 jib {
@@ -88,6 +88,6 @@ jib {
         tags = setOf("latest")
     }
     container {
-        mainClass = application.mainClassName
+        mainClass = application.mainClass.get()
     }
 }
