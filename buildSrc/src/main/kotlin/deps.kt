@@ -34,14 +34,14 @@ object Versions {
     const val flogger = "0.5.1"
     const val junit5 = "5.7.0"
     const val truth = "1.1"
-    const val micronaut = "2.1.2"
+    const val micronaut = "2.1.3"
     const val spineGcloud = "1.6.6"
-    const val spineBase = "1.6.6"
+    const val spineBase = "1.6.9"
     const val spineCore = "1.6.6"
-    const val googleSecretManager = "1.2.3"
+    const val googleSecretManager = "1.2.4"
     const val googleChat = "v1-rev20201019-1.30.10"
-    const val googleAuth = "0.22.0"
-    const val log4j2 = "2.13.3"
+    const val googleAuth = "0.22.1"
+    const val log4j2 = "2.14.0"
 }
 
 object Build {
