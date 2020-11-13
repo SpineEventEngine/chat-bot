@@ -81,6 +81,9 @@ dependencies {
 val shadowJar: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar by tasks
 shadowJar.apply {
     mergeServiceFiles("desc.ref")
+    manifest {
+        attributes["Multi-Release"] = "true" // https://github.com/johnrengelman/shadow/issues/449
+    }
 }
 
 application {
