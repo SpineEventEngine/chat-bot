@@ -25,10 +25,10 @@
  */
 
 plugins {
-    application
     id("com.github.johnrengelman.shadow")
     id("com.google.cloud.tools.jib")
     id("io.spine.tools.gradle.bootstrap")
+    id("io.micronaut.application")
 }
 
 /** The GCP project ID used for deployment of the application. **/
@@ -38,19 +38,23 @@ spine {
     enableJava().server()
 }
 
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    version.set(Deps.versions.micronaut)
+    processing {
+        incremental.set(true)
+        annotations.add("io.spine.chatbot")
+    }
+}
+
 dependencies {
-    annotationProcessor(enforcedPlatform(Deps.build.micronaut.bom))
-    annotationProcessor(Deps.build.micronaut.injectJava)
-    annotationProcessor(Deps.build.micronaut.validation)
+    compileOnly("org.graalvm.nativeimage:svm")
 
-    compileOnly(enforcedPlatform(Deps.build.micronaut.bom))
-
-    implementation(enforcedPlatform(Deps.build.micronaut.bom))
-    implementation(Deps.build.micronaut.inject)
-    implementation(Deps.build.micronaut.validation)
-    implementation(Deps.build.micronaut.runtime)
     implementation(Deps.build.micronaut.netty)
     implementation(Deps.build.micronaut.annotationApi)
+    implementation(Deps.build.micronaut.validation)
+    implementation(Deps.build.micronaut.runtime)
 
     implementation(Deps.build.log4j2.core)
     runtimeOnly(Deps.build.log4j2.api)
@@ -69,17 +73,14 @@ dependencies {
     implementation(Deps.build.google.chat)
     implementation(Deps.build.google.auth)
 
-    testAnnotationProcessor(enforcedPlatform(Deps.build.micronaut.bom))
-    testAnnotationProcessor(Deps.build.micronaut.injectJava)
-
     testImplementation("io.spine:spine-testutil-server:${spine.version()}")
-    testImplementation(enforcedPlatform(Deps.build.micronaut.bom))
     testImplementation(Deps.build.micronaut.testJUnit5)
     testImplementation(Deps.build.micronaut.httpClient)
 }
 
 val shadowJar: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar by tasks
 shadowJar.apply {
+    mergeServiceFiles()
     mergeServiceFiles("desc.ref")
     manifest {
         attributes["Multi-Release"] = "true" // https://github.com/johnrengelman/shadow/issues/449
@@ -87,7 +88,7 @@ shadowJar.apply {
 }
 
 application {
-    mainClassName = "io.spine.chatbot.Application"
+    mainClass.set("io.spine.chatbot.Application")
 }
 
 jib {
@@ -96,6 +97,6 @@ jib {
         tags = setOf("latest")
     }
     container {
-        mainClass = application.mainClassName
+        mainClass = application.mainClass.get()
     }
 }
