@@ -78,6 +78,11 @@ dependencies {
     testImplementation(Deps.build.micronaut.httpClient)
 }
 
+val shadowJar: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar by tasks
+shadowJar.apply {
+    mergeServiceFiles("desc.ref")
+}
+
 application {
     mainClassName = "io.spine.chatbot.Application"
 }
