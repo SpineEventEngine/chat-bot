@@ -28,6 +28,12 @@ plugins {
     java
 }
 
+repositories {
+    google()
+    mavenCentral()
+    jcenter()
+}
+
 configurations.all {
     resolutionStrategy {
         force(

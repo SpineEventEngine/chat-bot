@@ -29,7 +29,8 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
+    google()
+    mavenCentral()
     jcenter()
     gradlePluginPortal()
 }
