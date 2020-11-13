@@ -130,7 +130,7 @@ public final class Server implements Logging {
         @Override
         public void run() {
             _info().log("Shutting down the GRPC server.");
-            server.shutdownAndWait();
+            server.shutdown();
         }
     }
 }
