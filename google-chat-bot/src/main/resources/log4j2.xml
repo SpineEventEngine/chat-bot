@@ -31,10 +31,13 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="io.spine.chatbot" level="trace" additivity="false">
+        <Logger name="io.spine.chatbot" level="TRACE" additivity="false">
             <AppenderRef ref="LogToConsole"/>
         </Logger>
-        <Root level="error">
+        <Logger name="io.micronaut" level="INFO" additivity="false">
+            <AppenderRef ref="LogToConsole"/>
+        </Logger>
+        <Root level="WARN">
             <AppenderRef ref="LogToConsole"/>
         </Root>
     </Loggers>
