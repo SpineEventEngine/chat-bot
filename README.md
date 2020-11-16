@@ -14,7 +14,7 @@ via the [Google Chat][google-chat].
 * [Docker SE][docker] v19.03 or newer.
 
 [docker]: https://docs.docker.com/get-docker/
-[jdk11]: https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/downloads-list.html
+[jdk11]: https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/downloads-list.html 
 
 # Build
 
@@ -31,6 +31,51 @@ Also, it is possible to build a Docker image using [`jib`][jib]:
 ```
 
 [jib]: https://github.com/GoogleContainerTools/jib
+
+## GraalVM Native Image
+
+In order to build a Native Image, one must have [GraalVM][graalvm] installed and 
+[configured][graalvm-configuration].
+
+One can use the snippet below to install GraalVM and it's Native Image plugin:
+
+```bash
+GRAALVM_VERSION="20.2.0"
+JAVA_VERSION="11"
+GRAALVM="graalvm-ce-java${JAVA_VERSION}-linux-amd64-${GRAALVM_VERSION}"
+GRAALVM_ARCHIVE="${GRAALVM}.tar.gz"
+GRAALVM_JAVA="graalvm-ce-java${JAVA_VERSION}-${GRAALVM_VERSION}"
+
+wget "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAALVM_VERSION}/${GRAALVM_ARCHIVE}"
+
+tar -xvzf "${GRAALVM_ARCHIVE}"
+
+sudo mkdir /usr/lib/jvm
+sudo mv "${GRAALVM_JAVA}" /usr/lib/jvm
+rm "${GRAALVM_ARCHIVE}"
+
+
+JAVA_SDK_PATH="/usr/lib/jvm/${GRAALVM_JAVA}"
+sudo bash -c "echo \"export JAVA_HOME=${JAVA_SDK_PATH}\" >> /etc/profile.d/graalvm.sh"
+sudo bash -c "echo \"export PATH=${JAVA_SDK_PATH}/bin:\\\$PATH\" >> /etc/profile.d/graalvm.sh"
+
+source /etc/profile.d/graalvm.sh
+
+## Install Native Image using GVM `gu` utility
+
+gu install native-image
+```
+
+With GraalVM installed and configured, run the Native Image compilation using the following 
+Gradle command:
+
+```bash
+./gradlew clean build nativeImage
+```
+
+
+[graalvm]: https://www.graalvm.org
+[graalvm-configuration]: https://www.graalvm.org/docs/getting-started-with-graalvm/linux/
 
 # Running locally 
 
