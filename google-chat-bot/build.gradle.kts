@@ -27,6 +27,7 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import io.micronaut.gradle.MicronautRuntime
 import io.micronaut.gradle.MicronautTestRuntime
+import io.micronaut.gradle.graalvm.NativeImageTask
 
 plugins {
     id("com.github.johnrengelman.shadow")
@@ -45,10 +46,40 @@ spine {
 micronaut {
     runtime(MicronautRuntime.NETTY)
     testRuntime(MicronautTestRuntime.JUNIT_5)
+    enableNativeImage.set(true)
     version.set(Deps.versions.micronaut)
     processing {
         incremental.set(true)
         annotations.add("io.spine.chatbot")
+    }
+}
+
+/**
+ * The following configs are required in order to start building the Native Image.
+ *
+ * <p>The further improvements to the Spine framework are required due to the usage
+ * of currently non-supported reflection API within the GraalVM. E.g. the {@code invoke} or
+ * the {@code MethodHandles} usage within the {@code io.spine.server.entity.storage.Scanner}.
+ *
+ * <p>See https://www.graalvm.org/reference-manual/native-image/Limitations for details.
+ */
+tasks.withType<NativeImageTask>().apply {
+    forEach {
+        it.args(
+                "-H:+TraceClassInitialization",
+                "-Dlog4j2.disable.jmx=true",
+                "--initialize-at-build-time=org.apache.logging.log4j",
+                "--initialize-at-build-time=org.apache.logging.slf4j",
+                "--initialize-at-build-time=com.sun.jmx.defaults",
+                "--initialize-at-build-time=com.sun.jmx.mbeanserver",
+                "--initialize-at-build-time=com.sun.org.apache.xerces",
+                "--initialize-at-build-time=jdk.management.jfr",
+                "--initialize-at-build-time=com.google.protobuf",
+                "--initialize-at-build-time=com.google.gson",
+                "--initialize-at-build-time=org.conscrypt",
+                "--initialize-at-build-time=java.beans.Introspector",
+                "--verbose"
+        )
     }
 }
 
