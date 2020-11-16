@@ -84,8 +84,6 @@ tasks.withType<NativeImageTask>().apply {
 }
 
 dependencies {
-    compileOnly("org.graalvm.nativeimage:svm")
-
     implementation(Deps.build.micronaut.netty)
     implementation(Deps.build.micronaut.annotationApi)
     implementation(Deps.build.micronaut.validation)
@@ -94,11 +92,11 @@ dependencies {
     implementation(Deps.build.log4j2.core)
     runtimeOnly(Deps.build.log4j2.api)
     runtimeOnly(Deps.build.log4j2.slf4jBridge)
-    implementation(Deps.build.flogger)
-    implementation("com.google.flogger:flogger-log4j2-backend:${Deps.versions.flogger}") {
+    implementation(Deps.build.log4j2.floggerBackend) {
         exclude("org.apache.logging.log4j:log4j-api")
         exclude("org.apache.logging.log4j:log4j-core")
     }
+    implementation(Deps.build.flogger)
 
     implementation(Deps.build.spine.datastore)
     implementation(Deps.build.spine.pubsub)
@@ -108,7 +106,7 @@ dependencies {
     implementation(Deps.build.google.chat)
     implementation(Deps.build.google.auth)
 
-    testImplementation("io.spine:spine-testutil-server:${spine.version()}")
+    testImplementation(Deps.build.spine.serverTestUtil)
     testImplementation(Deps.build.micronaut.testJUnit5)
     testImplementation(Deps.build.micronaut.httpClient)
 }

@@ -49,14 +49,9 @@ object Build {
             "com.google.errorprone:error_prone_annotations:${Versions.errorProne}",
             "com.google.errorprone:error_prone_type_annotations:${Versions.errorProne}"
     )
-    const val errorProneCheckApi = "com.google.errorprone:error_prone_check_api:${Versions.errorProne}"
     const val errorProneCore = "com.google.errorprone:error_prone_core:${Versions.errorProne}"
     const val errorProneTestHelpers = "com.google.errorprone:error_prone_test_helpers:${Versions.errorProne}"
     const val checkerAnnotations = "org.checkerframework:checker-qual:${Versions.checkerFramework}"
-    val checkerDataflow = listOf(
-            "org.checkerframework:dataflow:${Versions.checkerFramework}",
-            "org.checkerframework:javacutil:${Versions.checkerFramework}"
-    )
     const val jsr305Annotations = "com.google.code.findbugs:jsr305:${Versions.findBugs}"
     const val guava = "com.google.guava:guava:${Versions.guava}"
     const val flogger = "com.google.flogger:flogger:${Versions.flogger}"
@@ -74,12 +69,14 @@ object Spine {
     const val server = "io.spine:spine-server:${Versions.spineCore}"
     const val client = "io.spine:spine-client:${Versions.spineCore}"
     const val core = "io.spine:spine-core:${Versions.spineCore}"
+    const val serverTestUtil = "io.spine:spine-testutil-server:${Versions.spineCore}"
 }
 
 object Log4j2 {
     const val core = "org.apache.logging.log4j:log4j-core:${Versions.log4j2}"
     const val api = "org.apache.logging.log4j:log4j-api:${Versions.log4j2}"
     const val slf4jBridge = "org.apache.logging.log4j:log4j-slf4j-impl:${Versions.log4j2}"
+    const val floggerBackend = "com.google.flogger:flogger-log4j2-backend:${Deps.versions.flogger}"
 }
 
 object Google {
@@ -89,9 +86,7 @@ object Google {
 }
 
 object Micronaut {
-    const val bom = "io.micronaut:micronaut-bom:${Versions.micronaut}"
     const val inject = "io.micronaut:micronaut-inject"
-    const val injectJava = "io.micronaut:micronaut-inject-java"
     const val validation = "io.micronaut:micronaut-validation"
     const val runtime = "io.micronaut:micronaut-runtime"
     const val netty = "io.micronaut:micronaut-http-server-netty"
