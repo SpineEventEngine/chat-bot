@@ -53,8 +53,6 @@ micronaut {
 }
 
 dependencies {
-    compileOnly("org.graalvm.nativeimage:svm")
-
     implementation(Deps.build.micronaut.netty)
     implementation(Deps.build.micronaut.annotationApi)
     implementation(Deps.build.micronaut.validation)
