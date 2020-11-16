@@ -34,14 +34,14 @@ object Versions {
     const val flogger = "0.5.1"
     const val junit5 = "5.7.0"
     const val truth = "1.1"
-    const val micronaut = "2.1.2"
+    const val micronaut = "2.1.3"
     const val spineGcloud = "1.6.6"
-    const val spineBase = "1.6.6"
+    const val spineBase = "1.6.9"
     const val spineCore = "1.6.6"
     const val googleSecretManager = "1.2.3"
     const val googleChat = "v1-rev20201019-1.30.10"
     const val googleAuth = "0.22.0"
-    const val log4j2 = "2.13.3"
+    const val log4j2 = "2.14.0"
 }
 
 object Build {
@@ -49,14 +49,9 @@ object Build {
             "com.google.errorprone:error_prone_annotations:${Versions.errorProne}",
             "com.google.errorprone:error_prone_type_annotations:${Versions.errorProne}"
     )
-    const val errorProneCheckApi = "com.google.errorprone:error_prone_check_api:${Versions.errorProne}"
     const val errorProneCore = "com.google.errorprone:error_prone_core:${Versions.errorProne}"
     const val errorProneTestHelpers = "com.google.errorprone:error_prone_test_helpers:${Versions.errorProne}"
     const val checkerAnnotations = "org.checkerframework:checker-qual:${Versions.checkerFramework}"
-    val checkerDataflow = listOf(
-            "org.checkerframework:dataflow:${Versions.checkerFramework}",
-            "org.checkerframework:javacutil:${Versions.checkerFramework}"
-    )
     const val jsr305Annotations = "com.google.code.findbugs:jsr305:${Versions.findBugs}"
     const val guava = "com.google.guava:guava:${Versions.guava}"
     const val flogger = "com.google.flogger:flogger:${Versions.flogger}"
@@ -80,6 +75,7 @@ object Log4j2 {
     const val core = "org.apache.logging.log4j:log4j-core:${Versions.log4j2}"
     const val api = "org.apache.logging.log4j:log4j-api:${Versions.log4j2}"
     const val slf4jBridge = "org.apache.logging.log4j:log4j-slf4j-impl:${Versions.log4j2}"
+    const val floggerBackend = "com.google.flogger:flogger-log4j2-backend:${Deps.versions.flogger}"
 }
 
 object Google {
@@ -89,9 +85,7 @@ object Google {
 }
 
 object Micronaut {
-    const val bom = "io.micronaut:micronaut-bom:${Versions.micronaut}"
     const val inject = "io.micronaut:micronaut-inject"
-    const val injectJava = "io.micronaut:micronaut-inject-java"
     const val validation = "io.micronaut:micronaut-validation"
     const val runtime = "io.micronaut:micronaut-runtime"
     const val netty = "io.micronaut:micronaut-http-server-netty"

@@ -24,11 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import io.micronaut.gradle.MicronautRuntime
+import io.micronaut.gradle.MicronautTestRuntime
+
 plugins {
-    application
     id("com.github.johnrengelman.shadow")
     id("com.google.cloud.tools.jib")
     id("io.spine.tools.gradle.bootstrap")
+    id("io.micronaut.application")
 }
 
 /** The GCP project ID used for deployment of the application. **/
@@ -38,28 +42,30 @@ spine {
     enableJava().server()
 }
 
+micronaut {
+    runtime(MicronautRuntime.NETTY)
+    testRuntime(MicronautTestRuntime.JUNIT_5)
+    version.set(Deps.versions.micronaut)
+    processing {
+        incremental.set(true)
+        annotations.add("io.spine.chatbot")
+    }
+}
+
 dependencies {
-    annotationProcessor(enforcedPlatform(Deps.build.micronaut.bom))
-    annotationProcessor(Deps.build.micronaut.injectJava)
-    annotationProcessor(Deps.build.micronaut.validation)
-
-    compileOnly(enforcedPlatform(Deps.build.micronaut.bom))
-
-    implementation(enforcedPlatform(Deps.build.micronaut.bom))
-    implementation(Deps.build.micronaut.inject)
-    implementation(Deps.build.micronaut.validation)
-    implementation(Deps.build.micronaut.runtime)
     implementation(Deps.build.micronaut.netty)
     implementation(Deps.build.micronaut.annotationApi)
+    implementation(Deps.build.micronaut.validation)
+    implementation(Deps.build.micronaut.runtime)
 
     implementation(Deps.build.log4j2.core)
     runtimeOnly(Deps.build.log4j2.api)
     runtimeOnly(Deps.build.log4j2.slf4jBridge)
-    implementation(Deps.build.flogger)
-    implementation("com.google.flogger:flogger-log4j2-backend:${Deps.versions.flogger}") {
+    implementation(Deps.build.log4j2.floggerBackend) {
         exclude("org.apache.logging.log4j:log4j-api")
         exclude("org.apache.logging.log4j:log4j-core")
     }
+    implementation(Deps.build.flogger)
 
     implementation(Deps.build.spine.datastore)
     implementation(Deps.build.spine.pubsub)
@@ -69,17 +75,21 @@ dependencies {
     implementation(Deps.build.google.chat)
     implementation(Deps.build.google.auth)
 
-    testAnnotationProcessor(enforcedPlatform(Deps.build.micronaut.bom))
-    testAnnotationProcessor(Deps.build.micronaut.injectJava)
-
-    testImplementation("io.spine:spine-testutil-server:${spine.version()}")
-    testImplementation(enforcedPlatform(Deps.build.micronaut.bom))
     testImplementation(Deps.build.micronaut.testJUnit5)
     testImplementation(Deps.build.micronaut.httpClient)
 }
 
+val shadowJar: ShadowJar by tasks
+shadowJar.apply {
+    mergeServiceFiles()
+    mergeServiceFiles("desc.ref")
+    manifest {
+        attributes["Multi-Release"] = "true" // https://github.com/johnrengelman/shadow/issues/449
+    }
+}
+
 application {
-    mainClassName = "io.spine.chatbot.Application"
+    mainClass.set("io.spine.chatbot.Application")
 }
 
 jib {
@@ -88,6 +98,6 @@ jib {
         tags = setOf("latest")
     }
     container {
-        mainClass = application.mainClassName
+        mainClass = application.mainClass.get()
     }
 }

@@ -73,6 +73,7 @@ public final class Application implements Logging {
               .start();
         _config().log("Starting Micronaut application.");
         Micronaut.run(Application.class);
+        _info().log("Application successfully started. Waiting for incoming requests.");
     }
 
     /**
