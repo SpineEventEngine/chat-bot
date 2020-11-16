@@ -24,6 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import io.micronaut.gradle.MicronautRuntime
+import io.micronaut.gradle.MicronautTestRuntime
+
 plugins {
     id("com.github.johnrengelman.shadow")
     id("com.google.cloud.tools.jib")
@@ -39,8 +43,8 @@ spine {
 }
 
 micronaut {
-    runtime("netty")
-    testRuntime("junit5")
+    runtime(MicronautRuntime.NETTY)
+    testRuntime(MicronautTestRuntime.JUNIT_5)
     version.set(Deps.versions.micronaut)
     processing {
         incremental.set(true)
@@ -78,7 +82,7 @@ dependencies {
     testImplementation(Deps.build.micronaut.httpClient)
 }
 
-val shadowJar: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar by tasks
+val shadowJar: ShadowJar by tasks
 shadowJar.apply {
     mergeServiceFiles()
     mergeServiceFiles("desc.ref")
