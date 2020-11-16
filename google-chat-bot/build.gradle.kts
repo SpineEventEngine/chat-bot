@@ -84,6 +84,8 @@ tasks.withType<NativeImageTask>().apply {
 }
 
 dependencies {
+    compileOnly(Deps.build.graalvmSvm)
+
     implementation(Deps.build.micronaut.netty)
     implementation(Deps.build.micronaut.annotationApi)
     implementation(Deps.build.micronaut.validation)

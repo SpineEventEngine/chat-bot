@@ -55,6 +55,7 @@ object Build {
     const val jsr305Annotations = "com.google.code.findbugs:jsr305:${Versions.findBugs}"
     const val guava = "com.google.guava:guava:${Versions.guava}"
     const val flogger = "com.google.flogger:flogger:${Versions.flogger}"
+    const val graalvmSvm = "org.graalvm.nativeimage:svm"
     val ci = "true".equals(System.getenv("CI"))
     val micronaut = Micronaut
     val google = Google
