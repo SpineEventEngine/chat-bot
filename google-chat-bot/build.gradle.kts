@@ -75,7 +75,6 @@ dependencies {
     implementation(Deps.build.google.chat)
     implementation(Deps.build.google.auth)
 
-    testImplementation(Deps.build.spine.serverTestUtil)
     testImplementation(Deps.build.micronaut.testJUnit5)
     testImplementation(Deps.build.micronaut.httpClient)
 }

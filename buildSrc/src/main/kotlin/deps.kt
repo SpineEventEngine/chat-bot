@@ -69,7 +69,6 @@ object Spine {
     const val server = "io.spine:spine-server:${Versions.spineCore}"
     const val client = "io.spine:spine-client:${Versions.spineCore}"
     const val core = "io.spine:spine-core:${Versions.spineCore}"
-    const val serverTestUtil = "io.spine:spine-testutil-server:${Versions.spineCore}"
 }
 
 object Log4j2 {
