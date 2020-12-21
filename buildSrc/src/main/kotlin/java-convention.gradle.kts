@@ -25,6 +25,8 @@
  */
 
 import net.ltgt.gradle.errorprone.errorprone
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     java
@@ -53,6 +55,14 @@ tasks.test {
     useJUnitPlatform {
         includeEngines("junit-jupiter")
     }
+
+    testLogging {
+        events = setOf(TestLogEvent.FAILED, TestLogEvent.SKIPPED)
+        exceptionFormat = TestExceptionFormat.FULL
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+    }
 }
 
 tasks.compileJava {
@@ -71,11 +81,13 @@ tasks.compileJava {
     //
     // For more config details see:
     //    https://github.com/tbroyer/gradle-errorprone-plugin/tree/master#usage
-    options.errorprone.errorproneArgs.addAll(listOf(
+    options.errorprone.errorproneArgs.addAll(
+        listOf(
             "-XepExcludedPaths:.*/generated/.*",
             "-Xep:ClassCanBeStatic:OFF",
             "-Xep:UnusedMethod:OFF",
             "-Xep:UnusedVariable:OFF",
             "-Xep:CheckReturnValue:OFF"
-    ))
+        )
+    )
 }
