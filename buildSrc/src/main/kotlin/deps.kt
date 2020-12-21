@@ -38,7 +38,7 @@ object Versions {
     const val spineGcloud = "1.7.0"
     const val spineBase = "1.7.0"
     const val spineCore = "1.7.0"
-    const val googleSecretManager = "1.2.8"
+    const val googleSecretManager = "1.2.6"
     const val googleChat = "v1-rev20201211-1.31.0"
     const val googleAuth = "0.22.2"
     const val log4j2 = "2.14.0"
