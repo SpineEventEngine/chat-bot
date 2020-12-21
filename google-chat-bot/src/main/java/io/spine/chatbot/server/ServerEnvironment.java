@@ -28,6 +28,7 @@ package io.spine.chatbot.server;
 
 import com.google.cloud.datastore.DatastoreOptions;
 import io.spine.base.Environment;
+import io.spine.base.EnvironmentType;
 import io.spine.base.Production;
 import io.spine.base.Tests;
 import io.spine.chatbot.delivery.LocalDelivery;
@@ -64,14 +65,14 @@ final class ServerEnvironment {
                 .when(Production.class)
                 .use(InMemoryTransportFactory.newInstance())
                 .use(LocalDelivery.instance)
-                .use(dsStorageFactory());
+                .useStorageFactory(ServerEnvironment::dsStorageFactory);
         io.spine.server.ServerEnvironment
                 .when(Tests.class)
                 .use(LocalDelivery.instance)
                 .use(InMemoryStorageFactory.newInstance());
     }
 
-    private static DatastoreStorageFactory dsStorageFactory() {
+    private static DatastoreStorageFactory dsStorageFactory(Class<? extends EnvironmentType> env) {
         var datastore = DatastoreOptions
                 .getDefaultInstance()
                 .getService();
