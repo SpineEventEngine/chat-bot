@@ -30,7 +30,6 @@ import com.google.cloud.datastore.DatastoreOptions;
 import io.spine.base.Environment;
 import io.spine.base.EnvironmentType;
 import io.spine.base.Production;
-import io.spine.base.Tests;
 import io.spine.chatbot.delivery.LocalDelivery;
 import io.spine.server.storage.StorageFactory;
 import io.spine.server.storage.datastore.DatastoreStorageFactory;
@@ -61,18 +60,22 @@ final class ServerEnvironment {
         //TODO:2020-06-21:yuri-sergiichuk: switch to io.spine.chatbot.delivery.DistributedDelivery
         // for Production environment after implementing the delivery strategy.
         // see https://github.com/SpineEventEngine/chat-bot/issues/5.
+        var env = Environment.instance();
         io.spine.server.ServerEnvironment
-                .when(Production.class)
+                .when(env.type())
                 .use(InMemoryTransportFactory.newInstance())
                 .use(LocalDelivery.instance)
-                .useStorageFactory(ServerEnvironment::dsStorageFactory);
-        io.spine.server.ServerEnvironment
-                .when(Tests.class)
-                .use(LocalDelivery.instance)
-                .use(InMemoryStorageFactory.newInstance());
+                .useStorageFactory(ServerEnvironment::determineStorage);
     }
 
-    private static DatastoreStorageFactory dsStorageFactory(Class<? extends EnvironmentType> env) {
+    private static StorageFactory determineStorage(Class<? extends EnvironmentType> env) {
+        if (Production.class.equals(env)) {
+            return dsStorageFactory();
+        }
+        return InMemoryStorageFactory.newInstance();
+    }
+
+    private static DatastoreStorageFactory dsStorageFactory() {
         var datastore = DatastoreOptions
                 .getDefaultInstance()
                 .getService();
