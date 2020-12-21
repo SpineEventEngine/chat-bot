@@ -61,17 +61,20 @@ final class ServerEnvironment {
         // for Production environment after implementing the delivery strategy.
         // see https://github.com/SpineEventEngine/chat-bot/issues/5.
         io.spine.server.ServerEnvironment
-                .instance()
-                .use(InMemoryTransportFactory.newInstance(), Production.class)
-                .use(LocalDelivery.instance, Production.class)
-                .use(LocalDelivery.instance, Tests.class)
-                .use(dsStorageFactory(), Production.class)
-                .use(InMemoryStorageFactory.newInstance(), Tests.class);
+                .when(Production.class)
+                .use(InMemoryTransportFactory.newInstance())
+                .use(LocalDelivery.instance)
+                .use(dsStorageFactory());
+        io.spine.server.ServerEnvironment
+                .when(Tests.class)
+                .use(LocalDelivery.instance)
+                .use(InMemoryStorageFactory.newInstance());
     }
 
     private static DatastoreStorageFactory dsStorageFactory() {
-        var datastore = DatastoreOptions.getDefaultInstance()
-                                        .getService();
+        var datastore = DatastoreOptions
+                .getDefaultInstance()
+                .getService();
         return DatastoreStorageFactory
                 .newBuilder()
                 .setDatastore(datastore)
