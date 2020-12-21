@@ -39,9 +39,9 @@ java {
 dependencies {
     errorprone(Deps.build.errorProneCore)
     implementation(Deps.build.guava)
-    implementation(Deps.build.jsr305Annotations)
-    implementation(Deps.build.checkerAnnotations)
-    Deps.build.errorProneAnnotations.forEach { implementation(it) }
+    compileOnly(Deps.build.jsr305Annotations)
+    compileOnly(Deps.build.checkerAnnotations)
+    Deps.build.errorProneAnnotations.forEach { compileOnly(it) }
 
     testImplementation(Deps.test.guavaTestlib)
     Deps.test.junit5Api.forEach { testImplementation(it) }
