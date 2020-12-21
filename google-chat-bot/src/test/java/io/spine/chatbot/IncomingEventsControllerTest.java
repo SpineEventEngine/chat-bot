@@ -32,7 +32,7 @@ import com.google.pubsub.v1.PubsubMessage;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
-import io.micronaut.test.annotation.MicronautTest;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.spine.chatbot.google.chat.InMemoryGoogleChatClient;
 import io.spine.chatbot.server.Server;
 import io.spine.chatbot.server.github.GitHubContext;
