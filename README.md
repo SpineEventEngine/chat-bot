@@ -1,3 +1,10 @@
+[![Build Status][actions-badge]](https://github.com/SpineEventEngine/chat-bot/actions) &nbsp;
+[![license][license-badge]](http://www.apache.org/licenses/LICENSE-2.0)
+
+
+[actions-badge]: https://github.com/SpineEventEngine/chat-bot/workflows/CI/badge.svg?branch=master
+[license-badge]: https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat
+
 Spine ChatBot
 -------
 

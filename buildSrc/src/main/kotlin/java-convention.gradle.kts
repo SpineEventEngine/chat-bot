@@ -25,6 +25,8 @@
  */
 
 import net.ltgt.gradle.errorprone.errorprone
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     java
@@ -39,9 +41,9 @@ java {
 dependencies {
     errorprone(Deps.build.errorProneCore)
     implementation(Deps.build.guava)
-    implementation(Deps.build.jsr305Annotations)
-    implementation(Deps.build.checkerAnnotations)
-    Deps.build.errorProneAnnotations.forEach { implementation(it) }
+    compileOnly(Deps.build.jsr305Annotations)
+    compileOnly(Deps.build.checkerAnnotations)
+    Deps.build.errorProneAnnotations.forEach { compileOnly(it) }
 
     testImplementation(Deps.test.guavaTestlib)
     Deps.test.junit5Api.forEach { testImplementation(it) }
@@ -52,6 +54,14 @@ dependencies {
 tasks.test {
     useJUnitPlatform {
         includeEngines("junit-jupiter")
+    }
+
+    testLogging {
+        events = setOf(TestLogEvent.FAILED, TestLogEvent.SKIPPED)
+        exceptionFormat = TestExceptionFormat.FULL
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
     }
 }
 
@@ -71,11 +81,13 @@ tasks.compileJava {
     //
     // For more config details see:
     //    https://github.com/tbroyer/gradle-errorprone-plugin/tree/master#usage
-    options.errorprone.errorproneArgs.addAll(listOf(
+    options.errorprone.errorproneArgs.addAll(
+        listOf(
             "-XepExcludedPaths:.*/generated/.*",
             "-Xep:ClassCanBeStatic:OFF",
             "-Xep:UnusedMethod:OFF",
             "-Xep:UnusedVariable:OFF",
             "-Xep:CheckReturnValue:OFF"
-    ))
+        )
+    )
 }
