@@ -41,7 +41,7 @@ import io.spine.server.transport.memory.InMemoryTransportFactory;
  * Initializes the {@link ServerEnvironment}.
  *
  * <p>Configures the {@link StorageFactory} depending on the current
- * {@link Environment Env}.
+ * {@linkplain Environment environment}.
  * Uses the Datastore storage factory for the production mode and in-memory storage for tests.
  *
  * <p>Configures the inbox delivery through the Datastore work registry while
@@ -56,7 +56,7 @@ final class Env {
     }
 
     /**
-     * Initializes {@link ServerEnvironment Env} for ChatBot.
+     * Initializes {@link ServerEnvironment} for ChatBot.
      */
     static void init() {
         //TODO:2020-06-21:yuri-sergiichuk: switch to io.spine.chatbot.delivery.DistributedDelivery
