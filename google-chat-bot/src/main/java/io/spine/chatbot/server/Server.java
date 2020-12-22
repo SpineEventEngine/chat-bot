@@ -63,7 +63,10 @@ public final class Server implements Logging {
      */
     public static Server withContexts(ContextBuilderAware... contexts) {
         checkNotNull(contexts);
-        checkArgument(contexts.length > 0, "At least a single Bounded Context is required.");
+        checkArgument(
+                contexts.length > 0,
+                "At least a single Bounded Context is required."
+        );
         return new Server(ImmutableSet.copyOf(contexts));
     }
 
@@ -97,11 +100,11 @@ public final class Server implements Logging {
     }
 
     /**
-     * Initializes the server and its {@link ServerEnvironment environment}.
+     * Initializes the server and its {@linkplain Environment environment}.
      */
     public void init() {
         _config().log("Initializing server environment.");
-        ServerEnvironment.init();
+        Environment.init();
         _config().log("Bootstrapping server.");
         io.spine.server.Server.Builder serverBuilder = io.spine.server.Server.inProcess(
                 SERVER_NAME);
