@@ -100,11 +100,11 @@ public final class Server implements Logging {
     }
 
     /**
-     * Initializes the server and its {@linkplain Environment environment}.
+     * Initializes the server and its {@linkplain Env environment}.
      */
     public void init() {
         _config().log("Initializing server environment.");
-        Environment.init();
+        Env.init();
         _config().log("Bootstrapping server.");
         io.spine.server.Server.Builder serverBuilder = io.spine.server.Server.inProcess(
                 SERVER_NAME);

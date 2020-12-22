@@ -27,6 +27,7 @@
 package io.spine.chatbot.server;
 
 import com.google.cloud.datastore.DatastoreOptions;
+import io.spine.base.Environment;
 import io.spine.base.EnvironmentType;
 import io.spine.base.Production;
 import io.spine.chatbot.delivery.LocalDelivery;
@@ -40,33 +41,33 @@ import io.spine.server.transport.memory.InMemoryTransportFactory;
  * Initializes the {@link ServerEnvironment}.
  *
  * <p>Configures the {@link StorageFactory} depending on the current
- * {@link io.spine.base.Environment Environment}.
+ * {@link Environment Env}.
  * Uses the Datastore storage factory for the production mode and in-memory storage for tests.
  *
  * <p>Configures the inbox delivery through the Datastore work registry while
  * in Production environment, otherwise uses local synchronous delivery.
  */
-final class Environment {
+final class Env {
 
     /**
      * Prevents instantiation of this utility class.
      */
-    private Environment() {
+    private Env() {
     }
 
     /**
-     * Initializes {@link ServerEnvironment Environment} for ChatBot.
+     * Initializes {@link ServerEnvironment Env} for ChatBot.
      */
     static void init() {
         //TODO:2020-06-21:yuri-sergiichuk: switch to io.spine.chatbot.delivery.DistributedDelivery
         // for Production environment after implementing the delivery strategy.
         // see https://github.com/SpineEventEngine/chat-bot/issues/5.
-        var env = io.spine.base.Environment.instance();
+        var env = Environment.instance();
         ServerEnvironment
                 .when(env.type())
                 .use(InMemoryTransportFactory.newInstance())
                 .use(LocalDelivery.instance)
-                .useStorageFactory(Environment::determineStorage);
+                .useStorageFactory(Env::determineStorage);
     }
 
     private static StorageFactory determineStorage(Class<? extends EnvironmentType> env) {
