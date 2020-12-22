@@ -28,50 +28,59 @@ package io.spine.chatbot.server;
 
 import com.google.cloud.datastore.DatastoreOptions;
 import io.spine.base.Environment;
+import io.spine.base.EnvironmentType;
 import io.spine.base.Production;
-import io.spine.base.Tests;
 import io.spine.chatbot.delivery.LocalDelivery;
+import io.spine.server.ServerEnvironment;
 import io.spine.server.storage.StorageFactory;
 import io.spine.server.storage.datastore.DatastoreStorageFactory;
 import io.spine.server.storage.memory.InMemoryStorageFactory;
 import io.spine.server.transport.memory.InMemoryTransportFactory;
 
 /**
- * Initializes the {@link io.spine.server.ServerEnvironment ServerEnvironment}.
+ * Initializes the {@link ServerEnvironment}.
  *
- * <p>Configures the {@link StorageFactory} depending on the current {@link Environment}.
+ * <p>Configures the {@link StorageFactory} depending on the current
+ * {@linkplain Environment environment}.
  * Uses the Datastore storage factory for the production mode and in-memory storage for tests.
  *
  * <p>Configures the inbox delivery through the Datastore work registry while
  * in Production environment, otherwise uses local synchronous delivery.
  */
-final class ServerEnvironment {
+final class Env {
 
     /**
      * Prevents instantiation of this utility class.
      */
-    private ServerEnvironment() {
+    private Env() {
     }
 
     /**
-     * Initializes {@link io.spine.server.ServerEnvironment ServerEnvironment} for ChatBot.
+     * Initializes {@link ServerEnvironment} for ChatBot.
      */
     static void init() {
         //TODO:2020-06-21:yuri-sergiichuk: switch to io.spine.chatbot.delivery.DistributedDelivery
         // for Production environment after implementing the delivery strategy.
         // see https://github.com/SpineEventEngine/chat-bot/issues/5.
-        io.spine.server.ServerEnvironment
-                .instance()
-                .use(InMemoryTransportFactory.newInstance(), Production.class)
-                .use(LocalDelivery.instance, Production.class)
-                .use(LocalDelivery.instance, Tests.class)
-                .use(dsStorageFactory(), Production.class)
-                .use(InMemoryStorageFactory.newInstance(), Tests.class);
+        var env = Environment.instance();
+        ServerEnvironment
+                .when(env.type())
+                .use(InMemoryTransportFactory.newInstance())
+                .use(LocalDelivery.instance)
+                .useStorageFactory(Env::determineStorage);
+    }
+
+    private static StorageFactory determineStorage(Class<? extends EnvironmentType> env) {
+        if (Production.class.equals(env)) {
+            return dsStorageFactory();
+        }
+        return InMemoryStorageFactory.newInstance();
     }
 
     private static DatastoreStorageFactory dsStorageFactory() {
-        var datastore = DatastoreOptions.getDefaultInstance()
-                                        .getService();
+        var datastore = DatastoreOptions
+                .getDefaultInstance()
+                .getService();
         return DatastoreStorageFactory
                 .newBuilder()
                 .setDatastore(datastore)
