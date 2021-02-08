@@ -37,7 +37,7 @@ repositories {
 dependencies {
     implementation("net.ltgt.gradle:gradle-errorprone-plugin:1.3.0")
     implementation("com.github.jengelman.gradle.plugins:shadow:6.1.0")
-    implementation("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:2.7.0")
+    implementation("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:2.7.1")
     implementation("io.spine.tools:spine-bootstrap:1.7.1")
     implementation("net.saliman:gradle-properties-plugin:1.5.1")
     implementation("io.micronaut.gradle:micronaut-gradle-plugin:1.2.0")
