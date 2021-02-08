@@ -1,5 +1,5 @@
 /*
- * Copyright 2020, TeamDev. All rights reserved.
+ * Copyright 2021, TeamDev. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,4 +28,4 @@
  * The version of the application.
  */
 
-val botVersion: String by extra("1.4.1")
+val botVersion: String by extra("1.4.2")
