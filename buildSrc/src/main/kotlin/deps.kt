@@ -46,11 +46,12 @@ object Versions {
 
 object Build {
     val errorProneAnnotations = listOf(
-            "com.google.errorprone:error_prone_annotations:${Versions.errorProne}",
-            "com.google.errorprone:error_prone_type_annotations:${Versions.errorProne}"
+        "com.google.errorprone:error_prone_annotations:${Versions.errorProne}",
+        "com.google.errorprone:error_prone_type_annotations:${Versions.errorProne}"
     )
     const val errorProneCore = "com.google.errorprone:error_prone_core:${Versions.errorProne}"
-    const val errorProneTestHelpers = "com.google.errorprone:error_prone_test_helpers:${Versions.errorProne}"
+    const val errorProneTestHelpers =
+        "com.google.errorprone:error_prone_test_helpers:${Versions.errorProne}"
     const val checkerAnnotations = "org.checkerframework:checker-qual:${Versions.checkerFramework}"
     const val jsr305Annotations = "com.google.code.findbugs:jsr305:${Versions.findBugs}"
     const val guava = "com.google.guava:guava:${Versions.guava}"
@@ -79,7 +80,8 @@ object Log4j2 {
 }
 
 object Google {
-    const val secretManager = "com.google.cloud:google-cloud-secretmanager:${Versions.googleSecretManager}"
+    const val secretManager =
+        "com.google.cloud:google-cloud-secretmanager:${Versions.googleSecretManager}"
     const val chat = "com.google.apis:google-api-services-chat:${Versions.googleChat}"
     const val auth = "com.google.auth:google-auth-library-oauth2-http:${Versions.googleAuth}"
 }
@@ -96,15 +98,15 @@ object Micronaut {
 
 object Test {
     val junit5Api = listOf(
-            "org.junit.jupiter:junit-jupiter-api:${Versions.junit5}",
-            "org.junit.jupiter:junit-jupiter-params:${Versions.junit5}"
+        "org.junit.jupiter:junit-jupiter-api:${Versions.junit5}",
+        "org.junit.jupiter:junit-jupiter-params:${Versions.junit5}"
     )
     const val junit5Runner = "org.junit.jupiter:junit-jupiter-engine:${Versions.junit5}"
     const val guavaTestlib = "com.google.guava:guava-testlib:${Versions.guava}"
     val truth = listOf(
-            "com.google.truth:truth:${Versions.truth}",
-            "com.google.truth.extensions:truth-java8-extension:${Versions.truth}",
-            "com.google.truth.extensions:truth-proto-extension:${Versions.truth}"
+        "com.google.truth:truth:${Versions.truth}",
+        "com.google.truth.extensions:truth-java8-extension:${Versions.truth}",
+        "com.google.truth.extensions:truth-proto-extension:${Versions.truth}"
     )
 }
 
