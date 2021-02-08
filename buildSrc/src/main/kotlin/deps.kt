@@ -25,22 +25,22 @@
  */
 
 object Versions {
-    const val checkerFramework = "3.8.0"
+    const val checkerFramework = "3.10.0"
     const val errorProne = "2.4.0"
-    const val pmd = "6.30.0"
-    const val checkstyle = "8.38"
+    const val pmd = "6.31.0"
+    const val checkstyle = "8.40"
     const val findBugs = "3.0.2"
     const val guava = "30.1-jre"
     const val flogger = "0.5.1"
-    const val junit5 = "5.7.0"
-    const val truth = "1.1"
-    const val micronaut = "2.2.1"
+    const val junit5 = "5.7.1"
+    const val truth = "1.1.2"
+    const val micronaut = "2.3.1"
     const val spineGcloud = "1.7.1"
     const val spineBase = "1.7.4"
     const val spineCore = "1.7.1"
-    const val googleSecretManager = "1.2.6"
+    const val googleSecretManager = "1.2.9"
     const val googleChat = "v1-rev20201211-1.31.0"
-    const val googleAuth = "0.22.2"
+    const val googleAuth = "0.23.0"
     const val log4j2 = "2.14.0"
 }
 
