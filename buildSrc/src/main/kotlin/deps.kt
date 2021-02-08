@@ -26,7 +26,7 @@
 
 object Versions {
     const val checkerFramework = "3.10.0"
-    const val errorProne = "2.4.0"
+    const val errorProne = "2.5.1"
     const val pmd = "6.31.0"
     const val checkstyle = "8.40"
     const val findBugs = "3.0.2"

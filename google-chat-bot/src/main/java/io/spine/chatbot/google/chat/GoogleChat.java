@@ -59,14 +59,13 @@ final class GoogleChat implements GoogleChatClient, Logging {
         checkNotNull(build);
         checkNotNull(thread);
         var repo = build.getRepository();
-        var trace = _trace();
-        trace.log("Building state update message for the repository `%s`.", repo);
+        _trace().log("Building state update message for the repository `%s`.", repo);
         var message = buildStateMessage(build, thread);
-        trace.log("Sending state update message for the repository `%s`.", repo);
+        _trace().log("Sending state update message for the repository `%s`.", repo);
         var sentMessage = sendMessage(build.getSpace(), message);
         var messageName = sentMessage.getName();
         var messageThread = sentMessage.getThread();
-        trace.log(
+        _trace().log(
                 "Build state update message with ID `%s` " +
                         "for the repository `%s` sent to the thread `%s`.",
                 messageName, repo, messageThread.getName()
