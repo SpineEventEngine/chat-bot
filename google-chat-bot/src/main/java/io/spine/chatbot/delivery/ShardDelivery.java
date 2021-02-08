@@ -67,22 +67,21 @@ final class ShardDelivery implements Logging {
     }
 
     private void deliverNow() {
-        var trace = _trace();
         var server = ServerEnvironment.instance();
         var nodeId = server.nodeId()
                            .getValue();
         var indexValue = shard.getIndex();
-        trace.log("Delivering messages from the shard with index `%d`. NodeId=%s.",
-                  indexValue, nodeId);
+        _trace().log("Delivering messages from the shard with index `%d`. NodeId=%s.",
+                     indexValue, nodeId);
         var stats = server.delivery()
                           .deliverMessagesFrom(shard);
         if (stats.isPresent()) {
             DeliveryStats deliveryStats = stats.get();
-            trace.log("`%d` messages delivered from the shard with index `%s`. NodeId=%s.",
-                      deliveryStats.deliveredCount(), indexValue, nodeId);
+            _trace().log("`%d` messages delivered from the shard with index `%s`. NodeId=%s.",
+                         deliveryStats.deliveredCount(), indexValue, nodeId);
         } else {
-            trace.log("No messages delivered from the shard with index `%d`. NodeId=%s.",
-                      indexValue, nodeId);
+            _trace().log("No messages delivered from the shard with index `%d`. NodeId=%s.",
+                         indexValue, nodeId);
         }
     }
 }

@@ -25,32 +25,33 @@
  */
 
 object Versions {
-    const val checkerFramework = "3.8.0"
-    const val errorProne = "2.4.0"
-    const val pmd = "6.30.0"
-    const val checkstyle = "8.38"
+    const val checkerFramework = "3.10.0"
+    const val errorProne = "2.5.1"
+    const val pmd = "6.31.0"
+    const val checkstyle = "8.40"
     const val findBugs = "3.0.2"
     const val guava = "30.1-jre"
     const val flogger = "0.5.1"
-    const val junit5 = "5.7.0"
-    const val truth = "1.1"
-    const val micronaut = "2.2.1"
-    const val spineGcloud = "1.7.0"
-    const val spineBase = "1.7.0"
-    const val spineCore = "1.7.0"
-    const val googleSecretManager = "1.2.6"
+    const val junit5 = "5.7.1"
+    const val truth = "1.1.2"
+    const val micronaut = "2.3.1"
+    const val spineGcloud = "1.7.1"
+    const val spineBase = "1.7.4"
+    const val spineCore = "1.7.1"
+    const val googleSecretManager = "1.2.9"
     const val googleChat = "v1-rev20201211-1.31.0"
-    const val googleAuth = "0.22.2"
+    const val googleAuth = "0.23.0"
     const val log4j2 = "2.14.0"
 }
 
 object Build {
     val errorProneAnnotations = listOf(
-            "com.google.errorprone:error_prone_annotations:${Versions.errorProne}",
-            "com.google.errorprone:error_prone_type_annotations:${Versions.errorProne}"
+        "com.google.errorprone:error_prone_annotations:${Versions.errorProne}",
+        "com.google.errorprone:error_prone_type_annotations:${Versions.errorProne}"
     )
     const val errorProneCore = "com.google.errorprone:error_prone_core:${Versions.errorProne}"
-    const val errorProneTestHelpers = "com.google.errorprone:error_prone_test_helpers:${Versions.errorProne}"
+    const val errorProneTestHelpers =
+        "com.google.errorprone:error_prone_test_helpers:${Versions.errorProne}"
     const val checkerAnnotations = "org.checkerframework:checker-qual:${Versions.checkerFramework}"
     const val jsr305Annotations = "com.google.code.findbugs:jsr305:${Versions.findBugs}"
     const val guava = "com.google.guava:guava:${Versions.guava}"
@@ -79,7 +80,8 @@ object Log4j2 {
 }
 
 object Google {
-    const val secretManager = "com.google.cloud:google-cloud-secretmanager:${Versions.googleSecretManager}"
+    const val secretManager =
+        "com.google.cloud:google-cloud-secretmanager:${Versions.googleSecretManager}"
     const val chat = "com.google.apis:google-api-services-chat:${Versions.googleChat}"
     const val auth = "com.google.auth:google-auth-library-oauth2-http:${Versions.googleAuth}"
 }
@@ -96,15 +98,15 @@ object Micronaut {
 
 object Test {
     val junit5Api = listOf(
-            "org.junit.jupiter:junit-jupiter-api:${Versions.junit5}",
-            "org.junit.jupiter:junit-jupiter-params:${Versions.junit5}"
+        "org.junit.jupiter:junit-jupiter-api:${Versions.junit5}",
+        "org.junit.jupiter:junit-jupiter-params:${Versions.junit5}"
     )
     const val junit5Runner = "org.junit.jupiter:junit-jupiter-engine:${Versions.junit5}"
     const val guavaTestlib = "com.google.guava:guava-testlib:${Versions.guava}"
     val truth = listOf(
-            "com.google.truth:truth:${Versions.truth}",
-            "com.google.truth.extensions:truth-java8-extension:${Versions.truth}",
-            "com.google.truth.extensions:truth-proto-extension:${Versions.truth}"
+        "com.google.truth:truth:${Versions.truth}",
+        "com.google.truth.extensions:truth-java8-extension:${Versions.truth}",
+        "com.google.truth.extensions:truth-proto-extension:${Versions.truth}"
     )
 }
 

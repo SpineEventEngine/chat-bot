@@ -31,18 +31,17 @@ plugins {
 repositories {
     google()
     mavenCentral()
-    jcenter()
 }
 
 configurations.all {
     resolutionStrategy {
         force(
-                Deps.build.guava,
-                Deps.build.errorProneAnnotations,
-                Deps.build.spine.base,
-                Deps.build.spine.core,
-                Deps.build.spine.server,
-                Deps.build.spine.client
+            Deps.build.guava,
+            Deps.build.errorProneAnnotations,
+            Deps.build.spine.base,
+            Deps.build.spine.core,
+            Deps.build.spine.server,
+            Deps.build.spine.client
         )
     }
 }
