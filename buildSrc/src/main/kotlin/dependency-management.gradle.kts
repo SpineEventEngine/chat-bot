@@ -31,7 +31,6 @@ plugins {
 repositories {
     google()
     mavenCentral()
-    jcenter()
 }
 
 configurations.all {
