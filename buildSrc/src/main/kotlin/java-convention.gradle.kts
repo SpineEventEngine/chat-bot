@@ -106,7 +106,7 @@ tasks.compileJava {
     )
 
     options.errorprone {
-        option("NullAway:AnnotatedPackages", "io.spine.message.delivery")
+        option("NullAway:AnnotatedPackages", "io.spine.chatbot")
         disableWarningsInGeneratedCode.set(true)
     }
 }
