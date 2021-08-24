@@ -34,6 +34,7 @@ import io.spine.chatbot.travis.TravisClient;
 import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.server.route.EventRouting;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.chatbot.server.github.SpineOrgInitProcess.ORGANIZATION;
 import static io.spine.server.route.EventRoute.withId;
 
@@ -46,11 +47,12 @@ final class SpineOrgInitRepository
     private final TravisClient client;
 
     SpineOrgInitRepository(TravisClient client) {
-        this.client = client;
+        super();
+        this.client = checkNotNull(client);
     }
 
-    @OverridingMethodsMustInvokeSuper
     @Override
+    @OverridingMethodsMustInvokeSuper
     protected void setupEventRouting(EventRouting<OrganizationId> routing) {
         super.setupEventRouting(routing);
         routing.route(SpaceRegistered.class, (event, context) -> withId(ORGANIZATION));

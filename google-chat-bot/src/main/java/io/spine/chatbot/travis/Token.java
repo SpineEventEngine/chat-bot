@@ -40,6 +40,7 @@ final class Token extends Secret {
     private final String value;
 
     private Token(String value) {
+        super();
         this.value = value;
     }
 

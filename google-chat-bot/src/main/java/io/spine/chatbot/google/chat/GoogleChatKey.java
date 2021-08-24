@@ -48,6 +48,7 @@ final class GoogleChatKey extends Secret {
     private final String value;
 
     private GoogleChatKey(String value) {
+        super();
         this.value = value;
     }
 

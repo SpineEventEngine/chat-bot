@@ -40,6 +40,7 @@ import io.spine.server.route.EventRouting;
 
 import java.util.Set;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.thread;
 import static io.spine.server.route.EventRoute.withId;
 
@@ -52,11 +53,12 @@ final class ThreadChatRepository
     private final GoogleChatClient client;
 
     ThreadChatRepository(GoogleChatClient client) {
-        this.client = client;
+        super();
+        this.client = checkNotNull(client);
     }
 
-    @OverridingMethodsMustInvokeSuper
     @Override
+    @OverridingMethodsMustInvokeSuper
     protected void setupEventRouting(EventRouting<ThreadId> routing) {
         super.setupEventRouting(routing);
         routing.route(BuildFailed.class, new RepositoryEventRoute<>())

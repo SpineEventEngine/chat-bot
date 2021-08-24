@@ -31,6 +31,8 @@ import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.travis.TravisClient;
 import io.spine.server.procman.ProcessManagerRepository;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * The repository for {@link RepoBuildProcess}es.
  */
@@ -40,7 +42,8 @@ final class RepoBuildRepository
     private final TravisClient client;
 
     RepoBuildRepository(TravisClient client) {
-        this.client = client;
+        super();
+        this.client = checkNotNull(client);
     }
 
     @Override
