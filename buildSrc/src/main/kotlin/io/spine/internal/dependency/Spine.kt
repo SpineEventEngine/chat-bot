@@ -49,12 +49,15 @@ object Spine {
         const val version = "1.7.4"
         const val coreVersion = "1.7.5"
         const val timeVersion = "1.7.1"
+        const val gcloudVersion = "1.7.1"
 
         const val base = "io.spine:spine-base:${version}"
         const val client = "io.spine:spine-client:${coreVersion}"
         const val server = "io.spine:spine-server:${coreVersion}"
         const val core = "io.spine:spine-core:${coreVersion}"
         const val time = "io.spine:spine-time:${timeVersion}"
+        const val datastore = "io.spine.gcloud:spine-datastore:${gcloudVersion}"
+        const val pubsub = "io.spine.gcloud:spine-pubsub:${gcloudVersion}"
 
         object Test {
             const val base = "io.spine:spine-testlib:${version}"

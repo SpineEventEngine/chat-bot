@@ -27,11 +27,12 @@
 package io.spine.internal.dependency
 
 object Gcp {
-    private const val bomVersion = "2.8.8"
-    private const val authVersion = "0.23.0"
+    private const val bomVersion = "20.0.0"
     private const val chatVersion = "v1-rev20201211-1.31.0"
-    const val bom = ""
+
+    const val bom = "com.google.cloud:libraries-bom:${bomVersion}"
     const val secretManager = "com.google.cloud:google-cloud-secretmanager"
-    const val auth = "com.google.auth:google-auth-library-oauth2-http:${authVersion}"
+    const val auth = "com.google.auth:google-auth-library-oauth2-http"
+
     const val chat = "com.google.apis:google-api-services-chat:${chatVersion}"
 }

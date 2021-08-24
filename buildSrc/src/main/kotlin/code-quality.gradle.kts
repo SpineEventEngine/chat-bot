@@ -24,44 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.CheckerFramework
-import io.spine.internal.dependency.ErrorProne
-import io.spine.internal.dependency.FindBugs
-import io.spine.internal.dependency.Flogger
-import io.spine.internal.dependency.Gson
-import io.spine.internal.dependency.Guava
-import io.spine.internal.dependency.JavaX
-import io.spine.internal.dependency.Protobuf
-import io.spine.internal.dependency.Spine
-import io.spine.internal.dependency.Truth
+import io.spine.internal.dependency.CheckStyle
+import io.spine.internal.dependency.Pmd
 
 plugins {
-    `java-library`
+    java
+    pmd
+    checkstyle
 }
 
-configurations.all {
-    resolutionStrategy {
-        force(
-            CheckerFramework.annotations,
-            ErrorProne.annotations,
-            Guava.lib,
-            Guava.testLib,
-            FindBugs.annotations,
-            Flogger.lib,
-            Gson.lib,
-            JavaX.annotations,
-            Protobuf.libs,
-            Truth.libs,
-            Spine.Stable.base,
-            Spine.Stable.core,
-            Spine.Stable.server,
-            Spine.Stable.client,
-            Spine.Stable.time,
-            Spine.Stable.Test.base,
-            Spine.Stable.Test.core,
-            Spine.Stable.Test.server,
-            Spine.Stable.Test.client,
-            Spine.Stable.Test.time
-        )
-    }
+pmd {
+    toolVersion = Pmd.version
+    isConsoleOutput = true
+    // The build is going to fail in case of violations.
+    isIgnoreFailures = false
+    incrementalAnalysis.set(true)
+
+    ruleSets = listOf()
+    ruleSetFiles = files("${rootDir}/buildSrc/src/main/resources/pmd.xml")
+
+    reportsDir = file("build/reports/pmd")
+    sourceSets = listOf(project.sourceSets.named("main").get())
+}
+
+checkstyle {
+    toolVersion = CheckStyle.version
+
+    // The build is going to fail in case of violations.
+    isIgnoreFailures = false
+
+    configDirectory.set(file("${rootDir}/buildSrc/src/main/resources"))
+    configFile = file("${rootDir}/buildSrc/src/main/resources/checkstyle.xml")
+
+    reportsDir = file("build/reports/checkstyle")
+    sourceSets = listOf(project.sourceSets.named("main").get())
 }
