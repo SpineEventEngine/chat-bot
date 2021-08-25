@@ -24,31 +24,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.internal.dependency
 
-import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.build.RepositoryBuild;
-import io.spine.chatbot.travis.TravisClient;
-import io.spine.server.procman.ProcessManagerRepository;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
-/**
- * The repository for {@link RepoBuildProcess}es.
- */
-final class RepoBuildRepository
-        extends ProcessManagerRepository<RepositoryId, RepoBuildProcess, RepositoryBuild> {
-
-    private final TravisClient client;
-
-    RepoBuildRepository(TravisClient client) {
-        super();
-        this.client = checkNotNull(client);
-    }
-
-    @Override
-    protected void configure(RepoBuildProcess processManager) {
-        super.configure(processManager);
-        processManager.setClient(client);
-    }
+// https://github.com/google/guava
+object Guava {
+    private const val version = "30.1.1-jre"
+    const val lib = "com.google.guava:guava:${version}"
+    const val testLib = "com.google.guava:guava-testlib:${version}"
 }

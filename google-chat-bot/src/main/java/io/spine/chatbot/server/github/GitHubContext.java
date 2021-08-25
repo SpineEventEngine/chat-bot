@@ -31,6 +31,7 @@ import io.spine.chatbot.server.DiagnosticEventLogger;
 import io.spine.chatbot.travis.TravisClient;
 import io.spine.server.BoundedContext;
 import io.spine.server.BoundedContextBuilder;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -47,7 +48,7 @@ public final class GitHubContext implements ContextBuilderAware {
     private final BoundedContextBuilder builder;
 
     private GitHubContext(TravisClient client) {
-        this.builder = configureBuilder(client);
+        this.builder = configureBuilder(checkNotNull(client));
     }
 
     /**
@@ -88,7 +89,7 @@ public final class GitHubContext implements ContextBuilderAware {
      */
     public static final class Builder {
 
-        private TravisClient client;
+        private @MonotonicNonNull TravisClient client;
 
         /**
          * Prevents direct instantiation.

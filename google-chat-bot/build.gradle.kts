@@ -27,6 +27,11 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import io.micronaut.gradle.MicronautRuntime
 import io.micronaut.gradle.MicronautTestRuntime
+import io.spine.internal.dependency.Flogger
+import io.spine.internal.dependency.Gcp
+import io.spine.internal.dependency.Log4j2
+import io.spine.internal.dependency.Micronaut
+import io.spine.internal.dependency.Spine
 
 plugins {
     id("com.github.johnrengelman.shadow")
@@ -35,8 +40,7 @@ plugins {
     id("io.micronaut.application")
 }
 
-/** The GCP project ID used for deployment of the application. **/
-val gcpProject: String by project
+val extras by extra(io.spine.internal.gradle.prepareExtras(project))
 
 spine {
     enableJava().server()
@@ -45,7 +49,7 @@ spine {
 micronaut {
     runtime(MicronautRuntime.NETTY)
     testRuntime(MicronautTestRuntime.JUNIT_5)
-    version.set(Deps.versions.micronaut)
+    version.set(Micronaut.version)
     processing {
         incremental.set(true)
         annotations.add("io.spine.chatbot")
@@ -53,51 +57,57 @@ micronaut {
 }
 
 dependencies {
-    implementation(Deps.build.micronaut.netty)
-    implementation(Deps.build.micronaut.annotationApi)
-    implementation(Deps.build.micronaut.validation)
-    implementation(Deps.build.micronaut.runtime)
+    implementation(Micronaut.netty)
+    implementation(Micronaut.annotationApi)
+    implementation(Micronaut.validation)
+    implementation(Micronaut.runtime)
 
-    implementation(Deps.build.log4j2.core)
-    runtimeOnly(Deps.build.log4j2.api)
-    runtimeOnly(Deps.build.log4j2.slf4jBridge)
-    implementation(Deps.build.log4j2.floggerBackend) {
+    runtimeOnly(Log4j2.core)
+    runtimeOnly(Log4j2.api)
+    runtimeOnly(Log4j2.slf4jBridge)
+    runtimeOnly(Flogger.Runtime.log4J2) {
         exclude("org.apache.logging.log4j:log4j-api")
         exclude("org.apache.logging.log4j:log4j-core")
     }
-    implementation(Deps.build.flogger)
+    implementation(Flogger.lib)
 
-    implementation(Deps.build.spine.datastore)
-    implementation(Deps.build.spine.pubsub)
+    implementation(Spine.Stable.datastore)
+    implementation(Spine.Stable.pubsub)
 
-    implementation(Deps.build.google.secretManager)
+    implementation(Gcp.secretManager)
 
-    implementation(Deps.build.google.chat)
-    implementation(Deps.build.google.auth)
+    implementation(Gcp.chat)
+    implementation(Gcp.auth)
 
-    testImplementation(Deps.build.micronaut.testJUnit5)
-    testImplementation(Deps.build.micronaut.httpClient)
+    testImplementation(Micronaut.testJUnit5)
+    testImplementation(Micronaut.httpClient)
 }
 
-val shadowJar: ShadowJar by tasks
-shadowJar.apply {
+val appClassName = "io.spine.chatbot.Application"
+project.setProperty("mainClassName", appClassName)
+
+tasks.withType<ShadowJar> {
     mergeServiceFiles()
     mergeServiceFiles("desc.ref")
     manifest {
         attributes["Multi-Release"] = "true" // https://github.com/johnrengelman/shadow/issues/449
+        attributes["Main-Class"] = appClassName
     }
 }
 
 application {
-    mainClass.set("io.spine.chatbot.Application")
+    mainClass.set(appClassName)
+    applicationDefaultJvmArgs = listOf(
+        "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=7007"
+    )
 }
 
 jib {
     to {
-        image = "gcr.io/${gcpProject}/chat-bot-server"
-        tags = setOf("latest")
+        image = "gcr.io/${extras.gcpProject}/chat-bot-server"
+        tags = setOf("latest", extras.git.hash, extras.git.shortHash, "v${version}")
     }
     container {
-        mainClass = application.mainClass.get()
+        mainClass = appClassName
     }
 }

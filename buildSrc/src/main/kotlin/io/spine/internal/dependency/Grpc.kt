@@ -24,31 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.internal.dependency
 
-import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.build.RepositoryBuild;
-import io.spine.chatbot.travis.TravisClient;
-import io.spine.server.procman.ProcessManagerRepository;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
-/**
- * The repository for {@link RepoBuildProcess}es.
- */
-final class RepoBuildRepository
-        extends ProcessManagerRepository<RepositoryId, RepoBuildProcess, RepositoryBuild> {
-
-    private final TravisClient client;
-
-    RepoBuildRepository(TravisClient client) {
-        super();
-        this.client = checkNotNull(client);
-    }
-
-    @Override
-    protected void configure(RepoBuildProcess processManager) {
-        super.configure(processManager);
-        processManager.setClient(client);
-    }
+// https://github.com/grpc/grpc-java
+@Suppress("unused")
+object Grpc {
+    @Suppress("MemberVisibilityCanBePrivate")
+    const val version = "1.39.0"
+    const val core = "io.grpc:grpc-core:${version}"
+    const val stub = "io.grpc:grpc-stub:${version}"
+    const val okHttp = "io.grpc:grpc-okhttp:${version}"
+    const val protobuf = "io.grpc:grpc-protobuf:${version}"
+    const val netty = "io.grpc:grpc-netty:${version}"
+    const val nettyShaded = "io.grpc:grpc-netty-shaded:${version}"
+    const val context = "io.grpc:grpc-context:${version}"
+    const val protobufPlugin = "io.grpc:protoc-gen-grpc-java:${version}"
 }

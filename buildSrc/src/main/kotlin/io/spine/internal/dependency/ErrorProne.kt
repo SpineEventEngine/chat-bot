@@ -24,31 +24,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.internal.dependency
 
-import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.build.RepositoryBuild;
-import io.spine.chatbot.travis.TravisClient;
-import io.spine.server.procman.ProcessManagerRepository;
+// https://errorprone.info/
+@Suppress("unused")
+object ErrorProne {
+    private const val version = "2.9.0"
+    private const val nullawayVersion = "0.9.2"
 
-import static com.google.common.base.Preconditions.checkNotNull;
+    val annotations = listOf(
+        "com.google.errorprone:error_prone_annotations:${version}",
+        "com.google.errorprone:error_prone_type_annotations:${version}"
+    )
+    const val core = "com.google.errorprone:error_prone_core:${version}"
+    const val checkApi = "com.google.errorprone:error_prone_check_api:${version}"
+    const val testHelpers = "com.google.errorprone:error_prone_test_helpers:${version}"
 
-/**
- * The repository for {@link RepoBuildProcess}es.
- */
-final class RepoBuildRepository
-        extends ProcessManagerRepository<RepositoryId, RepoBuildProcess, RepositoryBuild> {
+    object Plugin {
 
-    private final TravisClient client;
-
-    RepoBuildRepository(TravisClient client) {
-        super();
-        this.client = checkNotNull(client);
-    }
-
-    @Override
-    protected void configure(RepoBuildProcess processManager) {
-        super.configure(processManager);
-        processManager.setClient(client);
+        // https://github.com/uber/NullAway
+        const val nullaway = "com.uber.nullaway:nullaway:${nullawayVersion}"
     }
 }

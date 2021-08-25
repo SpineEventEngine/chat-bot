@@ -24,24 +24,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-plugins {
-    java
-}
+import io.spine.internal.dependency.CheckerFramework
+import io.spine.internal.dependency.ErrorProne
+import io.spine.internal.dependency.FindBugs
+import io.spine.internal.dependency.Flogger
+import io.spine.internal.dependency.Gson
+import io.spine.internal.dependency.Guava
+import io.spine.internal.dependency.JavaX
+import io.spine.internal.dependency.Protobuf
+import io.spine.internal.dependency.Spine
+import io.spine.internal.dependency.Truth
 
-repositories {
-    google()
-    mavenCentral()
+plugins {
+    `java-library`
 }
 
 configurations.all {
     resolutionStrategy {
         force(
-            Deps.build.guava,
-            Deps.build.errorProneAnnotations,
-            Deps.build.spine.base,
-            Deps.build.spine.core,
-            Deps.build.spine.server,
-            Deps.build.spine.client
+            CheckerFramework.annotations,
+            ErrorProne.annotations,
+            Guava.lib,
+            Guava.testLib,
+            FindBugs.annotations,
+            Flogger.lib,
+            Gson.lib,
+            JavaX.annotations,
+            Protobuf.libs,
+            Truth.libs,
+            Spine.Stable.base,
+            Spine.Stable.core,
+            Spine.Stable.server,
+            Spine.Stable.client,
+            Spine.Stable.time,
+            Spine.Stable.Test.base,
+            Spine.Stable.Test.core,
+            Spine.Stable.Test.server,
+            Spine.Stable.Test.client,
+            Spine.Stable.Test.time
         )
     }
 }

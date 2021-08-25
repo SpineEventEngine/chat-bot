@@ -28,7 +28,7 @@ package io.spine.chatbot.google.chat;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.chat.v1.HangoutsChat;
 import com.google.auth.http.HttpCredentialsAdapter;
 
@@ -66,7 +66,7 @@ final class HangoutsChatFactory {
     private static HangoutsChat.Builder
     chatWithCredentials(HttpCredentialsAdapter credentialsAdapter) {
         var transport = newTrustedTransport();
-        var jacksonFactory = JacksonFactory.getDefaultInstance();
+        var jacksonFactory = GsonFactory.getDefaultInstance();
         return new HangoutsChat.Builder(transport, jacksonFactory, credentialsAdapter);
     }
 

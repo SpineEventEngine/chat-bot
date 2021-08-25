@@ -24,31 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.internal.dependency
 
-import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.build.RepositoryBuild;
-import io.spine.chatbot.travis.TravisClient;
-import io.spine.server.procman.ProcessManagerRepository;
+// https://github.com/google/flogger
+object Flogger {
+    internal const val version = "0.6"
+    const val lib = "com.google.flogger:flogger:${version}"
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-/**
- * The repository for {@link RepoBuildProcess}es.
- */
-final class RepoBuildRepository
-        extends ProcessManagerRepository<RepositoryId, RepoBuildProcess, RepositoryBuild> {
-
-    private final TravisClient client;
-
-    RepoBuildRepository(TravisClient client) {
-        super();
-        this.client = checkNotNull(client);
-    }
-
-    @Override
-    protected void configure(RepoBuildProcess processManager) {
-        super.configure(processManager);
-        processManager.setClient(client);
+    @Suppress("unused")
+    object Runtime {
+        const val systemBackend = "com.google.flogger:flogger-system-backend:${version}"
+        const val log4J = "com.google.flogger:flogger-log4j:${version}"
+        const val slf4J = "com.google.flogger:slf4j-backend-factory:${version}"
+        const val log4J2 = "com.google.flogger:flogger-log4j2-backend:${version}"
     }
 }

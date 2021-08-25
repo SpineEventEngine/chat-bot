@@ -24,31 +24,38 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+import io.spine.internal.dependency.CheckStyle
+import io.spine.internal.dependency.Pmd
 
-import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.build.RepositoryBuild;
-import io.spine.chatbot.travis.TravisClient;
-import io.spine.server.procman.ProcessManagerRepository;
+plugins {
+    java
+    pmd
+    checkstyle
+}
 
-import static com.google.common.base.Preconditions.checkNotNull;
+pmd {
+    toolVersion = Pmd.version
+    isConsoleOutput = true
+    // The build is going to fail in case of violations.
+    isIgnoreFailures = false
+    incrementalAnalysis.set(true)
 
-/**
- * The repository for {@link RepoBuildProcess}es.
- */
-final class RepoBuildRepository
-        extends ProcessManagerRepository<RepositoryId, RepoBuildProcess, RepositoryBuild> {
+    ruleSets = listOf()
+    ruleSetFiles = files("${rootDir}/buildSrc/src/main/resources/pmd.xml")
 
-    private final TravisClient client;
+    reportsDir = file("build/reports/pmd")
+    sourceSets = listOf(project.sourceSets.named("main").get())
+}
 
-    RepoBuildRepository(TravisClient client) {
-        super();
-        this.client = checkNotNull(client);
-    }
+checkstyle {
+    toolVersion = CheckStyle.version
 
-    @Override
-    protected void configure(RepoBuildProcess processManager) {
-        super.configure(processManager);
-        processManager.setClient(client);
-    }
+    // The build is going to fail in case of violations.
+    isIgnoreFailures = true
+
+    configDirectory.set(file("${rootDir}/buildSrc/src/main/resources"))
+    configFile = file("${rootDir}/buildSrc/src/main/resources/checkstyle.xml")
+
+    reportsDir = file("build/reports/checkstyle")
+    sourceSets = listOf(project.sourceSets.named("main").get())
 }

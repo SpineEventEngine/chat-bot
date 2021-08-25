@@ -24,31 +24,15 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.internal.dependency
 
-import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.build.RepositoryBuild;
-import io.spine.chatbot.travis.TravisClient;
-import io.spine.server.procman.ProcessManagerRepository;
+object Gcp {
+    private const val bomVersion = "20.0.0"
+    private const val chatVersion = "v1-rev20210814-1.32.1"
 
-import static com.google.common.base.Preconditions.checkNotNull;
+    const val bom = "com.google.cloud:libraries-bom:${bomVersion}"
+    const val secretManager = "com.google.cloud:google-cloud-secretmanager"
+    const val auth = "com.google.auth:google-auth-library-oauth2-http"
 
-/**
- * The repository for {@link RepoBuildProcess}es.
- */
-final class RepoBuildRepository
-        extends ProcessManagerRepository<RepositoryId, RepoBuildProcess, RepositoryBuild> {
-
-    private final TravisClient client;
-
-    RepoBuildRepository(TravisClient client) {
-        super();
-        this.client = checkNotNull(client);
-    }
-
-    @Override
-    protected void configure(RepoBuildProcess processManager) {
-        super.configure(processManager);
-        processManager.setClient(client);
-    }
+    const val chat = "com.google.apis:google-api-services-chat:${chatVersion}"
 }

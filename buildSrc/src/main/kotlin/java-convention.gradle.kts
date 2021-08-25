@@ -24,12 +24,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import io.spine.internal.dependency.CheckerFramework
+import io.spine.internal.dependency.ErrorProne
+import io.spine.internal.dependency.FindBugs
+import io.spine.internal.dependency.Guava
+import io.spine.internal.dependency.JUnit
+import io.spine.internal.dependency.JavaX
+import io.spine.internal.dependency.Truth
+import io.spine.internal.dependency.Gcp
 import net.ltgt.gradle.errorprone.errorprone
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    java
+    `java-library`
     id("net.ltgt.errorprone")
 }
 
@@ -39,16 +47,23 @@ java {
 }
 
 dependencies {
-    errorprone(Deps.build.errorProneCore)
-    implementation(Deps.build.guava)
-    compileOnly(Deps.build.jsr305Annotations)
-    compileOnly(Deps.build.checkerAnnotations)
-    Deps.build.errorProneAnnotations.forEach { compileOnly(it) }
+    errorprone(ErrorProne.core)
+    errorprone(ErrorProne.Plugin.nullaway)
+    compileOnlyApi(CheckerFramework.annotations)
+    compileOnlyApi(FindBugs.annotations)
+    compileOnlyApi(JavaX.annotations)
+    ErrorProne.annotations.forEach { compileOnlyApi(it) }
 
-    testImplementation(Deps.test.guavaTestlib)
-    Deps.test.junit5Api.forEach { testImplementation(it) }
-    Deps.test.truth.forEach { testImplementation(it) }
-    testRuntimeOnly(Deps.test.junit5Runner)
+    constraints {
+        implementation(Guava.lib)
+    }
+    api(platform(Gcp.bom))
+    implementation(Guava.lib)
+    testImplementation(Guava.testLib)
+    testImplementation(enforcedPlatform(JUnit.bom))
+    JUnit.api.forEach { testImplementation(it) }
+    Truth.libs.forEach { testImplementation(it) }
+    testRuntimeOnly(JUnit.engine)
 }
 
 tasks.test {
@@ -66,7 +81,6 @@ tasks.test {
 }
 
 tasks.compileJava {
-    options.errorprone.disableWarningsInGeneratedCode.set(true)
     // Explicitly states the encoding of the source and test source files, ensuring
     // correct execution of the `javac` task.
     options.encoding = "UTF-8"
@@ -90,4 +104,13 @@ tasks.compileJava {
             "-Xep:CheckReturnValue:OFF"
         )
     )
+
+    options.errorprone {
+        option("NullAway:AnnotatedPackages", "io.spine.chatbot")
+        disableWarningsInGeneratedCode.set(true)
+    }
+}
+
+tasks.compileTestJava {
+    options.errorprone.isEnabled.set(false)
 }

@@ -24,31 +24,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.internal.dependency
 
-import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.build.RepositoryBuild;
-import io.spine.chatbot.travis.TravisClient;
-import io.spine.server.procman.ProcessManagerRepository;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
-/**
- * The repository for {@link RepoBuildProcess}es.
- */
-final class RepoBuildRepository
-        extends ProcessManagerRepository<RepositoryId, RepoBuildProcess, RepositoryBuild> {
-
-    private final TravisClient client;
-
-    RepoBuildRepository(TravisClient client) {
-        super();
-        this.client = checkNotNull(client);
-    }
-
-    @Override
-    protected void configure(RepoBuildProcess processManager) {
-        super.configure(processManager);
-        processManager.setClient(client);
-    }
+// https://logging.apache.org/log4j/2.x/
+object Log4j2 {
+    const val version = "2.14.1"
+    const val core = "org.apache.logging.log4j:log4j-core:${version}"
+    const val api = "org.apache.logging.log4j:log4j-api:${version}"
+    const val slf4jBridge = "org.apache.logging.log4j:log4j-slf4j18-impl:${version}"
 }

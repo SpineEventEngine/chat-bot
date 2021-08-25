@@ -24,31 +24,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package io.spine.chatbot.server.github;
+package io.spine.internal.dependency
 
-import io.spine.chatbot.github.RepositoryId;
-import io.spine.chatbot.github.repository.build.RepositoryBuild;
-import io.spine.chatbot.travis.TravisClient;
-import io.spine.server.procman.ProcessManagerRepository;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-
-/**
- * The repository for {@link RepoBuildProcess}es.
- */
-final class RepoBuildRepository
-        extends ProcessManagerRepository<RepositoryId, RepoBuildProcess, RepositoryBuild> {
-
-    private final TravisClient client;
-
-    RepoBuildRepository(TravisClient client) {
-        super();
-        this.client = checkNotNull(client);
-    }
-
-    @Override
-    protected void configure(RepoBuildProcess processManager) {
-        super.configure(processManager);
-        processManager.setClient(client);
-    }
+// https://micronaut.io/
+object Micronaut {
+    const val version = "2.5.12"
+    const val inject = "io.micronaut:micronaut-inject"
+    const val validation = "io.micronaut:micronaut-validation"
+    const val runtime = "io.micronaut:micronaut-runtime"
+    const val netty = "io.micronaut:micronaut-http-server-netty"
+    const val testJUnit5 = "io.micronaut.test:micronaut-test-junit5"
+    const val httpClient = "io.micronaut:micronaut-http-client"
+    const val annotationApi = "javax.annotation:javax.annotation-api"
 }
