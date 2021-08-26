@@ -31,6 +31,8 @@ steps:
   - name: 'gradle:7.2-jdk16'
     entrypoint: 'gradle'
     args: [ 'build', 'jib', '-PGCP_PROJECT=${PROJECT_ID}' ]
+    env: ["GITHUB_ACTOR=CloudBuild"]
+    secretEnv: ["GITHUB_TOKEN"]
   # The following step deploys the previously produced container image to the Cloud Run environment
   # with the pre-configured `GCP_PROJECT_ID` environment variable.
   - name: 'google/cloud-sdk:slim'
@@ -46,3 +48,7 @@ steps:
 timeout: 1200s
 substitutions:
   _SERVICE_NAME: "chat-bot-server"
+availableSecrets:
+  secretManager:
+    - versionName: projects/1032487587652/secrets/GithubToken:latest
+      env: "GITHUB_TOKEN"
