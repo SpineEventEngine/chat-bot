@@ -112,5 +112,10 @@ jib {
     }
     container {
         mainClass = appClassName
+        jvmFlags = listOf(
+            "-server",
+            "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
+            "-Dflogger.backend_factory=com.google.common.flogger.backend.log4j2.Log4j2BackendFactory#getInstance"
+        )
     }
 }
