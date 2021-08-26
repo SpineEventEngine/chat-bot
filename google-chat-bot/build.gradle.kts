@@ -101,6 +101,9 @@ application {
 }
 
 jib {
+    from {
+        image = "amazoncorretto:16"
+    }
     to {
         image = "gcr.io/${extras.gcpProject}/chat-bot-server"
         tags = setOf("latest", extras.git.hash, extras.git.shortHash, "v${version}")
