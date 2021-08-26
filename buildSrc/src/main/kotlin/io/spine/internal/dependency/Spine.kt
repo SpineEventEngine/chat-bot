@@ -30,12 +30,15 @@ package io.spine.internal.dependency
 object Spine {
     private const val baseVersion = "2.0.0-SNAPSHOT.47"
     private const val coreVersion = "2.0.0-SNAPSHOT.47"
+    private const val gcloudVersion = "2.0.0-SNAPSHOT.4"
 
     const val base = "io.spine:spine-base:${baseVersion}"
     const val client = "io.spine:spine-client:${coreVersion}"
     const val server = "io.spine:spine-server:${coreVersion}"
     const val serverProto = "io.spine:spine-server:${coreVersion}:proto"
     const val core = "io.spine:spine-core:${coreVersion}"
+    const val datastore = "io.spine.gcloud:spine-datastore:${gcloudVersion}"
+    const val pubsub = "io.spine.gcloud:spine-pubsub:${gcloudVersion}"
 
     object Test {
         const val base = "io.spine.tools:spine-testlib:${baseVersion}"
