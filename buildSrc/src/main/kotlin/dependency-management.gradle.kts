@@ -53,6 +53,7 @@ configurations.all {
             Protobuf.libs,
             Truth.libs,
             Spine.base,
+            Spine.baseTypes,
             Spine.core,
             Spine.server,
             Spine.client,
