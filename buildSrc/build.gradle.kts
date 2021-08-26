@@ -28,22 +28,51 @@ plugins {
     `kotlin-dsl`
 }
 
+
 repositories {
-    google()
+    mavenLocal()
     mavenCentral()
+    google()
     gradlePluginPortal()
+    maven("https://spine.mycloudrepo.io/public/repositories/releases") {
+        content {
+            includeGroup("io.spine")
+            includeGroup("io.spine.tools")
+            includeGroup("io.spine.gcloud")
+        }
+        mavenContent {
+            releasesOnly()
+        }
+    }
+    maven("https://spine.mycloudrepo.io/public/repositories/snapshots")
+    maven("https://maven.pkg.github.com/SpineEventEngine/base-types") {
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
+    maven("https://maven.pkg.github.com/SpineEventEngine/base") {
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
+    maven("https://maven.pkg.github.com/SpineEventEngine/core-java") {
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
 }
 
+val spineBaseVersion = "2.0.0-SNAPSHOT.47"
+
 dependencies {
+    implementation("io.spine.tools:spine-mc-java:${spineBaseVersion}")
     implementation("net.ltgt.gradle:gradle-errorprone-plugin:2.0.2")
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.8.17")
     implementation("com.github.jengelman.gradle.plugins:shadow:6.1.0")
     implementation("gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:3.1.2")
-    implementation("io.spine.tools:spine-bootstrap:1.7.1")
     implementation("net.saliman:gradle-properties-plugin:1.5.1")
     implementation("io.micronaut.gradle:micronaut-gradle-plugin:1.5.4")
-}
-
-kotlinDslPluginOptions {
-    experimentalWarning.set(false)
 }

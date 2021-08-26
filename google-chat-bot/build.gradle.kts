@@ -36,15 +36,11 @@ import io.spine.internal.dependency.Spine
 plugins {
     id("com.github.johnrengelman.shadow")
     id("com.google.cloud.tools.jib")
-    id("io.spine.tools.gradle.bootstrap")
     id("io.micronaut.application")
+    `spine`
 }
 
 val extras by extra(io.spine.internal.gradle.prepareExtras(project))
-
-spine {
-    enableJava().server()
-}
 
 micronaut {
     runtime(MicronautRuntime.NETTY)
@@ -71,8 +67,9 @@ dependencies {
     }
     implementation(Flogger.lib)
 
-    implementation(Spine.Stable.datastore)
-    implementation(Spine.Stable.pubsub)
+    implementation(Spine.server)
+    implementation(Spine.datastore)
+    implementation(Spine.pubsub)
 
     implementation(Gcp.secretManager)
 
@@ -81,6 +78,7 @@ dependencies {
 
     testImplementation(Micronaut.testJUnit5)
     testImplementation(Micronaut.httpClient)
+    implementation(Spine.Test.server)
 }
 
 val appClassName = "io.spine.chatbot.Application"

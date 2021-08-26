@@ -24,44 +24,62 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import io.spine.internal.dependency.CheckerFramework
-import io.spine.internal.dependency.ErrorProne
-import io.spine.internal.dependency.FindBugs
-import io.spine.internal.dependency.Flogger
-import io.spine.internal.dependency.Gson
-import io.spine.internal.dependency.Guava
-import io.spine.internal.dependency.JavaX
+import com.google.protobuf.gradle.protoc
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
-import io.spine.internal.dependency.Truth
+import org.gradle.plugins.ide.idea.model.Module
+import org.gradle.plugins.ide.idea.model.ModuleLibrary
 
 plugins {
     `java-library`
+    idea
+    id("com.google.protobuf")
+    id("io.spine.mc-java")
 }
 
-configurations.all {
-    resolutionStrategy {
-        force(
-            CheckerFramework.annotations,
-            ErrorProne.annotations,
-            Guava.lib,
-            Guava.testLib,
-            FindBugs.annotations,
-            Flogger.lib,
-            Gson.lib,
-            JavaX.annotations,
-            Protobuf.libs,
-            Truth.libs,
-            Spine.base,
-            Spine.core,
-            Spine.server,
-            Spine.client,
-            Spine.time,
-            Spine.Test.base,
-            Spine.Test.core,
-            Spine.Test.server,
-            Spine.Test.client,
-            Spine.Test.time
-        )
+
+val generatedRootDir = "${projectDir}/generated"
+val generatedSpineDir = file("${generatedRootDir}/main/spine")
+val generatedTestSpineDir = file("${generatedRootDir}/test/spine")
+
+sourceSets {
+    main {
+        java {
+            srcDir(generatedSpineDir)
+        }
     }
+    test {
+        java {
+            srcDir(generatedTestSpineDir)
+        }
+    }
+}
+
+idea {
+    module {
+        sourceDirs.add(generatedSpineDir)
+        generatedSourceDirs.add(generatedSpineDir)
+        testSourceDirs.add(generatedTestSpineDir)
+        iml {
+            beforeMerged(Action<Module> {
+                dependencies.clear()
+            })
+            whenMerged(Action<Module> {
+                dependencies.forEach {
+                    (it as ModuleLibrary).isExported = true
+                }
+            })
+        }
+    }
+}
+
+dependencies {
+    Protobuf.libs.forEach { implementation(it) }
+    implementation(Spine.base)
+    implementation(Spine.baseTypes)
+    testImplementation(Spine.Test.base)
+}
+
+protobuf.protobuf.protoc {
+    artifact = Protobuf.compiler
 }
