@@ -41,13 +41,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Delivery#deliverMessagesFrom} with server environment-specific logging and provides helpers
  * that unifies the usage of the delivery.
  */
-final class ShardDelivery implements Logging {
-
-    private final ShardIndex shard;
-
-    private ShardDelivery(ShardIndex shard) {
-        this.shard = shard;
-    }
+record ShardDelivery(ShardIndex shard) implements Logging {
 
     /**
      * Delivers the {@code message}.

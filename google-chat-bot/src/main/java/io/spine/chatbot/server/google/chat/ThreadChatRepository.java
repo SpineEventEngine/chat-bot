@@ -38,6 +38,7 @@ import io.spine.server.procman.ProcessManagerRepository;
 import io.spine.server.route.EventRoute;
 import io.spine.server.route.EventRouting;
 
+import java.io.Serial;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -73,6 +74,7 @@ final class ThreadChatRepository
     private static class RepositoryEventRoute<M extends RepositoryAwareEvent>
             implements EventRoute<ThreadId, M> {
 
+        @Serial
         private static final long serialVersionUID = 0L;
 
         @Override

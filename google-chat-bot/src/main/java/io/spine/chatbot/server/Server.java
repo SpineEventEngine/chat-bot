@@ -116,13 +116,7 @@ public final class Server implements Logging {
     /**
      * Gracefully stops the {@link #server}.
      */
-    private static final class ShutdownHook implements Runnable, Logging {
-
-        private final io.spine.server.Server server;
-
-        private ShutdownHook(io.spine.server.Server server) {
-            this.server = server;
-        }
+    private record ShutdownHook(io.spine.server.Server server) implements Runnable, Logging {
 
         private static Thread newInstance(io.spine.server.Server server) {
             checkNotNull(server);

@@ -69,10 +69,9 @@ abstract class Query<T extends TravisResponse> {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Query)) {
+        if (!(o instanceof Query<?> query)) {
             return false;
         }
-        Query<?> query = (Query<?>) o;
         return Objects.equal(responseType, query.responseType) &&
                 Objects.equal(request, query.request);
     }

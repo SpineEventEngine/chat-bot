@@ -43,13 +43,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @param <T>
  *         the Protobuf message supplied in the response body
  */
-final class JsonProtoBodyHandler<T extends Message> implements HttpResponse.BodyHandler<T> {
-
-    private final Class<T> type;
-
-    private JsonProtoBodyHandler(Class<T> type) {
-        this.type = type;
-    }
+record JsonProtoBodyHandler<T extends Message>(Class<T> type)
+        implements HttpResponse.BodyHandler<T> {
 
     /**
      * Creates a body handler for a specified Protobuf message.
