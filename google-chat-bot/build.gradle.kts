@@ -37,7 +37,7 @@ plugins {
     id("com.github.johnrengelman.shadow")
     id("com.google.cloud.tools.jib")
     id("io.micronaut.application")
-    `spine`
+    spine
 }
 
 val extras by extra(io.spine.internal.gradle.prepareExtras(project))
