@@ -36,4 +36,5 @@ import io.spine.base.EventMessage;
 @GeneratedMixin
 @Immutable
 public interface RepositoryAwareEvent extends RepositoryAware, EventMessage {
+
 }

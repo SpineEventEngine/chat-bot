@@ -54,9 +54,9 @@ import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource
 @DisplayName("`GoogleChat` should")
 final class GoogleChatTest {
 
-    @DisplayName("send a message to")
     @Nested
-    @SuppressWarnings("ClassCanBeStatic") // jUnit5 is not able to work with nested static class
+    @DisplayName("send a message to")
+    @SuppressWarnings("ClassCanBeStatic" /* jUnit5 is not able to work with nested static class. */)
     final class SendMessage {
 
         private final RepositoryId repo = repository("SpineEventEngine/publisher");

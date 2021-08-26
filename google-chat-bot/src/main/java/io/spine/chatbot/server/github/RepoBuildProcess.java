@@ -44,7 +44,6 @@ import io.spine.chatbot.google.chat.SpaceId;
 import io.spine.chatbot.travis.BuildsQuery;
 import io.spine.chatbot.travis.RepoBranchBuildResponse;
 import io.spine.chatbot.travis.TravisClient;
-import io.spine.logging.Logging;
 import io.spine.net.Urls;
 import io.spine.server.command.Assign;
 import io.spine.server.procman.ProcessManager;
@@ -74,8 +73,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  * Or, if the repository builds cannot be retrieved, throws {@link NoBuildsFound} rejection.
  */
 final class RepoBuildProcess
-        extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder>
-        implements Logging {
+        extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder> {
 
     @LazyInit
     private @MonotonicNonNull TravisClient client;

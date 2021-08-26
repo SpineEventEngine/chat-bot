@@ -37,7 +37,6 @@ import io.spine.chatbot.google.chat.event.MessageCreated;
 import io.spine.chatbot.google.chat.event.ThreadCreated;
 import io.spine.chatbot.google.chat.thread.ThreadChat;
 import io.spine.core.External;
-import io.spine.logging.Logging;
 import io.spine.protobuf.Messages;
 import io.spine.server.event.React;
 import io.spine.server.procman.ProcessManager;
@@ -49,8 +48,7 @@ import java.util.Optional;
 /**
  * A process of notifying thread members about the changes in the watched resouces.
  */
-final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, ThreadChat.Builder>
-        implements Logging {
+final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, ThreadChat.Builder> {
 
     @LazyInit
     private @MonotonicNonNull GoogleChatClient client;

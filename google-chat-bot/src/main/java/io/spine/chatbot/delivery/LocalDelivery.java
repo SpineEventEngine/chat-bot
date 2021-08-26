@@ -27,13 +27,10 @@
 package io.spine.chatbot.delivery;
 
 import com.google.protobuf.util.Durations;
-import io.spine.server.delivery.CatchUpStorage;
 import io.spine.server.delivery.Delivery;
-import io.spine.server.delivery.InboxStorage;
 import io.spine.server.delivery.UniformAcrossAllShards;
 import io.spine.server.delivery.memory.InMemoryShardedWorkRegistry;
-import io.spine.server.storage.memory.InMemoryCatchUpStorage;
-import io.spine.server.storage.memory.InMemoryInboxStorage;
+import io.spine.server.storage.memory.InMemoryStorageFactory;
 
 /**
  * A {@link Delivery} factory that creates deliveries for local or test environments.
@@ -53,25 +50,16 @@ public final class LocalDelivery {
      * Creates a new instance of an in-memory local delivery.
      */
     private static Delivery delivery() {
+        var storages = InMemoryStorageFactory.newInstance();
         var delivery = Delivery
                 .newBuilder()
-                .setInboxStorage(singleTenantInboxStorage())
-                .setCatchUpStorage(singleTenantCatchupStorage())
+                .setInboxStorage(storages.createInboxStorage(false))
+                .setCatchUpStorage(storages.createCatchUpStorage(false))
                 .setWorkRegistry(new InMemoryShardedWorkRegistry())
                 .setStrategy(UniformAcrossAllShards.singleShard())
                 .setDeduplicationWindow(Durations.fromSeconds(0))
                 .build();
         delivery.subscribe(ShardDelivery::deliver);
         return delivery;
-    }
-
-    @SuppressWarnings("TestOnlyProblems") // we do want the in-memory delivery in local-dev env
-    private static InboxStorage singleTenantInboxStorage() {
-        return new InMemoryInboxStorage(false);
-    }
-
-    @SuppressWarnings("TestOnlyProblems") // we do want the in-memory delivery in local-dev env
-    private static CatchUpStorage singleTenantCatchupStorage() {
-        return new InMemoryCatchUpStorage(false);
     }
 }

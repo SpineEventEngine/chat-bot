@@ -26,11 +26,12 @@
 
 package io.spine.chatbot.delivery;
 
+import io.spine.server.ContextSpec;
 import io.spine.server.delivery.Delivery;
 import io.spine.server.delivery.ShardedWorkRegistry;
 import io.spine.server.delivery.UniformAcrossAllShards;
 import io.spine.server.storage.datastore.DatastoreStorageFactory;
-import io.spine.server.storage.datastore.DsShardedWorkRegistry;
+import io.spine.server.storage.datastore.delivery.DsShardedWorkRegistry;
 
 /**
  * Delivers messages using Datastore as the underlying storage.
@@ -56,7 +57,9 @@ final class DistributedDelivery {
      * to be single-tenant.
      */
     public static Delivery instance(DatastoreStorageFactory storageFactory) {
-        var workRegistry = new DsShardedWorkRegistry(storageFactory);
+        var workRegistry = new DsShardedWorkRegistry(
+                storageFactory, ContextSpec.singleTenant("ChatBot-Delivery")
+        );
         var inboxStorage = storageFactory.createInboxStorage(false);
         var delivery = Delivery
                 .newBuilder()

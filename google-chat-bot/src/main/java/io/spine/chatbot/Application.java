@@ -79,6 +79,7 @@ public final class Application implements Logging {
     /**
      * Configures Log4j2 as the <a href="https://github.com/google/flogger">Flogger</a> backend.
      */
+    @SuppressWarnings("AccessOfSystemProperties" /* We do want to configure Flogger props. */)
     private static void useLog4j2FloggerBackend() {
         System.setProperty(
                 "flogger.backend_factory",

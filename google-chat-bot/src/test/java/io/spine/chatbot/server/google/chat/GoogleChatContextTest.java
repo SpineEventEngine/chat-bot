@@ -30,7 +30,7 @@ import io.spine.chatbot.google.chat.InMemoryGoogleChatClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.testing.Tests.nullRef;
+import static io.spine.testing.TestValues.nullRef;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -48,13 +48,14 @@ final class GoogleChatContextTest {
         );
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     @DisplayName("not allow passing `null` value as Google Chat client")
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     void notAllowNullTravisClients() {
         assertThrows(
                 NullPointerException.class, () -> GoogleChatContext.newBuilder()
                                                                    .setClient(nullRef())
+                                                                   .build()
         );
     }
 }

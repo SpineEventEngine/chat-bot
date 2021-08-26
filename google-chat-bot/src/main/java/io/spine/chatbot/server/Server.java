@@ -106,9 +106,8 @@ public final class Server implements Logging {
         _config().log("Initializing server environment.");
         Env.init();
         _config().log("Bootstrapping server.");
-        io.spine.server.Server.Builder serverBuilder = io.spine.server.Server.inProcess(
-                SERVER_NAME);
-        for (ContextBuilderAware contextAware : contexts) {
+        var serverBuilder = io.spine.server.Server.inProcess(SERVER_NAME);
+        for (var contextAware : contexts) {
             serverBuilder.add(contextAware.builder());
         }
         grpcServer = serverBuilder.build();

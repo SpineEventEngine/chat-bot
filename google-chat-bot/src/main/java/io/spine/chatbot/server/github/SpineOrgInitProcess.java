@@ -42,7 +42,6 @@ import io.spine.chatbot.travis.ReposQuery;
 import io.spine.chatbot.travis.Repository;
 import io.spine.chatbot.travis.TravisClient;
 import io.spine.core.External;
-import io.spine.logging.Logging;
 import io.spine.net.Urls;
 import io.spine.server.command.Command;
 import io.spine.server.procman.ProcessManager;
@@ -62,8 +61,7 @@ import static io.spine.chatbot.net.MoreUrls.travisUrlFor;
  * the ChatBot to the space.
  */
 final class SpineOrgInitProcess
-        extends ProcessManager<OrganizationId, OrganizationInit, OrganizationInit.Builder>
-        implements Logging {
+        extends ProcessManager<OrganizationId, OrganizationInit, OrganizationInit.Builder> {
 
     private static final ImmutableList<String> WATCHED_REPOS = ImmutableList.of(
             "base", "time", "core-java", "web", "gcloud-java", "bootstrap", "money", "jdbc-storage"

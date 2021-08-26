@@ -31,7 +31,8 @@ import io.spine.chatbot.github.Slug;
 /**
  * A branch builds query to the Travis CI API.
  *
- * @see <a href="https://developer.travis-ci.com/resource/branch#find">Finding the branch build</a>
+ * @see <a href="https://developer.travis-ci.com/resource/branch#find">Finding the branch
+ *         build</a>
  */
 public final class BuildsQuery extends Query<RepoBranchBuildResponse> {
 
