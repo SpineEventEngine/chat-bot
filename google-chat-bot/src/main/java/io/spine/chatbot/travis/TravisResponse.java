@@ -32,5 +32,4 @@ import com.google.protobuf.Message;
  * Travis CI API response marker.
  */
 public interface TravisResponse extends Message {
-
 }
