@@ -34,6 +34,7 @@ import io.spine.internal.dependency.JavaX
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Truth
+import io.spine.internal.dependency.Log4j2
 
 plugins {
     `java-library`
@@ -47,7 +48,6 @@ configurations.all {
             Guava.lib,
             Guava.testLib,
             FindBugs.annotations,
-            Flogger.lib,
             Gson.lib,
             JavaX.annotations,
             Protobuf.libs,
@@ -61,7 +61,16 @@ configurations.all {
             Spine.Test.core,
             Spine.Test.server,
             Spine.Test.client,
-            Spine.Test.time
+            Spine.Test.time,
+            Flogger.lib,
+            Log4j2.slf4jBridge,
+            Log4j2.api,
+            Log4j2.core,
+            Log4j2.julBridge,
+            Log4j2.jclBridge,
+            "org.slf4j:slf4j-api:2.0.0-alpha2"
         )
     }
+    exclude("com.google.guava", "guava-jdk5")
+    exclude("org.slf4j", "slf4j-jdk14")
 }
