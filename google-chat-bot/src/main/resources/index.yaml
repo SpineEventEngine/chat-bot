@@ -65,6 +65,14 @@ indexes:
       - name: of_total_inbox_shards
       - name: status
 
+  - kind: spine.server.aggregate.AggregateEventRecord
+    properties:
+      - name: aggregate_id
+      - name: version
+        direction: desc
+      - name: created
+        direction: desc
+
   - kind: spine.system.server.CommandLifecycle
     properties:
       - name: aggregate_id
