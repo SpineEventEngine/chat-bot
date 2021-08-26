@@ -61,6 +61,8 @@ dependencies {
     runtimeOnly(Log4j2.core)
     runtimeOnly(Log4j2.api)
     runtimeOnly(Log4j2.slf4jBridge)
+    runtimeOnly(Log4j2.jclBridge)
+    runtimeOnly(Log4j2.julBridge)
     runtimeOnly(Flogger.Runtime.log4J2) {
         exclude("org.apache.logging.log4j:log4j-api")
         exclude("org.apache.logging.log4j:log4j-core")
@@ -78,7 +80,7 @@ dependencies {
 
     testImplementation(Micronaut.testJUnit5)
     testImplementation(Micronaut.httpClient)
-    implementation(Spine.Test.server)
+    testImplementation(Spine.Test.server)
 }
 
 val appClassName = "io.spine.chatbot.Application"
