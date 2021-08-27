@@ -17,11 +17,11 @@ via the [Google Chat][google-chat].
 
 # Prerequisites
 
-* [JDK 11][jdk11] or newer.
+* [JDK 16][jdk16] or newer.
 * [Docker SE][docker] v19.03 or newer.
 
 [docker]: https://docs.docker.com/get-docker/
-[jdk11]: https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/downloads-list.html
+[jdk16]: https://docs.aws.amazon.com/corretto/latest/corretto-16-ug/downloads-list.html
 
 # Build
 

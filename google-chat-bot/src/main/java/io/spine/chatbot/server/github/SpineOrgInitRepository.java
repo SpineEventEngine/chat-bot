@@ -36,7 +36,6 @@ import io.spine.server.route.EventRouting;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.chatbot.server.github.SpineOrgInitProcess.ORGANIZATION;
-import static io.spine.server.route.EventRoute.withId;
 
 /**
  * The repository for {@link SpineOrgInitProcess}.
@@ -55,7 +54,7 @@ final class SpineOrgInitRepository
     @OverridingMethodsMustInvokeSuper
     protected void setupEventRouting(EventRouting<OrganizationId> routing) {
         super.setupEventRouting(routing);
-        routing.route(SpaceRegistered.class, (event, context) -> withId(ORGANIZATION));
+        routing.unicast(SpaceRegistered.class, e -> ORGANIZATION);
     }
 
     @Override

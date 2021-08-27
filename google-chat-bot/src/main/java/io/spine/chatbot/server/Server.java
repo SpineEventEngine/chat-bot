@@ -106,9 +106,8 @@ public final class Server implements Logging {
         _config().log("Initializing server environment.");
         Env.init();
         _config().log("Bootstrapping server.");
-        io.spine.server.Server.Builder serverBuilder = io.spine.server.Server.inProcess(
-                SERVER_NAME);
-        for (ContextBuilderAware contextAware : contexts) {
+        var serverBuilder = io.spine.server.Server.inProcess(SERVER_NAME);
+        for (var contextAware : contexts) {
             serverBuilder.add(contextAware.builder());
         }
         grpcServer = serverBuilder.build();
@@ -117,13 +116,7 @@ public final class Server implements Logging {
     /**
      * Gracefully stops the {@link #server}.
      */
-    private static final class ShutdownHook implements Runnable, Logging {
-
-        private final io.spine.server.Server server;
-
-        private ShutdownHook(io.spine.server.Server server) {
-            this.server = server;
-        }
+    private record ShutdownHook(io.spine.server.Server server) implements Runnable, Logging {
 
         private static Thread newInstance(io.spine.server.Server server) {
             checkNotNull(server);

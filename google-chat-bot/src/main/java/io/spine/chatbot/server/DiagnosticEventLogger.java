@@ -28,7 +28,6 @@ package io.spine.chatbot.server;
 
 import io.spine.base.Identifier;
 import io.spine.core.Subscribe;
-import io.spine.logging.Logging;
 import io.spine.server.event.AbstractEventSubscriber;
 import io.spine.system.server.CannotDispatchDuplicateCommand;
 import io.spine.system.server.CannotDispatchDuplicateEvent;
@@ -42,7 +41,7 @@ import java.util.stream.Collectors;
 /**
  * Logs internal diagnostic events to ease applications management.
  */
-public final class DiagnosticEventLogger extends AbstractEventSubscriber implements Logging {
+public final class DiagnosticEventLogger extends AbstractEventSubscriber {
 
     /**
      * Logs entity constraint violation rejection.

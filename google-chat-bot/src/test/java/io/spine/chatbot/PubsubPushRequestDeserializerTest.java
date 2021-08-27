@@ -43,7 +43,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 
 import static com.google.common.truth.extensions.proto.ProtoTruth.assertThat;
-import static io.spine.testing.Tests.nullRef;
+import static io.spine.testing.TestValues.nullRef;
 import static io.spine.util.Exceptions.newIllegalStateException;
 
 @MicronautTest

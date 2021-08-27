@@ -46,9 +46,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  *
  * @see <a href="https://developers.google.com/hangouts/chat/concepts">Google Chat API</a>
  */
-final class GoogleChat implements GoogleChatClient, Logging {
-
-    private final HangoutsChat chat;
+record GoogleChat(HangoutsChat chat) implements GoogleChatClient, Logging {
 
     GoogleChat(HangoutsChat chat) {
         this.chat = checkNotNull(chat);

@@ -43,8 +43,8 @@ import static io.spine.server.route.EventRoute.withId;
 final class OrgReposRepository
         extends ProjectionRepository<OrganizationId, OrgReposProjection, OrganizationRepositories> {
 
-    @OverridingMethodsMustInvokeSuper
     @Override
+    @OverridingMethodsMustInvokeSuper
     protected void setupEventRouting(EventRouting<OrganizationId> routing) {
         super.setupEventRouting(routing);
         routing.route(RepositoryRegistered.class, (event, context) ->

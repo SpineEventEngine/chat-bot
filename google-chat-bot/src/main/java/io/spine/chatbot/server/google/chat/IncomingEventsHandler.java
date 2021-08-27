@@ -32,7 +32,6 @@ import io.spine.chatbot.google.chat.incoming.event.BotRemovedFromSpace;
 import io.spine.chatbot.google.chat.incoming.event.ChatEventReceived;
 import io.spine.chatbot.google.chat.incoming.event.MessageReceived;
 import io.spine.core.External;
-import io.spine.logging.Logging;
 import io.spine.server.event.AbstractEventReactor;
 import io.spine.server.event.React;
 import io.spine.server.model.Nothing;
@@ -55,7 +54,7 @@ import static io.spine.chatbot.server.google.chat.ChatEvents.toMessageReceived;
  * <p>If the bot receives a chat event with a not supported currently event type,
  * {@link Nothing} is emitted.
  */
-final class IncomingEventsHandler extends AbstractEventReactor implements Logging {
+final class IncomingEventsHandler extends AbstractEventReactor {
 
     /**
      * Processes an incoming external {@link ChatEvent}.
@@ -70,7 +69,7 @@ final class IncomingEventsHandler extends AbstractEventReactor implements Loggin
         switch (chatEvent.getType()) {
             case MESSAGE:
                 _debug().log("A new user message received in the space `%s` (%s).",
-                            space.getDisplayName(), space.getName());
+                             space.getDisplayName(), space.getName());
                 return EitherOf4.withC(toMessageReceived(chatEvent));
             case ADDED_TO_SPACE:
                 _info().log("ChatBot added to the space `%s` (%s).",

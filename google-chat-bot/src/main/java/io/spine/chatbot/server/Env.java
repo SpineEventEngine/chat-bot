@@ -27,10 +27,10 @@
 package io.spine.chatbot.server;
 
 import com.google.cloud.datastore.DatastoreOptions;
-import io.spine.base.Environment;
-import io.spine.base.EnvironmentType;
-import io.spine.base.Production;
 import io.spine.chatbot.delivery.LocalDelivery;
+import io.spine.environment.Environment;
+import io.spine.environment.EnvironmentType;
+import io.spine.environment.Production;
 import io.spine.server.ServerEnvironment;
 import io.spine.server.storage.StorageFactory;
 import io.spine.server.storage.datastore.DatastoreStorageFactory;

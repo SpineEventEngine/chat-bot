@@ -42,15 +42,13 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  *
  * @see <a href="https://developer.travis-ci.com/">Travis CI API</a>
  */
-final class Travis implements TravisClient, Logging {
+record Travis(Token apiToken) implements TravisClient, Logging {
 
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
     private static final String BASE_URL = "https://api.travis-ci.com";
     private static final String API_HEADER = "Travis-API-Version";
     private static final String API_VERSION = "3";
     private static final String AUTH_HEADER = "Authorization";
-
-    private final Token apiToken;
 
     /**
      * Creates a new Travis client with the specified API token.

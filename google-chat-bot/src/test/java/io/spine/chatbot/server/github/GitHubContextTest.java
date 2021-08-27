@@ -30,7 +30,7 @@ import io.spine.chatbot.travis.InMemoryTravisClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.spine.testing.Tests.nullRef;
+import static io.spine.testing.TestValues.nullRef;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -47,13 +47,14 @@ final class GitHubContextTest {
         );
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     @DisplayName("not allow passing `null` value as Travis CI client")
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     void notAllowNullTravisClients() {
         assertThrows(
                 NullPointerException.class, () -> GitHubContext.newBuilder()
                                                                .setTravis(nullRef())
+                                                               .build()
         );
     }
 }

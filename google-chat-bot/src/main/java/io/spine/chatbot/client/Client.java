@@ -61,7 +61,7 @@ public final class Client implements AutoCloseable {
      * Creates a new in-process client linked to the {@link Server}.
      */
     public static Client newInstance() {
-        io.spine.client.Client client = io.spine.client.Client
+        var client = io.spine.client.Client
                 .inProcess(Server.name())
                 .build();
         return new Client(client);
@@ -71,9 +71,10 @@ public final class Client implements AutoCloseable {
      * Retrieves all registered organizations.
      */
     public ImmutableList<Organization> listOrganizations() {
+        var query = Organization.query()
+                                .build();
         return client.asGuest()
-                     .select(Organization.class)
-                     .run();
+                     .run(query);
     }
 
     /**
@@ -81,13 +82,16 @@ public final class Client implements AutoCloseable {
      */
     public ImmutableList<RepositoryId> listOrgRepos(OrganizationId org) {
         checkNotNull(org);
+        var query =
+                OrganizationRepositories.query()
+                                        .organization()
+                                        .is(org)
+                                        .build();
         var orgRepos = client.asGuest()
-                             .select(OrganizationRepositories.class)
-                             .byId(org)
-                             .run();
+                             .run(query);
         checkState(orgRepos.size() == 1);
-        return ImmutableList.copyOf(orgRepos.get(0)
-                                            .getRepositoryList());
+        var repos = orgRepos.get(0);
+        return ImmutableList.copyOf(repos.getRepositoryList());
     }
 
     @Override

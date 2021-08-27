@@ -36,15 +36,11 @@ import io.spine.internal.dependency.Spine
 plugins {
     id("com.github.johnrengelman.shadow")
     id("com.google.cloud.tools.jib")
-    id("io.spine.tools.gradle.bootstrap")
     id("io.micronaut.application")
+    spine
 }
 
 val extras by extra(io.spine.internal.gradle.prepareExtras(project))
-
-spine {
-    enableJava().server()
-}
 
 micronaut {
     runtime(MicronautRuntime.NETTY)
@@ -65,14 +61,17 @@ dependencies {
     runtimeOnly(Log4j2.core)
     runtimeOnly(Log4j2.api)
     runtimeOnly(Log4j2.slf4jBridge)
+    runtimeOnly(Log4j2.jclBridge)
+    runtimeOnly(Log4j2.julBridge)
     runtimeOnly(Flogger.Runtime.log4J2) {
         exclude("org.apache.logging.log4j:log4j-api")
         exclude("org.apache.logging.log4j:log4j-core")
     }
     implementation(Flogger.lib)
 
-    implementation(Spine.Stable.datastore)
-    implementation(Spine.Stable.pubsub)
+    implementation(Spine.server)
+    implementation(Spine.datastore)
+    implementation(Spine.pubsub)
 
     implementation(Gcp.secretManager)
 
@@ -81,6 +80,7 @@ dependencies {
 
     testImplementation(Micronaut.testJUnit5)
     testImplementation(Micronaut.httpClient)
+    testImplementation(Spine.Test.server)
 }
 
 val appClassName = "io.spine.chatbot.Application"
@@ -103,11 +103,19 @@ application {
 }
 
 jib {
+    from {
+        image = "amazoncorretto:16"
+    }
     to {
         image = "gcr.io/${extras.gcpProject}/chat-bot-server"
         tags = setOf("latest", extras.git.hash, extras.git.shortHash, "v${version}")
     }
     container {
         mainClass = appClassName
+        jvmFlags = listOf(
+            "-server",
+            "-Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager",
+            "-Dflogger.backend_factory=com.google.common.flogger.backend.log4j2.Log4j2BackendFactory#getInstance"
+        )
     }
 }

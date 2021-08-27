@@ -26,10 +26,6 @@
 
 import net.saliman.gradle.plugin.properties.PropertiesPlugin
 
-plugins {
-    idea
-}
-
 apply(from = "version.gradle.kts")
 val botVersion: String by extra
 
