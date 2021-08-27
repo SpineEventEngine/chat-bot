@@ -31,10 +31,10 @@ import io.spine.internal.dependency.Flogger
 import io.spine.internal.dependency.Gson
 import io.spine.internal.dependency.Guava
 import io.spine.internal.dependency.JavaX
+import io.spine.internal.dependency.Log4j2
 import io.spine.internal.dependency.Protobuf
 import io.spine.internal.dependency.Spine
 import io.spine.internal.dependency.Truth
-import io.spine.internal.dependency.Log4j2
 
 plugins {
     `java-library`
@@ -54,9 +54,13 @@ repositories {
         }
     }
     maven("https://spine.mycloudrepo.io/public/repositories/snapshots")
-    spine("base")
-    spine("base-types")
-    spine("core-java")
+    maven {
+        setUrl("https://maven.pkg.github.com/SpineEventEngine/*")
+        credentials {
+            username = System.getenv("GITHUB_ACTOR")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
 }
 
 configurations.all {
@@ -94,20 +98,3 @@ configurations.all {
     exclude("com.google.guava", "guava-jdk5")
     exclude("org.slf4j", "slf4j-jdk14")
 }
-
-
-/**
- * Adds and configures a Spine's GitHub Packages Maven repository.
- *
- * @see [RepositoryHandler.maven]
- * @see [MavenArtifactRepository.setUrl]
- * @see [MavenArtifactRepository.credentials]
- */
-fun RepositoryHandler.spine(repoName: Any) =
-    maven {
-        setUrl("https://maven.pkg.github.com/SpineEventEngine/${repoName}")
-        credentials {
-            username = System.getenv("GITHUB_ACTOR")
-            password = System.getenv("GITHUB_TOKEN")
-        }
-    }
