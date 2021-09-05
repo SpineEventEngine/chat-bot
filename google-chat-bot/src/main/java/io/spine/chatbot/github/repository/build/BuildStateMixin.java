@@ -102,8 +102,8 @@ public interface BuildStateMixin extends BuildOrBuilder {
      *     the previous is non-canceled. This way only notify about cancellation once;
      *     <li>{@code recovered} if the new state is {@code passed} and the previous is
      *     {@link #failed() failed};
-     *     <li>{@code stable} if the new state is {@code passed} or {@code canceled }and the
-     *     previous is either {@code unknown} meaning that there were no previous states
+     *     <li>{@code stable} if the new state is {@code passed} or {@code canceled} and
+     *     the previous is either {@code unknown} meaning that there were no previous states
      *     or {@code passed} or {@code canceled} as well.
      * </ul>
      */
