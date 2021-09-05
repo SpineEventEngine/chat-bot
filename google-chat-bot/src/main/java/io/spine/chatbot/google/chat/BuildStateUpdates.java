@@ -52,10 +52,10 @@ import static io.spine.validate.Validate.checkValid;
  */
 final class BuildStateUpdates {
 
-    private static final String FAILURE_ICON =
-            "https://storage.googleapis.com/spine-chat-bot.appspot.com/failure-icon.png";
-    private static final String SUCCESS_ICON =
-            "https://storage.googleapis.com/spine-chat-bot.appspot.com/success-icon.png";
+    private static final String BUCKET = "https://storage.googleapis.com/spine-chat-bot.appspot.com";
+    private static final String FAILURE_ICON = BUCKET + "/failure-icon.png";
+    private static final String SUCCESS_ICON = BUCKET + "/success-icon.png";
+    private static final String CANCELED_ICON = BUCKET + "/canceled-icon.png";
 
     /**
      * Prevents instantiation of this utility class.
@@ -73,7 +73,7 @@ final class BuildStateUpdates {
     static Message buildStateMessage(Build build, ThreadResource thread) {
         checkValid(build);
         checkNotNull(thread);
-        var headerIcon = build.failed() ? FAILURE_ICON : SUCCESS_ICON;
+        var headerIcon = headerIconUrl(build);
         var cardHeader = new CardHeader()
                 .setTitle(build.getRepository()
                                .value())
@@ -88,6 +88,16 @@ final class BuildStateUpdates {
             message.setThread(new Thread().setName(thread.getName()));
         }
         return message;
+    }
+
+    private static String headerIconUrl(Build build) {
+        if (build.failed()) {
+            return FAILURE_ICON;
+        }
+        if (build.canceled()) {
+            return CANCELED_ICON;
+        }
+        return SUCCESS_ICON;
     }
 
     private static Section commitSection(Build build) {
