@@ -175,6 +175,64 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     }
 
     @Nested
+    @DisplayName("handle consecutive build cancellation")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
+    final class ConsecutiveCanceledBuild {
+
+        private final io.spine.chatbot.travis.Build previousBuild = canceledBuild();
+        private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
+        private final Build previousBuildState = buildFrom(previousBranchBuild, space);
+
+        private final io.spine.chatbot.travis.Build newBuild = canceledBuild();
+        private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
+        private final Build newBuildState = buildFrom(newBranchBuild, space);
+
+        @BeforeEach
+        void sendCheckCommands() {
+            travisClient().setBuildsFor(repoSlug(repo), previousBranchBuild);
+            var checkRepoCancellation = CheckRepositoryBuild.newBuilder()
+                    .setRepository(repo)
+                    .setSpace(space)
+                    .setOrganization(org)
+                    .vBuild();
+            context().receivesCommand(checkRepoCancellation);
+            travisClient().setBuildsFor(repoSlug(repo), newBranchBuild);
+            var checkRepoStable = CheckRepositoryBuild.newBuilder()
+                    .setRepository(repo)
+                    .setSpace(space)
+                    .setOrganization(org)
+                    .vBuild();
+            context().receivesCommand(checkRepoStable);
+        }
+
+        @Test
+        @DisplayName("producing `BuildSucceededAgain` event")
+        void producingEvent() {
+            var stateChange = BuildStateChange.newBuilder()
+                    .setPreviousValue(previousBuildState)
+                    .setNewValue(newBuildState)
+                    .vBuild();
+            var buildFailed = BuildSucceededAgain.newBuilder()
+                    .setRepository(repo)
+                    .setChange(stateChange)
+                    .vBuild();
+            context().assertEvent(buildFailed);
+        }
+
+        @Test
+        @DisplayName("setting process state")
+        void settingState() {
+            var expectedState = RepositoryBuild.newBuilder()
+                    .setRepository(repo)
+                    .setBuild(newBuildState)
+                    .setCurrentState(newBuildState.getState())
+                    .vBuild();
+            context().assertState(repo, RepositoryBuild.class)
+                     .isEqualTo(expectedState);
+        }
+    }
+
+    @Nested
     @DisplayName("handle build recovery")
     @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
     final class RecoveredBuild {
