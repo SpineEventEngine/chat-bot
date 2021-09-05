@@ -143,9 +143,7 @@ public interface BuildStateMixin extends BuildOrBuilder {
      * @return {@code true} if the build status is failed, {@code false} otherwise
      */
     private static boolean failed(Build.State state) {
-        var failedStatuses = EnumSet.of(
-                Build.State.FAILED, Build.State.ERRORED
-        );
+        var failedStatuses = EnumSet.of(Build.State.FAILED, Build.State.ERRORED);
         return failedStatuses.contains(state);
     }
 }
