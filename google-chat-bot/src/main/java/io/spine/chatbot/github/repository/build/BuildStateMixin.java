@@ -137,8 +137,7 @@ public interface BuildStateMixin extends BuildOrBuilder {
     /**
      * Determines whether the build state denotes a failed status.
      *
-     * <p>The {@code canceled}, {@code failed} and {@code errored} statuses are considered
-     * failed statuses.
+     * <p>The {@code failed} and {@code errored} statuses are considered failed statuses.
      *
      * @return {@code true} if the build status is failed, {@code false} otherwise
      */
