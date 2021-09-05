@@ -46,6 +46,15 @@ import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 public interface BuildStateMixin extends BuildOrBuilder {
 
     /**
+     * Determines whether the build is canceled.
+     *
+     * @return {@code true} if the build is canceled, {@code false} otherwise
+     */
+    default boolean canceled() {
+        return getState() == CANCELED;
+    }
+
+    /**
      * Determines whether the build is failed.
      *
      * @return {@code true} if the build is failed, {@code false} otherwise
