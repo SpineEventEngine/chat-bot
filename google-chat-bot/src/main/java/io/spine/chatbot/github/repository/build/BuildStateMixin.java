@@ -98,11 +98,13 @@ public interface BuildStateMixin extends BuildOrBuilder {
      *
      * <ul>
      *     <li>{@code failed} if the new state is {@link #failed() failed};
-     *     <li>{@code canceled} if the new state is {@link #canceled() canceled};
+     *     <li>{@code canceled} if the new state is {@link #canceled() canceled} and
+     *     the previous is non-canceled. This way only notify about cancellation once;
      *     <li>{@code recovered} if the new state is {@code passed} and the previous is
      *     {@link #failed() failed};
-     *     <li>{@code stable} if the new state is {@code passed} and the previous is either
-     *     {@code unknown} meaning that there were no previous states or {@code passed} as well.
+     *     <li>{@code stable} if the new state is {@code passed} or {@code canceled }and the
+     *     previous is either {@code unknown} meaning that there were no previous states
+     *     or {@code passed} or {@code canceled} as well.
      * </ul>
      */
     private static BuildStateChange.Type stateChange(BuildStateMixin newBuildState,
@@ -112,7 +114,7 @@ public interface BuildStateMixin extends BuildOrBuilder {
         if (newBuildState.failed()) {
             return BuildStateChange.Type.FAILED;
         }
-        if (newBuildState.canceled()) {
+        if (newBuildState.canceled() && !previousBuildState.canceled()) {
             return BuildStateChange.Type.CANCELED;
         }
         if (currentState == PASSED && previousBuildState.failed()) {
@@ -128,8 +130,8 @@ public interface BuildStateMixin extends BuildOrBuilder {
     }
 
     private static boolean stable(Build.State currentState, Build.State previousState) {
-        var previousStates = EnumSet.of(PASSED, BS_UNKNOWN, CANCELED);
-        return currentState == PASSED && previousStates.contains(previousState);
+        var stableStates = EnumSet.of(PASSED, BS_UNKNOWN, CANCELED);
+        return stableStates.contains(currentState) && stableStates.contains(previousState);
     }
 
     /**

@@ -132,12 +132,12 @@ final class BuildStateMixinTest {
         @DisplayName("as stable if the previous was")
         @ParameterizedTest
         @EnumSource(mode = INCLUDE, value = Build.State.class, names = {"PASSED", "BS_UNKNOWN", "CANCELED"})
-        void stable(Build.State previousState) {
+        void stable(Build.State state) {
             var previous = Build.newBuilder()
-                    .setState(previousState)
+                    .setState(state)
                     .buildPartial();
             var current = Build.newBuilder()
-                    .setState(Build.State.PASSED)
+                    .setState(state)
                     .buildPartial();
             assertThat(current.stateChangeFrom(previous))
                     .isEqualTo(BuildStateChange.Type.STABLE);
