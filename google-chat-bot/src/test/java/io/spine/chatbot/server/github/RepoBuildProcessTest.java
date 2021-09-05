@@ -53,6 +53,7 @@ import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.space;
 import static io.spine.chatbot.server.github.RepoBuildProcess.buildFrom;
 
 @DisplayName("`RepoBuildProcess` should")
+@SuppressWarnings("MethodOnlyUsedFromInnerClass" /* This way the code is better structured. */)
 final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
     private static final OrganizationId org = organization("SpineEventEngine");
@@ -78,9 +79,9 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         context().assertEvent(noBuildsFound);
     }
 
-    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
     @Nested
     @DisplayName("handle build failure")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
     final class FailedBuild {
 
         private final io.spine.chatbot.travis.Build build = failedBuild();
@@ -128,9 +129,9 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         }
     }
 
-    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
     @Nested
     @DisplayName("handle build recovery")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
     final class RecoveredBuild {
 
         private final io.spine.chatbot.travis.Build previousBuild = failedBuild();
@@ -192,9 +193,9 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         }
     }
 
-    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
     @Nested
     @DisplayName("handle stable builds")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
     final class StableBuild {
 
         private final io.spine.chatbot.travis.Build initialFailedBuild = failedBuild();
@@ -272,7 +273,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                 .setLastBuild(build)
                 .setName("master")
                 .setRepository(Repository.newBuilder()
-                                         .setSlug(repo.getValue()))
+                                       .setSlug(repo.getValue()))
                 .buildPartial();
     }
 
