@@ -68,7 +68,7 @@ message BuildRecovered {
     BuildStateChange change = 2 [(required) = true];
 }
 
-// The build is stable and passing.
+// The build is stable.
 message BuildSucceededAgain {
 
     RepositoryId repository = 1 [(required) = true];
