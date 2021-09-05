@@ -27,6 +27,7 @@
 package io.spine.chatbot.github.repository.build;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -83,5 +84,63 @@ final class BuildStateMixinTest {
                 .buildPartial();
         assertThat(build.failed())
                 .isFalse();
+    }
+
+    @Nested
+    @DisplayName("determine build state change")
+    class StateChange {
+
+        @Test
+        @DisplayName("as failed no matter what")
+        void failed() {
+            var previous = Build.newBuilder()
+                    .setState(Build.State.PASSED)
+                    .buildPartial();
+            var current = Build.newBuilder()
+                    .setState(Build.State.FAILED)
+                    .buildPartial();
+            assertThat(current.stateChangeFrom(previous))
+                    .isEqualTo(BuildStateChange.Type.FAILED);
+        }
+
+        @Test
+        @DisplayName("as canceled no matter what")
+        void canceled() {
+            var previous = Build.newBuilder()
+                    .setState(Build.State.FAILED)
+                    .buildPartial();
+            var current = Build.newBuilder()
+                    .setState(Build.State.CANCELED)
+                    .buildPartial();
+            assertThat(current.stateChangeFrom(previous))
+                    .isEqualTo(BuildStateChange.Type.CANCELED);
+        }
+
+        @Test
+        @DisplayName("as recovered if the previous was failed")
+        void recovered() {
+            var previous = Build.newBuilder()
+                    .setState(Build.State.FAILED)
+                    .buildPartial();
+            var current = Build.newBuilder()
+                    .setState(Build.State.PASSED)
+                    .buildPartial();
+            assertThat(current.stateChangeFrom(previous))
+                    .isEqualTo(BuildStateChange.Type.RECOVERED);
+        }
+
+        @DisplayName("as stable if the previous was")
+        @ParameterizedTest
+        @EnumSource(mode = INCLUDE, value = Build.State.class, names = {"PASSED", "BS_UNKNOWN", "CANCELED"})
+        void stable(Build.State previousState) {
+            var previous = Build.newBuilder()
+                    .setState(previousState)
+                    .buildPartial();
+            var current = Build.newBuilder()
+                    .setState(Build.State.PASSED)
+                    .buildPartial();
+            assertThat(current.stateChangeFrom(previous))
+                    .isEqualTo(BuildStateChange.Type.STABLE);
+        }
     }
 }

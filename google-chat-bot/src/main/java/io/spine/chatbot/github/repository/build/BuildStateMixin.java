@@ -33,9 +33,6 @@ import java.util.EnumSet;
 import static io.spine.chatbot.github.repository.build.Build.State.BS_UNKNOWN;
 import static io.spine.chatbot.github.repository.build.Build.State.CANCELED;
 import static io.spine.chatbot.github.repository.build.Build.State.PASSED;
-import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.FAILED;
-import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.RECOVERED;
-import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.STABLE;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
@@ -101,6 +98,7 @@ public interface BuildStateMixin extends BuildOrBuilder {
      *
      * <ul>
      *     <li>{@code failed} if the new state is {@link #failed() failed};
+     *     <li>{@code canceled} if the new state is {@link #canceled() canceled};
      *     <li>{@code recovered} if the new state is {@code passed} and the previous is
      *     {@link #failed() failed};
      *     <li>{@code stable} if the new state is {@code passed} and the previous is either
@@ -112,13 +110,16 @@ public interface BuildStateMixin extends BuildOrBuilder {
         var currentState = newBuildState.getState();
         var previousState = previousBuildState.getState();
         if (newBuildState.failed()) {
-            return FAILED;
+            return BuildStateChange.Type.FAILED;
+        }
+        if (newBuildState.canceled()) {
+            return BuildStateChange.Type.CANCELED;
         }
         if (currentState == PASSED && previousBuildState.failed()) {
-            return RECOVERED;
+            return BuildStateChange.Type.RECOVERED;
         }
         if (stable(currentState, previousState)) {
-            return STABLE;
+            return BuildStateChange.Type.STABLE;
         }
         throw newIllegalStateException(
                 "Build is in an unpredictable state. Current state `%s`. Previous state `%s`.",
