@@ -95,8 +95,7 @@ final class RepoBuildProcess
         var branchBuild = client.execute(BuildsQuery.forRepo(repoSlug(repo)));
         if (isDefault(branchBuild.getLastBuild())) {
             _warn().log("No builds found for the repository `%s`.", repo.getValue());
-            throw NoBuildsFound
-                    .newBuilder()
+            throw NoBuildsFound.newBuilder()
                     .setRepository(repo)
                     .build();
         }
@@ -104,8 +103,7 @@ final class RepoBuildProcess
         builder().setWhenLastChecked(Time.currentTime())
                  .setBuild(build)
                  .setCurrentState(build.getState());
-        var stateChange = BuildStateChange
-                .newBuilder()
+        var stateChange = BuildStateChange.newBuilder()
                 .setPreviousValue(state().getBuild())
                 .setNewValue(build)
                 .vBuild();
@@ -140,8 +138,7 @@ final class RepoBuildProcess
     private EitherOf4<BuildFailed, BuildRecovered, BuildSucceededAgain, BuildCanceled>
     onStable(RepositoryId repo, BuildStateChange stateChange) {
         _info().log("The build for the repository `%s` is stable.", repo.getValue());
-        var buildSucceededAgain = BuildSucceededAgain
-                .newBuilder()
+        var buildSucceededAgain = BuildSucceededAgain.newBuilder()
                 .setRepository(repo)
                 .setChange(stateChange)
                 .vBuild();
@@ -151,8 +148,7 @@ final class RepoBuildProcess
     private EitherOf4<BuildFailed, BuildRecovered, BuildSucceededAgain, BuildCanceled>
     onRecovered(RepositoryId repo, BuildStateChange stateChange) {
         _info().log("The build for the repository `%s` is recovered.", repo.getValue());
-        var buildRecovered = BuildRecovered
-                .newBuilder()
+        var buildRecovered = BuildRecovered.newBuilder()
                 .setRepository(repo)
                 .setChange(stateChange)
                 .vBuild();
@@ -164,8 +160,7 @@ final class RepoBuildProcess
         var newBuildState = stateChange.getNewValue();
         _info().log("A build for the repository `%s` failed with the status `%s`.",
                     repo.getValue(), newBuildState.getState());
-        var buildFailed = BuildFailed
-                .newBuilder()
+        var buildFailed = BuildFailed.newBuilder()
                 .setRepository(repo)
                 .setChange(stateChange)
                 .vBuild();
@@ -175,8 +170,7 @@ final class RepoBuildProcess
     private EitherOf4<BuildFailed, BuildRecovered, BuildSucceededAgain, BuildCanceled>
     onCanceled(RepositoryId repo, BuildStateChange stateChange) {
         _info().log("A build for the repository `%s` is canceled.", repo.getValue());
-        var buildCanceled = BuildCanceled
-                .newBuilder()
+        var buildCanceled = BuildCanceled.newBuilder()
                 .setRepository(repo)
                 .setChange(stateChange)
                 .vBuild();
@@ -189,8 +183,7 @@ final class RepoBuildProcess
         var slug = newSlug(branchBuild.getRepository()
                                       .getSlug());
         var build = branchBuild.getLastBuild();
-        return Build
-                .newBuilder()
+        return Build.newBuilder()
                 .setNumber(build.getNumber())
                 .setSpace(space)
                 .setState(BuildStateMixin.buildStateFrom(build.getState()))
@@ -205,8 +198,7 @@ final class RepoBuildProcess
     }
 
     private static Commit from(io.spine.chatbot.travis.Commit commit) {
-        return Commit
-                .newBuilder()
+        return Commit.newBuilder()
                 .setSha(commit.getSha())
                 .setMessage(commit.getMessage())
                 .setCommittedAt(commit.getCommittedAt())
