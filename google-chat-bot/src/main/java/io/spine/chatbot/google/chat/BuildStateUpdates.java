@@ -32,6 +32,7 @@ import com.google.api.services.chat.v1.model.Message;
 import com.google.api.services.chat.v1.model.Section;
 import com.google.api.services.chat.v1.model.Thread;
 import com.google.api.services.chat.v1.model.WidgetMarkup;
+import com.google.common.annotations.VisibleForTesting;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.google.chat.thread.ThreadResource;
 
@@ -53,9 +54,12 @@ import static io.spine.validate.Validate.checkValid;
 final class BuildStateUpdates {
 
     private static final String BUCKET = "https://storage.googleapis.com/spine-chat-bot.appspot.com";
-    private static final String FAILURE_ICON = BUCKET + "/failure-icon.png";
-    private static final String SUCCESS_ICON = BUCKET + "/success-icon.png";
-    private static final String CANCELED_ICON = BUCKET + "/canceled-icon.png";
+    @VisibleForTesting
+    static final String FAILURE_ICON = BUCKET + "/failure-icon.png";
+    @VisibleForTesting
+    static final String SUCCESS_ICON = BUCKET + "/success-icon.png";
+    @VisibleForTesting
+    static final String CANCELED_ICON = BUCKET + "/canceled-icon.png";
 
     /**
      * Prevents instantiation of this utility class.
