@@ -66,11 +66,11 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  *
  * <ul>
  *     <li>{@link BuildFailed} — whenever the build is failed;
- *     <li>{@link BuildCanceled} — whenever the build is failed;
+ *     <li>{@link BuildCanceled} — whenever the build is canceled the first time;
  *     <li>{@link BuildRecovered} — whenever the build state changes from {@code failed}
  *     to {@code passing};
  *     <li>{@link BuildSucceededAgain} — whenever the build state is {@code passing} and was
- *     {@code passing} previously.
+ *     {@code passing} previously or is {@code canceled} multiple times consecutive.
  * </ul>
  *
  * Or, if the repository builds cannot be retrieved, throws {@link NoBuildsFound} rejection.
