@@ -50,6 +50,15 @@ message BuildFailed {
     BuildStateChange change = 2 [(required) = true];
 }
 
+// The build has been canceled for a repository.
+message BuildCanceled {
+
+    RepositoryId repository = 1 [(required) = true];
+
+    // The change of the build state.
+    BuildStateChange change = 2 [(required) = true];
+}
+
 // The build has recovered from the failed state.
 message BuildRecovered {
 
