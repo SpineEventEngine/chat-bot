@@ -126,7 +126,7 @@ public interface BuildStateMixin extends BuildOrBuilder {
      */
     private static boolean failed(Build.State state) {
         var failedStatuses = EnumSet.of(
-                Build.State.CANCELED, Build.State.FAILED, Build.State.ERRORED
+                Build.State.FAILED, Build.State.ERRORED
         );
         return failedStatuses.contains(state);
     }
