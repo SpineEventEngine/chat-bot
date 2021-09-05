@@ -28,6 +28,7 @@ package io.spine.chatbot.server.google.chat;
 
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
 import io.spine.chatbot.github.repository.RepositoryAwareEvent;
+import io.spine.chatbot.github.repository.build.event.BuildCanceled;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.google.chat.GoogleChatClient;
@@ -63,7 +64,8 @@ final class ThreadChatRepository
     protected void setupEventRouting(EventRouting<ThreadId> routing) {
         super.setupEventRouting(routing);
         routing.route(BuildFailed.class, new RepositoryEventRoute<>())
-               .route(BuildRecovered.class, new RepositoryEventRoute<>());
+               .route(BuildRecovered.class, new RepositoryEventRoute<>())
+               .route(BuildCanceled.class, new RepositoryEventRoute<>());
     }
 
     @Override
