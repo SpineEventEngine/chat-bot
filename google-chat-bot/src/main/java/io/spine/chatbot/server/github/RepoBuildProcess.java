@@ -36,6 +36,7 @@ import io.spine.chatbot.github.repository.build.BuildStateMixin;
 import io.spine.chatbot.github.repository.build.Commit;
 import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
+import io.spine.chatbot.github.repository.build.event.BuildCanceled;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.github.repository.build.event.BuildSucceededAgain;
@@ -47,9 +48,10 @@ import io.spine.chatbot.travis.TravisClient;
 import io.spine.net.Urls;
 import io.spine.server.command.Assign;
 import io.spine.server.procman.ProcessManager;
-import io.spine.server.tuple.EitherOf3;
+import io.spine.server.tuple.EitherOf4;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.chatbot.github.Slugs.newSlug;
 import static io.spine.chatbot.github.Slugs.repoSlug;
 import static io.spine.chatbot.net.MoreUrls.travisBuildUrlFor;
@@ -64,6 +66,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  *
  * <ul>
  *     <li>{@link BuildFailed} — whenever the build is failed;
+ *     <li>{@link BuildCanceled} — whenever the build is failed;
  *     <li>{@link BuildRecovered} — whenever the build state changes from {@code failed}
  *     to {@code passing};
  *     <li>{@link BuildSucceededAgain} — whenever the build state is {@code passing} and was
@@ -72,6 +75,7 @@ import static io.spine.util.Exceptions.newIllegalStateException;
  *
  * Or, if the repository builds cannot be retrieved, throws {@link NoBuildsFound} rejection.
  */
+@SuppressWarnings("OverlyCoupledClass" /* OK for a complex process. */)
 final class RepoBuildProcess
         extends ProcessManager<RepositoryId, RepositoryBuild, RepositoryBuild.Builder> {
 
@@ -84,8 +88,8 @@ final class RepoBuildProcess
      * <p>If the repository build state cannot be retrieved, throws {@link NoBuildsFound} rejection.
      */
     @Assign
-    EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain> handle(CheckRepositoryBuild c)
-            throws NoBuildsFound {
+    EitherOf4<BuildFailed, BuildRecovered, BuildSucceededAgain, BuildCanceled>
+    handle(CheckRepositoryBuild c) throws NoBuildsFound {
         var repo = c.getRepository();
         _info().log("Checking build status for the repository `%s`.", repo.getValue());
         var branchBuild = client.execute(BuildsQuery.forRepo(repoSlug(repo)));
@@ -109,7 +113,7 @@ final class RepoBuildProcess
         return result;
     }
 
-    private EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain>
+    private EitherOf4<BuildFailed, BuildRecovered, BuildSucceededAgain, BuildCanceled>
     determineOutcome(RepositoryId repo, BuildStateChange stateChange) {
         var newBuildState = stateChange.getNewValue();
         var previousBuildState = stateChange.getPreviousValue();
@@ -121,6 +125,8 @@ final class RepoBuildProcess
                 return onRecovered(repo, stateChange);
             case STABLE:
                 return onStable(repo, stateChange);
+            case CANCELED:
+                return onCanceled(repo, stateChange);
             case BSCT_UNKNOWN:
             case UNRECOGNIZED:
             default:
@@ -131,7 +137,7 @@ final class RepoBuildProcess
         }
     }
 
-    private EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain>
+    private EitherOf4<BuildFailed, BuildRecovered, BuildSucceededAgain, BuildCanceled>
     onStable(RepositoryId repo, BuildStateChange stateChange) {
         _info().log("The build for the repository `%s` is stable.", repo.getValue());
         var buildSucceededAgain = BuildSucceededAgain
@@ -139,10 +145,10 @@ final class RepoBuildProcess
                 .setRepository(repo)
                 .setChange(stateChange)
                 .vBuild();
-        return EitherOf3.withC(buildSucceededAgain);
+        return EitherOf4.withC(buildSucceededAgain);
     }
 
-    private EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain>
+    private EitherOf4<BuildFailed, BuildRecovered, BuildSucceededAgain, BuildCanceled>
     onRecovered(RepositoryId repo, BuildStateChange stateChange) {
         _info().log("The build for the repository `%s` is recovered.", repo.getValue());
         var buildRecovered = BuildRecovered
@@ -150,10 +156,10 @@ final class RepoBuildProcess
                 .setRepository(repo)
                 .setChange(stateChange)
                 .vBuild();
-        return EitherOf3.withB(buildRecovered);
+        return EitherOf4.withB(buildRecovered);
     }
 
-    private EitherOf3<BuildFailed, BuildRecovered, BuildSucceededAgain>
+    private EitherOf4<BuildFailed, BuildRecovered, BuildSucceededAgain, BuildCanceled>
     onFailed(RepositoryId repo, BuildStateChange stateChange) {
         var newBuildState = stateChange.getNewValue();
         _info().log("A build for the repository `%s` failed with the status `%s`.",
@@ -163,7 +169,18 @@ final class RepoBuildProcess
                 .setRepository(repo)
                 .setChange(stateChange)
                 .vBuild();
-        return EitherOf3.withA(buildFailed);
+        return EitherOf4.withA(buildFailed);
+    }
+
+    private EitherOf4<BuildFailed, BuildRecovered, BuildSucceededAgain, BuildCanceled>
+    onCanceled(RepositoryId repo, BuildStateChange stateChange) {
+        _info().log("A build for the repository `%s` is canceled.", repo.getValue());
+        var buildCanceled = BuildCanceled
+                .newBuilder()
+                .setRepository(repo)
+                .setChange(stateChange)
+                .vBuild();
+        return EitherOf4.withD(buildCanceled);
     }
 
     @VisibleForTesting
@@ -206,6 +223,6 @@ final class RepoBuildProcess
      *         done through the repository
      */
     void setClient(TravisClient client) {
-        this.client = client;
+        this.client = checkNotNull(client);
     }
 }
