@@ -31,6 +31,7 @@ import io.spine.annotation.GeneratedMixin;
 import java.util.EnumSet;
 
 import static io.spine.chatbot.github.repository.build.Build.State.BS_UNKNOWN;
+import static io.spine.chatbot.github.repository.build.Build.State.CANCELED;
 import static io.spine.chatbot.github.repository.build.Build.State.PASSED;
 import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.FAILED;
 import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.RECOVERED;
@@ -107,13 +108,18 @@ public interface BuildStateMixin extends BuildOrBuilder {
         if (currentState == PASSED && previousBuildState.failed()) {
             return RECOVERED;
         }
-        if (currentState == PASSED && (previousState == PASSED || previousState == BS_UNKNOWN)) {
+        if (stable(currentState, previousState)) {
             return STABLE;
         }
         throw newIllegalStateException(
                 "Build is in an unpredictable state. Current state `%s`. Previous state `%s`.",
                 currentState.name(), previousState.name()
         );
+    }
+
+    private static boolean stable(Build.State currentState, Build.State previousState) {
+        var previousStates = EnumSet.of(PASSED, BS_UNKNOWN, CANCELED);
+        return currentState == PASSED && previousStates.contains(previousState);
     }
 
     /**
