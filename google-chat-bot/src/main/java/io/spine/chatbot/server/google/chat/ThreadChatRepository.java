@@ -63,7 +63,10 @@ final class ThreadChatRepository
                .unicast(BuildCanceled.class, ThreadChatRepository::route);
     }
 
-    private static ThreadId route(RepositoryAware e, EventContext c) {
+    private static ThreadId route(
+            RepositoryAware e,
+            @SuppressWarnings("unused" /* Required to avoid ambiguous routing. */) EventContext c
+    ) {
         var repository = e.repository();
         return thread(repository.getValue());
     }
