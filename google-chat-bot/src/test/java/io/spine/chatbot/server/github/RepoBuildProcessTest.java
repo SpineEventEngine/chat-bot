@@ -32,6 +32,7 @@ import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
 import io.spine.chatbot.github.repository.build.RepositoryBuild;
 import io.spine.chatbot.github.repository.build.command.CheckRepositoryBuild;
+import io.spine.chatbot.github.repository.build.event.BuildCanceled;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.github.repository.build.event.BuildSucceededAgain;
@@ -53,6 +54,7 @@ import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.space;
 import static io.spine.chatbot.server.github.RepoBuildProcess.buildFrom;
 
 @DisplayName("`RepoBuildProcess` should")
+@SuppressWarnings("MethodOnlyUsedFromInnerClass" /* This way the code is better structured. */)
 final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
     private static final OrganizationId org = organization("SpineEventEngine");
@@ -63,24 +65,22 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     @DisplayName("throw `NoBuildsFound` rejection when Travis API cannot return builds for a repo")
     void throwNoBuildsFoundRejection() {
         travisClient().setBuildsFor(repoSlug(repo), RepoBranchBuildResponse.getDefaultInstance());
-        var checkRepoBuild = CheckRepositoryBuild
-                .newBuilder()
+        var checkRepoBuild = CheckRepositoryBuild.newBuilder()
                 .setRepository(repo)
                 .setOrganization(org)
                 .setSpace(space)
                 .vBuild();
         context().receivesCommand(checkRepoBuild);
 
-        var noBuildsFound = RepositoryBuildRejections.NoBuildsFound
-                .newBuilder()
+        var noBuildsFound = RepositoryBuildRejections.NoBuildsFound.newBuilder()
                 .setRepository(repo)
                 .vBuild();
         context().assertEvent(noBuildsFound);
     }
 
-    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
     @Nested
     @DisplayName("handle build failure")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
     final class FailedBuild {
 
         private final io.spine.chatbot.travis.Build build = failedBuild();
@@ -90,8 +90,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         @BeforeEach
         void sendCheckCommand() {
             travisClient().setBuildsFor(repoSlug(repo), branchBuild);
-            var checkRepoBuild = CheckRepositoryBuild
-                    .newBuilder()
+            var checkRepoBuild = CheckRepositoryBuild.newBuilder()
                     .setRepository(repo)
                     .setSpace(space)
                     .setOrganization(org)
@@ -102,12 +101,10 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         @Test
         @DisplayName("producing `BuildFailed` event")
         void producingEvent() {
-            var stateChange = BuildStateChange
-                    .newBuilder()
+            var stateChange = BuildStateChange.newBuilder()
                     .setNewValue(buildState)
                     .vBuild();
-            var buildFailed = BuildFailed
-                    .newBuilder()
+            var buildFailed = BuildFailed.newBuilder()
                     .setRepository(repo)
                     .setChange(stateChange)
                     .vBuild();
@@ -128,54 +125,39 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         }
     }
 
-    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
     @Nested
-    @DisplayName("handle build recovery")
-    final class RecoveredBuild {
+    @DisplayName("handle build cancellation")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
+    final class CanceledBuild {
 
-        private final io.spine.chatbot.travis.Build previousBuild = failedBuild();
-        private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
-        private final Build previousBuildState = buildFrom(previousBranchBuild,
-                                                           space);
-
-        private final io.spine.chatbot.travis.Build newBuild = passingBuild();
-        private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
-        private final Build newBuildState = buildFrom(newBranchBuild, space);
+        private final io.spine.chatbot.travis.Build build = canceledBuild();
+        private final RepoBranchBuildResponse branchBuild = branchBuildOf(build);
+        private final Build buildState = buildFrom(branchBuild, space);
 
         @BeforeEach
-        void sendCheckCommands() {
-            travisClient().setBuildsFor(repoSlug(repo), previousBranchBuild);
-            var checkRepoFailure = CheckRepositoryBuild
-                    .newBuilder()
+        void sendCheckCommand() {
+            travisClient().setBuildsFor(repoSlug(repo), branchBuild);
+            var checkRepoBuild = CheckRepositoryBuild.newBuilder()
                     .setRepository(repo)
                     .setSpace(space)
                     .setOrganization(org)
                     .vBuild();
-            context().receivesCommand(checkRepoFailure);
-            travisClient().setBuildsFor(repoSlug(repo), newBranchBuild);
-            var checkRepoRecovery = CheckRepositoryBuild
-                    .newBuilder()
-                    .setRepository(repo)
-                    .setSpace(space)
-                    .setOrganization(org)
-                    .vBuild();
-            context().receivesCommand(checkRepoRecovery);
+            context().receivesCommand(checkRepoBuild);
         }
 
         @Test
-        @DisplayName("producing `BuildRecovered` event")
+        @DisplayName("producing `BuildCanceled` event")
         void producingEvent() {
             var stateChange = BuildStateChange
                     .newBuilder()
-                    .setPreviousValue(previousBuildState)
-                    .setNewValue(newBuildState)
+                    .setNewValue(buildState)
                     .vBuild();
-            var buildFailed = BuildRecovered
+            var buildCanceled = BuildCanceled
                     .newBuilder()
                     .setRepository(repo)
                     .setChange(stateChange)
                     .vBuild();
-            context().assertEvent(buildFailed);
+            context().assertEvent(buildCanceled);
         }
 
         @Test
@@ -184,51 +166,38 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
             var expectedState = RepositoryBuild
                     .newBuilder()
                     .setRepository(repo)
-                    .setBuild(newBuildState)
-                    .setCurrentState(newBuildState.getState())
+                    .setBuild(buildState)
+                    .setCurrentState(buildState.getState())
                     .vBuild();
             context().assertState(repo, RepositoryBuild.class)
                      .isEqualTo(expectedState);
         }
     }
 
-    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
     @Nested
-    @DisplayName("handle stable builds")
-    final class StableBuild {
+    @DisplayName("handle consecutive build cancellation")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
+    final class ConsecutiveCanceledBuild {
 
-        private final io.spine.chatbot.travis.Build initialFailedBuild = failedBuild();
-
-        private final io.spine.chatbot.travis.Build previousBuild = passingBuild();
+        private final io.spine.chatbot.travis.Build previousBuild = canceledBuild();
         private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
-        private final Build previousBuildState = buildFrom(previousBranchBuild,
-                                                           space);
+        private final Build previousBuildState = buildFrom(previousBranchBuild, space);
 
-        private final io.spine.chatbot.travis.Build newBuild = nextPassingBuild();
+        private final io.spine.chatbot.travis.Build newBuild = canceledBuild();
         private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
         private final Build newBuildState = buildFrom(newBranchBuild, space);
 
         @BeforeEach
         void sendCheckCommands() {
-            travisClient().setBuildsFor(repoSlug(repo), branchBuildOf(initialFailedBuild));
-            var checkRepoFailure = CheckRepositoryBuild
-                    .newBuilder()
-                    .setRepository(repo)
-                    .setSpace(space)
-                    .setOrganization(org)
-                    .vBuild();
-            context().receivesCommand(checkRepoFailure);
             travisClient().setBuildsFor(repoSlug(repo), previousBranchBuild);
-            var checkRepoRecovery = CheckRepositoryBuild
-                    .newBuilder()
+            var checkRepoCancellation = CheckRepositoryBuild.newBuilder()
                     .setRepository(repo)
                     .setSpace(space)
                     .setOrganization(org)
                     .vBuild();
-            context().receivesCommand(checkRepoRecovery);
+            context().receivesCommand(checkRepoCancellation);
             travisClient().setBuildsFor(repoSlug(repo), newBranchBuild);
-            var checkRepoStable = CheckRepositoryBuild
-                    .newBuilder()
+            var checkRepoStable = CheckRepositoryBuild.newBuilder()
                     .setRepository(repo)
                     .setSpace(space)
                     .setOrganization(org)
@@ -239,13 +208,136 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         @Test
         @DisplayName("producing `BuildSucceededAgain` event")
         void producingEvent() {
-            var stateChange = BuildStateChange
-                    .newBuilder()
+            var stateChange = BuildStateChange.newBuilder()
                     .setPreviousValue(previousBuildState)
                     .setNewValue(newBuildState)
                     .vBuild();
-            var buildSucceededAgain = BuildSucceededAgain
-                    .newBuilder()
+            var buildFailed = BuildSucceededAgain.newBuilder()
+                    .setRepository(repo)
+                    .setChange(stateChange)
+                    .vBuild();
+            context().assertEvent(buildFailed);
+        }
+
+        @Test
+        @DisplayName("setting process state")
+        void settingState() {
+            var expectedState = RepositoryBuild.newBuilder()
+                    .setRepository(repo)
+                    .setBuild(newBuildState)
+                    .setCurrentState(newBuildState.getState())
+                    .vBuild();
+            context().assertState(repo, RepositoryBuild.class)
+                     .isEqualTo(expectedState);
+        }
+    }
+
+    @Nested
+    @DisplayName("handle build recovery")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
+    final class RecoveredBuild {
+
+        private final io.spine.chatbot.travis.Build previousBuild = failedBuild();
+        private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
+        private final Build previousBuildState = buildFrom(previousBranchBuild, space);
+
+        private final io.spine.chatbot.travis.Build newBuild = passingBuild();
+        private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
+        private final Build newBuildState = buildFrom(newBranchBuild, space);
+
+        @BeforeEach
+        void sendCheckCommands() {
+            travisClient().setBuildsFor(repoSlug(repo), previousBranchBuild);
+            var checkRepoFailure = CheckRepositoryBuild.newBuilder()
+                    .setRepository(repo)
+                    .setSpace(space)
+                    .setOrganization(org)
+                    .vBuild();
+            context().receivesCommand(checkRepoFailure);
+            travisClient().setBuildsFor(repoSlug(repo), newBranchBuild);
+            var checkRepoRecovery = CheckRepositoryBuild.newBuilder()
+                    .setRepository(repo)
+                    .setSpace(space)
+                    .setOrganization(org)
+                    .vBuild();
+            context().receivesCommand(checkRepoRecovery);
+        }
+
+        @Test
+        @DisplayName("producing `BuildRecovered` event")
+        void producingEvent() {
+            var stateChange = BuildStateChange.newBuilder()
+                    .setPreviousValue(previousBuildState)
+                    .setNewValue(newBuildState)
+                    .vBuild();
+            var buildFailed = BuildRecovered.newBuilder()
+                    .setRepository(repo)
+                    .setChange(stateChange)
+                    .vBuild();
+            context().assertEvent(buildFailed);
+        }
+
+        @Test
+        @DisplayName("setting process state")
+        void settingState() {
+            var expectedState = RepositoryBuild.newBuilder()
+                    .setRepository(repo)
+                    .setBuild(newBuildState)
+                    .setCurrentState(newBuildState.getState())
+                    .vBuild();
+            context().assertState(repo, RepositoryBuild.class)
+                     .isEqualTo(expectedState);
+        }
+    }
+
+    @Nested
+    @DisplayName("handle stable builds")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
+    final class StableBuild {
+
+        private final io.spine.chatbot.travis.Build initialFailedBuild = failedBuild();
+
+        private final io.spine.chatbot.travis.Build previousBuild = passingBuild();
+        private final RepoBranchBuildResponse previousBranchBuild = branchBuildOf(previousBuild);
+        private final Build previousBuildState = buildFrom(previousBranchBuild, space);
+
+        private final io.spine.chatbot.travis.Build newBuild = nextPassingBuild();
+        private final RepoBranchBuildResponse newBranchBuild = branchBuildOf(newBuild);
+        private final Build newBuildState = buildFrom(newBranchBuild, space);
+
+        @BeforeEach
+        void sendCheckCommands() {
+            travisClient().setBuildsFor(repoSlug(repo), branchBuildOf(initialFailedBuild));
+            var checkRepoFailure = CheckRepositoryBuild.newBuilder()
+                    .setRepository(repo)
+                    .setSpace(space)
+                    .setOrganization(org)
+                    .vBuild();
+            context().receivesCommand(checkRepoFailure);
+            travisClient().setBuildsFor(repoSlug(repo), previousBranchBuild);
+            var checkRepoRecovery = CheckRepositoryBuild.newBuilder()
+                    .setRepository(repo)
+                    .setSpace(space)
+                    .setOrganization(org)
+                    .vBuild();
+            context().receivesCommand(checkRepoRecovery);
+            travisClient().setBuildsFor(repoSlug(repo), newBranchBuild);
+            var checkRepoStable = CheckRepositoryBuild.newBuilder()
+                    .setRepository(repo)
+                    .setSpace(space)
+                    .setOrganization(org)
+                    .vBuild();
+            context().receivesCommand(checkRepoStable);
+        }
+
+        @Test
+        @DisplayName("producing `BuildSucceededAgain` event")
+        void producingEvent() {
+            var stateChange = BuildStateChange.newBuilder()
+                    .setPreviousValue(previousBuildState)
+                    .setNewValue(newBuildState)
+                    .vBuild();
+            var buildSucceededAgain = BuildSucceededAgain.newBuilder()
                     .setRepository(repo)
                     .setChange(stateChange)
                     .vBuild();
@@ -255,8 +347,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
         @Test
         @DisplayName("setting process state")
         void settingState() {
-            var expectedState = RepositoryBuild
-                    .newBuilder()
+            var expectedState = RepositoryBuild.newBuilder()
                     .setRepository(repo)
                     .setBuild(newBuildState)
                     .setCurrentState(newBuildState.getState())
@@ -272,7 +363,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                 .setLastBuild(build)
                 .setName("master")
                 .setRepository(Repository.newBuilder()
-                                         .setSlug(repo.getValue()))
+                                       .setSlug(repo.getValue()))
                 .buildPartial();
     }
 
@@ -289,8 +380,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     }
 
     private static io.spine.chatbot.travis.Build nextPassingBuild() {
-        return io.spine.chatbot.travis.Build
-                .newBuilder()
+        return io.spine.chatbot.travis.Build.newBuilder()
                 .setId(123154L)
                 .setNumber("43")
                 .setState("passed")
@@ -301,8 +391,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     }
 
     private static io.spine.chatbot.travis.Build failedBuild() {
-        return io.spine.chatbot.travis.Build
-                .newBuilder()
+        return io.spine.chatbot.travis.Build.newBuilder()
                 .setId(123152L)
                 .setNumber("41")
                 .setState("failed")
@@ -312,14 +401,23 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
                 .buildPartial();
     }
 
+    private static io.spine.chatbot.travis.Build canceledBuild() {
+        return io.spine.chatbot.travis.Build.newBuilder()
+                .setId(123152L)
+                .setNumber("47")
+                .setState("canceled")
+                .setPreviousState("passed")
+                .setRepository(webRepository())
+                .setCommit(fatefulCommit())
+                .buildPartial();
+    }
+
     private static Commit stableCommit() {
         var compareUrl = "https://github.com/SpineEventEngine/web/compare/04694f26f24a...afc1b76bf93c";
-        var author = Author
-                .newBuilder()
+        var author = Author.newBuilder()
                 .setName("God")
                 .buildPartial();
-        return Commit
-                .newBuilder()
+        return Commit.newBuilder()
                 .setId(668)
                 .setCompareUrl(compareUrl)
                 .setSha("afc1b76bf93c4dadf86075280da623f947e1434b")
@@ -331,12 +429,10 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
     private static Commit luckyCommit() {
         var compareUrl = "https://github.com/SpineEventEngine/web/compare/6b4d32cadd9c...6b0a31d033a2";
-        var author = Author
-                .newBuilder()
+        var author = Author.newBuilder()
                 .setName("God")
                 .buildPartial();
-        return Commit
-                .newBuilder()
+        return Commit.newBuilder()
                 .setId(667)
                 .setCompareUrl(compareUrl)
                 .setSha("6b0a31d033a2fc8d29d49baad600bc31789d9615")
@@ -348,12 +444,10 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
 
     private static Commit fatefulCommit() {
         var compareUrl = "https://github.com/SpineEventEngine/web/compare/5cbfa7423708...8fcf5d98e50f";
-        var author = Author
-                .newBuilder()
+        var author = Author.newBuilder()
                 .setName("Lucifer")
                 .buildPartial();
-        return Commit
-                .newBuilder()
+        return Commit.newBuilder()
                 .setId(666)
                 .setCompareUrl(compareUrl)
                 .setSha("8fcf5d98e50f8ffa6daa8c81746181c72bd09a50")
@@ -365,8 +459,7 @@ final class RepoBuildProcessTest extends GitHubContextAwareTest {
     }
 
     private static Repository webRepository() {
-        return Repository
-                .newBuilder()
+        return Repository.newBuilder()
                 .setId(1112)
                 .setName("web")
                 .setSlug(repo.getValue())

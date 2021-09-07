@@ -27,15 +27,18 @@
 package io.spine.chatbot.github.repository.build;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
+import static com.google.common.truth.Truth.assertThat;
 import static io.spine.chatbot.github.repository.build.BuildStateMixin.buildStateFrom;
 import static io.spine.testing.TestValues.nullRef;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.EnumSource.Mode.EXCLUDE;
+import static org.junit.jupiter.params.provider.EnumSource.Mode.INCLUDE;
 
 @DisplayName("`BuildStateMixin` should")
 final class BuildStateMixinTest {
@@ -59,5 +62,85 @@ final class BuildStateMixinTest {
         assertDoesNotThrow(() -> {
             buildStateFrom(state.name());
         });
+    }
+
+    @DisplayName("determine failed states")
+    @ParameterizedTest
+    @EnumSource(mode = INCLUDE, value = Build.State.class, names = {"FAILED", "ERRORED"})
+    void determineFailed(Build.State state) {
+        Build build = Build.newBuilder()
+                .setState(state)
+                .buildPartial();
+        assertThat(build.failed())
+                .isTrue();
+    }
+
+    @DisplayName("determine states as non-failed")
+    @ParameterizedTest
+    @EnumSource(mode = EXCLUDE, value = Build.State.class, names = {"FAILED", "ERRORED", "UNRECOGNIZED"})
+    void determineNonFailed(Build.State state) {
+        Build build = Build.newBuilder()
+                .setState(state)
+                .buildPartial();
+        assertThat(build.failed())
+                .isFalse();
+    }
+
+    @Nested
+    @DisplayName("determine build state change")
+    class StateChange {
+
+        @Test
+        @DisplayName("as failed no matter what")
+        void failed() {
+            var previous = Build.newBuilder()
+                    .setState(Build.State.PASSED)
+                    .buildPartial();
+            var current = Build.newBuilder()
+                    .setState(Build.State.FAILED)
+                    .buildPartial();
+            assertThat(current.stateChangeFrom(previous))
+                    .isEqualTo(BuildStateChange.Type.FAILED);
+        }
+
+        @Test
+        @DisplayName("as canceled no matter what")
+        void canceled() {
+            var previous = Build.newBuilder()
+                    .setState(Build.State.FAILED)
+                    .buildPartial();
+            var current = Build.newBuilder()
+                    .setState(Build.State.CANCELED)
+                    .buildPartial();
+            assertThat(current.stateChangeFrom(previous))
+                    .isEqualTo(BuildStateChange.Type.CANCELED);
+        }
+
+        @Test
+        @DisplayName("as recovered if the previous was failed")
+        void recovered() {
+            var previous = Build.newBuilder()
+                    .setState(Build.State.FAILED)
+                    .buildPartial();
+            var current = Build.newBuilder()
+                    .setState(Build.State.PASSED)
+                    .buildPartial();
+            assertThat(current.stateChangeFrom(previous))
+                    .isEqualTo(BuildStateChange.Type.RECOVERED);
+        }
+
+        @DisplayName("as stable if the previous was")
+        @ParameterizedTest
+        @EnumSource(mode = INCLUDE, value = Build.State.class, names = {"PASSED", "BS_UNKNOWN", "CANCELED"})
+        void stable(Build.State state) {
+            var previous = Build.newBuilder()
+                    .setState(state)
+                    .buildPartial();
+            var current = Build.newBuilder()
+                    .setState(state)
+                    .buildPartial();
+            assertThat(current.stateChangeFrom(previous))
+                    .isEqualTo(BuildStateChange.Type.STABLE);
+        }
     }
 }

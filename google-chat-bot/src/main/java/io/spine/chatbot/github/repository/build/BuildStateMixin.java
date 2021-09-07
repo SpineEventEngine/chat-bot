@@ -31,10 +31,8 @@ import io.spine.annotation.GeneratedMixin;
 import java.util.EnumSet;
 
 import static io.spine.chatbot.github.repository.build.Build.State.BS_UNKNOWN;
+import static io.spine.chatbot.github.repository.build.Build.State.CANCELED;
 import static io.spine.chatbot.github.repository.build.Build.State.PASSED;
-import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.FAILED;
-import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.RECOVERED;
-import static io.spine.chatbot.github.repository.build.BuildStateChange.Type.STABLE;
 import static io.spine.util.Exceptions.newIllegalStateException;
 import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
 
@@ -43,6 +41,15 @@ import static io.spine.util.Preconditions2.checkNotEmptyOrBlank;
  */
 @GeneratedMixin
 public interface BuildStateMixin extends BuildOrBuilder {
+
+    /**
+     * Determines whether the build is canceled.
+     *
+     * @return {@code true} if the build is canceled, {@code false} otherwise
+     */
+    default boolean canceled() {
+        return getState() == CANCELED;
+    }
 
     /**
      * Determines whether the build is failed.
@@ -91,10 +98,13 @@ public interface BuildStateMixin extends BuildOrBuilder {
      *
      * <ul>
      *     <li>{@code failed} if the new state is {@link #failed() failed};
+     *     <li>{@code canceled} if the new state is {@link #canceled() canceled} and
+     *     the previous is non-canceled. This way only notify about cancellation once;
      *     <li>{@code recovered} if the new state is {@code passed} and the previous is
      *     {@link #failed() failed};
-     *     <li>{@code stable} if the new state is {@code passed} and the previous is either
-     *     {@code unknown} meaning that there were no previous states or {@code passed} as well.
+     *     <li>{@code stable} if the new state is {@code passed} or {@code canceled} and
+     *     the previous is either {@code unknown} meaning that there were no previous states
+     *     or {@code passed} or {@code canceled} as well.
      * </ul>
      */
     private static BuildStateChange.Type stateChange(BuildStateMixin newBuildState,
@@ -102,13 +112,16 @@ public interface BuildStateMixin extends BuildOrBuilder {
         var currentState = newBuildState.getState();
         var previousState = previousBuildState.getState();
         if (newBuildState.failed()) {
-            return FAILED;
+            return BuildStateChange.Type.FAILED;
+        }
+        if (newBuildState.canceled() && !previousBuildState.canceled()) {
+            return BuildStateChange.Type.CANCELED;
         }
         if (currentState == PASSED && previousBuildState.failed()) {
-            return RECOVERED;
+            return BuildStateChange.Type.RECOVERED;
         }
-        if (currentState == PASSED && (previousState == PASSED || previousState == BS_UNKNOWN)) {
-            return STABLE;
+        if (stable(currentState, previousState)) {
+            return BuildStateChange.Type.STABLE;
         }
         throw newIllegalStateException(
                 "Build is in an unpredictable state. Current state `%s`. Previous state `%s`.",
@@ -116,18 +129,20 @@ public interface BuildStateMixin extends BuildOrBuilder {
         );
     }
 
+    private static boolean stable(Build.State currentState, Build.State previousState) {
+        var stableStates = EnumSet.of(PASSED, BS_UNKNOWN, CANCELED);
+        return stableStates.contains(currentState) && stableStates.contains(previousState);
+    }
+
     /**
      * Determines whether the build state denotes a failed status.
      *
-     * <p>The {@code canceled}, {@code failed} and {@code errored} statuses are considered
-     * failed statuses.
+     * <p>The {@code failed} and {@code errored} statuses are considered failed statuses.
      *
      * @return {@code true} if the build status is failed, {@code false} otherwise
      */
     private static boolean failed(Build.State state) {
-        var failedStatuses = EnumSet.of(
-                Build.State.CANCELED, Build.State.FAILED, Build.State.ERRORED
-        );
+        var failedStatuses = EnumSet.of(Build.State.FAILED, Build.State.ERRORED);
         return failedStatuses.contains(state);
     }
 }

@@ -30,6 +30,7 @@ import io.spine.base.EventMessage;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.Build;
 import io.spine.chatbot.github.repository.build.BuildStateChange;
+import io.spine.chatbot.github.repository.build.event.BuildCanceled;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.google.chat.BuildStateUpdate;
@@ -52,30 +53,42 @@ import static io.spine.chatbot.server.google.chat.ThreadResources.threadResource
 @DisplayName("`ThreadChatProcess` should")
 final class ThreadChatProcessTest {
 
-    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
     @Nested
     @DisplayName("sent a message to the Google Chat room when build failed")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
     final class BuildIsFailed extends BuildStateChanged {
 
         @Override
-        EventMessage buildStateChangeEvent(RepositoryId repo, BuildStateChange stateChange) {
-            return BuildFailed
-                    .newBuilder()
+        BuildFailed buildStateChangeEvent(RepositoryId repo, BuildStateChange stateChange) {
+            return BuildFailed.newBuilder()
                     .setRepository(repo)
                     .setChange(stateChange)
                     .vBuild();
         }
     }
 
-    @SuppressWarnings("ClassCanBeStatic") // nested tests do not work with static classes
+    @Nested
+    @DisplayName("sent a message to the Google Chat room when build is canceled")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
+    final class BuildIsCanceled extends BuildStateChanged {
+
+        @Override
+        BuildCanceled buildStateChangeEvent(RepositoryId repo, BuildStateChange stateChange) {
+            return BuildCanceled.newBuilder()
+                    .setRepository(repo)
+                    .setChange(stateChange)
+                    .vBuild();
+        }
+    }
+
     @Nested
     @DisplayName("sent a message to the Google Chat room when build recovered from failure")
+    @SuppressWarnings("ClassCanBeStatic" /* Nested tests do not work with static classes. */)
     final class BuildIsRecovered extends BuildStateChanged {
 
         @Override
-        EventMessage buildStateChangeEvent(RepositoryId repo, BuildStateChange stateChange) {
-            return BuildRecovered
-                    .newBuilder()
+        BuildRecovered buildStateChangeEvent(RepositoryId repo, BuildStateChange stateChange) {
+            return BuildRecovered.newBuilder()
                     .setRepository(repo)
                     .setChange(stateChange)
                     .vBuild();
@@ -101,33 +114,28 @@ final class ThreadChatProcessTest {
         @BeforeEach
         void receiveBuildStateChange() {
             googleChatClient().setBuildStateUpdate(buildNumber, stateUpdate);
-            var newBuildState = Build
-                    .newBuilder()
+            var newBuildState = Build.newBuilder()
                     .setSpace(space)
                     .setNumber(buildNumber)
                     .vBuild();
-            var buildStateChange = BuildStateChange
-                    .newBuilder()
+            var buildStateChange = BuildStateChange.newBuilder()
                     .setNewValue(newBuildState)
                     .vBuild();
-            var buildFailed = buildStateChangeEvent(repo, buildStateChange);
-            context().receivesExternalEvent(buildFailed);
+            var event = buildStateChangeEvent(repo, buildStateChange);
+            context().receivesExternalEvent(event);
         }
 
-        abstract EventMessage buildStateChangeEvent(RepositoryId repo,
-                                                    BuildStateChange stateChange);
+        abstract EventMessage buildStateChangeEvent(RepositoryId repo, BuildStateChange change);
 
         @Test
         @DisplayName("producing `MessageCreated` and `ThreadCreated` events")
         void producingEvents() {
-            var messageCreated = MessageCreated
-                    .newBuilder()
+            var messageCreated = MessageCreated.newBuilder()
                     .setMessage(stateUpdate.getMessage())
                     .setThread(thread)
                     .setSpace(space)
                     .vBuild();
-            var threadCreated = ThreadCreated
-                    .newBuilder()
+            var threadCreated = ThreadCreated.newBuilder()
                     .setThread(thread)
                     .setResource(stateUpdate.getResource())
                     .setSpace(space)
@@ -139,8 +147,7 @@ final class ThreadChatProcessTest {
         @Test
         @DisplayName("setting process state")
         void settingState() {
-            var expectedState = ThreadChat
-                    .newBuilder()
+            var expectedState = ThreadChat.newBuilder()
                     .setThread(thread)
                     .setSpace(space)
                     .setResource(stateUpdate.getResource())

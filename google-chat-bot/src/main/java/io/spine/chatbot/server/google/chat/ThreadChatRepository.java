@@ -27,7 +27,8 @@
 package io.spine.chatbot.server.google.chat;
 
 import com.google.errorprone.annotations.OverridingMethodsMustInvokeSuper;
-import io.spine.chatbot.github.repository.RepositoryAwareEvent;
+import io.spine.chatbot.github.repository.RepositoryAware;
+import io.spine.chatbot.github.repository.build.event.BuildCanceled;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.google.chat.GoogleChatClient;
@@ -35,15 +36,10 @@ import io.spine.chatbot.google.chat.ThreadId;
 import io.spine.chatbot.google.chat.thread.ThreadChat;
 import io.spine.core.EventContext;
 import io.spine.server.procman.ProcessManagerRepository;
-import io.spine.server.route.EventRoute;
 import io.spine.server.route.EventRouting;
-
-import java.io.Serial;
-import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static io.spine.chatbot.google.chat.GoogleChatIdentifiers.thread;
-import static io.spine.server.route.EventRoute.withId;
 
 /**
  * The repository for {@link ThreadChatProcess}es.
@@ -62,25 +58,21 @@ final class ThreadChatRepository
     @OverridingMethodsMustInvokeSuper
     protected void setupEventRouting(EventRouting<ThreadId> routing) {
         super.setupEventRouting(routing);
-        routing.route(BuildFailed.class, new RepositoryEventRoute<>())
-               .route(BuildRecovered.class, new RepositoryEventRoute<>());
+        routing.unicast(BuildFailed.class, ThreadChatRepository::route)
+               .unicast(BuildRecovered.class, ThreadChatRepository::route)
+               .unicast(BuildCanceled.class, ThreadChatRepository::route);
+    }
+
+    private static ThreadId route(
+            RepositoryAware e,
+            @SuppressWarnings("unused" /* Required to avoid ambiguous routing. */) EventContext c
+    ) {
+        var repository = e.repository();
+        return thread(repository.getValue());
     }
 
     @Override
     protected void configure(ThreadChatProcess processManager) {
         processManager.setClient(client);
-    }
-
-    private static class RepositoryEventRoute<M extends RepositoryAwareEvent>
-            implements EventRoute<ThreadId, M> {
-
-        @Serial
-        private static final long serialVersionUID = 0L;
-
-        @Override
-        public Set<ThreadId> apply(M event, EventContext context) {
-            var repository = event.repository();
-            return withId(thread(repository.getValue()));
-        }
     }
 }

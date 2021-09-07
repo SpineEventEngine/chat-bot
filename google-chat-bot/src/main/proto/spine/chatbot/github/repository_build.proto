@@ -168,5 +168,12 @@ message BuildStateChange {
 
         // The build is stable.
         STABLE = 3;
+
+        // The build was manually canceled.
+        //
+        // This is not a failure, while only developers with respective access rights may
+        // cancel builds.
+        //
+        CANCELED = 4;
     }
 }

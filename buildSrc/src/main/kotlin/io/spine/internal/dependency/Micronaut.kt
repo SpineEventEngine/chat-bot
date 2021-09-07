@@ -28,7 +28,7 @@ package io.spine.internal.dependency
 
 // https://micronaut.io/
 object Micronaut {
-    const val version = "2.5.12"
+    const val version = "2.5.13"
     const val inject = "io.micronaut:micronaut-inject"
     const val validation = "io.micronaut:micronaut-validation"
     const val runtime = "io.micronaut:micronaut-runtime"

@@ -29,6 +29,7 @@ package io.spine.chatbot.server.google.chat;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import io.spine.chatbot.github.RepositoryId;
 import io.spine.chatbot.github.repository.build.Build;
+import io.spine.chatbot.github.repository.build.event.BuildCanceled;
 import io.spine.chatbot.github.repository.build.event.BuildFailed;
 import io.spine.chatbot.github.repository.build.event.BuildRecovered;
 import io.spine.chatbot.google.chat.GoogleChatClient;
@@ -44,6 +45,8 @@ import io.spine.server.tuple.Pair;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import java.util.Optional;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * A process of notifying thread members about the changes in the watched resouces.
@@ -62,6 +65,18 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var build = change.getNewValue();
         var repo = e.getRepository();
         _info().log("A build for the repository `%s` failed.", repo.getValue());
+        return processBuildStateUpdate(build, repo);
+    }
+
+    /**
+     * Notifies thread members about a canceled CI build.
+     */
+    @React
+    Pair<MessageCreated, Optional<ThreadCreated>> on(@External BuildCanceled e) {
+        var change = e.getChange();
+        var build = change.getNewValue();
+        var repo = e.getRepository();
+        _info().log("A build for the repository `%s` has been canceled.", repo.getValue());
         return processBuildStateUpdate(build, repo);
     }
 
@@ -85,8 +100,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
         var sentUpdate = client.sendBuildStateUpdate(build, state().getResource());
         var space = sentUpdate.getSpace();
         var thread = sentUpdate.getThread();
-        var messageCreated = MessageCreated
-                .newBuilder()
+        var messageCreated = MessageCreated.newBuilder()
                 .setMessage(sentUpdate.getMessage())
                 .setSpace(space)
                 .setThread(thread)
@@ -97,8 +111,7 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
                          resource.getName(), repo.getValue());
             builder().setResource(resource)
                      .setSpace(space);
-            var threadCreated = ThreadCreated
-                    .newBuilder()
+            var threadCreated = ThreadCreated.newBuilder()
                     .setThread(thread)
                     .setResource(resource)
                     .setSpace(space)
@@ -119,6 +132,6 @@ final class ThreadChatProcess extends ProcessManager<ThreadId, ThreadChat, Threa
      *         done through the repository
      */
     void setClient(GoogleChatClient client) {
-        this.client = client;
+        this.client = checkNotNull(client);
     }
 }
