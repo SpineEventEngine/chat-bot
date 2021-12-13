@@ -28,6 +28,6 @@ package io.spine.internal.dependency
 
 // https://checkerframework.org/
 object CheckerFramework {
-    private const val version = "3.17.0"
+    private const val version = "3.20.0"
     const val annotations = "org.checkerframework:checker-qual:${version}"
 }

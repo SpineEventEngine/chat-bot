@@ -28,11 +28,11 @@ package io.spine.internal.dependency
 
 // https://github.com/SpineEventEngine
 object Spine {
-    private const val baseVersion = "2.0.0-SNAPSHOT.47"
-    private const val baseTypesVersion = "2.0.0-SNAPSHOT.40"
-    private const val coreVersion = "2.0.0-SNAPSHOT.47"
-    private const val timeVersion = "2.0.0-SNAPSHOT.40"
-    private const val gcloudVersion = "2.0.0-SNAPSHOT.4"
+    private const val baseVersion = "2.0.0-SNAPSHOT.79"
+    private const val baseTypesVersion = "2.0.0-SNAPSHOT.75"
+    private const val coreVersion = "2.0.0-SNAPSHOT.88"
+    private const val timeVersion = "2.0.0-SNAPSHOT.76"
+    private const val gcloudVersion = "2.0.0-SNAPSHOT.63"
 
     const val base = "io.spine:spine-base:${baseVersion}"
     const val baseTypes = "io.spine:spine-base-types:${baseTypesVersion}"
