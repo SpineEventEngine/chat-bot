@@ -104,7 +104,7 @@ application {
 
 jib {
     from {
-        image = "amazoncorretto:16"
+        image = "amazoncorretto:17"
     }
     to {
         image = "gcr.io/${extras.gcpProject}/chat-bot-server"
